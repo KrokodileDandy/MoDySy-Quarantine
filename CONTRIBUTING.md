@@ -17,7 +17,7 @@ Inspiriert durch <a href="www.contribution-guide.org">www.contribution-guide.org
 
 * __Erstellt immer einen neuen Branch__ für Eure Arbeit, egal wie klein die Änderungen sind.
   * Daraus folg: __Submittet nicht unzusammenhängende Änderungen auf dem gleichen Branch/Merge Request!__
-* __Basiert eure neuen Branch auf den passenden Branches__ des Main Repositories:
+* __Basiert euren neuen Branch auf den passenden Branches__ des Main Repositories:
   * __Bug fixes__ sollten auf dem Branch basieren, mit dem der __Bug eingeführt wurde__
     * Z.B.: Ein Feature wurde mit Version 1.1 implemeniert, die aktuelle Version ist 1.3 und ein Bug wurde in diesem Feature gefunden. Erstellt euren Branch basierend auf 1.1.
   * __Neue Features__ sollten vom __'master' branch__ branchen
@@ -38,13 +38,13 @@ Patches ohne Dokumentation werden nicht gemerged. Sonst haben wir zum Schluss ei
 ### Projekt kopieren
 1. Projekt kopieren: `git clone ssh://git@git.mtv.tu-berlin.de:2222/modysy-2020sose/quarantine.git`
 2. Projektordner aufrufen
-3. Branch erstellen `git branch <branch-name>`
-4. Zum Branch wechseln `git checkout <branch-name>` 
+3. Branch erstellen: `git branch <branch-name>`
+4. Zum Branch wechseln: `git checkout <branch-name>` 
 
 ### Änderungen vornehmen
 1. Geänderte Dateien stagen: `git add <datei-name>`
 2. Geänderte Dateien commiten: `git commit -m "Ausführliche Beschreibung der vorgenommenen Änderungen."`
-3. Änderungen auf den Branch hochladen `git push`
+3. Änderungen auf den Branch hochladen: `git push`
 
 ### Merge Request erstellen
 1. Auf GitLab neue Merge Request erstellen
