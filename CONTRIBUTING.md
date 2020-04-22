@@ -71,9 +71,9 @@ Patches ohne Dokumentation werden nicht gemerged. Sonst haben wir zum Schluss ei
 3. Änderungen zum nächsten Commit hinzufügen `git add <datei-name>` (Wenn Ihr alle Dateien hinzufügen wollt: `git add .`)
 4. Einen Commit erstellen: `git commit -m "<commit-nachricht>"`
 5. Alle Commits zum Repository hochladen: `git push`
-  * Falls der Branch noch nicht im Repository existiert, weil Ihr bisher lokal gearbeitet habt: `git push --set-upstream origin <branch-name>`
+	- Falls der Branch noch nicht im Repository existiert, weil Ihr bisher lokal gearbeitet habt: `git push --set-upstream origin <branch-name>`
 
-_Anmerkung_: Falls Ihr wissen wollt, welche Dateien Ihr mit eurem nächsten Commit hochladen würdet, könnt ihr 'git status' eingeben.
+_Anmerkung_: Falls Ihr wissen wollt, welche Dateien Ihr mit eurem nächsten Commit hochladen würdet, könnt ihr `git status` eingeben.
 
 ## Nützliche Kommandos
 Folgen in Kürze
