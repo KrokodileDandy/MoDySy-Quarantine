@@ -1,5 +1,7 @@
 # Richtlinien zum Mitwirken
 
+Nachdem mich jetzt vermehrt Anfragen zur Benutzung von Git erreicht haben, findet Ihr jetzt am Ende des Dokuments einen __Quick Start Guide__ für GitLab.
+
 ## Code Conventions
 * Kommentiere jede Methode und Schleife kurz und prägnant
 * Leerzeichen hinter Listenelementen und Methodenparametern
@@ -60,3 +62,18 @@ Patches ohne Dokumentation werden nicht gemerged. Sonst haben wir zum Schluss ei
 3. Beschreibung hinzufügen
   * Welche Änderungen wurden vorgenommen? / Was sind die neuen Funktionalitäten?
   * Wenn damit ein Issue abgeschlossen werden soll: `Closes #<Issue-Nummer>`
+
+
+# Quick Start Guide
+## Die wichtigsten Befehle
+1. Branch erstellen: `git branch <branch-name>`
+2. Auf den Branch wechseln: `git checkout <branch-name>`
+3. Änderungen zum nächsten Commit hinzufügen `git add <datei-name>` (Wenn Ihr alle Dateien hinzufügen wollt: `git add .`)
+4. Einen Commit erstellen: `git commit -m "<commit-nachricht>"`
+5. Alle Commits zum Repository hochladen: `git push`
+  * Falls der Branch noch nicht im Repository existiert, weil Ihr bisher lokal gearbeitet habt: `git push --set-upstream origin <branch-name>`
+
+_Anmerkung_: Falls Ihr wissen wollt, welche Dateien Ihr mit eurem nächsten Commit hochladen würdet, könnt ihr 'git status' eingeben.
+
+## Nützliche Kommandos
+Folgen in Kürze
