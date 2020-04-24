@@ -7,6 +7,12 @@ Nachdem mich jetzt vermehrt Anfragen zur Benutzung von Git erreicht haben, finde
 * Leerzeichen hinter Listenelementen und Methodenparametern
   * z.B. `['a', 'b', 'c']`, nicht `['a','b','c']` oder `x = 1`, nicht `x=1`
 * Grenzt logisch zusammenhängende Blöcke mit Leerzeilen voneinander ab
+* Klammern hinter Methoden öffnen
+  * also z.B. `private setupCollision(): void {`
+
+## Naming Conventions
+* CamelCase für Variablennamen und Klassennamen
+* Enums in Caps-Lock
 
 Allgemein gilt: _Versetzt euch in die Person hinein, die euren Code lesen soll und sorgt dafür, dass eure Arbeit leicht zu verstehen ist und gut aussieht._
 
@@ -62,18 +68,3 @@ Patches ohne Dokumentation werden nicht gemerged. Sonst haben wir zum Schluss ei
 3. Beschreibung hinzufügen
   * Welche Änderungen wurden vorgenommen? / Was sind die neuen Funktionalitäten?
   * Wenn damit ein Issue abgeschlossen werden soll: `Closes #<Issue-Nummer>`
-
-
-# Quick Start Guide
-## Die wichtigsten Befehle
-1. Branch erstellen: `git branch <branch-name>`
-2. Auf den Branch wechseln: `git checkout <branch-name>`
-3. Änderungen zum nächsten Commit hinzufügen `git add <datei-name>` (Wenn Ihr alle Dateien hinzufügen wollt: `git add .`)
-4. Einen Commit erstellen: `git commit -m "<commit-nachricht>"`
-5. Alle Commits zum Repository hochladen: `git push`
-	- Falls der Branch noch nicht im Repository existiert, weil Ihr bisher lokal gearbeitet habt: `git push --set-upstream origin <branch-name>`
-
-_Anmerkung_: Falls Ihr wissen wollt, welche Dateien Ihr mit eurem nächsten Commit hochladen würdet, könnt ihr `git status` eingeben.
-
-## Nützliche Kommandos
-Folgen in Kürze
