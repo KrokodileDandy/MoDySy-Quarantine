@@ -4,6 +4,7 @@
 * Git: https://git.mtv.tu-berlin.de/modysy-2020sose/quarantine/
 * Chat: https://chat.mtv.tu-berlin.de/modysy-2020sose/channels/quarantine
 * Technologie: Java-/Typescript + Phaser 3 (IDE: Visual Studio Code)
+* Doc: https://orga.mtv.tu-berlin.de/-WouF8d1TXenaBcuGkZYEg?view
 * Scrum-Master: @chandi  
 * Product-Owner: @paula  
 * Merge-Request-Manager: @sebastianfuehr 
