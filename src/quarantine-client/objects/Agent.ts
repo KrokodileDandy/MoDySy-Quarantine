@@ -1,14 +1,6 @@
 import 'phaser';
+
 import {State} from '../util/healthstates';
-
-enum Direction {
-
-    UP,
-    RIGHT,
-    DOWN,
-    LEFT,
-    IDLE
-}   
 
 export abstract class Agent extends Phaser.Physics.Arcade.Sprite {
 
@@ -22,23 +14,31 @@ export abstract class Agent extends Phaser.Physics.Arcade.Sprite {
     protected prevState: State;
 
     //100 update iterations
-    protected counter = 100;
+    protected counter = 200;
 
     //random velocity
-    protected velocity = 3* Math.random();
+    protected action = Phaser.Math.Between(0, 1);
+    protected velocity = Phaser.Math.RND.realInRange(0.5, 1);
 
-    //get random direction
-    protected direction: Direction = this.getRandomDirection();
+    public degree = Phaser.Math.Between(0, 360);
+    public gradient = new Phaser.Math.Vector2();
 
-    protected constructor(scene, Phaser.scene, x: number, y: number, texture: string, state: State) {
+    protected constructor(scene: Phaser.Scene, x: number, y: number, state: State, texture: string, frame?: string | number) {
         super(scene, x, y, texture);
 
         this.currentState = state;
         this.prevState = state;
         this.quarantined = false;
 
+        this.setDisplaySize(32, 32);
+        this.randomWalk();
+
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
+        this.setImmovable(true);
+        this.setCollideWorldBounds(true);
+        //this.setBounce(0);
+        //scene.physics.world.enableBody(this);
     }
 
     public isQuarantined(): boolean {
@@ -54,54 +54,61 @@ export abstract class Agent extends Phaser.Physics.Arcade.Sprite {
     }
 
     public getCurrentState(): State {
-        this.currentState;
+        return this.currentState;
     }
 
     public setCurrentState(status: State): void {
         this.currentState = status;
     }
 
-    //E.g. self-isolation
     public isolate(): void {
         this.quarantined = true;
-        this.direction = Direction.IDLE
     }
 
     public leaveQuarantine(): void {
         this.quarantined = false;
     }
 
-    public meet(agent: Agent): void {
+    public update(): void {
 
-        const prevState = agent.getPreviousState();
-        let newState = prevState;
-
-        if(this.currentState == 'HEALTHY') {
-
-            if(prevState === 'ACTIVE') {
-                
-                this.currentState = State.ACTIVE;
-            }
-        } else if(this.currentState === "ACTIVE"){
-
-            if(prevState === "ACTIVE") {
-
-                this.currentState = State.DECEASED;
-                newState = State.DECEASED;
-            } else if (prevState === "HEALTHY") {
-
-                newState = State.ACTIVE;
-            }
+        if(this.isQuarantined()){
+            return;
         }
 
-        agent.setPreviousState(newState);
-        if(newState === "DECEASED") {
-
-            agent.destroy();
-            this.destroy();
+        if(this.counter <= 0 && this.action == 0) {
+            this.randomWalk();
         }
-        console.log(this.currentState);
+        /*if(this.counter <= 0) {
+            /*while(this.action == 1 && this.counter > 0) {
+                this.counter = Phaser.Math.Between(100, 300);
+                this.velocity = 0;
+                this.angle += 1;
+                this.counter--;
+            }
+        }*/
 
+        this.x += (this.velocity * this.gradient.x);
+        this.y += (this.velocity * this.gradient.y);
+
+        this.counter--;
+    }
+
+    public randomWalk(): void {
+        this.counter = Phaser.Math.Between(200, 300);
+        this.velocity = Phaser.Math.RND.realInRange(0.5, 1);
+        this.degree = Phaser.Math.Between(0, 360);
+        this.angle = this.degree + 90;
+        this.gradient.x = Phaser.Math.RoundTo(Math.cos(Phaser.Math.DegToRad(this.degree)), -4);
+        this.gradient.y = Phaser.Math.RoundTo(Math.sin(Phaser.Math.DegToRad(this.degree)), -4);
+    }
+
+    public oppositeDirection(): void {
+        this.counter = Phaser.Math.Between(200, 300);
+        this.velocity = Phaser.Math.RND.realInRange(0.5, 1);
+        this.degree += 90;
+        this.angle = this.degree + 90;
+        this.gradient.x = Phaser.Math.RoundTo(Math.cos(Phaser.Math.DegToRad(this.degree)), -4);
+        this.gradient.y = Phaser.Math.RoundTo(Math.sin(Phaser.Math.DegToRad(this.degree)), -4);
     }
 
 }

@@ -1,13 +1,15 @@
-import "phaser";
+import 'phaser';
+import { MainScene } from './scenes/main-scene';
 
 const config: Phaser.Types.Core.GameConfig = {
-    width: 800,
-    height: 600,
+    width: 1600,
+    height: 800,
+    backgroundColor: Phaser.Display.Color.GetColor(255, 255, 255),
     scale: {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    //scene: ,
+    scene: MainScene,
     physics: {
         default: 'arcade',
         arcade: {
