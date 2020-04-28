@@ -99,6 +99,12 @@ class Controller {
     /** Returns a random integer value between 0 and the current population number. */
     private getRandomIndex(): number {return Math.floor(Math.random() * this.stats.population);}
 
+    /** Increases budget by income rate. */
+    public updateBudget() {this.stats.budget += this.getIncome()}
+
+
+
+    // ----------------------------------------------------------------- GETTER-METHODS
     /** Returns the single instance of Controller. */
     public static getInstance(): Controller {
         if (!Controller.instance) Controller.instance = new Controller();
@@ -110,4 +116,11 @@ class Controller {
 
     /** Returns current income per tic */
     public getIncome(): number {return this.stats.income;}
+
+
+
+    // ------------------------------------------------------------------ SETTER-METHODS
+    // allows encapsulation of application logic
+    // private setIncome(amt: number) {}
+
 }
