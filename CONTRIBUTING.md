@@ -1,6 +1,6 @@
 # Richtlinien zum Mitwirken
 
-Nachdem mich jetzt vermehrt Anfragen zur Benutzung von Git erreicht haben, findet Ihr jetzt am Ende des Dokuments einen __Quick Start Guide__ für GitLab.
+Straight to the [Quick Start Guide](https://git.mtv.tu-berlin.de/modysy-2020sose/quarantine/-/wikis/intern/Quick-Start-Guide)
 
 ## Code Conventions
 * Kommentiere jede Methode und Schleife kurz und prägnant
@@ -26,18 +26,26 @@ Bevor Ihr einen Merge Request eröffnet, prüft folgende Dinge:
 2. `npm run dev` compiliert
 3. `npm run lint` gibt keine Fehlermeldung zurück
 
-
+## Contributing changes
 ### Version control branching
 
-Inspiriert durch <a href="www.contribution-guide.org">www.contribution-guide.org</a>
+Based upon <a href="www.contribution-guide.org">www.contribution-guide.org</a>
 
-* __Erstellt immer einen neuen Branch__ für Eure Arbeit, egal wie klein die Änderungen sind.
-  * Daraus folg: __Submittet nicht unzusammenhängende Änderungen auf dem gleichen Branch/Merge Request!__
-* __Basiert euren neuen Branch auf den passenden Branches__ des Main Repositories:
-  * __Bug fixes__ sollten auf dem Branch basieren, mit dem der __Bug eingeführt wurde__
-    * Z.B.: Ein Feature wurde mit Version 1.1 implemeniert, die aktuelle Version ist 1.3 und ein Bug wurde in diesem Feature gefunden. Erstellt euren Branch basierend auf 1.1.
-  * __Neue Features__ sollten vom __'master' branch__ branchen
-* __Kommentiert Euren Code__
+* Always __make a new branch__ for your work, no matter how small. This makes it easy for others to take just that one set of changes from your repository, in case you have multiple unrelated changes floating around.
+  * A corollary: __don’t submit unrelated changes in the same branch/pull request!__ The maintainer shouldn’t have to reject your awesome bugfix because the feature you put in with it needs more review.
+* Base your new branch off of the appropriate branch on the main repository:
+  * __Bug fixes__ should be based on the branch named after the oldest supported release line the bug affects.
+    * E.g. if a feature was introduced in 1.1, the latest release line is 1.3, and a bug is found in that feature - make your branch based on 1.1. The maintainer will then forward-port it to 1.3 and master.
+    * Bug fixes requiring large changes to the code or which have a chance of being otherwise disruptive, may need to base off of __master__ instead. This is a judgement call 
+  * __New features__ should branch off of __the ‘master’ branch__.
+
+### Code formatting
+* fdaf
+
+### Documentation isn't optional
+It’s not! Patches without documentation will be returned to sender. By “documentation” I mean:
+
+Patches ohne Dokumentation werden nicht gemerged. Sonst haben wir zum Schluss einen haufen Arbeit und erschweren uns gegenseitig den Entwicklungsprozess.
 
 
 ### Wie sieht eine gute Merge Request aus?
@@ -46,8 +54,7 @@ Inspiriert durch <a href="www.contribution-guide.org">www.contribution-guide.org
 * Die __Dokumentation wurde aktualisiert__
 
 
-### Die Dokumentation ist nicht optional
-Patches ohne Dokumentation werden nicht gemerged. Sonst haben wir zum Schluss einen haufen Arbeit und erschweren uns gegenseitig den Entwicklungsprozess.
+
 
 
 ### Praxis-Beispiel
