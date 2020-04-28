@@ -8,6 +8,7 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
     public degree = Phaser. Math.Between(0, 360);
     public gradient = new Phaser.Math.Vector2(); 
     public counter = 200;
+    public turnRate: number;
 
     public constructor(scene: Phaser.Scene, agent: Agent, texture?: string) {
         super(scene, agent.x, agent.y, texture);
@@ -24,9 +25,11 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
 
     public update(): void {
 
-        if(this.counter <= 0 && this.action == 0) {
+        if(this.counter <= 0) {     // && this.action == 0) {
             this.randomWalk();
         }
+
+        this.randomTurn();
 
         this.x += this.velocity * this.gradient.x;
         this.y += this.velocity * this.gradient.y;
@@ -41,6 +44,7 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
         this.gradient.x = Phaser.Math.RoundTo(Math.cos(Phaser.Math.DegToRad(this.degree)), -4);
         this.gradient.y = Phaser.Math.RoundTo(Math.sin(Phaser.Math.DegToRad(this.degree)), -4);
         this.counter = Phaser.Math.Between(200, 300);
+        this.turnRate = Phaser.Math.RND.realInRange(-0.4, 0.4);
         this.angle = this.degree + 90;
     }
 
@@ -50,8 +54,18 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
         this.gradient.x = Phaser.Math.RoundTo(Math.cos(Phaser.Math.DegToRad(this.degree)), -4);
         this.gradient.y = Phaser.Math.RoundTo(Math.sin(Phaser.Math.DegToRad(this.degree)), -4);
         this.counter = Phaser.Math.Between(200, 300);
+        this.turnRate = Phaser.Math.RND.realInRange(-0.4, 0.4);
         this.angle = this.degree + 90; 
     }
+
+    public randomTurn(): void {
+        this.degree += this.turnRate;
+        this.gradient.x = Phaser.Math.RoundTo(Math.cos(Phaser.Math.DegToRad(this.degree)), -4);
+        this.gradient.y = Phaser.Math.RoundTo(Math.sin(Phaser.Math.DegToRad(this.degree)), -4);
+        this.angle += this.turnRate;
+    }
+
+    
 
 
 
