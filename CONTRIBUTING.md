@@ -1,20 +1,34 @@
-# Richtlinien zum Mitwirken
+# Contribution Guide
+## Content
+1. Very condensed
+1.1 Code Conventions
+1.2 Naming Conventions
+1.3 Characteristics of a "good" merge request
+2. Merge Request
+3. Full example
 
-Straight to the [Quick Start Guide](https://git.mtv.tu-berlin.de/modysy-2020sose/quarantine/-/wikis/intern/Quick-Start-Guide)
+Straight to the [Quick Start Guide](https://git.mtv.tu-berlin.de/modysy-2020sose/quarantine/-/wikis/intern/Quick-Start-Guide) on how to use GitLab.
 
-## Code Conventions
-* Kommentiere jede Methode und Schleife kurz und prägnant
-* Leerzeichen hinter Listenelementen und Methodenparametern
-  * z.B. `['a', 'b', 'c']`, nicht `['a','b','c']` oder `x = 1`, nicht `x=1`
-* Grenzt logisch zusammenhängende Blöcke mit Leerzeilen voneinander ab
-* Klammern hinter Methoden öffnen
-  * also z.B. `private setupCollision(): void {`
+## Very condensed
+### Code conventions
+* Every method and loop should have a short and descriptive comment
+* Spaces behind list elements and method parameters
+  * e.g. `['a', 'b', 'c']`, not `['a','b','c']`
+  * e.g. `x = 1`, not `x=1`
+* Seperate blocks of code with empty lines
+* Open parenthesis behind methods e.g. `private setupCollision(): void {`
 
-## Naming Conventions
-* CamelCase für Variablennamen und Klassennamen
-* Enums in Caps-Lock
+### Naming conventions
+* Use CamelCase e.g. `MyClass`
+* Enums in Caps-Lock e.g. `INFECTED`
 
-Allgemein gilt: _Versetzt euch in die Person hinein, die euren Code lesen soll und sorgt dafür, dass eure Arbeit leicht zu verstehen ist und gut aussieht._
+Generally speaking: _Think about the person which will read your code and make your code easy to understend and good looking._
+
+### Characteristics of a "good" merge request
+... should contain ...
+* __Clear and descriptive Title__ to identify the implemented feature
+* __Description of the changes__
+* __Helpful Documentation__
 
 
 ## Merge Requests
@@ -43,35 +57,28 @@ Based upon <a href="www.contribution-guide.org">www.contribution-guide.org</a>
 * fdaf
 
 ### Documentation isn't optional
-It’s not! Patches without documentation will be returned to sender. By “documentation” I mean:
-
-Patches ohne Dokumentation werden nicht gemerged. Sonst haben wir zum Schluss einen haufen Arbeit und erschweren uns gegenseitig den Entwicklungsprozess.
-
-
-### Wie sieht eine gute Merge Request aus?
-* __Klarer und beschreibender Titel__ um das zu implementierende Feature zu identifizieren
-* __Beschreibung, welche Änderungen vorgenommen wurden__
-* Die __Dokumentation wurde aktualisiert__
+It’s not! Patches without documentation will be returned to sender. Otherwise we'll have a lot of work later on and complicate the development process for each other.
 
 
 
+## Full Example
+### Preparing your project
+1. Clone project: `git clone ssh://git@git.mtv.tu-berlin.de:2222/modysy-2020sose/quarantine.git`
+2. Navigate to the project folder
+3. Create a branch: `git branch <branch-name>`
+4. Change to this branch: `git checkout <branch-name>` 
 
+### Making your changes
+1. Stage your changed files for commit: `git add <datei-name>`
+2. Make your commit: `git commit -m "Ausführliche Beschreibung der vorgenommenen Änderungen."`
+3. Upload your commit with all the changes: `git push`
 
-### Praxis-Beispiel
-#### Projekt kopieren
-1. Projekt kopieren: `git clone ssh://git@git.mtv.tu-berlin.de:2222/modysy-2020sose/quarantine.git`
-2. Projektordner aufrufen
-3. Branch erstellen: `git branch <branch-name>`
-4. Zum Branch wechseln: `git checkout <branch-name>` 
-
-#### Änderungen vornehmen
-1. Geänderte Dateien stagen: `git add <datei-name>`
-2. Geänderte Dateien commiten: `git commit -m "Ausführliche Beschreibung der vorgenommenen Änderungen."`
-3. Änderungen auf den Branch hochladen: `git push`
-
-#### Merge Request erstellen
-1. Auf GitLab neue Merge Request erstellen
-2. Markanten Titel eintragen
-3. Beschreibung hinzufügen
-  * Welche Änderungen wurden vorgenommen? / Was sind die neuen Funktionalitäten?
-  * Wenn damit ein Issue abgeschlossen werden soll: `Closes #<Issue-Nummer>`
+### Merge Request erstellen
+1. Click 'Create merge request' on GitLab
+2. Chose a descriptive title
+3. In the description field
+  * Write down the issue number (if issue exists) or describe issue
+  * Describe your fix/new code
+    * Which changes have been made?
+    * What are new functionalities?
+  * If the issue should be closed automatically: `Closes #<Issue-Nummer>`
