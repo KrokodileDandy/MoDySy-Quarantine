@@ -2,10 +2,10 @@ import { State } from "../../util/healthStates";
 
 /** Represents a transition rule of the population protocol. */
 export class Rule {
-    private inputState1: State;
-    private inputState2: State;
-    private outputState1: State;
-    private outputState2: State;
+    public readonly inputState1: State;
+    public readonly inputState2: State;
+    public readonly outputState1: State;
+    public readonly outputState2: State;
 
     constructor(inputState1, inputState2, outputState1, outputState2) {
         this.inputState1 = inputState1;
