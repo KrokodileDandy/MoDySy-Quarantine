@@ -1,20 +1,34 @@
-# Richtlinien zum Mitwirken
+# Contribution Guide
+## Content
+1. Very condensed
+1.1 Code Conventions
+1.2 Naming Conventions
+1.3 Characteristics of a "good" merge request
+2. Merge Request
+3. Full example
 
-Nachdem mich jetzt vermehrt Anfragen zur Benutzung von Git erreicht haben, findet Ihr jetzt am Ende des Dokuments einen __Quick Start Guide__ für GitLab.
+Straight to the [Quick Start Guide](https://git.mtv.tu-berlin.de/modysy-2020sose/quarantine/-/wikis/intern/Quick-Start-Guide) on how to use GitLab.
 
-## Code Conventions
-* Kommentiere jede Methode und Schleife kurz und prägnant
-* Leerzeichen hinter Listenelementen und Methodenparametern
-  * z.B. `['a', 'b', 'c']`, nicht `['a','b','c']` oder `x = 1`, nicht `x=1`
-* Grenzt logisch zusammenhängende Blöcke mit Leerzeilen voneinander ab
-* Klammern hinter Methoden öffnen
-  * also z.B. `private setupCollision(): void {`
+## Very condensed
+### Code conventions
+* Every method and loop should have a short and descriptive comment
+* Spaces behind list elements and method parameters
+  * e.g. `['a', 'b', 'c']`, not `['a','b','c']`
+  * e.g. `x = 1`, not `x=1`
+* Seperate blocks of code with empty lines
+* Open parenthesis behind methods e.g. `private setupCollision(): void {`
 
-## Naming Conventions
-* CamelCase für Variablennamen und Klassennamen
-* Enums in Caps-Lock
+### Naming conventions
+* Use CamelCase e.g. `MyClass`
+* Enums in Caps-Lock e.g. `INFECTED`
 
-Allgemein gilt: _Versetzt euch in die Person hinein, die euren Code lesen soll und sorgt dafür, dass eure Arbeit leicht zu verstehen ist und gut aussieht._
+Generally speaking: _Think about the person which will read your code and make your code easy to understend and good looking._
+
+### Characteristics of a "good" merge request
+... should contain ...
+* __Clear and descriptive Title__ to identify the implemented feature
+* __Description of the changes__
+* __Helpful Documentation__
 
 
 ## Merge Requests
@@ -26,45 +40,45 @@ Bevor Ihr einen Merge Request eröffnet, prüft folgende Dinge:
 2. `npm run dev` compiliert
 3. `npm run lint` gibt keine Fehlermeldung zurück
 
-
+## Contributing changes
 ### Version control branching
 
-Inspiriert durch <a href="www.contribution-guide.org">www.contribution-guide.org</a>
+Based upon <a href="www.contribution-guide.org">www.contribution-guide.org</a>
 
-* __Erstellt immer einen neuen Branch__ für Eure Arbeit, egal wie klein die Änderungen sind.
-  * Daraus folg: __Submittet nicht unzusammenhängende Änderungen auf dem gleichen Branch/Merge Request!__
-* __Basiert euren neuen Branch auf den passenden Branches__ des Main Repositories:
-  * __Bug fixes__ sollten auf dem Branch basieren, mit dem der __Bug eingeführt wurde__
-    * Z.B.: Ein Feature wurde mit Version 1.1 implemeniert, die aktuelle Version ist 1.3 und ein Bug wurde in diesem Feature gefunden. Erstellt euren Branch basierend auf 1.1.
-  * __Neue Features__ sollten vom __'master' branch__ branchen
-* __Kommentiert Euren Code__
+* Always __make a new branch__ for your work, no matter how small. This makes it easy for others to take just that one set of changes from your repository, in case you have multiple unrelated changes floating around.
+  * A corollary: __don’t submit unrelated changes in the same branch/pull request!__ The maintainer shouldn’t have to reject your awesome bugfix because the feature you put in with it needs more review.
+* Base your new branch off of the appropriate branch on the main repository:
+  * __Bug fixes__ should be based on the branch named after the oldest supported release line the bug affects.
+    * E.g. if a feature was introduced in 1.1, the latest release line is 1.3, and a bug is found in that feature - make your branch based on 1.1. The maintainer will then forward-port it to 1.3 and master.
+    * Bug fixes requiring large changes to the code or which have a chance of being otherwise disruptive, may need to base off of __master__ instead. This is a judgement call 
+  * __New features__ should branch off of __the ‘master’ branch__.
 
+### Code formatting
+* fdaf
 
-### Wie sieht eine gute Merge Request aus?
-* __Klarer und beschreibender Titel__ um das zu implementierende Feature zu identifizieren
-* __Beschreibung, welche Änderungen vorgenommen wurden__
-* Die __Dokumentation wurde aktualisiert__
-
-
-### Die Dokumentation ist nicht optional
-Patches ohne Dokumentation werden nicht gemerged. Sonst haben wir zum Schluss einen haufen Arbeit und erschweren uns gegenseitig den Entwicklungsprozess.
+### Documentation isn't optional
+It’s not! Patches without documentation will be returned to sender. Otherwise we'll have a lot of work later on and complicate the development process for each other.
 
 
-### Praxis-Beispiel
-#### Projekt kopieren
-1. Projekt kopieren: `git clone ssh://git@git.mtv.tu-berlin.de:2222/modysy-2020sose/quarantine.git`
-2. Projektordner aufrufen
-3. Branch erstellen: `git branch <branch-name>`
-4. Zum Branch wechseln: `git checkout <branch-name>` 
 
-#### Änderungen vornehmen
-1. Geänderte Dateien stagen: `git add <datei-name>`
-2. Geänderte Dateien commiten: `git commit -m "Ausführliche Beschreibung der vorgenommenen Änderungen."`
-3. Änderungen auf den Branch hochladen: `git push`
+## Full Example
+### Preparing your project
+1. Clone project: `git clone ssh://git@git.mtv.tu-berlin.de:2222/modysy-2020sose/quarantine.git`
+2. Navigate to the project folder
+3. Create a branch: `git branch <branch-name>`
+4. Change to this branch: `git checkout <branch-name>` 
 
-#### Merge Request erstellen
-1. Auf GitLab neue Merge Request erstellen
-2. Markanten Titel eintragen
-3. Beschreibung hinzufügen
-  * Welche Änderungen wurden vorgenommen? / Was sind die neuen Funktionalitäten?
-  * Wenn damit ein Issue abgeschlossen werden soll: `Closes #<Issue-Nummer>`
+### Making your changes
+1. Stage your changed files for commit: `git add <datei-name>`
+2. Make your commit: `git commit -m "Ausführliche Beschreibung der vorgenommenen Änderungen."`
+3. Upload your commit with all the changes: `git push`
+
+### Merge Request erstellen
+1. Click 'Create merge request' on GitLab
+2. Chose a descriptive title
+3. In the description field
+  * Write down the issue number (if issue exists) or describe issue
+  * Describe your fix/new code
+    * Which changes have been made?
+    * What are new functionalities?
+  * If the issue should be closed automatically: `Closes #<Issue-Nummer>`
