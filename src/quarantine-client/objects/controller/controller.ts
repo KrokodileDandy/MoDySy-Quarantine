@@ -113,10 +113,10 @@ export class Controller {
             if (remainingPolice > 0
                 && (Math.random() > (this.stats.nbrPolice / this.stats.population) // random generation of agents OR
                     || remainingPolice === this.stats.population - i)) { // remaining number of agents has to be filled by police officers
-                this.agents[i] = new Police();
+                this.agents[i] = new Police(Role.POLICE, State.HEALTHY);
                 remainingPolice--;
             } else {
-                this.agents[i] = new Citizen();
+                this.agents[i] = new Citizen(Role.CITIZEN, State.HEALTHY);
             }
         }
     }
@@ -184,9 +184,9 @@ export class Controller {
             this.findRuleAndApply(this.agents[idxAgent1], this.agents[idxAgent2]);
 
             // Remove deceased agents from the agents array
-            if (this.agents[idxAgent1] == State.DECEASED) {
+            if (this.agents[idxAgent1].getHealthState() == State.DECEASED) {
                 this.agents.splice(idxAgent1, 1);
-            } else if (this.agents[idxAgent2] == State.DECEASED) {
+            } else if (this.agents[idxAgent2].getHealthState() == State.DECEASED) {
                 this.agents.splice(idxAgent2, 1);
             }
         }
