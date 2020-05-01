@@ -8,9 +8,9 @@
 [2.1 Preparation](#preparation)  
 [3. Contributing Changes](#contributing-changes)  
 [3.1 Version Control Branching](#version-control-branching)  
-[3.2 Commit Messages](#commit-messages)
-[3.2.1 The Seven Rules of a Great Git Commit Message](#the-seven-rules-of-a-great-git-commit-message)
-[3.3 Documentation isn't Optional](#documentation-isnt-optional)
+[3.2 Commit Messages](#commit-messages)  
+[3.2.1 The Seven Rules of a Great Git Commit Message](#the-seven-rules-of-a-great-git-commit-message)  
+[3.3 Documentation isn't Optional](#documentation-isnt-optional)  
 [4. Full example](#full-example)  
 
 Straight to the [Quick Start Guide](https://git.mtv.tu-berlin.de/modysy-2020sose/quarantine/-/wikis/intern/Quick-Start-Guide) on how to use GitLab.
