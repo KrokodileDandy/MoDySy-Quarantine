@@ -1,7 +1,7 @@
-import { Agent } from "./Agent";
+import { Agent } from "./agent";
+import { Citizen } from "./citizen";
+import { Police } from "./police";
 import { State } from "../util/healthstates";
-import { Police } from "./Police";
-import { Citizen } from "./Citizen";
 
 /**
  * Moving agent entities as VisualAgents.

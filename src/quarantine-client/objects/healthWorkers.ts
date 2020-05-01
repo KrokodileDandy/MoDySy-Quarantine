@@ -1,4 +1,4 @@
-import { Agent } from "./Agent";
+import { Agent } from "./agent";
 import { Role } from "../util/roles";
 import { State } from "../util/healthstates";
 
