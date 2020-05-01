@@ -1,11 +1,17 @@
 # Contribution Guide
 ## Content
-1. Very condensed
-1.1 Code Conventions
-1.2 Naming Conventions
-1.3 Characteristics of a "good" merge request
-2. Merge Request
-3. Full example
+[1. Very condensed](#very-condensed)  
+[1.1 Code Conventions](#code-conventions)  
+[1.2 Naming Conventions](#naming-conventions)  
+[1.3 Characteristics of a "good" merge request](#characteristics-of-a-good-merge-request)  
+[2. Merge Request](#merge-requests)  
+[2.1 Preparation](#preparation)  
+[3. Contributing Changes](#contributing-changes)  
+[3.1 Version Control Branching](#version-control-branching)  
+[3.2 Commit Messages](#commit-messages)
+[3.2.1 The Seven Rules of a Great Git Commit Message](#the-seven-rules-of-a-great-git-commit-message)
+[3.3 Documentation isn't Optional](#documentation-isnt-optional)
+[4. Full example](#full-example)  
 
 Straight to the [Quick Start Guide](https://git.mtv.tu-berlin.de/modysy-2020sose/quarantine/-/wikis/intern/Quick-Start-Guide) on how to use GitLab.
 
@@ -28,17 +34,18 @@ Generally speaking: _Think about the person which will read your code and make y
 ... should contain ...
 * __Clear and descriptive Title__ to identify the implemented feature
 * __Description of the changes__
-* __Helpful Documentation__
+  * If the issue you are solving has a good description just link that issue. But if you made changes not remarked in the issue description pleas add them here.
+* __Helpful Documentation__ (see [here](#documentation-isnt-optional))
 
 
 ## Merge Requests
-### Vorbereitung
-Bevor Ihr einen Merge Request eröffnet, prüft folgende Dinge:
-1. Bringt euren eigenen Branch auf den gleichen Stand wie `master`
-	1. Alle bisherigen Änderungen auf euren Branch commiten `git commit -m "<commit-message>"`
-	2. Änderungen von 'master' einholen: `git pull origin master`
-2. `npm run dev` compiliert
-3. `npm run lint` gibt keine Fehlermeldung zurück
+### Preparation
+Before opening a new merge request please check the following:
+1. Update your branch to fit the state of `master`
+	1. Commit all your changes: `git commit -m "<commit-message>"`
+	2. Get current version of master: `git pull origin master`
+2. `npm run dev` compiles without errors
+3. `npm run lint` doesn't return error messages
 
 ## Contributing changes
 ### Version control branching
@@ -53,11 +60,51 @@ Based upon <a href="www.contribution-guide.org">www.contribution-guide.org</a>
     * Bug fixes requiring large changes to the code or which have a chance of being otherwise disruptive, may need to base off of __master__ instead. This is a judgement call 
   * __New features__ should branch off of __the ‘master’ branch__.
 
-### Code formatting
-* fdaf
+### Commit messages
+
+To write great commit messages you have to use a text editor. Type `git config --global core.editor "<editor-name>"` to define one of your choice.
+
+#### The seven rules of a great Git commit message
+1. Separate subject from body with a blank line
+2. Limit the subject line to 50 characters
+3. Capitalize the subject line
+4. Do not end the subject line with a period
+5. Use the imperative mood in the subject line
+6. Wrap the body at 72 characters
+7. Use the body to explain _what_ and _why_ vs. _how_
+
+For example:
+
+```
+Summarize changes in around 50 characters or less
+
+More detailed explanatory text, if necessary. Wrap it to about 72
+characters or so. In some contexts, the first line is treated as the
+subject of the commit and the rest of the text as the body. The
+blank line separating the summary from the body is critical (unless
+you omit the body entirely); various tools like `log`, `shortlog`
+and `rebase` can get confused if you run the two together.
+
+Explain the problem that this commit is solving. Focus on why you
+are making this change as opposed to how (the code explains that).
+Are there side effects or other unintuitive consequences of this
+change? Here's the place to explain them.
+
+Further paragraphs come after blank lines.
+
+ - Bullet points are okay, too
+
+ - Typically a hyphen or asterisk is used for the bullet, preceded
+   by a single space, with blank lines in between, but conventions
+   vary here
+
+```
+
+For more information look [here](https://chris.beams.io/posts/git-commit/).
 
 ### Documentation isn't optional
-It’s not! Patches without documentation will be returned to sender. Otherwise we'll have a lot of work later on and complicate the development process for each other.
+It’s not! Patches without documentation will be returned to sender. Otherwise we'll have a lot of work later on and complicate the development process for each other.  
+Insert your documentation in our [wiki](https://git.mtv.tu-berlin.de/modysy-2020sose/quarantine/-/wikis/Documentations).
 
 
 
