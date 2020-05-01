@@ -14,7 +14,7 @@ const config: Phaser.Types.Core.GameConfig = {
         default: 'arcade',
         arcade: {
             // set to true to display object collision bounding boxes
-            debug: true
+            debug: false
         }
     }
 };

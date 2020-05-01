@@ -1,13 +1,18 @@
 import { Agent } from "./Agent";
+import { Role } from "../util/roles";
 import { State } from "../util/healthstates";
 
+/**
+ * Health workers do some sort of 'cure' to infected agents.
+ * Subclass of agent.
+ * @author Shao
+ */
 
 export class HealthWorkers extends Agent {
     
-    public constructor(scene: Phaser.Scene, x: number, y: number, texture: string, state: State) {
-        super(scene, x, y, texture);
+    public constructor(role: Role, state: State) {
+        super(role, state);
 
-        this.state = state;
     }
 
     public update(): void {

@@ -1,13 +1,18 @@
 import { Agent } from "./Agent";
+import { Role } from "../util/roles";
 import { State } from "../util/healthstates";
 
+/**
+ * Police detecting infected agents.
+ * Subclass of agent.
+ * @author Shao
+ */
 
 export class Police extends Agent {
     
-    public constructor(scene: Phaser.Scene, x: number, y: number, state: State, texture?: string) {
-        super(scene, x, y, texture);
+    public constructor(role: Role, state: State) {
+        super(role, state);
 
-        this.state = state;
     }
 
     public update(): void {

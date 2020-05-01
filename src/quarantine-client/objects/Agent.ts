@@ -1,63 +1,93 @@
 import 'phaser';
+import { Role } from '../util/roles';
 import { State } from '../util/healthstates';
 
-export abstract class Agent extends Phaser.Physics.Arcade.Sprite {
+/**
+ * Entity class agent divided into other subclasses (e.g. police, citizen, etc.).
+ * All agents works as identically programmed finite state machines
+ * to simulate the population protocol in the controller class.
+ * @author Shao
+ */
 
+export abstract class Agent {
+
+    // ------------------------------------------------ GAME VARIABLES
+    /** Determine the current status of the agent */
     protected quarantined: boolean;
+    /** Determine the behaviour of the agent */
     protected socialDistancing: boolean;
+    /** Role of the agent */
+    protected role: Role;
+    /** Health state of the Agent*/
     protected healthState: State; 
+    /** Eventually giving the progress of the transition as integer representing a healthstate*/
     protected token: integer;
-    protected velocity: number;
-    protected timer: number;
+    // ------------------------------------------------ GAME VARIABLES
 
-    protected constructor(scene: Phaser.Scene, x: number, y: number, texture: string) {
-        super(scene, x, y, texture);
+    /**
+     * Constructor of the agent.
+     * Call the constructor from a subclass (e.g. police).
+     * @param role assign a role to the agent
+     * @param state assign a health state to the agent
+     */
+    protected constructor(role: Role, state: State) {
 
-        this.quarantined = false;
-        this.socialDistancing = false;
-        this.healthState = State.HEALTHY;
+        this.quarantined = false;   // should be false at beginning. Can be changed by purchasing Upgrades.
+        this.socialDistancing = false;  //should be false at beginning. Can be changed by purchasing Upgrades.
+        this.role = role;
+        this.healthState = state;
         this.token = 0;
-        this.velocity = 1;
     }
 
     public update(): void {
-
     }
 
+    // ------------------------------------------------ GETTER-METHODS
+    /** @returns whether the agent ist quaratined or not */
     public isQuarantined(): boolean {
         return this.quarantined;
     }
 
-    public quarantine(): void {
-        this.quarantined = true;
-    }
-
-    public leaveQuarantine(): void {
-        this.quarantined = false;
-    }
-
+    /** @returns whether social distancing is active or not */
     public isSocialDistancingActive(): boolean {
         return this.socialDistancing;
     }
 
+    /** @returns the current health state of the agent */
+    public getHealthState(): State {
+        return this.healthState;
+    }
+    // ------------------------------------------------ GETTER-METHODS
+
+    // ------------------------------------------------ SETTER-METHODS
+    /** Set quarantine to true */
+    public quarantine(): void {
+        this.quarantined = true;
+    }
+
+    /** Set quarantine to false */
+    public leaveQuarantine(): void {
+        this.quarantined = false;
+    }
+
+    /** Set social distancing to true */
     public activateSocialDistancing(): void {
         this.socialDistancing = true;
     }
 
+    /** Set social distancing to false */
     public deactivateSocialDistancing(): void {
         this.socialDistancing = false;
     }
 
-    public getHealthState(): State {
-        return this.healthState;
-    }
-
+    /**
+     * Set new health state
+     * @param newState assign new health state
+     */
     public setHealthState(newState: State): void {
         this.healthState = newState;
     }
-
-
-
+    // ------------------------------------------------ SETTER-METHODS
 
 }
 

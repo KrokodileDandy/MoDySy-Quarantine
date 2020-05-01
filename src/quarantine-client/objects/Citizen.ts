@@ -1,13 +1,19 @@
 import { Agent } from "./Agent";
+import { Role } from "../util/roles";
 import { State } from "../util/healthstates";
 
+/**
+ * Generic citizen.
+ * By default healthy. Can be infected by other citizen.
+ * Subclass of agent.
+ * @author Shao
+ */
 
 export class Citizen extends Agent {
     
-    public constructor(scene: Phaser.Scene, x: number, y: number, state: State, texture?: string) {
-        super(scene, x, y, texture);
+    public constructor(role: Role, state: State) {
+        super(role, state);
 
-        this.state = state;
     }
 
     public update(): void {
