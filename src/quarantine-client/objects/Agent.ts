@@ -8,9 +8,7 @@ import { State } from '../util/healthstates';
  * to simulate the population protocol in the controller class.
  * @author Shao
  */
-
 export abstract class Agent {
-
     // ------------------------------------------------ GAME VARIABLES
     /** Determine the current status of the agent */
     protected quarantined: boolean;
@@ -31,7 +29,6 @@ export abstract class Agent {
      * @param state assign a health state to the agent
      */
     protected constructor(role: Role, state: State) {
-
         this.quarantined = false;   // should be false at beginning. Can be changed by purchasing Upgrades.
         this.socialDistancing = false;  //should be false at beginning. Can be changed by purchasing Upgrades.
         this.role = role;
@@ -41,6 +38,7 @@ export abstract class Agent {
 
     public update(): void {
     }
+    
 
     // ------------------------------------------------ GETTER-METHODS
     /** @returns whether the agent ist quaratined or not */
@@ -57,7 +55,7 @@ export abstract class Agent {
     public getHealthState(): State {
         return this.healthState;
     }
-    // ------------------------------------------------ GETTER-METHODS
+
 
     // ------------------------------------------------ SETTER-METHODS
     /** Set quarantine to true */
@@ -87,7 +85,6 @@ export abstract class Agent {
     public setHealthState(newState: State): void {
         this.healthState = newState;
     }
-    // ------------------------------------------------ SETTER-METHODS
 
 }
 

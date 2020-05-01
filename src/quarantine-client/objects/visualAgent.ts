@@ -10,9 +10,7 @@ import { State } from "../util/healthstates";
  * to furthermore elucidate the spread of the virus.
  * @author Shao
  */
-
 export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
-
     // ------------------------------------------------ GAME VARIABLES 
     /** Randomly decides which action the agent do next */
     public action = Phaser.Math.Between(0, 1);
@@ -26,7 +24,6 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
     public counter = 200;
 
     public turnRate: number;
-    // ------------------------------------------------ GAME VARIABLES
 
     /**
      * The constructor generates a visual agent at position(x, y)
@@ -61,7 +58,6 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
         if(agent instanceof Citizen == true && this.state == State.INFECTED) {
             this.anims.play('infectedWalk');
         }
-        // ------------------------------------------------ RUNNING-ANIMATIONS
         
     }
 
@@ -86,7 +82,6 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
         }
 
         this.randomTurn();
-
         /** Moving the body to the direction it is facing to */
         this.x += this.velocity * this.gradient.x;
         this.y += this.velocity * this.gradient.y;
