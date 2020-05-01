@@ -23,6 +23,7 @@ Straight to the [Quick Start Guide](https://git.mtv.tu-berlin.de/modysy-2020sose
   * e.g. `x = 1`, not `x=1`
 * Seperate blocks of code with empty lines
 * Open parenthesis behind methods e.g. `private setupCollision(): void {`
+* No empty lines between the documentation and the first line of the class/method
 
 ### Naming conventions
 * Use CamelCase e.g. `MyClass`
