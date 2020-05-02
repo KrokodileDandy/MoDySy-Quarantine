@@ -202,14 +202,33 @@ export class Controller {
         return Controller.instance;
     }
 
+    /** @returns Tics per day */
+    public getTicsPerDay(): number {return this.ticsPerDay;}
+
+    // ------------------------------------------------------- GETTER of Stats instance
     /** @returns Currently available budget */
     public getBudget(): number {return this.stats.budget;}
 
     /** @returns Current income per tic */
     public getIncome(): number {return this.stats.income;}
 
-    /** @returns Tics per day */
-    public getTicsPerDay(): number {return this.ticsPerDay;}
+    /** @returns Current population number */
+    public getPopulation(): number {return this.stats.population;}
+
+    /** @returns Number of deceased people since game start */
+    public getDeceased(): number {return this.stats.deceased;}
+
+    /**
+     * The number does not include agents with the state UNKNOWINGLY_INFECTED 
+     * @returns Number of currently infected people
+     */
+    public getInfected(): number {return this.stats.infected;}
+
+    /** @returns Number of police officers */
+    public getNumberOfPolice(): number {return this.stats.nbrPolice;}
+
+    /** @returns Number of health workers */
+    public getNumberOfHealthWorkers(): number {return this.stats.nbrHW;}
 
 
 
