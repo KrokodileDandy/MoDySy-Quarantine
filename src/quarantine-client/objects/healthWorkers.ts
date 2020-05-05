@@ -12,11 +12,6 @@ export class HealthWorkers extends Agent {
     
     public constructor(role: Role, state: State) {
         super(role, state);
-
-    }
-
-    public update(): void {
-        
     }
 
 }

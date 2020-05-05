@@ -35,9 +35,6 @@ export abstract class Agent {
         this.healthState = state;
         this.token = 0;
     }
-
-    public update(): void {
-    }
     
 
     // ------------------------------------------------ GETTER-METHODS
@@ -54,6 +51,11 @@ export abstract class Agent {
     /** @returns the current health state of the agent */
     public getHealthState(): State {
         return this.healthState;
+    }
+
+    /**@returns the current role of the agent */
+    public getRole(): Role {
+        return this.role;
     }
 
 
@@ -84,6 +86,14 @@ export abstract class Agent {
      */
     public setHealthState(newState: State): void {
         this.healthState = newState;
+    }
+
+    /**
+     * Set new role
+     * @param role assign new role
+     */
+    public setRole(role: Role): void {
+        this.role = role;
     }
 
 }
