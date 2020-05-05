@@ -15,8 +15,4 @@ export class Police extends Agent {
 
     }
 
-    public update(): void {
-        
-    }
-
 }
