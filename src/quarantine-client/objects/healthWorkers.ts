@@ -1,6 +1,6 @@
 import { Agent } from "./agent";
 import { Role } from "../util/roles";
-import { State } from "../util/healthstates";
+import { State } from "../util/healthStates";
 
 /**
  * Health workers do some sort of 'cure' to infected agents.

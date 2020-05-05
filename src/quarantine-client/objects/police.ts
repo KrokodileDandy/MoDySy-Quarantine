@@ -12,7 +12,6 @@ export class Police extends Agent {
     
     public constructor(role: Role, state: State) {
         super(role, state);
-
     }
 
 }
