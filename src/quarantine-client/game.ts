@@ -1,7 +1,7 @@
 import 'phaser';
 import { MainScene } from './scenes/main-scene';
 import {GuiScene} from "./scenes/gui-scene";
-import { ChartScene } from './scenes/graph-scene';
+import { ChartScene } from './scenes/chart-scene';
 
 const config: Phaser.Types.Core.GameConfig = {
     width: 1600,
