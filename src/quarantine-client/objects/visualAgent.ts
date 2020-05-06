@@ -23,6 +23,8 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
     /** Sets the duration of the current action */
     public counter = 200;
 
+    public collided: boolean;
+
     public turnRate: number;
 
     /**
@@ -39,14 +41,16 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
     public constructor(scene: Phaser.Scene, x: number, y: number, agent: Agent, texture: string) {
         super(scene, x, y, texture);
 
+        this.collided = false;
         this.state = agent.getHealthState();
-        this.setDisplaySize(32, 32);    // original size is 64x64. 
+        this.setDisplaySize(32, 32);    // original size is 64x64.
         this.randomWalk();
 
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
-        this.setImmovable(true);
+        //this.setImmovable(true);
         this.setCollideWorldBounds(true);
+
 
         // ------------------------------------------------ RUNNING-ANIMATIONS
         if(agent instanceof Police == true) {
@@ -68,24 +72,40 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
     public update(): void {
         
         /** Sets the skin and animation of healthy citizen */
+        /*if(this.counter <= 0) {*/
+        if(this instanceof Police == true) {
+            this.anims.play('patrol');
+        }
         if(this instanceof Citizen == true && this.state == State.HEALTHY) {
             this.anims.play('walk');
+            console.log("playing walk animation");
         }
-        /**  */
+            ///**  *//*
         if(this instanceof Citizen == true && this.state == State.INFECTED) {
             this.anims.play('infectedWalk');
         }
+        /*}*/
+
+        if(this.body.onWorldBounds == true) {
+            this.collided = true;
+            this.changeDirectionOnCollide();
+        }
 
         /** certain behaviours */
-        if(this.counter == 0) {     // && this.action == 0) {       //:TODO add more movements and behaviors
+        if(this.counter <= 0 && this.action == 0) {       //:TODO add more movements and behaviors
             this.randomWalk();
         }
+
+        /*if(this.counter == 0 && this.action == 1) {
+            this.lookAround();
+        }*/
 
         this.randomTurn();
         /** Moving the body to the direction it is facing to */
         this.x += this.velocity * this.gradient.x;
         this.y += this.velocity * this.gradient.y;
 
+        this.collided = false;
         this.counter--;
     }
 
@@ -131,13 +151,15 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
      * TODO: change direction when agent hits the wall
      */
     public changeDirectionOnCollide(): void {
-        this.velocity = Phaser.Math.RND.realInRange(0.5, 1);
-        this.degree += 90;
-        this.gradient.x = Phaser.Math.RoundTo(Math.cos(Phaser.Math.DegToRad(this.degree)), -4);
-        this.gradient.y = Phaser.Math.RoundTo(Math.sin(Phaser.Math.DegToRad(this.degree)), -4);
-        this.counter = Phaser.Math.Between(200, 300);
-        this.turnRate = Phaser.Math.RND.realInRange(-0.4, 0.4);
-        this.angle = this.degree + 90; 
+        if(this.collided == true) {
+            this.velocity = Phaser.Math.RND.realInRange(0.5, 1);
+            this.degree += 180;
+            this.gradient.x = Phaser.Math.RoundTo(Math.cos(Phaser.Math.DegToRad(this.degree)), -4);
+            this.gradient.y = Phaser.Math.RoundTo(Math.sin(Phaser.Math.DegToRad(this.degree)), -4);
+            this.counter = Phaser.Math.Between(200, 300);
+            this.turnRate = Phaser.Math.RND.realInRange(-0.4, 0.4);
+            this.angle = this.degree + 90;
+        }
     }
 
     /**
@@ -149,4 +171,32 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
         this.gradient.y = Phaser.Math.RoundTo(Math.sin(Phaser.Math.DegToRad(this.degree)), -4);
         this.angle += this.turnRate;
     }
+
+    public correctPositionWhenOverlap(otherAgentX: number, otherAgentY: number): void {
+        this.x += (this.x - otherAgentX)/20;
+        this.y += (this.y - otherAgentY)/20;
+    }
+
+    public lookAround(): void {
+        /*this.anims.play('citizenIdle');
+        this.action = Phaser.Math.Between(0, 1);
+        this.velocity = 0;
+        this.counter = 100; //Phaser.Math.Between(500, 600);
+        this.turnRate = 1;  //Phaser.Math.RND.realInRange(-2, 2);*/
+    }
+
+    // ------------------------------------------------ GETTER-METHODS
+    public isCollided(): boolean {
+        return this.collided;
+    }
+
+    // ------------------------------------------------ SETTER-METHODS
+    public setCollided(): void {
+        this.collided = true;
+    }
+
+    public setNotCollided(): void {
+        this.collided = false;
+    }
+
 }
