@@ -20,7 +20,7 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         this.scene.add.existing(itemBar);
         
         this.add(this.scene.add.image(0 , 0, 'menuborder').setOrigin(0, 0));
-        itemBar.add(this.scene.add.image(0, 0, 'blackborder').setOrigin(0, 0));
+        itemBar.add(this.scene.add.image(0, 0, 'itemborder').setOrigin(0, 0));
         
         this.add(itemBar);
         this.addStatistics();
@@ -38,13 +38,13 @@ export class ItemMenu extends Phaser.GameObjects.Container {
 
     private fillWithItems(): Phaser.GameObjects.GameObject[] {
         return [
-        new Item(this.scene, 75, 330, 'hallo', 23, 'blackborder', console.log),
-        new Item(this.scene, 200, 330, 'hallo2', 25, 'blackborder', console.log),
-        new Item(this.scene, 325, 330, 'hallo3', 25, 'blackborder', console.log),
-        new Item(this.scene, 450, 330, 'hallo4', 25, 'blackborder', console.log),
-        new Item(this.scene, 575, 330, 'hallo5', 25, 'blackborder', console.log),
-        new Item(this.scene, 700, 330, 'hallo6', 25, 'blackborder', console.log),
-        new Item(this.scene, 825, 330, 'hallo7', 25, 'blackborder', console.log)
+        new Item(this.scene, 75, 330, 'hallo', 23, 'itemborder', console.log),
+        new Item(this.scene, 200, 330, 'hallo2', 25, 'itemborder', console.log),
+        new Item(this.scene, 325, 330, 'hallo3', 25, 'itemborder', console.log),
+        new Item(this.scene, 450, 330, 'hallo4', 25, 'itemborder', console.log),
+        new Item(this.scene, 575, 330, 'hallo5', 25, 'itemborder', console.log),
+        new Item(this.scene, 700, 330, 'hallo6', 25, 'itemborder', console.log),
+        new Item(this.scene, 825, 330, 'hallo7', 25, 'itemborder', console.log)
         ]
     }
 
