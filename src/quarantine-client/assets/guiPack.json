@@ -10,6 +10,16 @@
             "type": "image",
             "key" : "itemborder",
             "url" : "assets/sprites/blackborder.png"
+          },
+          {
+            "type": "image",
+            "key" : "arrow-button-right",
+            "url" : "assets/sprites/arrow-button-right.jpg"
+          },
+          {
+            "type": "image",
+            "key" : "arrow-button-left",
+            "url" : "assets/sprites/arrow-button-left.jpg"
           }
         ]
     }

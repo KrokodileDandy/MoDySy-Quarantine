@@ -1,4 +1,5 @@
 import 'phaser';
+import { ArrowButton } from './arrow-button';
 
 /**
  * 
@@ -22,14 +23,13 @@ export class Item extends Phaser.GameObjects.Image{
         this.price = price;
         this.eventListener = callback;
 
-        this.setInteractive();
-        this.scene.input.setDraggable(this); //TODO Make a draggable list (container)of items. On drag => move all items of this list
-        /*this.on('drag', (pointer, gameObject, dragX, dragY) => {
-            //gameObject.x = dragX;
-            //this.x = dragX;
-            this.eventListener(dragY);
-        })*/
-        
+        this.setInteractive()
+            .on('pointerdown', () => {
+                this.eventListener(this.price);
+            });
+        ArrowButton.getEmitter().on('myButtonClick', (direction) => {
+            this.updatePosition(direction);
+        });
     }
 
     public getTitle(): string {
@@ -40,7 +40,14 @@ export class Item extends Phaser.GameObjects.Image{
         return this.price;
     }
 
-    public updatePosition(position: number): void {
-        console.log(position);
+    public updatePosition(direction: number): void {
+        this.x += direction * 125;
+        if (this.x < 75 || this.x > 825) {
+            this.disableInteractive();
+            this.setVisible(false);
+        } else {
+            this.setVisible(true);
+            this.setInteractive();
+        }
     }
 }

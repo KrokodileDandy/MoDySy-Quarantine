@@ -1,6 +1,7 @@
 import 'phaser';
 import { Item } from './item';
 import { GameObjects } from 'phaser';
+import { ArrowButton } from './arrow-button';
 
 /**
  * @author Marvin Kruber
@@ -13,7 +14,7 @@ export class ItemMenu extends Phaser.GameObjects.Container {
     public constructor(scene: Phaser.Scene, x: number, y: number ) {
         super(scene, x, y);
 
-        const itemBar = new Phaser.GameObjects.Container(this.scene, 200, 100, this.fillWithItems() ).setScale(1.1, 1);
+        const itemBar = new Phaser.GameObjects.Container(this.scene, 200, 100, this.fillWithItems() ).setScale(1.05, 1);
         this.setScale(1.5, 0.25);
 
         this.scene.add.existing(this);
@@ -21,15 +22,19 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         
         this.add(this.scene.add.image(0 , 0, 'menuborder').setOrigin(0, 0));
         itemBar.add(this.scene.add.image(0, 0, 'itemborder').setOrigin(0, 0));
+
+        const nbrOfItems = itemBar.length -1; //1 has to be subracted because of the background img of itemBar
+        this.add(new ArrowButton(this.scene, 175, 400, 'arrow-button-left', -1, nbrOfItems));
+        this.add(new ArrowButton(this.scene, 1230, 400, 'arrow-button-right', 1, nbrOfItems));
         
         this.add(itemBar);
         this.addStatistics();
 
         itemBar.setSize(100, 300);
-        itemBar.setInteractive();
+        /*itemBar.setInteractive();
         itemBar.input.hitArea = new Phaser.GameObjects.Rectangle(this.scene, 50, 100 , 1000, 600); //hitArea of ItemMenu
         itemBar.on('pointerdown', () => console.log("Hello again"));
-        /*itemBar.on('drag', (pointer, gameObject, dragX, dragY) => { //TODO change hit area of items -> setHitArea()
+        itemBar.on('drag', (pointer, gameObject, dragX, dragY) => { //TODO change hit area of items -> setHitArea()
             itemBar.each(x => (x as Item).updatePosition(0));
         });*/
         
