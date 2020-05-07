@@ -16,7 +16,7 @@ export class HealthWorkers extends Agent {
     }
 
     public update(): void {
-        
+        super.update();
     }
 
 }

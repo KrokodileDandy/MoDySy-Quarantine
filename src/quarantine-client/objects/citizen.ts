@@ -17,7 +17,7 @@ export class Citizen extends Agent {
     }
 
     public update(): void {
-        
+        super.update();
     }
 
 }

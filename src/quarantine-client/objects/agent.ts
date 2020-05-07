@@ -37,6 +37,7 @@ export abstract class Agent {
     }
 
     public update(): void {
+        console.log('Update');
     }
     
 
