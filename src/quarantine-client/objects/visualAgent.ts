@@ -1,6 +1,4 @@
 import { Agent } from "./agent";
-import { Citizen } from "./citizen";
-import { Police } from "./police";
 import { Role } from "../util/roles";
 import { State } from "../util/healthStates";
 
