@@ -60,7 +60,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     spawnCitizen(): void {
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < 100; i++) {
             const citizen = new VisualAgent(this, Phaser.Math.Between(430, 1365), Phaser.Math.Between(180, 820), new Citizen(Role.CITIZEN, State.HEALTHY), 'citizen');
             citizen.setSize(38, 38);
             citizen.setOffset(16, 16);
@@ -70,7 +70,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     spawnPolice(): void {
-        for (let i = 0; i < 5; i++) {
+        for (let i = 0; i < 1; i++) {
             const police = new VisualAgent(this, Phaser.Math.Between(430, 1365), Phaser.Math.Between(180, 820), new Police(Role.POLICE, State.HEALTHY), 'police');
             police.setSize(38, 38);
             police.setOffset(16, 16);
@@ -95,9 +95,9 @@ export class MainScene extends Phaser.Scene {
             a1.changeDirectionOnCollide();
             a1.meet(a2);
         });
-        this.physics.add.collider(this.police, this.police, (p1: VisualAgent, p2: VisualAgent) => {
-            p1.setCollided();
-            p1.changeDirectionOnCollide();
+        this.physics.add.collider(this.police, this.police, (p: VisualAgent) => {
+            p.setCollided();
+            p.changeDirectionOnCollide();
         });
         this.physics.add.collider(this.agents, this.police, (a: VisualAgent, p: VisualAgent) => {
             a.setCollided();
