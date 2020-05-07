@@ -1,5 +1,16 @@
 {
   "preload": {
-
+      "files": [
+        {
+          "type": "image",
+          "key" : "menuborder",
+          "url" : "assets/menuBorder.jpg"
+        },
+        {
+          "type": "image",
+          "key" : "blackborder",
+          "url" : "assets/sprites/blackborder.png"
+        }
+      ]
   }
 }
