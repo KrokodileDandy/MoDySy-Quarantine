@@ -68,7 +68,7 @@ export class Controller {
      * values for nbrPolice, budget, income...
      */
     private constructor() {
-        this.stats.population = 83_149_300; // german population in september 2019 (wikipedia)
+        this.stats.population = 1000; // german population in september 2019 (wikipedia)
         this.stats.budget = 2_000_000;
         this.stats.income = 30_000;
 
