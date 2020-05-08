@@ -113,7 +113,7 @@ export class GuiScene extends Phaser.Scene {
         this.addOverOutListener(sprites[i], sprites[i+1]);
       }
 
-      var menuIsPressed = false;
+      let menuIsPressed = false;
 
       // Handle the visibility of the measure buttons
       menuBlack.on('pointerup', ()=> {
