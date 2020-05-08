@@ -4,6 +4,7 @@ import { Police } from '../police';
 import { Role} from '../../util/roles';
 import { State } from '../../util/healthStates';
 import { Rule } from './rule';
+import { HealthWorker } from '../healthWorker';
 
 /**
  * Singleton controller which contains game variables (e.g. budget, population size)
@@ -58,17 +59,17 @@ export class Controller {
     private readonly ticsPerDay = 24;
  
     /** All population protocol agents of the game */
-    private agents: Agent[];
+    private agents: Agent[] = [];
    
     /** All transition rule currently defined in the population protocol */
-    private rules: Rule[];
+    private rules: Rule[] = [];
 
     /**
      * Different difficulty levels can be reached through defining different
      * values for nbrPolice, budget, income...
      */
     private constructor() {
-        this.stats.population = 83_149_300; // german population in september 2019 (wikipedia)
+        this.stats.population = 1000; // german population in september 2019 (wikipedia)
         this.stats.budget = 2_000_000;
         this.stats.income = 30_000;
 
@@ -85,14 +86,40 @@ export class Controller {
     }
 
     /**
-     * TODO Seperate class for upgrades?
+     * Inserts a number of health workers to the agents array and adds rules regarding the state 'CURE'.
+     * @param price Price of the upgrade
+     * @param numberOfNewAgents Number of new health workers
+     * @returns Boolean if the operation was successful, false if there are not enough people left to become health workers
      */
-    public introduceCure(price: number): Agent[] {
+    public introduceCure(price: number, numberOfNewAgents: number): boolean {
+        // There should be enough people left to become health workers
+        if (this.stats.population - this.stats.nbrHW - this.stats.nbrPolice < numberOfNewAgents) return false;
+
         this.buyItem(price);
-        return null; // TODO
+
+        const lastRule = this.rules.length;
+        this.rules[lastRule] = new Rule(State.HEALTHY, State.CURE, State.IMMUNE, State.CURE);
+        this.rules[lastRule] = new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE);
+        this.rules[lastRule] = new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE);
+
+        let agentsLeft = numberOfNewAgents;
+        /** 
+         * Changes agents of the agents array to become health workers if they are not already health
+         * workers or police officers.
+         */
+        while (agentsLeft != 0) {
+            const idx = this.getRandomIndex();
+            if (!(this.agents[idx] instanceof HealthWorker) &&
+                !(this.agents[idx] instanceof Police)) {
+                    this.agents[idx] = new HealthWorker(State.CURE);
+                    agentsLeft--;
+            }
+        }
+        return true;
     }
+    
     /**
-     * Reduces the current budget by the price
+     * Reduces the current budget by the given price
      * @param price Price of respective item
      */
     public buyItem(price: number): void {
@@ -217,6 +244,9 @@ export class Controller {
 
     /** @returns Tics per day */
     public getTicsPerDay(): number {return this.ticsPerDay;}
+
+    /** @returns Array of active rules */
+    public getRules(): Rule[] {return this.rules;}
 
     // ------------------------------------------------------- GETTER of Stats instance
     /** @returns Currently available budget */
