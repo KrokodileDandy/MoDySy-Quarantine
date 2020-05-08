@@ -52,6 +52,22 @@ export class Controller {
         // ...
     }
 
+    /** Anonymous class to encapsulate available game upgrades */
+    private upgrade = new class Upgrades {
+        /**
+         * 
+         * @param amt Number of new police officers
+         */
+        public buyPoliceOfficers(amt: number): boolean {
+            
+            return true;
+        }
+
+        public buyHealthWorkers(): boolean {
+            return true;
+        }
+    }
+
     /** The only existing instance of Controller */
     private static instance: Controller;
 
