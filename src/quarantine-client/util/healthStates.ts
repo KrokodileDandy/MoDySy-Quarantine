@@ -4,5 +4,6 @@ export enum State {
     INFECTED = 'INFECTED',
     UNKNOWINGLY_INFECTED = 'UNKNOWINGLY_INFECTED',
     DECEASED = 'DECEASED',
-    CURE = 'CURE'
+    CURE = 'CURE',
+    IMMUNE = 'IMMUNE'
 }
