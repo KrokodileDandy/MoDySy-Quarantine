@@ -44,8 +44,7 @@ export class AgentScene extends Phaser.Scene {
         this.police = this.add.group();
         
         /** Sets the bounds of the area where agents should interact in */
-        this.physics.world.setBounds(432, 182, 933, 637);
-        //this.physics.world.setBoundsCollision();      //:probably will delete later
+        this.physics.world.setBounds(432, 182, 933, 637);       // Change bounds later when layout is clear.
         
         /** adding collision */
         this.addCollision();
@@ -169,13 +168,6 @@ export class AgentScene extends Phaser.Scene {
             repeat: -1,
             frameRate: 12,
             frames: this.anims.generateFrameNames('police', { start: 0, end: 8 })
-        });
-        /** Idle animation of citizen */        // Might not needed because only 1 frame. TODO: Looking for different solution.
-        this.anims.create({
-            key: 'citizenIdle',
-            repeat: -1,
-            frameRate: 12,
-            frames: this.anims.generateFrameNames('citizen', { start: 0, end: 0 })
         });
     }
 }
