@@ -85,6 +85,15 @@ export class Controller {
         this.rules[2] = new Rule(State.INFECTED, State.INFECTED, State.INFECTED, State.DECEASED);
     }
 
+    // ------------------------------------------------------------------------------------------- UPGRADES
+    /**
+     * Reduces the current budget by the given price
+     * @param price Price of respective item
+     */
+    private buyItem(price: number): void {
+        this.stats.budget = this.stats.budget - price;
+    }
+
     /**
      * Inserts a number of health workers to the agents array and adds rules regarding the state 'CURE'.
      * @param price Price of the upgrade
@@ -102,44 +111,48 @@ export class Controller {
         this.rules[lastRule] = new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE);
         this.rules[lastRule] = new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE);
 
-        let agentsLeft = numberOfNewAgents;
-        /** 
-         * Changes agents of the agents array to become health workers if they are not already health
-         * workers or police officers.
-         */
-        while (agentsLeft != 0) {
-            const idx = this.getRandomIndex();
-            if (!(this.agents[idx] instanceof HealthWorker) &&
-                !(this.agents[idx] instanceof Police)) {
-                    this.agents[idx] = new HealthWorker(State.CURE);
-                    agentsLeft--;
-            }
-        }
+        this.distributeNewRoles(numberOfNewAgents, Role.HEALTH_WORKER);
         return true;
-    }
-    
-    /**
-     * Reduces the current budget by the given price
-     * @param price Price of respective item
-     */
-    public buyItem(price: number): void {
-        this.stats.budget = this.stats.budget - price;
     }
 
     /**
      * Changes the role of the specified number of agents. The agents are chosen randomly.
+     * Shouldn't be used with the rule CITIZEN.
      * @param amt Amount of new workers
      * @param role role to be distributed among the agents
+     * @reurns If enough agents can be assigned that role
      */
-    private distributeNewRoles(amt: number, role: Role): Agent[] {
+    private distributeNewRoles(amt: number, role: Role): boolean {
+        // There should be enough people left to be assigned the specific role
+        if (this.stats.population - this.stats.nbrHW - this.stats.nbrPolice < amt) return false;
+
         let i = 0;
+        /** 
+         * Changes agents of the agents array to become health workers if they are not already health
+         * workers or police officers.
+         */
         while(i < amt) {
             const idx = this.getRandomIndex();
-            if(this.agents[idx].getRole() == role) continue;
-            this.agents[idx].setRole(role);
+            if((this.agents[idx] instanceof HealthWorker) ||
+                (this.agents[idx] instanceof Police)) continue;
+            switch (role) {
+                case Role.HEALTH_WORKER: {
+                    this.agents[idx] = new HealthWorker(State.CURE);
+                    break;
+                }
+                case Role.POLICE: {
+                    const tmp = this.agents[idx].getHealthState(); // infected agents can become police officers
+                    this.agents[idx] = new Police(tmp);
+                    break;
+                }
+                default: {
+                    console.log("[WARNING] distributeNewRoles in controller.ts wasn't invoked with police or health worker role.");
+                    break;
+                }
+            }
             i++;
         }
-        return this.agents;
+        return true;
     }
 
     /**
@@ -153,10 +166,10 @@ export class Controller {
             if (remainingPolice > 0
                 && (Math.random() > (this.stats.nbrPolice / this.stats.population) // random generation of agents OR
                     || remainingPolice === this.stats.population - i)) { // remaining number of agents has to be filled by police officers
-                this.agents[i] = new Police(Role.POLICE, State.HEALTHY);
+                this.agents[i] = new Police(State.HEALTHY);
                 remainingPolice--;
             } else {
-                this.agents[i] = new Citizen(Role.CITIZEN, State.HEALTHY);
+                this.agents[i] = new Citizen(State.HEALTHY);
             }
         }
     }
