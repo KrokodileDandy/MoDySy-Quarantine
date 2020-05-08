@@ -73,19 +73,10 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
             this.anims.play('infectedWalk', true);
         }
 
-        /*if(this.body.onWorldBounds == true) {     // not working
-            this.collided = true;
-            this.changeDirectionOnCollide();
-        }*/
-
         /** certain behaviours */
         if(this.counter <= 0 && this.action == 0) {       //:TODO add more movements and behaviors
             this.randomWalk();
         }
-
-        /*if(this.counter == 0 && this.action == 1) {
-            this.lookAround();
-        }*/
 
         this.randomTurn();
         /** Moving the body to the direction it is facing to */
@@ -140,11 +131,9 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
      */
     public changeDirectionOnCollide(): void {
         if(this.collided == true) {
-            //this.velocity = Phaser.Math.RND.realInRange(0.5, 1);
             this.degree += 180;
             this.gradient.x = Phaser.Math.RoundTo(Math.cos(Phaser.Math.DegToRad(this.degree)), -4);
             this.gradient.y = Phaser.Math.RoundTo(Math.sin(Phaser.Math.DegToRad(this.degree)), -4);
-            //this.counter = Phaser.Math.Between(200, 300);
             this.turnRate = Phaser.Math.RND.realInRange(-0.4, 0.4);
             this.angle = this.degree + 90;
         }
@@ -169,18 +158,6 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
     public correctPositionWhenOverlap(otherAgentX: number, otherAgentY: number): void {
         this.x += (this.x - otherAgentX)/20;
         this.y += (this.y - otherAgentY)/20;
-    }
-
-    /**
-     * Agent standing still and looking around.
-     * Not working because of an animation bug.
-     */
-    public lookAround(): void {
-        /*this.anims.play('citizenIdle');
-        this.action = Phaser.Math.Between(0, 1);
-        this.velocity = 0;
-        this.counter = 100; //Phaser.Math.Between(500, 600);
-        this.turnRate = 1;  //Phaser.Math.RND.realInRange(-2, 2);*/
     }
 
     // ------------------------------------------------ GETTER-METHODS
