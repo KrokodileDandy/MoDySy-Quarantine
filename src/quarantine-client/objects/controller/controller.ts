@@ -26,13 +26,13 @@ export class Controller {
         /** Population of the country the player is playing in */
         public population: number;
         /** Number of deceased people since the game started */
-        public deceased: number = 0;
+        public deceased = 0;
         /** 
          * Number of currently infected people (known cases). 
          * The game starts with 0 agents with the status INFECTED, but
          * a specific number of agents have the status UNKNOWINGLY_INFECTED.
          */
-        public infected: number = 0;
+        public infected = 0;
     
         /** Number of police officers */
         public nbrPolice: number;
@@ -43,9 +43,9 @@ export class Controller {
          * Basic interaction rate which is used to calculate the number of
          * interactions per tic.
          */
-        public basicInteractionRate: number = 0.01;
+        public basicInteractionRate = 0.01;
         /** Upper bound of the randomly generated interaction variance. */
-        public maxInteractionVariance: number = 0.05;
+        public maxInteractionVariance = 0.05;
     
         // --------------------------------------------------- PROBABILITIES
         // ...
@@ -58,10 +58,10 @@ export class Controller {
     private readonly ticsPerDay = 24;
  
     /** All population protocol agents of the game */
-    private agents: Agent[];
+    private agents: Agent[] = [];
    
     /** All transition rule currently defined in the population protocol */
-    private rules: Rule[];
+    private rules: Rule[] = [];
 
     /**
      * Different difficulty levels can be reached through defining different
@@ -78,7 +78,7 @@ export class Controller {
     }
 
     /** Initiate basic transition rules at gamestart. */
-    private initiateRules() {
+    private initiateRules(): void {
         this.rules[0] = new Rule(State.HEALTHY, State.INFECTED, State.UNKNOWINGLY_INFECTED, State.INFECTED);
         this.rules[1] = new Rule(State.HEALTHY, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED);
         this.rules[2] = new Rule(State.INFECTED, State.INFECTED, State.INFECTED, State.DECEASED);
@@ -88,16 +88,29 @@ export class Controller {
      * TODO Seperate class for upgrades?
      */
     public introduceCure(price: number): Agent[] {
+        this.buyItem(price);
         return null; // TODO
+    }
+    /**
+     * Reduces the current budget by the price
+     * @param price Price of respective item
+     */
+    public buyItem(price: number): void {
+        this.stats.budget = this.stats.budget - price;
     }
 
     /**
-     * TODO
+     * Changes the role of the specified number of agents. The agents are chosen randomly.
      * @param amt Amount of new workers
+     * @param role role to be distributed among the agents
      */
     private distributeNewRoles(amt: number, role: Role): Agent[] {
-        for (let i = 0; i < amt; i++) {
+        let i = 0;
+        while(i < amt) {
             const idx = this.getRandomIndex();
+            if(this.agents[idx].getRole() == role) continue;
+            this.agents[idx].setRole(role);
+            i++;
         }
         return this.agents;
     }
@@ -125,7 +138,7 @@ export class Controller {
      * Randomly assigns agents as 'UNKNOWINGLY_INFECTED'
      * @param amt Amount of agents to change the state
      */
-    private distributeRandomlyInfected(amt: number) {
+    private distributeRandomlyInfected(amt: number): void {
         let i = 0;
         while (i < amt) {
             const idx = this.getRandomIndex();
@@ -140,11 +153,11 @@ export class Controller {
     private getRandomIndex(): number {return Math.floor(Math.random() * this.stats.population);}
 
     /** Increases budget by income rate. */
-    public updateBudget() {this.stats.budget += this.getIncome()}
+    public updateBudget(): void {this.stats.budget += this.getIncome()}
 
     /** @returns Partially randomized interaction rate. */
     private calculateInteractionRate(): number {
-        let sign = (Math.random() > 0.5) ? 1 : -1;
+        const sign = (Math.random() > 0.5) ? 1 : -1;
         return this.stats.basicInteractionRate + sign * this.stats.maxInteractionVariance;
     }
 
@@ -155,7 +168,7 @@ export class Controller {
      * @param agent1 
      * @param agent2 
      */
-    private findRuleAndApply(agent1: Agent, agent2: Agent) {
+    private findRuleAndApply(agent1: Agent, agent2: Agent): void {
         this.rules.forEach(r => {
             if (r.inputState1 == agent1.getHealthState() && r.inputState2 == agent2.getHealthState()) {
                 agent1.setHealthState(r.outputState1);

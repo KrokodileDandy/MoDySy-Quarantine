@@ -3,24 +3,29 @@
   "version": "1.0.0",
   "description": "A throwaway prototype for project 'quarantine'.",
   "devDependencies": {
+    "@types/jest": "^25.2.1",
     "@typescript-eslint/eslint-plugin": "^2.27.0",
     "@typescript-eslint/parser": "^2.27.0",
     "copy-webpack-plugin": "^5.0.2",
     "eslint": "^6.8.0",
     "expose-loader": "0.7.5",
+    "jest": "^26.0.1",
+    "ts-jest": "^25.5.0",
     "ts-loader": "6.0.4",
-    "typescript": "3.5.2",
+    "typescript": "^3.5.2",
     "webpack": "4.35.2",
     "webpack-cli": "3.3.5",
     "webpack-dev-server": "3.7.2"
   },
   "dependencies": {
+    "chart.js": "^2.9.3",
     "phaser": "3.22"
   },
   "scripts": {
     "dev": "webpack --mode development && webpack-dev-server --mode development",
     "dev-production": "webpack --mode production && webpack-dev-server --mode production",
     "build": "webpack --mode production",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "test": "jest"
   }
 }

@@ -57,10 +57,18 @@ export abstract class Agent {
         return this.healthState;
     }
 
+<<<<<<< HEAD
     /** @returns the role of the agent */
     public getRole(): Role {
         return this.role;
     }
+=======
+    /**@returns the current role of the agent */
+    public getRole(): Role {
+        return this.role;
+    }
+
+>>>>>>> ae7ac4cd839d11d3d78cc54ae9ef849c2f6e997b
 
     // ------------------------------------------------ SETTER-METHODS
     /** Set quarantine to true */
@@ -93,10 +101,19 @@ export abstract class Agent {
 
     /**
      * Set new role
+<<<<<<< HEAD
      * @param newRole assign new role
      */
     public setRole(newRole: Role): void {
         this.role = newRole;
     }
+=======
+     * @param role assign new role
+     */
+    public setRole(role: Role): void {
+        this.role = role;
+    }
+
+>>>>>>> ae7ac4cd839d11d3d78cc54ae9ef849c2f6e997b
 }
 
