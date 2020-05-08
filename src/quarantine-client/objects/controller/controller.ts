@@ -58,10 +58,10 @@ export class Controller {
     private readonly ticsPerDay = 24;
  
     /** All population protocol agents of the game */
-    private agents: Agent[];
+    private agents: Agent[] = [];
    
     /** All transition rule currently defined in the population protocol */
-    private rules: Rule[];
+    private rules: Rule[] = [];
 
     /**
      * Different difficulty levels can be reached through defining different
