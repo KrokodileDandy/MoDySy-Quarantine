@@ -1,9 +1,10 @@
 import { Agent } from '../agent';
-import { Citizen } from '../citizen';
 import { Police } from '../police';
+import { Citizen } from '../citizen';
 import { Role} from '../../util/roles';
 import { State } from '../../util/healthStates';
 import { Rule } from './rule';
+//import { Worker } from 'worker_threads';
 
 /**
  * Singleton controller which contains game variables (e.g. budget, population size)
@@ -63,18 +64,15 @@ export class Controller {
     /** All transition rule currently defined in the population protocol */
     private rules: Rule[];
 
-    /** Pool of worker threads for calculations of the agents array */
-    private workerPool = require('workerpool').pool();
-
-    /** System variable to define level of parallelism */
-    private readonly numberThreadWorkers = 10;
+    /** Scale factor to multiply with population numbers to simulate real population numbers */
+    private readonly populationFactor = 50;
 
     /**
      * Different difficulty levels can be reached through defining different
      * values for nbrPolice, budget, income...
      */
     private constructor() {
-        this.stats.population = 1000 //83_149_300; // german population in september 2019 (wikipedia)
+        this.stats.population = 1_620_000 //83_149_300; // german population in september 2019 (wikipedia)
         this.stats.budget = 2_000_000;
         this.stats.income = 30_000;
 
@@ -123,55 +121,14 @@ export class Controller {
     }
 
     /**
-     * Fill a specific part of the agents array with new Citizen instances.
-     * @param lowerBound Start index of array range
-     * @param upperBound End index of array range
-     */
-    private initiateRange(lowerBound: number, upperBound: number): void {
-        console.log(lowerBound + "; " + upperBound);
-        for (let i = lowerBound; i < upperBound; i++) {
-            this.agents[i] = new Citizen(Role.CITIZEN, State.HEALTHY);
-        }
-    }
-
-    /**
      * On game start initiate a population which consists of citizens and some
      * police officers. The police officers are randomly distributed inside
      * the underlying array.
-     * MULTI THREADED
      */
     private initiatePopulation(): void {
-        //let remainingPolice = this.stats.nbrPolice;
+        let remainingPolice = this.stats.nbrPolice;
         this.agents = new Array(this.stats.population);
-
-        let arrayRange = Math.floor(this.stats.population / this.numberThreadWorkers);
-        let currentLowerBound = 0;
-
-        /** 
-         * Create multiple, multithreaded workers to fill different parts of the agents array.
-         * Because probably the array isn't divideable the last worker fills out the last few
-         * index fields.
-         */
-        for (let i = 0; i < this.numberThreadWorkers; i++) {
-            if (i == this.numberThreadWorkers - 1) arrayRange = this.stats.population % this.numberThreadWorkers;
-            this.workerPool.exec(this.initiateRange, [currentLowerBound, currentLowerBound + arrayRange - 1])
-                .catch(function (err: Error) {
-                    console.error(err);
-                })
-                .then(function () {
-                    this.workerPool.terminate(); // terminate all workers when done
-                })
-                .then(function() {
-                    this.distributeRandomlyInfected(0.02 * this.stats.population); // TODO change starting rate of infected people
-                }
-            );
-            currentLowerBound += arrayRange;
-        }
-
-        for (let i = 0; i < this.stats.population; i++) {
-            if (this.agents[i] == null) console.log(i);
-        }
-        /*
+        
         for (let i = 0; i < this.stats.population; i++) {
             if (remainingPolice > 0
                 && (Math.random() > (this.stats.nbrPolice / this.stats.population) // random generation of agents OR
@@ -182,7 +139,6 @@ export class Controller {
                 this.agents[i] = new Citizen(Role.CITIZEN, State.HEALTHY);
             }
         }
-        */
     }
 
     /**
@@ -277,22 +233,22 @@ export class Controller {
     public getIncome(): number {return this.stats.income;}
 
     /** @returns Current population number */
-    public getPopulation(): number {return this.stats.population;}
+    public getPopulation(): number {return this.stats.population * this.populationFactor;}
 
     /** @returns Number of deceased people since game start */
-    public getDeceased(): number {return this.stats.deceased;}
+    public getDeceased(): number {return this.stats.deceased * this.populationFactor;}
 
     /**
      * The number does not include agents with the state UNKNOWINGLY_INFECTED 
      * @returns Number of currently infected people
      */
-    public getInfected(): number {return this.stats.infected;}
+    public getInfected(): number {return this.stats.infected * this.populationFactor;}
 
     /** @returns Number of police officers */
-    public getNumberOfPolice(): number {return this.stats.nbrPolice;}
+    public getNumberOfPolice(): number {return this.stats.nbrPolice * this.populationFactor;}
 
     /** @returns Number of health workers */
-    public getNumberOfHealthWorkers(): number {return this.stats.nbrHW;}
+    public getNumberOfHealthWorkers(): number {return this.stats.nbrHW * this.populationFactor;}
 
 
 
