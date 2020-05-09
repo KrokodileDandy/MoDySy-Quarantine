@@ -1,5 +1,80 @@
 {
-  "preload": {
+  "preload":{
 
+  },
+  "buttons": {
+    "files": [
+        {
+          "type": "image",
+          "key": "menu-white",
+          "url": "assets/sprites/menu-white.png"
+        },
+        {
+          "type": "image",
+          "key": "menu-black",
+          "url": "assets/sprites/menu-black.png"
+        },
+        {
+          "type": "image",
+          "key": "investment-white",
+          "url": "assets/sprites/investment-white.png"
+        },
+        {
+          "type": "image",
+          "key": "investment-black",
+          "url": "assets/sprites/investment-black.png"
+        },
+        {
+          "type": "image",
+          "key": "lockdown-white",
+          "url": "assets/sprites/lockdown-white.png"
+        },
+        {
+          "type": "image",
+          "key": "lockdown-black",
+          "url": "assets/sprites/lockdown-black.png"
+        },
+        {
+          "type": "image",
+          "key": "police-white",
+          "url": "assets/sprites/police-white.png"
+        },
+        {
+          "type": "image",
+          "key": "police-black",
+          "url": "assets/sprites/police-black.png"
+        },
+        {
+          "type": "image",
+          "key": "research-white",
+          "url": "assets/sprites/research-white.png"
+        },
+        {
+          "type": "image",
+          "key": "research-black",
+          "url": "assets/sprites/research-black.png"
+        },
+        {
+          "type": "image",
+          "key": "statemeasure-white",
+          "url": "assets/sprites/statemeasure-white.png"
+        },
+        {
+          "type": "image",
+          "key": "statemeasure-black",
+          "url": "assets/sprites/statemeasure-black.png"
+        },
+        {
+          "type": "image",
+          "key": "socialdistancing-white",
+          "url": "assets/sprites/socialdistancing-white.png"
+        },
+        {
+          "type": "image",
+          "key": "socialdistancing-black",
+          "url": "assets/sprites/socialdistancing-black.png"
+        }
+
+      ]
   }
 }
