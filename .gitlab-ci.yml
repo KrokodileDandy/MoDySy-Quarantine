@@ -19,7 +19,7 @@ build:
       - dist
     expire_in: 2 days
 
-lint:
+test:
   cache:
     key: "quarantine"
     policy: pull
@@ -28,8 +28,9 @@ lint:
   stage: test
   script:
     - "npm run lint"
+    - "npm run test"
 
-publish:
+deploy:
   stage: deploy
   script:
   - "~/copy_files.sh"

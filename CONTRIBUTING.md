@@ -47,6 +47,7 @@ Before opening a new merge request please check the following:
 	2. Get current version of master: `git pull origin master`
 2. `npm run dev` compiles without errors
 3. `npm run lint` doesn't return error messages
+4. `npm run test` doesn't throw any errors
 
 ## Contributing changes
 ### Version control branching
