@@ -1,4 +1,4 @@
-import * as Chart from "chart.js"
+import * as Chart from "chart.js";
 import { Controller } from "../objects/controller/controller";
 
 /**
