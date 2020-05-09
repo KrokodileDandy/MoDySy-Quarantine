@@ -1,6 +1,6 @@
 import { Agent } from '../agent';
-import { Citizen } from '../citizen';
 import { Police } from '../police';
+import { Citizen } from '../citizen';
 import { Role} from '../../util/roles';
 import { State } from '../../util/healthStates';
 import { Rule } from './rule';
@@ -64,25 +64,29 @@ export class Controller {
     /** All transition rule currently defined in the population protocol */
     private rules: Rule[] = [];
 
+    /** Scale factor to multiply with population numbers to simulate real population numbers */
+    private readonly populationFactor = 50;
+
     /**
      * Different difficulty levels can be reached through defining different
      * values for nbrPolice, budget, income...
      */
     private constructor() {
-        this.stats.population = 1000; // german population in september 2019 (wikipedia)
+        this.stats.population = 1_620_000 //83_149_300; // german population in september 2019 (wikipedia)
         this.stats.budget = 2_000_000;
         this.stats.income = 30_000;
 
         this.initiateRules();
         this.initiatePopulation();
-        this.distributeRandomlyInfected(0.02 * this.stats.population); // TODO change starting rate of infected people
     }
 
     /** Initiate basic transition rules at gamestart. */
     private initiateRules(): void {
-        this.rules[0] = new Rule(State.HEALTHY, State.INFECTED, State.UNKNOWINGLY_INFECTED, State.INFECTED);
-        this.rules[1] = new Rule(State.HEALTHY, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED);
-        this.rules[2] = new Rule(State.INFECTED, State.INFECTED, State.INFECTED, State.DECEASED);
+        this.rules = [
+            new Rule(State.HEALTHY, State.INFECTED, State.UNKNOWINGLY_INFECTED, State.INFECTED),
+            new Rule(State.HEALTHY, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED),
+            new Rule(State.INFECTED, State.INFECTED, State.INFECTED, State.DECEASED),
+        ];
     }
 
     /**
@@ -149,6 +153,8 @@ export class Controller {
      */
     private initiatePopulation(): void {
         let remainingPolice = this.stats.nbrPolice;
+        this.agents = new Array(this.stats.population);
+        
         for (let i = 0; i < this.stats.population; i++) {
             if (remainingPolice > 0
                 && (Math.random() > (this.stats.nbrPolice / this.stats.population) // random generation of agents OR
@@ -256,22 +262,22 @@ export class Controller {
     public getIncome(): number {return this.stats.income;}
 
     /** @returns Current population number */
-    public getPopulation(): number {return this.stats.population;}
+    public getPopulation(): number {return this.stats.population * this.populationFactor;}
 
     /** @returns Number of deceased people since game start */
-    public getDeceased(): number {return this.stats.deceased;}
+    public getDeceased(): number {return this.stats.deceased * this.populationFactor;}
 
     /**
      * The number does not include agents with the state UNKNOWINGLY_INFECTED 
      * @returns Number of currently infected people
      */
-    public getInfected(): number {return this.stats.infected;}
+    public getInfected(): number {return this.stats.infected * this.populationFactor;}
 
     /** @returns Number of police officers */
-    public getNumberOfPolice(): number {return this.stats.nbrPolice;}
+    public getNumberOfPolice(): number {return this.stats.nbrPolice * this.populationFactor;}
 
     /** @returns Number of health workers */
-    public getNumberOfHealthWorkers(): number {return this.stats.nbrHW;}
+    public getNumberOfHealthWorkers(): number {return this.stats.nbrHW * this.populationFactor;}
 
 
 
