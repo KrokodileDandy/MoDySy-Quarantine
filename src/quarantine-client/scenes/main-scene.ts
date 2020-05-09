@@ -1,4 +1,8 @@
+import { Controller } from "../objects/controller/controller";
+
 export class MainScene extends Phaser.Scene {
+
+    private controller: Controller;
 
     constructor() {
         super({
@@ -29,6 +33,8 @@ export class MainScene extends Phaser.Scene {
     create(): void {
         this.addAnimations();
         console.log('Create');
+
+        this.controller = Controller.getInstance();
     }
 
     update(): void {
