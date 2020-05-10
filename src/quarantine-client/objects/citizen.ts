@@ -8,12 +8,14 @@ import { State } from "../util/healthStates";
  * Subclass of agent.
  * @author Shao
  */
-
 export class Citizen extends Agent {
     
-    public constructor(role: Role, state: State) {
-        super(role, state);
-
+    /**
+     * Citizens have the role CITIZEN automatically.
+     * @param state State of the new citizen
+     */
+    public constructor(state: State) {
+        super(Role.CITIZEN, state);
     }
 
     public update(): void {
