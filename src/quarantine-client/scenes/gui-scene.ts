@@ -21,50 +21,30 @@ export class GuiScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.createPauseButton();
         this.createMenuButtons();
+        this.createSettingsButtons();
     }
 
-    // Creates a pause button
-    createPauseButton(): void {
-      //cast to MainScene because otherwise TS won't find MainScene functions in the Scene superclass
+    createPauseButton(reset, resume): void{
       const main = this.scene.get('MainScene') as MainScene;
-      let isPaused = false;
-      const pause = this.add.text(1300, 60, 'Pause', { fontFamily: '"Roboto Condensed"', color: "#000"});
-      const restart = this.add.text(1300, 100, 'Restart', { fontFamily: '"Roboto Condensed"', color: "#000" });
-      //restart button only set to visible when the game is paused
-      restart.visible = false;
-      pause.setInteractive();
-      restart.setInteractive();
+      main.scene.pause();
+      let isPaused = true;
 
       //when the button 'restart' is pressed, restart the main scene and reset the gui scene
-      restart.on('pointerup', ()=> {
+      reset.on('pointerup', ()=> {
         //only restart the game if it is paused to avoid accidentally clicking on the invisible button
         if(isPaused){
           main.scene.restart();
           isPaused = false;
-          pause.setText('Pause');
-          //reset the restart button to invisible for the new game
-          restart.visible = false;
         }
       });
 
       //when the button 'pause' is pressed, check whether the scene is already paused
-      pause.on('pointerup', ()=> {
-        if(!isPaused){
-          main.scene.pause();
-          //change text of the button from 'pause' to 'resume'
-          pause.setText('Resume');
-          //set restart button to visible
-          restart.visible = true;
-          isPaused = true;
-        } else {
+      resume.on('pointerup', ()=> {
+        if(isPaused){
           main.scene.resume();
-          pause.setText('Pause');
-          restart.visible = false;
-          isPaused = false;
-        }
-      });
+          isPaused = true;
+      }});
     }
 
     // Creates menu buttons
@@ -101,9 +81,7 @@ export class GuiScene extends Phaser.Scene {
       const measures = [lockdownBlack, socialdistancingBlack, policeBlack, researchBlack];
 
       // Represent sprites on a smaller scale
-      sprites.forEach(element => {
-        this.setSpriteScale(element);
-      });
+      this.setSpriteScale(sprites, .4);
 
       // Set default visibility (only the menu button can be seen)
       this.setDefaultVisibility(sprites);
@@ -144,13 +122,82 @@ export class GuiScene extends Phaser.Scene {
 
     }
 
-    // Handles the visibility of the measures
-    addOnListenerButton(button, measuresToShow, measuresToHide): void{
+    createSettingsButtons(): void {
+      const settingsWhite = this.add.sprite(1125, 70, 'settings-white').setInteractive();
+      const settingsBlack = this.add.sprite(1125, 70, 'settings-black').setInteractive();
+
+      const pauseWhite = this.add.sprite(1125, 120, 'pause-white').setInteractive();
+      const pauseBlack = this.add.sprite(1125, 120, 'pause-black').setInteractive();
+
+      const resetWhite = this.add.sprite(1250, 120, 'reset-white').setInteractive();
+      const resetBlack = this.add.sprite(1250, 120, 'reset-black').setInteractive();
+
+      const resumeWhite = this.add.sprite(1375, 120, 'resume-white').setInteractive();
+      const resumeBlack = this.add.sprite(1375, 120, 'resume-black').setInteractive();
+
+      const gamespeedWhite = this.add.sprite(1125, 170, 'gamespeed-white').setInteractive();
+      const gamespeedBlack = this.add.sprite(1125, 170, 'gamespeed-black').setInteractive();
+
+      const fasterWhite = this.add.sprite(1250, 170, 'faster-white').setInteractive();
+      const fasterBlack = this.add.sprite(1250, 170, 'faster-black').setInteractive();
+
+      const slowerWhite = this.add.sprite(1375, 170, 'slower-white').setInteractive();
+      const slowerBlack = this.add.sprite(1375, 170, 'slower-black').setInteractive();
+
+      const sprites = [settingsWhite, settingsBlack, pauseWhite, pauseBlack, resetWhite, resetBlack, resumeWhite, resumeBlack, gamespeedWhite, gamespeedBlack, slowerWhite, slowerBlack, fasterWhite, fasterBlack];
+
+      const defaultButtons = [pauseWhite, gamespeedWhite];
+
+      const pauseButtons = [resetWhite, resumeWhite];
+
+      const speedButtons = [fasterWhite, slowerWhite];
+
+      const speedSubbuttons = [fasterBlack, slowerBlack];
+
+      // Represent sprites on a smaller scale
+      this.setSpriteScale(sprites, .325);
+
+      // Set default visibility (only the menu button can be seen)
+      this.setDefaultVisibility(sprites);
+
+      // Change the color of the button from white to black if it is hovered over
+      for(let i = 0; i < sprites.length; i=i+2){
+        this.addOverOutListener(sprites[i], sprites[i+1]);
+      }
+
+      let settingsIsPressed = false;
+
+      settingsBlack.on('pointerup', () => {
+        if(settingsIsPressed){
+          this.setDefaultVisibility(sprites);
+          settingsIsPressed = false;
+        }else{
+          this.setToVisible(defaultButtons);
+          settingsIsPressed = true;
+        }
+      });
+
+      pauseBlack.on('pointerup', () => {
+        this.createPauseButton(resetBlack, resumeBlack);
+      });
+
+      // Handle the visibility of the subbuttons
+      this.addOnListenerButton(pauseBlack, pauseButtons, speedButtons);
+      this.addOnListenerButton(gamespeedBlack, speedButtons, pauseButtons);
+
+      speedSubbuttons.forEach(element => {
+        this.addOnListenerSubButton(element);
+      });
+
+    }
+
+    // Handles the visibility of the buttons
+    addOnListenerButton(button, buttonsToShow, buttonsToHide): void{
       button.on('pointerup', () => {
-        measuresToShow.forEach(element => {
+        buttonsToShow.forEach(element => {
           element.visible = true;
         });
-        measuresToHide.forEach(element => {
+        buttonsToHide.forEach(element => {
           element.visible = false;
         });
       })
@@ -168,8 +215,10 @@ export class GuiScene extends Phaser.Scene {
     }
 
     // Represents sprites on a smaller scale
-    setSpriteScale(sprite): void {
-      sprite.setScale(.4);
+    setSpriteScale(sprites, scale): void {
+      sprites.forEach(element => {
+        element.setScale(scale);
+      });
     }
 
     // Writes 'clicked' if the button was clicked
@@ -188,6 +237,12 @@ export class GuiScene extends Phaser.Scene {
       inverseButton.on('pointerout', () => {
         defaultButton.visible = true;
         inverseButton.visible = false;
+      });
+    }
+
+    setToVisible(sprites): void {
+      sprites.forEach(element => {
+        element.visible = true;
       });
     }
 

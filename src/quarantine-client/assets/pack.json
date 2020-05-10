@@ -127,6 +127,76 @@
           "type": "image",
           "key": "socialdistancing-black",
           "url": "assets/sprites/socialdistancing-black.png"
+        },
+        {
+          "type": "image",
+          "key": "faster-white",
+          "url": "assets/sprites/faster-white.png"
+        },
+        {
+          "type": "image",
+          "key": "faster-black",
+          "url": "assets/sprites/faster-black.png"
+        },
+        {
+          "type": "image",
+          "key": "gamespeed-white",
+          "url": "assets/sprites/gamespeed-white.png"
+        },
+        {
+          "type": "image",
+          "key": "gamespeed-black",
+          "url": "assets/sprites/gamespeed-black.png"
+        },
+        {
+          "type": "image",
+          "key": "pause-white",
+          "url": "assets/sprites/pause-white.png"
+        },
+        {
+          "type": "image",
+          "key": "pause-black",
+          "url": "assets/sprites/pause-black.png"
+        },
+        {
+          "type": "image",
+          "key": "resume-white",
+          "url": "assets/sprites/resume-white.png"
+        },
+        {
+          "type": "image",
+          "key": "resume-black",
+          "url": "assets/sprites/resume-black.png"
+        },
+        {
+          "type": "image",
+          "key": "settings-white",
+          "url": "assets/sprites/settings-white.png"
+        },
+        {
+          "type": "image",
+          "key": "settings-black",
+          "url": "assets/sprites/settings-black.png"
+        },
+        {
+          "type": "image",
+          "key": "reset-white",
+          "url": "assets/sprites/reset-white.png"
+        },
+        {
+          "type": "image",
+          "key": "reset-black",
+          "url": "assets/sprites/reset-black.png"
+        },
+        {
+          "type": "image",
+          "key": "slower-white",
+          "url": "assets/sprites/slower-white.png"
+        },
+        {
+          "type": "image",
+          "key": "slower-black",
+          "url": "assets/sprites/slower-black.png"
         }
 
       ]
