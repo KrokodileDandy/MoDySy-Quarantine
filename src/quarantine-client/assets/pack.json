@@ -2,6 +2,60 @@
   "preload":{
 
   },
+  "measure-buttons": {
+    "files": [
+        {
+          "type": "image",
+          "key": "bar",
+          "url": "assets/sprites/bar.png"
+        },
+        {
+          "type": "image",
+          "key": "bar-without-window",
+          "url": "assets/sprites/bar2.png"
+        },
+        {
+          "type": "image",
+          "key": "bar-lockdown-white",
+          "url": "assets/sprites/bar-lockdown-white.png"
+        },
+        {
+          "type": "image",
+          "key": "bar-lockdown-black",
+          "url": "assets/sprites/bar-lockdown-black.png"
+        },
+        {
+          "type": "image",
+          "key": "bar-police-white",
+          "url": "assets/sprites/bar-police-white.png"
+        },
+        {
+          "type": "image",
+          "key": "bar-police-black",
+          "url": "assets/sprites/bar-police-black.png"
+        },
+        {
+          "type": "image",
+          "key": "bar-research-white",
+          "url": "assets/sprites/bar-research-white.png"
+        },
+        {
+          "type": "image",
+          "key": "bar-research-black",
+          "url": "assets/sprites/bar-research-black.png"
+        },
+        {
+          "type": "image",
+          "key": "bar-socialdistancing-white",
+          "url": "assets/sprites/bar-socialdistancing-white.png"
+        },
+        {
+          "type": "image",
+          "key": "bar-socialdistancing-black",
+          "url": "assets/sprites/bar-socialdistancing-black.png"
+        }
+    ]
+  },
   "buttons": {
     "files": [
         {
