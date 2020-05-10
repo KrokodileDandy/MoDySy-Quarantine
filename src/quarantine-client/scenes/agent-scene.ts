@@ -1,7 +1,6 @@
 import { VisualAgent } from "../objects/visualAgent";
 import { Citizen } from "../objects/citizen";
 import { Police } from "../objects/police";
-import { Role } from "../util/roles";
 import { State } from "../util/healthStates";
 
 /**
@@ -77,7 +76,7 @@ export class AgentScene extends Phaser.Scene {
     spawnCitizen(): void {
         for (let i = 0; i < 100; i++) {
             /** Spawns a citizen as VisualAgent at random position, with the role 'citizen' and the state 'healthy' */
-            const citizen = new VisualAgent(this, Phaser.Math.Between(430, 1365), Phaser.Math.Between(180, 820), new Citizen(Role.CITIZEN, State.HEALTHY), 'citizen');
+            const citizen = new VisualAgent(this, Phaser.Math.Between(430, 1365), Phaser.Math.Between(180, 820), new Citizen(State.HEALTHY), 'citizen');
             citizen.setSize(38, 38);        // Set the size of the hitbox
             citizen.setOffset(16, 16);      // Sets the center of the hitbox
             citizen.body.isCircle = true;   // Sets the hitbox from rectangle to circle
@@ -88,7 +87,7 @@ export class AgentScene extends Phaser.Scene {
     spawnPolice(): void {
         for (let i = 0; i < 1; i++) {
             /** Spawns a police officer as VisualAgent at random position, with the role 'police' and the state 'healthy' */
-            const police = new VisualAgent(this, Phaser.Math.Between(430, 1365), Phaser.Math.Between(180, 820), new Police(Role.POLICE, State.HEALTHY), 'police');
+            const police = new VisualAgent(this, Phaser.Math.Between(430, 1365), Phaser.Math.Between(180, 820), new Police(State.HEALTHY), 'police');
             police.setSize(38, 38);         // Set the size of the hitbox
             police.setOffset(16, 16);       // Sets the center of the hitbox
             police.body.isCircle = true;    // Sets the hitbox from rectangle to circle
@@ -99,7 +98,7 @@ export class AgentScene extends Phaser.Scene {
     spawnInfectedCitizen(): void {
         for (let i = 0; i < 1; i++) {
             /** Spawns a citizen as VisualAgent at random position, with the role 'citizen' and state 'infected' */
-            const infected = new VisualAgent(this, Phaser.Math.Between(430, 1365), Phaser.Math.Between(180, 820), new Citizen(Role.CITIZEN, State.INFECTED), 'infected');
+            const infected = new VisualAgent(this, Phaser.Math.Between(430, 1365), Phaser.Math.Between(180, 820), new Citizen(State.INFECTED), 'infected');
             infected.setSize(38, 38);       // Set the size of the hitbox
             infected.setOffset(16, 16);     // Sets the center of the hitbox
             infected.body.isCircle = true;  // Sets the hitbox from rectangle to circle
