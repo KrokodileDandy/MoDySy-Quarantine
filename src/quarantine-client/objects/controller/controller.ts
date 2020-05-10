@@ -60,7 +60,10 @@ export class Controller {
 
         // ----------------------------------------------------------------- UPGRADE - PUBLIC
         /**
-         * Inserts a number of health workers to the agents array and adds rules regarding the state 'CURE'.
+         * Inserts a number of health workers into the agents array and adds rules regarding the state 'CURE'.
+         * This method is required to call before the buyHealthWorkers-method. Otherwise the agents array
+         * will have health workers but they won't do anything. (Because the transition rules are not yet
+         * defined.)
          * @param price Price of the upgrade
          * @param numberOfNewAgents Number of new health workers
          * @returns Boolean if the operation was successful, false if there are not enough people left to become health workers
@@ -81,16 +84,30 @@ export class Controller {
         }
 
         /**
-         * 
+         * Insert a number of police officers into the agents array
+         * @param price Price of this upgrade
          * @param amt Number of new police officers
          */
-        public buyPoliceOfficers(amt: number): boolean {
-            
-            return true;
+        public buyPoliceOfficers(price: number, amt: number): boolean {
+            if (this.distributeNewRoles(amt, Role.POLICE)) {
+                this.buyItem(price);
+                return true;
+            }
+            return false;
+
         }
 
-        public buyHealthWorkers(): boolean {
-            return true;
+        /**
+         * Insert a number of police officers into the agents array
+         * @param price Price of this upgrade
+         * @param amt Number of new police officers
+         */
+        public buyHealthWorkers(price: number, amt: number): boolean {
+            if (this.distributeNewRoles(amt, Role.HEALTH_WORKER)) {
+                this.buyItem(price);
+                return true;
+            }
+            return false;
         }
 
         // ----------------------------------------------------------------- UPGRADE - PRIVATE
