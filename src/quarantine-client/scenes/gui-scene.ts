@@ -30,7 +30,7 @@ export class GuiScene extends Phaser.Scene {
       main.scene.pause();
       let isPaused = true;
 
-      //when the button 'restart' is pressed, restart the main scene and reset the gui scene
+      //when the button 'reset' is pressed, restart the main scene and reset the gui scene
       reset.on('pointerup', ()=> {
         //only restart the game if it is paused to avoid accidentally clicking on the invisible button
         if(isPaused){
@@ -39,7 +39,7 @@ export class GuiScene extends Phaser.Scene {
         }
       });
 
-      //when the button 'pause' is pressed, check whether the scene is already paused
+      //resume the game only if the scene is already paused
       resume.on('pointerup', ()=> {
         if(isPaused){
           main.scene.resume();
@@ -122,7 +122,9 @@ export class GuiScene extends Phaser.Scene {
 
     }
 
+    // create settings buttons
     createSettingsButtons(): void {
+      // Create and set the buttons to the right positions
       const settingsWhite = this.add.sprite(1125, 70, 'settings-white').setInteractive();
       const settingsBlack = this.add.sprite(1125, 70, 'settings-black').setInteractive();
 
@@ -144,14 +146,19 @@ export class GuiScene extends Phaser.Scene {
       const slowerWhite = this.add.sprite(1375, 170, 'slower-white').setInteractive();
       const slowerBlack = this.add.sprite(1375, 170, 'slower-black').setInteractive();
 
+      // Create a list with all of the settings buttons
       const sprites = [settingsWhite, settingsBlack, pauseWhite, pauseBlack, resetWhite, resetBlack, resumeWhite, resumeBlack, gamespeedWhite, gamespeedBlack, slowerWhite, slowerBlack, fasterWhite, fasterBlack];
 
+      // Create a list of buttons that are to appear when 'settings' is clicked
       const defaultButtons = [pauseWhite, gamespeedWhite];
 
+      // Create a list of buttons that are to appear when 'pause' is clicked
       const pauseButtons = [resetWhite, resumeWhite];
 
+      // Create a list of buttons that are to appear when 'game speed' is clicked
       const speedButtons = [fasterWhite, slowerWhite];
 
+      // Create a list of buttons that are responsible for changing the speed of the game
       const speedSubbuttons = [fasterBlack, slowerBlack];
 
       // Represent sprites on a smaller scale
@@ -168,15 +175,21 @@ export class GuiScene extends Phaser.Scene {
       let settingsIsPressed = false;
 
       settingsBlack.on('pointerup', () => {
+        // Check whether 'settings' has been already clicked
         if(settingsIsPressed){
+          // Hide every button except for 'settings'
           this.setDefaultVisibility(sprites);
+          // Set 'settings' to not pressed
           settingsIsPressed = false;
         }else{
+          // Show available settings
           this.setToVisible(defaultButtons);
+          // Set 'settings' to pressed
           settingsIsPressed = true;
         }
       });
 
+      // Pause the game when 'pause' was clicked
       pauseBlack.on('pointerup', () => {
         this.createPauseButton(resetBlack, resumeBlack);
       });
@@ -185,6 +198,7 @@ export class GuiScene extends Phaser.Scene {
       this.addOnListenerButton(pauseBlack, pauseButtons, speedButtons);
       this.addOnListenerButton(gamespeedBlack, speedButtons, pauseButtons);
 
+      // Write 'clicked' if one of the speed buttons was pressed
       speedSubbuttons.forEach(element => {
         this.addOnListenerSubButton(element);
       });
@@ -240,6 +254,7 @@ export class GuiScene extends Phaser.Scene {
       });
     }
 
+    // Sets the sprites to visible
     setToVisible(sprites): void {
       sprites.forEach(element => {
         element.visible = true;
