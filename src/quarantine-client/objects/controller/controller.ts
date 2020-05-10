@@ -94,7 +94,6 @@ export class Controller {
                 return true;
             }
             return false;
-
         }
 
         /**
