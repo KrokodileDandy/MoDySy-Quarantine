@@ -17,4 +17,8 @@ export class Police extends Agent {
         super(Role.POLICE, state);
     }
 
+    public update(): void {
+        super.update();
+    }
+
 }

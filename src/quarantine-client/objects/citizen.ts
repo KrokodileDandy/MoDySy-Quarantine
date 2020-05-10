@@ -16,6 +16,9 @@ export class Citizen extends Agent {
      */
     public constructor(state: State) {
         super(Role.CITIZEN, state);
+
+    public update(): void {
+        super.update();
     }
 
 }

@@ -1,6 +1,5 @@
 import { Agent } from "./agent";
-import { Citizen } from "./citizen";
-import { Police } from "./police";
+import { Role } from "../util/roles";
 import { State } from "../util/healthStates";
 
 /**
@@ -12,17 +11,23 @@ import { State } from "../util/healthStates";
  */
 export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
     // ------------------------------------------------ GAME VARIABLES 
-    /** Randomly decides which action the agent do next */
+    /** The role of the agent */
+    public role: Role;
+    /** The health state of the agent */
+    public healthState: State;
+    /** Decides which action the agent do next */
     public action = Phaser.Math.Between(0, 1);
-    /** Randomly define the moving-speed of the agent */
+    /** Defines the movement-speed of the agent */
     public velocity = Phaser.Math.RND.realInRange(0.5, 1);
-    /** Randomly define in which direction the body is pointing to */
+    /** Defines in which direction the body is pointing to */
     public degree = Phaser. Math.Between(0, 360);
     /** The gradient as 2 dimensional vector to determine in which direction of the body is moving to */
     public gradient = new Phaser.Math.Vector2(); 
     /** Sets the duration of the current action */
     public counter = 200;
-
+    /** Indicator whether the agent has collided with someone or not */
+    public collided: boolean;
+    /** Defines the turn rate of the agent */
     public turnRate: number;
 
     /**
@@ -39,26 +44,16 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
     public constructor(scene: Phaser.Scene, x: number, y: number, agent: Agent, texture: string) {
         super(scene, x, y, texture);
 
-        this.state = agent.getHealthState();
-        this.setDisplaySize(32, 32);    // original size is 64x64. 
+        this.role = agent.getRole();
+        this.healthState = agent.getHealthState();
+        this.setDisplaySize(32, 32);    // original size is 64x64.
         this.randomWalk();
 
+        this.collided = false;
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
-        this.setImmovable(true);
+        //this.setImmovable(true);
         this.setCollideWorldBounds(true);
-
-        // ------------------------------------------------ RUNNING-ANIMATIONS
-        if(agent instanceof Police == true) {
-            this.anims.play('patrol');
-        }
-        if(agent instanceof Citizen == true && this.state == State.HEALTHY) {
-            this.anims.play('walk');
-        }
-        if(agent instanceof Citizen == true && this.state == State.INFECTED) {
-            this.anims.play('infectedWalk');
-        }
-        
     }
 
     /**
@@ -66,18 +61,20 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
      * Counting down and do certain behaviours when conditions met.
      */
     public update(): void {
-        
-        /** Sets the skin and animation of healthy citizen */
-        if(this instanceof Citizen == true && this.state == State.HEALTHY) {
-            this.anims.play('walk');
+        // ------------------------------------------------ RUNNING-ANIMATIONS
+        /** Sets the skin and animation of police and citizen */
+        if(this.role == 'POLICE') {
+            this.anims.play('patrol', true);
         }
-        /**  */
-        if(this instanceof Citizen == true && this.state == State.INFECTED) {
-            this.anims.play('infectedWalk');
+        if(this.role == 'CITIZEN' && this.healthState == State.HEALTHY) {
+            this.anims.play('walk', true);
+        }
+        if(this.role == 'CITIZEN' && this.healthState == State.INFECTED) {
+            this.anims.play('infectedWalk', true);
         }
 
         /** certain behaviours */
-        if(this.counter == 0) {     // && this.action == 0) {       //:TODO add more movements and behaviors
+        if(this.counter <= 0 && this.action == 0) {       //:TODO add more movements and behaviors
             this.randomWalk();
         }
 
@@ -86,26 +83,28 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
         this.x += this.velocity * this.gradient.x;
         this.y += this.velocity * this.gradient.y;
 
+        this.collided = false;
         this.counter--;
     }
 
     /**
-     * Implements the behaviour and events happening when the agents collide
+     * Implements the behaviour and events happening when the agents collide.
+     * Simulates the spreading of the virus.
      * @param agent 
      */
     public meet(agent: VisualAgent): void {
         /** healthy agent meets infected agent */
-        if(this.state == State.INFECTED) {
-            if(agent.state == State.HEALTHY) {
-                agent.state = State.INFECTED;
+        if(this.healthState == State.INFECTED) {
+            if(agent.healthState == State.HEALTHY) {
+                agent.healthState = State.INFECTED;
             }
         }
         /** police meets infected agent */
-        if(this instanceof Police == true) {
+        if(this.role == 'POLICE') {
             // TODO: infected agent should get quarantined
-            if(agent.state == State.INFECTED) {
-                agent.x = 100;
-                agent.y = 100;
+            if(agent.healthState == State.INFECTED) {
+                agent.x = 435;
+                agent.y = 200;
                 agent.velocity = 0;
                 agent.counter = 10000;
             }
@@ -131,13 +130,13 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
      * TODO: change direction when agent hits the wall
      */
     public changeDirectionOnCollide(): void {
-        this.velocity = Phaser.Math.RND.realInRange(0.5, 1);
-        this.degree += 90;
-        this.gradient.x = Phaser.Math.RoundTo(Math.cos(Phaser.Math.DegToRad(this.degree)), -4);
-        this.gradient.y = Phaser.Math.RoundTo(Math.sin(Phaser.Math.DegToRad(this.degree)), -4);
-        this.counter = Phaser.Math.Between(200, 300);
-        this.turnRate = Phaser.Math.RND.realInRange(-0.4, 0.4);
-        this.angle = this.degree + 90; 
+        if(this.collided == true) {
+            this.degree += 180;
+            this.gradient.x = Phaser.Math.RoundTo(Math.cos(Phaser.Math.DegToRad(this.degree)), -4);
+            this.gradient.y = Phaser.Math.RoundTo(Math.sin(Phaser.Math.DegToRad(this.degree)), -4);
+            this.turnRate = Phaser.Math.RND.realInRange(-0.4, 0.4);
+            this.angle = this.degree + 90;
+        }
     }
 
     /**
@@ -149,4 +148,33 @@ export class VisualAgent extends Phaser.Physics.Arcade.Sprite {
         this.gradient.y = Phaser.Math.RoundTo(Math.sin(Phaser.Math.DegToRad(this.degree)), -4);
         this.angle += this.turnRate;
     }
+
+    /**
+     * Moves the agent further away from the other overlapping agent.
+     * This function gets called from both agents.
+     * @param otherAgentX The x-coordinate of the overlapping agent
+     * @param otherAgentY The y-coordinate of the overlapping agent
+     */
+    public correctPositionWhenOverlap(otherAgentX: number, otherAgentY: number): void {
+        this.x += (this.x - otherAgentX)/20;
+        this.y += (this.y - otherAgentY)/20;
+    }
+
+    // ------------------------------------------------ GETTER-METHODS
+    /** @returns whether the agents have collided or not */
+    public isCollided(): boolean {
+        return this.collided;
+    }
+
+    // ------------------------------------------------ SETTER-METHODS
+    /** Set agent to collided */
+    public setCollided(): void {
+        this.collided = true;
+    }
+
+    /** Set agent to not collided */
+    public setNotCollided(): void {
+        this.collided = false;
+    }
+
 }

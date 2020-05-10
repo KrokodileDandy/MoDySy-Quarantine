@@ -1,6 +1,8 @@
 import 'phaser';
 import { MainScene } from './scenes/main-scene';
-import {GuiScene} from "./scenes/gui-scene";
+import { GuiScene } from "./scenes/gui-scene";
+import { ChartScene } from './scenes/chart-scene';
+import { AgentScene } from './scenes/agent-scene';
 
 const config: Phaser.Types.Core.GameConfig = {
     width: 1600,
@@ -10,7 +12,8 @@ const config: Phaser.Types.Core.GameConfig = {
         mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [MainScene, GuiScene],
+
+    scene: [MainScene, GuiScene, ChartScene, AgentScene],
     physics: {
         default: 'arcade',
         arcade: {
