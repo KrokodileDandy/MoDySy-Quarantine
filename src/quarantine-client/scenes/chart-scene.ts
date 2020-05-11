@@ -20,7 +20,7 @@ export class ChartScene extends Phaser.Scene {
     private chart;
 
     /** Controller to access the current infection numbers */
-    private controller: Controller = Controller.getInstance();
+    private controller: Controller;
 
     constructor() {
         super({
@@ -34,6 +34,12 @@ export class ChartScene extends Phaser.Scene {
         this.day = 0;
         this.ticAccumulator = 0;
         this.infected = 0;
+        this.controller = Controller.getInstance();
+
+        /** If the game is restarted, the current chart will be destroyed */
+        if (this.chart != null) {
+            this.chart.destroy();
+        }
     }
 
     create(): void {
@@ -112,7 +118,13 @@ export class ChartScene extends Phaser.Scene {
                 title: {
                     display: true,
                     text: 'Infektionszahlen'
-                }
+                },
+
+                /** Resize the canvas when the size of chart-container changes */
+                responsive: true,
+
+                /** Do not maintain the aspect ratio when resizing */
+                maintainApsectRatio: false
             }
         });
     }
