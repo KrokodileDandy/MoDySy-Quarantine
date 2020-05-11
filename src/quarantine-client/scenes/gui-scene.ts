@@ -12,19 +12,20 @@ export class GuiScene extends Phaser.Scene {
     }
 
     preload(): void {
-
         this.load.pack(
             'buttons',
             'assets/pack.json',
-            'buttons'
-        );
+            'buttons');
     }
 
     create(): void {
-        this.createMenuButtons();
-        this.createSettingsButtons();
+		this.createMenuButtons();
+		console.log("Menu buttons loaded");
+		this.createSettingsButtons();
+		console.log("Settings buttons laoded");
     }
 
+    // -------------------------------------------------------------------------- GAME MENU
     createPauseButton(reset, resume): void{
       const main = this.scene.get('MainScene') as MainScene;
       main.scene.pause();
@@ -260,6 +261,4 @@ export class GuiScene extends Phaser.Scene {
         element.visible = true;
       });
     }
-
-
 }
