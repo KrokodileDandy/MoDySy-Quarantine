@@ -31,7 +31,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     update(): void {
-        console.log('Update');
+        this.controller.update();
     }
 
 }
