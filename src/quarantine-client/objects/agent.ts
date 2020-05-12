@@ -35,6 +35,10 @@ export abstract class Agent {
         this.healthState = state;
         this.token = 0;
     }
+
+    public update(): void {
+        console.log('Update');
+    }
     
 
     // ------------------------------------------------ GETTER-METHODS
@@ -53,11 +57,10 @@ export abstract class Agent {
         return this.healthState;
     }
 
-    /**@returns the current role of the agent */
+    /** @returns the role of the agent */
     public getRole(): Role {
         return this.role;
     }
-
 
     // ------------------------------------------------ SETTER-METHODS
     /** Set quarantine to true */
@@ -90,11 +93,10 @@ export abstract class Agent {
 
     /**
      * Set new role
-     * @param role assign new role
+     * @param newRole assign new role
      */
-    public setRole(role: Role): void {
-        this.role = role;
+    public setRole(newRole: Role): void {
+        this.role = newRole;
     }
-
 }
 
