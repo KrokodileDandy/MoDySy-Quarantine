@@ -5,6 +5,8 @@ import { Role} from '../../util/roles';
 import { State } from '../../util/healthStates';
 import { Rule } from './rule';
 import { HealthWorker } from '../healthWorker';
+import { TimeSubscriber } from '../../util/timeSubscriber';
+import { TimeController } from './timeController';
 
 /**
  * Singleton controller which contains game variables (e.g. budget, population size)
@@ -15,7 +17,7 @@ import { HealthWorker } from '../healthWorker';
  * @author Marvin Kruber
  * @author Sebastian Führ
  */
-export class Controller {
+export class Controller implements TimeSubscriber {
     /** Anonymous class to encapsulate game variables. */
     private stats = new class Stats {
         // ------------------------------------------------ GAME VARIABLES
@@ -170,9 +172,6 @@ export class Controller {
 
     /** The only existing instance of Controller */
     private static instance: Controller;
-
-    /** Tics per day */
-    private readonly ticsPerDay = 24;
  
     /** All population protocol agents of the game */
     private agents: Agent[] = [];
@@ -196,6 +195,10 @@ export class Controller {
 
         this.initiateRules();
         this.initiatePopulation();
+
+        TimeController.getInstance().subscribe(this);
+
+        this.distributeRandomlyInfected(1_000);
     }
 
     /** Initiate basic transition rules at gamestart. */
@@ -247,7 +250,7 @@ export class Controller {
     private getRandomIndex(): number {return Math.floor(Math.random() * this.stats.population);}
 
     /** Increases budget by income rate. */
-    public updateBudget(): void {this.stats.budget += this.getIncome()}
+    private updateBudget(): void {this.stats.budget += this.getIncome()}
 
     /** @returns Partially randomized interaction rate. */
     private calculateInteractionRate(): number {
@@ -301,6 +304,8 @@ export class Controller {
         this.updateBudget();
     }
 
+    /** @see TimeSubscriber */
+    public notify(): void {this.update();}
 
     // ----------------------------------------------------------------- GETTER-METHODS
     /** @returns The singleton instance */
@@ -308,9 +313,6 @@ export class Controller {
         if (!Controller.instance) Controller.instance = new Controller();
         return Controller.instance;
     }
-
-    /** @returns Tics per day */
-    public getTicsPerDay(): number {return this.ticsPerDay;}
 
     /** @returns Array of active rules */
     public getRules(): Rule[] {return this.rules;}
