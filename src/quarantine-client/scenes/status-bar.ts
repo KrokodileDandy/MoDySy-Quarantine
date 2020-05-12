@@ -45,17 +45,17 @@ export class StatusBar extends Phaser.Scene {
                 <div class="stat" id="statbar-infected"></div>
                 <div class="stat" id="statbar-police"></div>
                 <div class="stat" id="statbar-hw"></div>
+                <div class="stat btn"><a href="#"><span class="icon"></span></a></div>
             `);
         this.update();
-        this.add.sprite(750, 6, 'settings-16');
     }
 
     /** Fill the status bar with information from the central controller on each call */
     public update(): void {
-        document.getElementById("statbar-population").innerHTML = "Einwohner: " + this.controller.getPopulation();
-        document.getElementById("statbar-infected").innerHTML = "Infizierte: " + this.controller.getInfected();
-        document.getElementById("statbar-police").innerHTML = "Polizei: " + this.controller.getNumberOfHealthWorkers();
-        document.getElementById("statbar-hw").innerHTML = "Gesundheitswesen: " + this.controller.getNumberOfPolice();
+        document.getElementById("statbar-population").innerHTML = "Population: " + this.controller.getPopulation();
+        document.getElementById("statbar-infected").innerHTML = "Infected: " + this.controller.getInfected();
+        document.getElementById("statbar-police").innerHTML = "Police: " + this.controller.getNumberOfHealthWorkers();
+        document.getElementById("statbar-hw").innerHTML = "Health Workers: " + this.controller.getNumberOfPolice();
     }
 
 }
