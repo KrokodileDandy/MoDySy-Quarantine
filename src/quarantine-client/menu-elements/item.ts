@@ -17,13 +17,19 @@ export class Item extends Phaser.GameObjects.Image{
 
         this.scene.add.existing(this);
 
-        this.setScale(0.125, 0.9);
+        this.setScale(0.8, 1);
 
-        this.title = name;
+        this.title = title;
         this.price = price;
         this.eventListener = callback;
 
         this.setInteractive()
+            .on('pointerover', () => {
+                this.setTexture(`bar-${this.title}-black`);
+            })
+            .on('pointerout', () => {
+                this.setTexture(`bar-${this.title}-white`);
+            })
             .on('pointerdown', () => {
                 this.eventListener(this.price);
             });
@@ -41,8 +47,8 @@ export class Item extends Phaser.GameObjects.Image{
     }
 
     public updatePosition(direction: number): void {
-        this.x += direction * 125;
-        if (this.x < 75 || this.x > 825) {
+        this.x += direction * 150; //150 => image size + space
+        if (this.x < 75 || this.x > 625) { //border
             this.disableInteractive();
             this.setVisible(false);
         } else {

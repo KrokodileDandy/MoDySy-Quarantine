@@ -13,7 +13,7 @@ const config: Phaser.Types.Core.GameConfig = {
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
 
-    scene: [MainScene, GuiScene, ChartScene, AgentScene],
+    scene: [MainScene, GuiScene /*, ChartScene, AgentScene*/],
     physics: {
         default: 'arcade',
         arcade: {

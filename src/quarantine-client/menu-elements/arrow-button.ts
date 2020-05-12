@@ -16,16 +16,17 @@ export class ArrowButton extends Phaser.GameObjects.Image{
 
         this.scene.add.existing(this);
 
-        this.setScale(0.03, 0.2);
+        this.setScale(0.15, 0.2);
 
         this.setInteractive()
             .on('pointerdown', ()=> {
                 const currentMenuPosition = ArrowButton.scrollCounter + this.direction;
-                
-                if(currentMenuPosition <= 3 || currentMenuPosition >= 11) return;
+                console.log(ArrowButton.scrollCounter)
+                if(currentMenuPosition <= 3 || currentMenuPosition >= 7) return;
 
                 ArrowButton.EMITTER.emit('myButtonClick', this.direction);
                 ArrowButton.scrollCounter = currentMenuPosition;
+                
              });
 
         

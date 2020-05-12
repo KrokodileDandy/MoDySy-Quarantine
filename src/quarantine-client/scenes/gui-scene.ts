@@ -12,22 +12,21 @@ export class GuiScene extends Phaser.Scene {
             key: "GuiScene",
             active: true
         });
-        console.log('GuiConstructor')
     }
 
     preload(): void {
       this.load.pack(
-            'buttons',
-            'assets/pack.json',
-            'buttons'
+            'preload',
+            'assets/guiPack.json',
+            'preload'
         );
   }
 
 
     create(): void {
-        this.createMenuButtons();
-        this.createSettingsButtons();
-        this.menu = new ItemMenu(this, 0, 725);
+        //this.createMenuButtons();
+        //this.createSettingsButtons();
+        this.menu = new ItemMenu(this, 0, 610);
     }
 
     createPauseButton(reset, resume): void{
@@ -211,7 +210,7 @@ export class GuiScene extends Phaser.Scene {
     }
 
     // Handles the visibility of the buttons
-    addOnListenerButton(button, buttonsToShow, buttonsToHide): void{
+    addOnListenerButton(button, buttonsToShow, buttonsToHide): void {
       button.on('pointerup', () => {
         buttonsToShow.forEach(element => {
           element.visible = true;
