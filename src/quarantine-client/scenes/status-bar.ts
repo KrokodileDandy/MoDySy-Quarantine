@@ -19,6 +19,10 @@ export class StatusBar extends Phaser.Scene {
         this.controller = Controller.getInstance();
     }
 
+    preload(): void {
+        //this.load.
+    }
+
     create(): void {
         this.initializeStatBar(); // Initialize the status bar
         console.log("Status bar loaded");
@@ -43,6 +47,7 @@ export class StatusBar extends Phaser.Scene {
                 <div class="stat" id="statbar-hw"></div>
             `);
         this.update();
+        this.add.sprite(750, 6, 'settings-16');
     }
 
     /** Fill the status bar with information from the central controller on each call */
