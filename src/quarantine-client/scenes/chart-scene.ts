@@ -1,12 +1,14 @@
 import * as Chart from "chart.js";
 import { Controller } from "../objects/controller/controller";
+import { TimeSubscriber } from "../util/timeSubscriber";
+import { TimeController } from "../objects/controller/timeController";
 
 /**
  * Scene for creating and updating the graphical
  * representation of infection numbers using Chart.js
  * @author Jakob Hartmann
  */
-export class ChartScene extends Phaser.Scene {
+export class ChartScene extends Phaser.Scene implements TimeSubscriber {
     /** Number of days since the game started */
     private day: number;
 
@@ -27,6 +29,7 @@ export class ChartScene extends Phaser.Scene {
             key: 'ChartScene',
             active: true
         });
+        TimeController.getInstance().subscribe(this);
     }
 
     init(): void {
@@ -45,38 +48,38 @@ export class ChartScene extends Phaser.Scene {
      * Update function to get the current infection numbers
      * and update the chart accordingly 
     */
-    update(): void {
+    updateChart(): void {
+        console.log('updateChart');
         /** TODO: Change it when uniform day-by-day progression is available */
-        if (this.ticAccumulator < (this.controller.getTicsPerDay() - 1)) {
-            this.ticAccumulator += 0.1;
-        } else {
-            this.ticAccumulator = 0;
-            this.day += 1;
+        this.ticAccumulator = 0;
+        this.day += 1;
 
-            /** Update the labels */
-            this.chart.data.labels.push('Tag ' + this.day);
+        /** Update the labels */
+        this.chart.data.labels.push('Tag ' + this.day);
 
-            /** Get current infection numbers */
-            const currentlyInfected = this.controller.getInfected();
+        /** Get current infection numbers */
+        const currentlyInfected = this.controller.getInfected();
 
-            /** Update both datasets */
-            this.chart.data.datasets.forEach((dataset) => {
-                if (dataset.label == 'Infizierte insgesamt') {
-                    /** Add a new datapoint with the total number of people infected */
-                    dataset.data.push(currentlyInfected);
-                } else {
-                    /** Calculate the number of infected people today and add a new bar */
-                    dataset.data.push(currentlyInfected - this.infected);
-                }
-            });
+        /** Update both datasets */
+        this.chart.data.datasets.forEach((dataset) => {
+            if (dataset.label == 'Infizierte insgesamt') {
+                /** Add a new datapoint with the total number of people infected */
+                dataset.data.push(currentlyInfected);
+            } else {
+                /** Calculate the number of infected people today and add a new bar */
+                dataset.data.push(currentlyInfected - this.infected);
+            }
+        });
 
-            /** Update current infection numbers */
-            this.infected = currentlyInfected;
+        /** Update current infection numbers */
+        this.infected = currentlyInfected;
 
-            /** Render the new chart in index.html */
-            this.chart.update();
-        }
+        /** Render the new chart in index.html */
+        this.chart.update();
     }
+
+    /** @see TimeSubscriber */
+    public notify(): void {this.updateChart();}
 
     /** Function to initialize the chart at the start of the game */
     private initializeChart(): void {
