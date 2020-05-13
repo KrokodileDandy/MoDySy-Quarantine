@@ -24,8 +24,10 @@ export class GuiScene extends Phaser.Scene {
 
 
     create(): void {
-        //this.createMenuButtons();
-        //this.createSettingsButtons();
+        this.createMenuButtons();
+        this.createSettingsButtons();
+
+        // Creates Itemmenu and it to this scene
         this.menu = new ItemMenu(this, 0, 610);
     }
 
@@ -266,6 +268,6 @@ export class GuiScene extends Phaser.Scene {
     }
 
     update(): void {
-      //if (!this.mainSceneIsPaused)this.menu.updateItemMenu(); // has to be invoked each tic/ ingame hour TODO
+      if (!this.mainSceneIsPaused) this.menu.updateItemMenu(); // has to be invoked each tic/ ingame hour TODO
     }
 }
