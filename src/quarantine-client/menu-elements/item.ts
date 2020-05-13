@@ -48,6 +48,7 @@ export class Item extends Phaser.GameObjects.Image{
                 this.setTexture(`bar-${this.title}-white`);
             })
             .on('pointerdown', () => { // "try to buy this item"
+                console.log(typeof this.eventListener);
                 this.eventListener(this.price);
             });
         ArrowButton.getEmitter().on('myButtonClick', (direction) => { //creates the link between Arrow-Button and Item by using an event (handler)

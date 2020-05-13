@@ -88,7 +88,7 @@ export class Controller {
          * @param price Price of this upgrade
          * @param amt Number of new police officers
          */
-        public buyPoliceOfficers(price: number, amt = 100): boolean { //make amount a specific game variable in upgrade controller?
+        public buyPoliceOfficers(price: number, amt = 100): boolean { //make amount a specific game variable in upgrade
             if (this.distributeNewRoles(amt, Role.POLICE)) {
                 this.buyItem(price);
                 console.log("Hello");

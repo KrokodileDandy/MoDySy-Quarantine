@@ -1,5 +1,6 @@
 import {MainScene} from "./main-scene";
 import { ItemMenu } from '../menu-elements/menu'
+import { ChartScene } from "./chart-scene";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -33,22 +34,27 @@ export class GuiScene extends Phaser.Scene {
 
     createPauseButton(reset, resume): void{
       const main = this.scene.get('MainScene') as MainScene;
+      const chart = this.scene.get('ChartScene') as ChartScene;
       main.scene.pause();
+      chart.scene.pause();
       this.mainSceneIsPaused = true;
+      
 
-      //when the button 'reset' is pressed, restart the main scene and reset the gui scene
+      //when the button 'reset' is pressed, restart the main scene, the chart scene and reset the gui scene
       reset.on('pointerup', ()=> {
         //only restart the game if it is paused to avoid accidentally clicking on the invisible button
         if(this.mainSceneIsPaused){
           main.scene.restart();
+          chart.scene.restart();
           this.mainSceneIsPaused = false;
         }
       });
 
-      //resume the game only if the scene is already paused
+      //resume the game only if the scenes are already paused
       resume.on('pointerup', ()=> {
         if(this.mainSceneIsPaused){
           main.scene.resume();
+          chart.scene.resume();
           this.mainSceneIsPaused = true;
       }});
     }
