@@ -88,9 +88,9 @@ export class Controller {
          * @param price Price of this upgrade
          * @param amt Number of new police officers
          */
-        public buyPoliceOfficers(price: number, amt = 100): boolean { //make amount a specific game variable in upgrade
-            if (this.distributeNewRoles(amt, Role.POLICE)) {
-                this.buyItem(price);
+        public buyPoliceOfficers(price: number, crt: Controller, amt = 100): boolean { //make amount a specific game variable in upgrade
+            if (crt.upgrades.distributeNewRoles(amt, Role.POLICE)) {
+                crt.upgrades.buyItem(price);
                 console.log("Hello");
                 return true;
             }
@@ -102,9 +102,10 @@ export class Controller {
          * @param price Price of this upgrade
          * @param amt Number of new police officers
          */
-        public buyHealthWorkers(price: number, amt = 100): boolean {
-            if (this.distributeNewRoles(amt, Role.HEALTH_WORKER)) {
-                this.buyItem(price);
+        public buyHealthWorkers(price: number, ctr: Controller, amt = 100): boolean {
+            if (ctr.upgrades.distributeNewRoles(amt, Role.HEALTH_WORKER)) {
+                ctr.upgrades.buyItem(price);
+                console.log("HEALTH");
                 return true;
             }
             return false;

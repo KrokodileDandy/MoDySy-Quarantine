@@ -29,7 +29,7 @@ export class GuiScene extends Phaser.Scene {
         this.createSettingsButtons();
 
         // Creates Itemmenu and it to this scene
-        this.menu = new ItemMenu(this, 0, 610);
+        this.menu = new ItemMenu(this, 0, 300);
     }
 
     createPauseButton(reset, resume): void{
