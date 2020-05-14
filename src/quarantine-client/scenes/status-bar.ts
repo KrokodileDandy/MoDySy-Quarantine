@@ -41,6 +41,7 @@ export class StatusBar extends Phaser.Scene {
         };
         this.statBar = this.add.dom(400, 12, "#status-bar", statBarStyle); // for center: "+this.game.config.width / 2"
         this.statBar.setHTML(`
+                <div class="stat" id="statbar-budget" style="color: 5bff33;"></div>
                 <div class="stat" id="statbar-population"></div>
                 <div class="stat" id="statbar-infected"></div>
                 <div class="stat" id="statbar-police"></div>
@@ -52,6 +53,7 @@ export class StatusBar extends Phaser.Scene {
 
     /** Fill the status bar with information from the central controller on each call */
     public update(): void {
+        document.getElementById("statbar-budget").innerHTML = UpgradeController.getInstance().getBudget();
         document.getElementById("statbar-population").innerHTML = "Population: " + this.controller.getPopulation();
         document.getElementById("statbar-infected").innerHTML = "Infected: " + this.controller.getInfected();
         document.getElementById("statbar-police").innerHTML = "Police: " + this.controller.getNumberOfHealthWorkers();
