@@ -49,7 +49,6 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
      * and update the chart accordingly 
     */
     updateChart(): void {
-        console.log('updateChart');
         /** TODO: Change it when uniform day-by-day progression is available */
         this.ticAccumulator = 0;
         this.day += 1;
