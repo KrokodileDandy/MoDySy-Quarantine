@@ -284,4 +284,14 @@ export class Controller implements TimeSubscriber {
         this.stats.infected++;
     }
 
+    /** Increases the Stats variable nbrPolice
+     * @param amt Number of new police officers
+     */
+    public increasePoliceOfficers(amt: number): void {this.stats.nbrPolice += amt;}
+
+    /** Increases the Stats variable nbrHW
+     * @param amt Number of new health workers
+     */
+    public increaseHealthWorkers(amt: number): void {this.stats.nbrHW += amt;}
+
 }
