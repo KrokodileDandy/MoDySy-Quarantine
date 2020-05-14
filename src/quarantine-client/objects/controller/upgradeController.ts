@@ -41,18 +41,20 @@ export class UpgradeController {
      * @param numberOfNewAgents Number of new health workers
      * @returns Boolean if the operation was successful, false if there are not enough people left to become health workers
      */
-    public introduceCure(price: number, numberOfNewAgents: number): boolean {
+    public introduceCure(uC: UpgradeController): boolean {
+        const price = 100_000;
+        const numberOfNewAgents = 10_000;
         // There should be enough people left to become health workers
-        if (this.contr.getPopulation() - this.contr.getNumberOfHealthWorkers() - this.contr.getNumberOfPolice() < numberOfNewAgents) return false;
+        if (uC.contr.getPopulation() - uC.contr.getNumberOfHealthWorkers() - uC.contr.getNumberOfPolice() < numberOfNewAgents) return false;
 
-        this.buyItem(price);
+        uC.buyItem(price);
 
-        const lastRule = this.contr.getRules().length;
-        this.contr.getRules()[lastRule] = new Rule(State.HEALTHY, State.CURE, State.IMMUNE, State.CURE);
-        this.contr.getRules()[lastRule] = new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE);
-        this.contr.getRules()[lastRule] = new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE);
+        const lastRule = uC.contr.getRules().length;
+        uC.contr.getRules()[lastRule] = new Rule(State.HEALTHY, State.CURE, State.IMMUNE, State.CURE);
+        uC.contr.getRules()[lastRule] = new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE);
+        uC.contr.getRules()[lastRule] = new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE);
 
-        this.contr.distributeNewRoles(numberOfNewAgents, Role.HEALTH_WORKER);
+        uC.contr.distributeNewRoles(numberOfNewAgents, Role.HEALTH_WORKER);
         return true;
     }
 
@@ -61,9 +63,11 @@ export class UpgradeController {
      * @param price Price of this upgrade
      * @param amt Number of new police officers
      */
-    public buyPoliceOfficers(price: number, amt: number): boolean {
-        if (this.contr.distributeNewRoles(amt, Role.POLICE)) {
-            this.buyItem(price);
+    public buyPoliceOfficers(uC: UpgradeController): boolean {
+        const price = 100_000;
+        const amt = 10_000;
+        if (uC.contr.distributeNewRoles(amt, Role.POLICE)) {
+            uC.buyItem(price);
             return true;
         }
         return false;
@@ -74,9 +78,11 @@ export class UpgradeController {
      * @param price Price of this upgrade
      * @param amt Number of new health workers
      */
-    public buyHealthWorkers(price: number, amt: number): boolean {
-        if (this.contr.distributeNewRoles(amt, Role.HEALTH_WORKER)) {
-            this.buyItem(price);
+    public buyHealthWorkers(uC: UpgradeController): boolean {
+        const price = 100_000;
+        const amt = 10_000;
+        if (uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER)) {
+            uC.buyItem(price);
             return true;
         }
         return false;
@@ -88,9 +94,11 @@ export class UpgradeController {
      * @param price Price of this upgrade
      * @param amt Number of new health workers
      */
-    public buyTestKitHWs(price: number, amt: number): boolean {
-        if (this.contr.distributeNewRoles(amt, Role.HEALTH_WORKER, true)) {
-            this.buyItem(price);
+    public buyTestKitHWs(uC: UpgradeController): boolean {
+        const price = 100_000;
+        const amt = 10_000;
+        if (uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER, true)) {
+            uC.buyItem(price);
             return true;
         }
         return false;
@@ -130,7 +138,8 @@ export class UpgradeController {
     // private setIncome(amt: number) {}
 
     /** @param newBudget New Budget (overrides old budget) */
-    public setBudget(newBudget: number): void {
+    private setBudget(newBudget: number): void {
         this.stats.budget = newBudget;
     }
+
 }
