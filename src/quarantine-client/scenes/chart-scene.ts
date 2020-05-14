@@ -12,9 +12,6 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
     /** Number of days since the game started */
     private day: number;
 
-    /** Number of tics since the start of the day */
-    private ticAccumulator: number;
-
     /** Number of infected people */
     private infected: number;
 
@@ -35,7 +32,6 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
     init(): void {
         /** The game starts on day 0 with 0 infected people */
         this.day = 0;
-        this.ticAccumulator = 0;
         this.infected = 0;
         this.controller = Controller.getInstance();
 
@@ -55,8 +51,6 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
      * and update the chart accordingly 
     */
     updateChart(): void {
-        /** TODO: Change it when uniform day-by-day progression is available */
-        this.ticAccumulator = 0;
         this.day += 1;
 
         /** Update the labels */

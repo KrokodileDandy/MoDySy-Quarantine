@@ -2,6 +2,7 @@ import {MainScene} from "./main-scene";
 import { ItemMenu } from '../menu-elements/menu'
 import { ChartScene } from "./chart-scene";
 import { UpgradeController } from "../objects/controller/upgradeController";
+import { MapScene } from "./map-scene";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -43,8 +44,10 @@ export class GuiScene extends Phaser.Scene {
     createPauseButton(reset, resume): void{
       const main = this.scene.get('MainScene') as MainScene;
       const chart = this.scene.get('ChartScene') as ChartScene;
+      const map = this.scene.get('MapScene') as MapScene;
       main.scene.pause();
       chart.scene.pause();
+      map.scene.pause();
       this.mainSceneIsPaused = true;
       
 
@@ -54,6 +57,7 @@ export class GuiScene extends Phaser.Scene {
         if(this.mainSceneIsPaused){
           main.scene.restart();
           chart.scene.restart();
+          map.scene.restart();
           this.mainSceneIsPaused = false;
         }
       });
@@ -63,6 +67,7 @@ export class GuiScene extends Phaser.Scene {
         if (this.mainSceneIsPaused) {
           main.scene.resume();
           chart.scene.resume();
+          map.scene.resume();
           this.mainSceneIsPaused = true;
       }});
     }
