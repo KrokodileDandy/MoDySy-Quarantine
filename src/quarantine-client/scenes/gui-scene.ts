@@ -1,10 +1,13 @@
 import {MainScene} from "./main-scene";
+import { ItemMenu } from '../menu-elements/menu'
 import { ChartScene } from "./chart-scene";
 import { UpgradeController } from "../objects/controller/upgradeController";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
 
+  private menu: ItemMenu;
+  private mainSceneIsPaused = false;
   /** Only existing instance of UpgradeController */
   private uC: UpgradeController;
 
@@ -13,20 +16,25 @@ export class GuiScene extends Phaser.Scene {
             key: "GuiScene",
             active: true
         });
-        console.log('GuiConstructor')
     }
 
     preload(): void {
-        this.load.pack(
-            'buttons',
-            'assets/pack.json',
-            'buttons');
-    }
+      this.load.pack(
+            'preload',
+            'assets/guiPack.json',
+            'preload'
+        );
+  }
+
 
     create(): void {
         this.createMenuButtons();
         this.createSettingsButtons();
+
         this.uC = UpgradeController.getInstance();
+
+        // Creates Itemmenu and it to this scene
+        this.menu = new ItemMenu(this, 0, 250);
     }
 
     // -------------------------------------------------------------------------- GAME MENU
@@ -35,24 +43,25 @@ export class GuiScene extends Phaser.Scene {
       const chart = this.scene.get('ChartScene') as ChartScene;
       main.scene.pause();
       chart.scene.pause();
-      let isPaused = true;
+      this.mainSceneIsPaused = true;
+      
 
       //when the button 'reset' is pressed, restart the main scene, the chart scene and reset the gui scene
       reset.on('pointerup', ()=> {
         //only restart the game if it is paused to avoid accidentally clicking on the invisible button
-        if(isPaused){
+        if(this.mainSceneIsPaused){
           main.scene.restart();
           chart.scene.restart();
-          isPaused = false;
+          this.mainSceneIsPaused = false;
         }
       });
 
       //resume the game only if the scenes are already paused
       resume.on('pointerup', ()=> {
-        if(isPaused){
+        if (this.mainSceneIsPaused) {
           main.scene.resume();
           chart.scene.resume();
-          isPaused = true;
+          this.mainSceneIsPaused = true;
       }});
     }
 
@@ -74,19 +83,16 @@ export class GuiScene extends Phaser.Scene {
       const socialdistancingWhite = this.add.sprite(750, 120, 'socialdistancing-white').setInteractive();
       const socialdistancingBlack = this.add.sprite(750, 120, 'socialdistancing-black').setInteractive().on('pointerdown', () => {
         this.uC.buyHealthWorkers(this.uC);
-        console.log("[Upgrade] Buy health workers");
       });
 
       const policeWhite = this.add.sprite(875, 170, 'police-white').setInteractive();
       const policeBlack = this.add.sprite(875, 170, 'police-black').setInteractive().on('pointerdown', () => {
         this.uC.buyPoliceOfficers(this.uC);
-        console.log("[Upgrade] Buy police");
       });
 
       const researchWhite = this.add.sprite(750, 170, 'research-white').setInteractive();
       const researchBlack = this.add.sprite(750, 170, 'research-black').setInteractive().on('pointerdown', () => {
         this.uC.introduceCure(this.uC);
-        console.log("[Upgrade] Introduce cure");
       });
 
       // Create a list of all measures, taking in consideration both of the colors
@@ -105,7 +111,7 @@ export class GuiScene extends Phaser.Scene {
       this.setDefaultVisibility(sprites);
 
       // Change the color of the button from white to black if it is hovered over
-      for(let i = 0; i < sprites.length; i=i+2){
+      for (let i = 0; i < sprites.length; i=i+2) {
         this.addOverOutListener(sprites[i], sprites[i+1]);
       }
 
@@ -114,12 +120,12 @@ export class GuiScene extends Phaser.Scene {
       // Handle the visibility of the measure buttons
       menuBlack.on('pointerup', ()=> {
         // Check, whether menu button is already pressed
-         if(menuIsPressed){
+         if (menuIsPressed) {
            // Return to the default visibility: hide each button except for menu
            this.setDefaultVisibility(sprites);
            // Return to the default (false) value
            menuIsPressed = false;
-         }else{
+         } else {
            // Show available measures
            stateWhite.visible = true;
            investmentWhite.visible = true;
@@ -185,20 +191,20 @@ export class GuiScene extends Phaser.Scene {
       this.setDefaultVisibility(sprites);
 
       // Change the color of the button from white to black if it is hovered over
-      for(let i = 0; i < sprites.length; i=i+2){
-        this.addOverOutListener(sprites[i], sprites[i+1]);
+      for (let i = 0; i < sprites.length; i = i + 2) {
+        this.addOverOutListener(sprites[i], sprites[i + 1]);
       }
 
       let settingsIsPressed = false;
 
       settingsBlack.on('pointerup', () => {
         // Check whether 'settings' has been already clicked
-        if(settingsIsPressed){
+        if (settingsIsPressed) {
           // Hide every button except for 'settings'
           this.setDefaultVisibility(sprites);
           // Set 'settings' to not pressed
           settingsIsPressed = false;
-        }else{
+        } else {
           // Show available settings
           this.setToVisible(defaultButtons);
           // Set 'settings' to pressed
@@ -223,7 +229,7 @@ export class GuiScene extends Phaser.Scene {
     }
 
     // Handles the visibility of the buttons
-    addOnListenerButton(button, buttonsToShow, buttonsToHide): void{
+    addOnListenerButton(button, buttonsToShow, buttonsToHide): void {
       button.on('pointerup', () => {
         buttonsToShow.forEach(element => {
           element.visible = true;
@@ -236,10 +242,10 @@ export class GuiScene extends Phaser.Scene {
 
     // Sets to the default value (only menu button is to be seen)
     setDefaultVisibility(sprites): void {
-      for(let i = 0; i < sprites.length; i++){
-        if(i === 0){
+      for (let i = 0; i < sprites.length; i++) {
+        if (i === 0) {
           sprites[i].visible = true;
-        }else{
+        } else {
           sprites[i].visible = false;
         }
       }
@@ -255,7 +261,7 @@ export class GuiScene extends Phaser.Scene {
     // Writes 'clicked' if the button was clicked
     addOnListenerSubButton(button): void {
       button.on('pointerup', () => {
-        console.log("Clicked");
+        //console.log("Clicked");
       })
     }
 
@@ -276,5 +282,9 @@ export class GuiScene extends Phaser.Scene {
       sprites.forEach(element => {
         element.visible = true;
       });
+    }
+
+    update(): void {
+      if (!this.mainSceneIsPaused) this.menu.updateItemMenu(); // has to be invoked each tic/ ingame hour TODO
     }
 }

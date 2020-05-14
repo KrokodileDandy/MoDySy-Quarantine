@@ -19,11 +19,12 @@ export class MainScene extends Phaser.Scene {
     }
 
     preload(): void {
-        this.load.pack(
+
+        /*this.load.pack(
             'preload',
             'assets/pack.json',
             'preload'
-        );
+        );*/
     }
 
     init(): void {
@@ -38,7 +39,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     update(): void {
-        //console.log('update main-scene');
+        //Updates ingame time
         this.timeController.tic();
     }
 
