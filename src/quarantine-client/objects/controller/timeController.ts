@@ -45,7 +45,6 @@ export class TimeController {
             this.ticAccumulator = 0.0;
             this.subscribers.forEach(s => s.notify());
         }
-        console.log(this.ticAccumulator);
     }
 
     /**
