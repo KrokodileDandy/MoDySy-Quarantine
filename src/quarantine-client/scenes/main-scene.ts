@@ -1,8 +1,15 @@
 import { Controller } from "../objects/controller/controller";
+import { TimeController } from "../objects/controller/timeController";
 
+/**
+ * Main phaser scene which manages the other game scene
+ */
 export class MainScene extends Phaser.Scene {
 
+    /** Instance of the central coordinator */
     private controller: Controller;
+    /** Instance of the central time coordinator */
+    private timeController: TimeController;
 
     constructor() {
         super({
@@ -27,11 +34,13 @@ export class MainScene extends Phaser.Scene {
     create(): void {
         console.log('Create');
 
+        this.timeController = TimeController.getInstance();
         this.controller = Controller.getInstance();
     }
 
     update(): void {
-        console.log('Update');
+        //console.log('update main-scene');
+        this.timeController.tic();
     }
 
 }

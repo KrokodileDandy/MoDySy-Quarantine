@@ -1,8 +1,12 @@
 import {MainScene} from "./main-scene";
 import { ChartScene } from "./chart-scene";
+import { UpgradeController } from "../objects/controller/upgradeController";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
+
+  /** Only existing instance of UpgradeController */
+  private uC: UpgradeController;
 
     constructor() {
         super({
@@ -24,6 +28,7 @@ export class GuiScene extends Phaser.Scene {
     create(): void {
         this.createMenuButtons();
         this.createSettingsButtons();
+        this.uC = UpgradeController.getInstance();
     }
 
     createPauseButton(reset, resume): void{
@@ -68,13 +73,22 @@ export class GuiScene extends Phaser.Scene {
       const lockdownBlack = this.add.sprite(875, 120, 'lockdown-black').setInteractive();
 
       const socialdistancingWhite = this.add.sprite(750, 120, 'socialdistancing-white').setInteractive();
-      const socialdistancingBlack = this.add.sprite(750, 120, 'socialdistancing-black').setInteractive();
+      const socialdistancingBlack = this.add.sprite(750, 120, 'socialdistancing-black').setInteractive().on('pointerdown', () => {
+        this.uC.buyHealthWorkers(this.uC);
+        console.log("[Upgrade] Buy health workers");
+      });
 
       const policeWhite = this.add.sprite(875, 170, 'police-white').setInteractive();
-      const policeBlack = this.add.sprite(875, 170, 'police-black').setInteractive();
+      const policeBlack = this.add.sprite(875, 170, 'police-black').setInteractive().on('pointerdown', () => {
+        this.uC.buyPoliceOfficers(this.uC);
+        console.log("[Upgrade] Buy police");
+      });
 
       const researchWhite = this.add.sprite(750, 170, 'research-white').setInteractive();
-      const researchBlack = this.add.sprite(750, 170, 'research-black').setInteractive();
+      const researchBlack = this.add.sprite(750, 170, 'research-black').setInteractive().on('pointerdown', () => {
+        this.uC.introduceCure(this.uC);
+        console.log("[Upgrade] Introduce cure");
+      });
 
       // Create a list of all measures, taking in consideration both of the colors
       const sprites = [menuWhite, menuBlack, stateWhite, stateBlack, investmentWhite, investmentBlack, lockdownWhite, lockdownBlack, socialdistancingWhite, socialdistancingBlack, policeWhite, policeBlack, researchWhite, researchBlack];
@@ -123,7 +137,6 @@ export class GuiScene extends Phaser.Scene {
       measures.forEach(element => {
         this.addOnListenerSubButton(element);
       });
-
 
     }
 
