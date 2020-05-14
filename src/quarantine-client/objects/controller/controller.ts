@@ -42,7 +42,7 @@ export class Controller implements TimeSubscriber {
          * Basic interaction rate which is used to calculate the number of
          * interactions per tic.
          */
-        public basicInteractionRate = 0.01;
+        public basicInteractionRate = 0.1;
         /** Upper bound of the randomly generated interaction variance. */
         public maxInteractionVariance = 0.05;
     
@@ -69,7 +69,7 @@ export class Controller implements TimeSubscriber {
     private constructor() {
         this.stats.population = 1_620_000; //83_149_300; // german population in september 2019 (wikipedia)
         this.stats.nbrPolice = 1_000;
-        this.stats.nbrHW = 1_000;
+        this.stats.nbrHW = 100_000;
 
         this.initiateRules();
         this.initiatePopulation();
@@ -82,22 +82,14 @@ export class Controller implements TimeSubscriber {
     /** Initiate basic transition rules at gamestart. */
     private initiateRules(): void {
         this.rules = [
-            new Rule(State.HEALTHY, State.INFECTED, State.UNKNOWINGLY_INFECTED, State.INFECTED, () => {
-                //console.log("INFECTED");
-                return true;
-            }),
+            new Rule(State.HEALTHY, State.INFECTED, State.UNKNOWINGLY_INFECTED, State.INFECTED),
             new Rule(State.HEALTHY, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED),
             new Rule(State.INFECTED, State.INFECTED, State.INFECTED, State.DECEASED, () => {
-                this.stats.deceased++;
-                this.stats.population--;
-                this.stats.infected--;
-                //console.log("DECEASED");
-                Controller.getInstance().death();
+                Controller.getInstance().deceased();
                 return true;
             }),
             new Rule(State.TEST_KIT, State.UNKNOWINGLY_INFECTED, State.TEST_KIT, State.INFECTED, () => {
-                this.stats.infected++;
-                //console.log("TESTED");
+                Controller.getInstance().foundInfected();
                 return true;
             })
         ];
@@ -207,11 +199,12 @@ export class Controller implements TimeSubscriber {
             if (r.inputState1 == agent1.getHealthState() && r.inputState2 == agent2.getHealthState()) {
                 agent1.setHealthState(r.outputState1);
                 agent2.setHealthState(r.outputState2);
+                r.calculationRule();
             } else if (r.inputState1 == agent2.getHealthState() && r.inputState2 == agent1.getHealthState()) {
                 agent1.setHealthState(r.outputState2);
                 agent2.setHealthState(r.outputState1);
+                r.calculationRule();
             }
-            r.calculationRule();
         });
     }
 
@@ -279,9 +272,16 @@ export class Controller implements TimeSubscriber {
 
 
     // ------------------------------------------------------------------ SETTER-METHODS
-    // allows encapsulation of application logic
-    public death(): void {
+    /** Increase deceased counter by one and decrease infected and population counter by one */
+    public deceased(): void {
+        this.stats.deceased++;
         this.stats.population--;
+        this.stats.infected--;
+    }
+
+    /** Increase infected counter by one */
+    public foundInfected(): void {
+        this.stats.infected++;
     }
 
 }
