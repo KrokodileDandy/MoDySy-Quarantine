@@ -60,14 +60,14 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
         this.day += 1;
 
         /** Update the labels */
-        this.chart.data.labels.push('Tag ' + this.day);
+        this.chart.data.labels.push('Day ' + this.day);
 
         /** Get current infection numbers */
         const currentlyInfected = this.controller.getInfected();
 
         /** Update both datasets */
         this.chart.data.datasets.forEach((dataset) => {
-            if (dataset.label == 'Infizierte insgesamt') {
+            if (dataset.label == 'Total Cases') {
                 /** Add a new datapoint with the total number of people infected */
                 dataset.data.push(currentlyInfected);
             } else {

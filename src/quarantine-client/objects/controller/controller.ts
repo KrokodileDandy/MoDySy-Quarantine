@@ -232,7 +232,7 @@ export class Controller implements TimeSubscriber {
             }
         }
 
-        console.log("Pop.: "+this.stats.population+"; Infected: "+this.stats.infected);
+        console.log("Pop.: "+this.stats.population+"; Infected: "+this.stats.infected*this.populationFactor);
 
         UpgradeController.getInstance().updateBudget();
     }
