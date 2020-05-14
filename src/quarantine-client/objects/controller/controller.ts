@@ -5,6 +5,9 @@ import { Role} from '../../util/roles';
 import { State } from '../../util/healthStates';
 import { Rule } from './rule';
 import { HealthWorker } from '../healthWorker';
+import { TimeSubscriber } from '../../util/timeSubscriber';
+import { TimeController } from './timeController';
+import { UpgradeController } from './upgradeController';
 
 /**
  * Singleton controller which contains game variables (e.g. budget, population size)
@@ -15,15 +18,10 @@ import { HealthWorker } from '../healthWorker';
  * @author Marvin Kruber
  * @author Sebastian Führ
  */
-export class Controller {
+export class Controller implements TimeSubscriber {
     /** Anonymous class to encapsulate game variables. */
     private stats = new class Stats {
-        // ------------------------------------------------ GAME VARIABLES
-        /** Available money in EURO */
-        public budget: number;
-        /** Income per tic */
-        public income: number;
-    
+        // ------------------------------------------------ GAME VARIABLES    
         /** Population of the country the player is playing in */
         public population: number;
         /** Number of deceased people since the game started */
@@ -44,7 +42,7 @@ export class Controller {
          * Basic interaction rate which is used to calculate the number of
          * interactions per tic.
          */
-        public basicInteractionRate = 0.01;
+        public basicInteractionRate = 0.1;
         /** Upper bound of the randomly generated interaction variance. */
         public maxInteractionVariance = 0.05;
     
@@ -52,129 +50,8 @@ export class Controller {
         // ...
     }
 
-    /** Anonymous class to encapsulate available game upgrades */
-    public upgrades = new class Upgrades {
-
-        /** Instance of nesting controller */
-        private contr: Controller;
-
-        // ----------------------------------------------------------------- UPGRADE - PUBLIC
-        /**
-         * Inserts a number of health workers into the agents array and adds rules regarding the state 'CURE'.
-         * This method is required to call before the buyHealthWorkers-method. Otherwise the agents array
-         * will have health workers but they won't do anything. (Because the transition rules are not yet
-         * defined.)
-         * @param price Price of the upgrade
-         * @param numberOfNewAgents Number of new health workers
-         * @returns Boolean if the operation was successful, false if there are not enough people left to become health workers
-         */
-        public introduceCure(price: number, numberOfNewAgents: number): boolean {
-            // There should be enough people left to become health workers
-            if (this.contr.stats.population - this.contr.stats.nbrHW - this.contr.stats.nbrPolice < numberOfNewAgents) return false;
-
-            this.buyItem(price);
-
-            const lastRule = this.contr.rules.length;
-            this.contr.rules[lastRule] = new Rule(State.HEALTHY, State.CURE, State.IMMUNE, State.CURE);
-            this.contr.rules[lastRule] = new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE);
-            this.contr.rules[lastRule] = new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE);
-
-            this.distributeNewRoles(numberOfNewAgents, Role.HEALTH_WORKER);
-            return true;
-        }
-
-        /**
-         * Insert a number of police officers into the agents array
-         * @param price Price of this upgrade
-         * @param amt Number of new police officers
-         */
-        public buyPoliceOfficers(price: number, crt: Controller, amt = 100): boolean { //make amount a specific game variable in upgrade
-            if (crt.upgrades.distributeNewRoles(amt, Role.POLICE)) {
-                crt.upgrades.buyItem(price);
-                console.log("Hello");
-                return true;
-            }
-            return false;
-        }
-
-        /**
-         * Insert a number of police officers into the agents array
-         * @param price Price of this upgrade
-         * @param amt Number of new police officers
-         */
-        public buyHealthWorkers(price: number, ctr: Controller, amt = 100): boolean {
-            if (ctr.upgrades.distributeNewRoles(amt, Role.HEALTH_WORKER)) {
-                ctr.upgrades.buyItem(price);
-                console.log("HEALTH");
-                return true;
-            }
-            return false;
-        }
-
-        // ----------------------------------------------------------------- UPGRADE - PRIVATE
-        /**
-         * Reduces the current budget by the given price
-         * @param price Price of respective item
-         */
-        private buyItem(price: number): void {
-            this.contr.stats.budget = this.contr.stats.budget - price;
-        }
-
-        /**
-         * Changes the role of the specified number of agents. The agents are chosen randomly.
-         * Shouldn't be used with the rule CITIZEN.
-         * @param amt Amount of new workers
-         * @param role role to be distributed among the agents
-         * @reurns If enough agents can be assigned that role
-         */
-        private distributeNewRoles(amt: number, role: Role): boolean {
-            // There should be enough people left to be assigned the specific role
-            if (this.contr.stats.population - this.contr.stats.nbrHW - this.contr.stats.nbrPolice < amt) return false;
-
-            let i = 0;
-            /** 
-             * Changes agents of the agents array to become health workers if they are not already health
-             * workers or police officers.
-             */
-            while(i < amt) {
-                const idx = this.contr.getRandomIndex();
-                if((this.contr.agents[idx] instanceof HealthWorker) ||
-                    (this.contr.agents[idx] instanceof Police)) continue;
-                switch (role) {
-                    case Role.HEALTH_WORKER: {
-                        this.contr.agents[idx] = new HealthWorker(State.CURE);
-                        break;
-                    }
-                    case Role.POLICE: {
-                        const tmp = this.contr.agents[idx].getHealthState(); // infected agents can become police officers
-                        this.contr.agents[idx] = new Police(tmp);
-                        break;
-                    }
-                    default: {
-                        console.log("[WARNING] distributeNewRoles in controller.ts wasn't invoked with police or health worker role.");
-                        break;
-                    }
-                }
-                i++;
-            }
-            return true;
-        }
-
-        // -------------------------------------------------------- UPGRADE - SETTER-METHODS
-        /**
-         * Set the controller instance to be used to integrate updates
-         * @param contr Controller instance
-         */
-        public setController(contr: Controller): void {
-            this.contr = contr;
-        }
-    }
-
     /** The only existing instance of Controller */
     private static instance: Controller;
-
-    /** Tics per day */
-    private readonly ticsPerDay = 24;
  
     /** All population protocol agents of the game */
     private agents: Agent[] = [];
@@ -190,14 +67,16 @@ export class Controller {
      * values for nbrPolice, budget, income...
      */
     private constructor() {
-        this.stats.population = 1_620_000 //83_149_300; // german population in september 2019 (wikipedia)
-        this.stats.budget = 2_000_000;
-        this.stats.income = 30_000;
-
-        this.upgrades.setController(this);
+        this.stats.population = 1_620_000; //83_149_300; // german population in september 2019 (wikipedia)
+        this.stats.nbrPolice = 1_000;
+        this.stats.nbrHW = 100_000;
 
         this.initiateRules();
         this.initiatePopulation();
+
+        TimeController.getInstance().subscribe(this);
+
+        this.distributeRandomlyInfected(1_000);
     }
 
     /** Initiate basic transition rules at gamestart. */
@@ -205,7 +84,14 @@ export class Controller {
         this.rules = [
             new Rule(State.HEALTHY, State.INFECTED, State.UNKNOWINGLY_INFECTED, State.INFECTED),
             new Rule(State.HEALTHY, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED),
-            new Rule(State.INFECTED, State.INFECTED, State.INFECTED, State.DECEASED),
+            new Rule(State.INFECTED, State.INFECTED, State.INFECTED, State.DECEASED, () => {
+                Controller.getInstance().deceased();
+                return true;
+            }),
+            new Rule(State.TEST_KIT, State.UNKNOWINGLY_INFECTED, State.TEST_KIT, State.INFECTED, () => {
+                Controller.getInstance().foundInfected();
+                return true;
+            })
         ];
     }
 
@@ -216,6 +102,7 @@ export class Controller {
      */
     private initiatePopulation(): void {
         let remainingPolice = this.stats.nbrPolice;
+        let remainingHW = this.stats.nbrHW;
         this.agents = new Array(this.stats.population);
         
         for (let i = 0; i < this.stats.population; i++) {
@@ -224,6 +111,11 @@ export class Controller {
                     || remainingPolice === this.stats.population - i)) { // remaining number of agents has to be filled by police officers
                 this.agents[i] = new Police(State.HEALTHY);
                 remainingPolice--;
+            } else if (remainingHW > 0
+                && (Math.random() > (this.stats.nbrHW / this.stats.population)
+                || remainingHW === this.stats.population - i)) {
+                this.agents[i] = new HealthWorker(State.TEST_KIT);
+                remainingHW--;
             } else {
                 this.agents[i] = new Citizen(State.HEALTHY);
             }
@@ -245,11 +137,49 @@ export class Controller {
         }
     }
 
+    /**
+     * Changes the role of the specified number of agents. The agents are chosen randomly.
+     * Shouldn't be used with the rule CITIZEN.
+     * @param amt Amount of new workers
+     * @param role role to be distributed among the agents
+     * @reurns If enough agents can be assigned that role
+     */
+    public distributeNewRoles(amt: number, role: Role, testKit = false): boolean {
+        // There should be enough people left to be assigned the specific role
+        if (this.getPopulation() - this.getNumberOfHealthWorkers() - this.getNumberOfPolice() < amt) return false;
+
+        let i = 0;
+        /** 
+         * Changes agents of the agents array to become health workers if they are not already health
+         * workers or police officers.
+         */
+        while(i < amt) {
+            const idx = this.getRandomIndex();
+            if((this.agents[idx] instanceof HealthWorker) ||
+                (this.agents[idx] instanceof Police)) continue;
+            switch (role) {
+                case Role.HEALTH_WORKER: {
+                    if (testKit) this.agents[idx] = new HealthWorker(State.TEST_KIT);
+                    else this.agents[idx] = new HealthWorker(State.CURE);
+                    break;
+                }
+                case Role.POLICE: {
+                    const tmp = this.agents[idx].getHealthState(); // infected agents can become police officers
+                    this.agents[idx] = new Police(tmp);
+                    break;
+                }
+                default: {
+                    console.log("[WARNING] distributeNewRoles in controller.ts wasn't invoked with police or health worker role.");
+                    break;
+                }
+            }
+            i++;
+        }
+        return true;
+    }
+
     /** Returns a random integer value between 0 and the current population number. */
     private getRandomIndex(): number {return Math.floor(Math.random() * this.stats.population);}
-
-    /** Increases budget by income rate. */
-    public updateBudget(): void {this.stats.budget += this.getIncome()}
 
     /** @returns Partially randomized interaction rate. */
     private calculateInteractionRate(): number {
@@ -269,9 +199,11 @@ export class Controller {
             if (r.inputState1 == agent1.getHealthState() && r.inputState2 == agent2.getHealthState()) {
                 agent1.setHealthState(r.outputState1);
                 agent2.setHealthState(r.outputState2);
+                r.calculationRule();
             } else if (r.inputState1 == agent2.getHealthState() && r.inputState2 == agent1.getHealthState()) {
                 agent1.setHealthState(r.outputState2);
                 agent2.setHealthState(r.outputState1);
+                r.calculationRule();
             }
         });
     }
@@ -300,9 +232,13 @@ export class Controller {
             }
         }
 
-        this.updateBudget();
+        console.log("Pop.: "+this.stats.population+"; Infected: "+this.stats.infected*this.populationFactor);
+
+        UpgradeController.getInstance().updateBudget();
     }
 
+    /** @see TimeSubscriber */
+    public notify(): void {this.update();}
 
     // ----------------------------------------------------------------- GETTER-METHODS
     /** @returns The singleton instance */
@@ -311,19 +247,10 @@ export class Controller {
         return Controller.instance;
     }
 
-    /** @returns Tics per day */
-    public getTicsPerDay(): number {return this.ticsPerDay;}
-
     /** @returns Array of active rules */
     public getRules(): Rule[] {return this.rules;}
 
     // ------------------------------------------------------- GETTER of Stats instance
-    /** @returns Currently available budget */
-    public getBudget(): number {return this.stats.budget;}
-
-    /** @returns Current income per tic */
-    public getIncome(): number {return this.stats.income;}
-
     /** @returns Current population number */
     public getPopulation(): number {return this.stats.population * this.populationFactor;}
 
@@ -345,7 +272,16 @@ export class Controller {
 
 
     // ------------------------------------------------------------------ SETTER-METHODS
-    // allows encapsulation of application logic
-    // private setIncome(amt: number) {}
+    /** Increase deceased counter by one and decrease infected and population counter by one */
+    public deceased(): void {
+        this.stats.deceased++;
+        this.stats.population--;
+        this.stats.infected--;
+    }
+
+    /** Increase infected counter by one */
+    public foundInfected(): void {
+        this.stats.infected++;
+    }
 
 }

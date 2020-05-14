@@ -2,7 +2,7 @@ import 'phaser';
 import { Item } from './item';
 import { GameObjects } from 'phaser';
 import { ArrowButton } from './arrow-button';
-import { Controller } from '../objects/controller/controller'
+import { UpgradeController } from '../objects/controller/upgradeController';
 
 /**
  * Extends Phaser.GameObjects.Container and represents the ingame item menu.
@@ -14,7 +14,7 @@ export class ItemMenu extends Phaser.GameObjects.Container {
 
     private budget: number;
     private income: number;
-    public controller: Controller;
+    public upgradeContr: UpgradeController;
 
     /**
      * 
@@ -25,9 +25,9 @@ export class ItemMenu extends Phaser.GameObjects.Container {
     public constructor(scene: Phaser.Scene, x: number, y: number ) {
         super(scene, x, y);
 
-        this.controller = Controller.getInstance();
-        this.budget = this.controller.getBudget();
-        this.income = this.controller.getIncome();
+        this.upgradeContr = UpgradeController.getInstance();
+        this.budget = this.upgradeContr.getBudget();
+        this.income = this.upgradeContr.getIncome();
 
         //Create itembar which contains all items and scale it
         const itemBar = new Phaser.GameObjects.Container(this.scene, 250, 100, this.fillWithItems() ).setScale(1.05, 1);
@@ -52,19 +52,14 @@ export class ItemMenu extends Phaser.GameObjects.Container {
     /** Adds all items to the menu */
     private fillWithItems(): Phaser.GameObjects.GameObject[] {
         return [
-        new Item(this.scene, 175, -15, 'lockdown', 1000000 , 'bar-lockdown-white', console.log),
-        new Item(this.scene, 325, -15, 'socialdistancing', 4000000, 'bar-socialdistancing-white', this.buildClosure(this.controller.upgrades.buyHealthWorkers)),
-        new Item(this.scene, 475, -15, 'police', 2500000, 'bar-police-white', this.buildClosure(this.controller.upgrades.buyPoliceOfficers)),
-        new Item(this.scene, 625, -15, 'research', 5000000 , 'bar-research-white', this.buildClosure(this.controller.upgrades.introduceCure)),
-        /*nnew Item(this.scene, 775, -15, 'police', 25, 'bar-police-white', console.log),
+        new Item(this.scene, 175, -15, 'lockdown', 1000000 , 'bar-lockdown-white', this.buildClosure(this.upgradeContr.buyTestKitHWs)),
+        new Item(this.scene, 325, -15, 'socialdistancing', 4000000, 'bar-socialdistancing-white', this.buildClosure(this.upgradeContr.buyHealthWorkers)),
+        new Item(this.scene, 475, -15, 'police', 2500000, 'bar-police-white', this.buildClosure(this.upgradeContr.buyPoliceOfficers)),
+        new Item(this.scene, 625, -15, 'research', 5000000 , 'bar-research-white', this.buildClosure(this.upgradeContr.introduceCure)),
+        /*new Item(this.scene, 775, -15, 'police', 25, 'bar-police-white', console.log),
         new Item(this.scene, 925, -15, 'comingSoon', 25, 'bar-police-black', console.log),
         new Item(this.scene, 1075, -15, 'comingSoon', 25, 'bar-police-black', console.log)*/
         ]
-    }
-
-    private buildClosure(myFunction: Function): Function {
-        const contr = this.controller;
-        return function(price: number): void {myFunction(price, contr , 0)};
     }
 
     /** Creates the "profile". That means item menu relevant stats are visualized on the menu. */
@@ -77,8 +72,15 @@ export class ItemMenu extends Phaser.GameObjects.Container {
 
     /** Updates all menu statistics i.e. budget and income. */
     public updateItemMenu(): void {
-        this.budget = this.controller.getBudget();
-        this.income = this.controller.getIncome();
+        this.budget = this.upgradeContr.getBudget();
+        this.income = this.upgradeContr.getIncome();
         (this.getAt(1) as GameObjects.Text).setText(`Budget: ${this.budget}\nIncome: ${this.income}`);
+    }
+
+    //-------------------------------------------------------------------------------------------------
+    /** */
+    private buildClosure(myFunction: Function): Function {
+        const contr = this.upgradeContr;
+        return function(): void {myFunction(contr)};
     }
 }
