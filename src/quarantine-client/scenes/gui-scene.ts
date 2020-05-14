@@ -17,12 +17,10 @@ export class GuiScene extends Phaser.Scene {
     }
 
     preload(): void {
-
         this.load.pack(
             'buttons',
             'assets/pack.json',
-            'buttons'
-        );
+            'buttons');
     }
 
     create(): void {
@@ -31,6 +29,7 @@ export class GuiScene extends Phaser.Scene {
         this.uC = UpgradeController.getInstance();
     }
 
+    // -------------------------------------------------------------------------- GAME MENU
     createPauseButton(reset, resume): void{
       const main = this.scene.get('MainScene') as MainScene;
       const chart = this.scene.get('ChartScene') as ChartScene;
@@ -278,6 +277,4 @@ export class GuiScene extends Phaser.Scene {
         element.visible = true;
       });
     }
-
-
 }
