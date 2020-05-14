@@ -10,6 +10,8 @@ export class GuiScene extends Phaser.Scene {
   private mainSceneIsPaused = false;
   /** Only existing instance of UpgradeController */
   private uC: UpgradeController;
+  /** Whether the upgrade introduceCure was already bought */
+  private cureFound = false;
 
     constructor() {
         super({
@@ -92,7 +94,8 @@ export class GuiScene extends Phaser.Scene {
 
       const researchWhite = this.add.sprite(750, 170, 'research-white').setInteractive();
       const researchBlack = this.add.sprite(750, 170, 'research-black').setInteractive().on('pointerdown', () => {
-        this.uC.introduceCure(this.uC);
+        if (!this.cureFound) this.uC.introduceCure(this.uC);
+        else this.uC.buyTestKitHWs(this.uC);
       });
 
       // Create a list of all measures, taking in consideration both of the colors

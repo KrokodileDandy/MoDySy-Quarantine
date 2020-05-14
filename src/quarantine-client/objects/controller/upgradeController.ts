@@ -27,8 +27,8 @@ export class UpgradeController {
 
     private constructor() {
         this.contr = Controller.getInstance();
-        this.stats.budget = 2_000_000;
-        this.stats.income = 30_000;
+        this.stats.budget = 2_000_000_000; // allows to buy 2 upgrades immediately
+        this.stats.income = 100_000_000; // allows to buy 1 upgrade every 5 days
     }
 
     // ----------------------------------------------------------------- UPGRADE - PUBLIC
@@ -118,7 +118,7 @@ export class UpgradeController {
      * @returns Wether the player is solvent
     */
     private isSolvent(price: number): boolean {
-        return this.getBudget() > price;
+        return this.getBudget() >= price;
     }
 
     /** Increases budget by income rate. */
