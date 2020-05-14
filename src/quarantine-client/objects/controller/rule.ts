@@ -7,10 +7,13 @@ export class Rule {
     public readonly outputState1: State;
     public readonly outputState2: State;
 
-    constructor(inputState1, inputState2, outputState1, outputState2) {
+    public calculationRule;
+
+    constructor(inputState1, inputState2, outputState1, outputState2, calculationRule = function(): boolean {return true;}) {
         this.inputState1 = inputState1;
         this.inputState2  = inputState2;
         this.outputState1 = outputState1;
         this.outputState2 = outputState2;
+        this.calculationRule = calculationRule;
     }
 }
