@@ -57,8 +57,8 @@ export class StatusBar extends Phaser.Scene {
         document.getElementById("statbar-budget").innerHTML = UpgradeController.getInstance().getBudget() + " €";
         document.getElementById("statbar-population").innerHTML = "Population: " + this.controller.getPopulation();
         document.getElementById("statbar-infected").innerHTML = "Infected: " + this.controller.getInfected();
-        document.getElementById("statbar-police").innerHTML = "Police: " + this.controller.getNumberOfHealthWorkers();
-        document.getElementById("statbar-hw").innerHTML = "Health Workers: " + this.controller.getNumberOfPolice();
+        document.getElementById("statbar-police").innerHTML = "Police: " + this.controller.getNumberOfPolice();
+        document.getElementById("statbar-hw").innerHTML = "Health Workers: " + this.controller.getNumberOfHealthWorkers();
     }
 
 }
