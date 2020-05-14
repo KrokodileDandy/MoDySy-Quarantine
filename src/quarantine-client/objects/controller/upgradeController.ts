@@ -41,8 +41,8 @@ export class UpgradeController {
      * @returns Boolean if the operation was successful, false if there are not enough people left to become health workers
      */
     public introduceCure(uC: UpgradeController): boolean {
-        const price = 100_000;
-        const numberOfNewAgents = 10_000;
+        const numberOfNewAgents = 100_000;
+        const price = numberOfNewAgents * 5_000; // = 500_000_000
 
         // There should be enough people left to become health workers
         if (uC.contr.getPopulation() - uC.contr.getNumberOfHealthWorkers() - uC.contr.getNumberOfPolice() < numberOfNewAgents) return false;
@@ -66,8 +66,8 @@ export class UpgradeController {
      * @param uC UpgradeController needed for closure {@see menu.ts#buildClosure}
      */
     public buyPoliceOfficers(uC: UpgradeController): boolean {
-        const price = 100_000;
-        const amt = 10_000;
+        const amt = 100_000;
+        const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.POLICE)) {
             uC.buyItem(price);
             this.contr.increasePoliceOfficers(amt);
@@ -80,8 +80,8 @@ export class UpgradeController {
      * @param uC UpgradeController needed for closure {@see menu.ts#buildClosure}
      */
     public buyHealthWorkers(uC: UpgradeController): boolean {
-        const price = 100_000;
-        const amt = 10_000;
+        const amt = 100_000;
+        const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER)) {
             uC.buyItem(price);
             this.contr.increaseHealthWorkers(amt);
@@ -95,8 +95,8 @@ export class UpgradeController {
      * @param uC UpgradeController needed for closure {@see menu.ts#buildClosure}
      */
     public buyTestKitHWs(uC: UpgradeController): boolean {
-        const price = 10_000_000;
-        const amt = 10_000;
+        const amt = 100_000;
+        const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER, true)) {
             uC.buyItem(price);
             this.contr.increaseHealthWorkers(amt);

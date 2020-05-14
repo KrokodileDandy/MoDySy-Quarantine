@@ -68,8 +68,8 @@ export class Controller implements TimeSubscriber {
      */
     private constructor() {
         this.stats.population = 1_620_000; //83_149_300; // german population in september 2019 (wikipedia)
-        this.stats.nbrPolice = 1_000;
-        this.stats.nbrHW = 100_000;
+        this.stats.nbrPolice = this.stats.population * 0.01;
+        this.stats.nbrHW = this.stats.population * 0.01;
 
         this.initiateRules();
         this.initiatePopulation();
