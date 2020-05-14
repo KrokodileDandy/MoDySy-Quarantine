@@ -1,6 +1,10 @@
 import { Controller } from "../objects/controller/controller";
 import { TimeController } from "../objects/controller/timeController";
 
+/**
+ * Scene to show the infected people on a map
+ * @author Jakob Hartmann
+ */
 export class MapScene extends Phaser.Scene {
     /** Number of infected people */
     private infected: number;
