@@ -43,6 +43,7 @@ export class UpgradeController {
     public introduceCure(uC: UpgradeController): boolean {
         const price = 100_000;
         const numberOfNewAgents = 10_000;
+
         // There should be enough people left to become health workers
         if (uC.contr.getPopulation() - uC.contr.getNumberOfHealthWorkers() - uC.contr.getNumberOfPolice() < numberOfNewAgents) return false;
 
@@ -55,8 +56,9 @@ export class UpgradeController {
             uC.contr.getRules()[lastRule] = new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE);
 
             uC.contr.distributeNewRoles(numberOfNewAgents, Role.HEALTH_WORKER);
-        }
-        return true;
+            this.contr.increaseHealthWorkers(numberOfNewAgents);
+            return true;
+        } else return false;
     }
 
     /**
@@ -66,13 +68,11 @@ export class UpgradeController {
     public buyPoliceOfficers(uC: UpgradeController): boolean {
         const price = 100_000;
         const amt = 10_000;
-        if(uC.isSolvent(price)) {
-            if (uC.contr.distributeNewRoles(amt, Role.POLICE)) {
-                uC.buyItem(price);
-                return true;
-            }
-        }
-        return false;
+        if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.POLICE)) {
+            uC.buyItem(price);
+            this.contr.increasePoliceOfficers(amt);
+            return true;
+        } else return false;
     }
 
     /**
@@ -82,13 +82,11 @@ export class UpgradeController {
     public buyHealthWorkers(uC: UpgradeController): boolean {
         const price = 100_000;
         const amt = 10_000;
-        if(uC.isSolvent(price)) {
-            if (uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER)) {
-                uC.buyItem(price);
-                return true;
-            }
-        }
-        return false;
+        if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER)) {
+            uC.buyItem(price);
+            this.contr.increaseHealthWorkers(amt);
+            return true;
+        } else return false;
     }
 
     /**
@@ -99,13 +97,11 @@ export class UpgradeController {
     public buyTestKitHWs(uC: UpgradeController): boolean {
         const price = 10_000_000;
         const amt = 10_000;
-        if(uC.isSolvent(price)) {
-            if (uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER, true)) {
-                uC.buyItem(price)
-                return true;
-            }
-        }
-        return false;
+        if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER, true)) {
+            uC.buyItem(price);
+            this.contr.increaseHealthWorkers(amt);
+            return true;
+        } else return false;
     }
 
     // ----------------------------------------------------------------- UPGRADE - PRIVATE
