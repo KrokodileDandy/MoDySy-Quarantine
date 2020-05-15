@@ -205,6 +205,11 @@
           "type": "image",
           "key": "blackborder",
           "url": "assets/sprites/blackborder.png"
+        },
+        {
+          "type": "image",
+          "key": "popup-box",
+          "url": "assets/sprites/popup-box.png"
         }
       ]
   }

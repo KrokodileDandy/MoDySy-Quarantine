@@ -1,11 +1,11 @@
 // foo.ts
 export const foo = {
-    a : {
-      b: {
-        c: {
-          hello: (name: string) => `Hello, ${name}`,
-        },
+  a: {
+    b: {
+      c: {
+        hello: (name: string) => `Hello, ${name}`,
       },
     },
-    name: () => 'foo',
-  }
+  },
+  name: () => 'foo',
+}
