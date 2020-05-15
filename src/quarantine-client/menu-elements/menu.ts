@@ -30,20 +30,20 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         this.income = this.upgradeContr.getIncome();
 
         //Create itembar which contains all items and scale it
-        const itemBar = new Phaser.GameObjects.Container(this.scene, 250, 100, this.fillWithItems() ).setScale(1.05, 1);
+        const itemBar = new Phaser.GameObjects.Container(this.scene, 250, 200, this.fillWithItems() ).setScale(1.05, 1);
 
         this.setScale(1.8, 1);
         this.scene.add.existing(this);
         this.scene.add.existing(itemBar);
         
         //Add menu layout     
-        this.add(this.scene.add.image(0 , 0, 'bar').setOrigin(0, 0));
+        this.add(this.scene.add.image(0 , 100, 'bar').setOrigin(0, 0));
         this.addStatistics();
 
         //Add navigation buttons
         const nbrOfItems = itemBar.length; //1 has to be subracted if there is a background img for itemBar
-        this.add(new ArrowButton(this.scene, 325, 75, 'arrow-button-left', -1, nbrOfItems));
-        this.add(new ArrowButton(this.scene, 1000, 75, 'arrow-button-right', 1, nbrOfItems));
+        this.add(new ArrowButton(this.scene, 325, 175, 'arrow-button-left', -1, nbrOfItems));
+        this.add(new ArrowButton(this.scene, 1000, 175, 'arrow-button-right', 1, nbrOfItems));
         
         //Add itembar
         this.add(itemBar);
@@ -64,7 +64,7 @@ export class ItemMenu extends Phaser.GameObjects.Container {
 
     /** Creates the "profile". That means item menu relevant stats are visualized on the menu. */
     private addStatistics(): void {
-        this.add(this.scene.add.text(50, 30,`Budget: ${this.budget}\nIncome: ${this.income}`,{ // \n for line break and then setLineSpacing
+        this.add(this.scene.add.text(50, 130,`Budget: ${this.budget}\nIncome: ${this.income}`,{ // \n for line break and then setLineSpacing
             fontFamily:'Arial',
             color:'#000000',
           }).setFontSize(12).setScale(1, 3).setLineSpacing(10));
