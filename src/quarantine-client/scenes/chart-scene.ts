@@ -1,7 +1,9 @@
 import * as Chart from "chart.js";
 import { Controller } from "../objects/controller/controller";
+import { GuiScene } from "./gui-scene";
 import { TimeSubscriber } from "../util/timeSubscriber";
 import { TimeController } from "../objects/controller/timeController";
+import { UpgradeController } from "../objects/controller/upgradeController";
 
 /**
  * Scene for creating and updating the graphical
@@ -9,6 +11,12 @@ import { TimeController } from "../objects/controller/timeController";
  * @author Jakob Hartmann
  */
 export class ChartScene extends Phaser.Scene implements TimeSubscriber {
+    /** initial population */
+    private initialInfected: number;
+
+    /** initial amount of money */
+    private initialMoney: number;
+
     /** Number of days since the game started */
     private day: number;
 
@@ -20,6 +28,8 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
 
     /** Controller to access the current infection numbers */
     private controller: Controller;
+
+    private upgradeController: UpgradeController;
 
     constructor() {
         super({
@@ -34,6 +44,10 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
         this.day = 0;
         this.infected = 0;
         this.controller = Controller.getInstance();
+        this.upgradeController = UpgradeController.getInstance();
+
+        this.initialMoney = this.upgradeController.getBudget();
+        this.initialInfected = 0;
 
         /** If the game is restarted, the current chart will be destroyed */
         if (this.chart != null) {
@@ -73,6 +87,19 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
         /** Update current infection numbers */
         this.infected = currentlyInfected;
 
+        /** difference between today and yesterday */
+        if(this.day > 0) {
+            const chngesInCases = this.infected - this.initialInfected;
+            this.initialInfected = this.infected;
+
+            const changesInBudget = this.upgradeController.getBudget() - this.initialMoney;
+            this.initialMoney = this.upgradeController.getBudget();
+
+            /** Call of function that creates daily report of cases and all money  */
+            const guiScene = this.scene.get('GuiScene') as GuiScene;
+            guiScene.createPopUp(this.day, changesInBudget, chngesInCases);
+        }
+        
         /** Render the new chart in index.html */
         this.chart.update();
     }
