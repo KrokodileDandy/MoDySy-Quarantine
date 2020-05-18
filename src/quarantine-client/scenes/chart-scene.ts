@@ -34,7 +34,7 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
     constructor() {
         super({
             key: 'ChartScene',
-            active: true
+            active: false
         });
         TimeController.getInstance().subscribe(this);
     }

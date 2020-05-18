@@ -15,7 +15,7 @@ export class StatusBar extends Phaser.Scene {
     constructor() {
         super({
             key: 'StatusBarScene',
-            active: true
+            active: false
         });
         this.controller = Controller.getInstance();
     }

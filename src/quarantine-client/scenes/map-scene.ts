@@ -21,7 +21,7 @@ export class MapScene extends Phaser.Scene {
     constructor() {
         super({
             key: 'MapScene',
-            active: true
+            active: false
         });
         TimeController.getInstance().subscribe(this);
     }
