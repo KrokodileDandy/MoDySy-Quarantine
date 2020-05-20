@@ -2,6 +2,8 @@ import { Controller } from "./controller";
 import { State } from "../../util/healthStates";
 import { Rule } from "./rule";
 import { Role } from "../../util/roles";
+import { Stats } from "./stats";
+import { TimeSubscriber } from "../../util/timeSubscriber";
 
 
 /**
@@ -9,16 +11,10 @@ import { Role } from "../../util/roles";
  * @author Marvin Kruber
  * @author Sebastian Führ
  */
-export class UpgradeController {
+export class UpgradeController implements TimeSubscriber {
 
     /** Anonymous class to encapsulate game variables. */
-    private stats = new class Stats {
-        // ------------------------------------------------ GAME VARIABLES
-        /** Available money in EURO */
-        public budget: number;
-        /** Income per tic */
-        public income: number;
-    }
+    private stats: Stats;
 
     /** The only existing instance of UpgradeController */
     private static instance: UpgradeController;
@@ -26,9 +22,9 @@ export class UpgradeController {
     private contr: Controller;
 
     private constructor() {
+        this.stats = Stats.getInstance();
+
         this.contr = Controller.getInstance();
-        this.stats.budget = 2_000_000_000; // allows to buy 2 upgrades immediately
-        this.stats.income = 100_000_000; // allows to buy 1 upgrade every 5 days
     }
 
     // ----------------------------------------------------------------- UPGRADE - PUBLIC
@@ -102,6 +98,39 @@ export class UpgradeController {
             this.contr.increaseHealthWorkers(amt);
             return true;
         } else return false;
+    }
+
+    /** @see TimeSubscriber */
+    public notify(): void {
+        this.updateCompliance();
+        this.calculateIncome();
+        this.updateBudget();
+    }
+
+    /**
+     * Calculate the compliance depending on the populations happiness
+     * 
+     * | Happiness | Compliance|  
+     * | ----- | ----- |
+     * |       100 |       100 |  
+     * |        50 |      45.4 |  
+     * |         0 |        10 |
+     */
+    private updateCompliance(): number {
+        return this.stats.compliance = 19/4950 * Math.pow(this.stats.happiness, 2) + 511/990 * this.stats.happiness + 10;
+    }
+
+    /**
+     * Calculate the income depending on the population compliance.
+     * When the compliance sinks below 20% the state generates 0 income,
+     * while above 70% 100% of the income are generated.
+     */
+    private calculateIncome(): void {
+        if (this.stats.compliance > 70) this.stats.income = 1;
+        else if (this.stats.compliance < 20) this.stats.income = 0;
+        else {
+            this.stats.income = (this.stats.compliance - 20) * 2 * this.stats.maxIncome;
+        }
     }
 
     // ----------------------------------------------------------------- UPGRADE - PRIVATE
