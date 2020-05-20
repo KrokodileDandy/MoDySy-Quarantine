@@ -312,7 +312,8 @@ export class GuiScene extends Phaser.Scene {
     this.time.addEvent({ delay: 1000, callback: this.destroyPopUp, callbackScope: this });
   }
 
-  destroyPopUp() {
+  /** TODO please add documentation */
+  destroyPopUp(): void {
     if (this.showMoney || this.showCases || this.day) {
       this.showMoney.destroy();
       this.showCases.destroy();
