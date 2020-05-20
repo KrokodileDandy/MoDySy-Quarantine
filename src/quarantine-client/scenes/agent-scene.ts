@@ -1,6 +1,6 @@
-import { VisualAgent } from "../objects/visualAgent";
-import { Citizen } from "../objects/citizen";
-import { Police } from "../objects/police";
+import { VisualAgent } from "../objects/agents/visualAgent";
+import { Citizen } from "../objects/agents/citizen";
+import { Police } from "../objects/agents/police";
 import { State } from "../util/healthStates";
 
 /**

@@ -1,17 +1,16 @@
-import { Agent } from '../agent';
-import { Police } from '../police';
-import { Citizen } from '../citizen';
+import { Agent } from '../agents/agent';
+import { Police } from '../agents/police';
+import { Citizen } from '../agents/citizen';
 import { Role} from '../../util/roles';
 import { State } from '../../util/healthStates';
 import { Rule } from './rule';
-import { HealthWorker } from '../healthWorker';
+import { HealthWorker } from '../agents/healthWorker';
 import { TimeSubscriber } from '../../util/timeSubscriber';
 import { TimeController } from './timeController';
-import { UpgradeController } from './upgradeController';
+import { Stats } from './stats';
 
 /**
- * Singleton controller which contains game variables (e.g. budget, population size)
- * and simulates the population protocol.
+ * Singleton controller which should only simulates the population protocol.
  * This is achieved by finding defined transition rules of the protocol and applying
  * them to randomly selected agents.
  * It acts as the central coordinator of the application logic.
@@ -20,35 +19,7 @@ import { UpgradeController } from './upgradeController';
  */
 export class Controller implements TimeSubscriber {
     /** Anonymous class to encapsulate game variables. */
-    private stats = new class Stats {
-        // ------------------------------------------------ GAME VARIABLES    
-        /** Population of the country the player is playing in */
-        public population: number;
-        /** Number of deceased people since the game started */
-        public deceased = 0;
-        /** 
-         * Number of currently infected people (known cases). 
-         * The game starts with 0 agents with the status INFECTED, but
-         * a specific number of agents have the status UNKNOWINGLY_INFECTED.
-         */
-        public infected = 0;
-    
-        /** Number of police officers */
-        public nbrPolice: number;
-        /** Number of health workers */
-        public nbrHW: number;
-
-        /** 
-         * Basic interaction rate which is used to calculate the number of
-         * interactions per tic.
-         */
-        public basicInteractionRate = 0.1;
-        /** Upper bound of the randomly generated interaction variance. */
-        public maxInteractionVariance = 0.05;
-    
-        // --------------------------------------------------- PROBABILITIES
-        // ...
-    }
+    private stats: Stats;
 
     /** The only existing instance of Controller */
     private static instance: Controller;
@@ -62,14 +33,8 @@ export class Controller implements TimeSubscriber {
     /** Scale factor to multiply with population numbers to simulate real population numbers */
     private readonly populationFactor = 50;
 
-    /**
-     * Different difficulty levels can be reached through defining different
-     * values for nbrPolice, budget, income...
-     */
     private constructor() {
-        this.stats.population = 1_620_000; //83_149_300; // german population in september 2019 (wikipedia)
-        this.stats.nbrPolice = this.stats.population * 0.01;
-        this.stats.nbrHW = this.stats.population * 0.01;
+        this.stats = Stats.getInstance();
 
         this.initiateRules();
         this.initiatePopulation();
@@ -231,10 +196,6 @@ export class Controller implements TimeSubscriber {
                 this.agents.splice(idxAgent2, 1);
             }
         }
-
-        console.log("Pop.: "+this.stats.population+"; Infected: "+this.stats.infected*this.populationFactor);
-
-        UpgradeController.getInstance().updateBudget();
     }
 
     /** @see TimeSubscriber */
