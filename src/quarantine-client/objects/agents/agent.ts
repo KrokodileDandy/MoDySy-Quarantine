@@ -1,6 +1,6 @@
 import 'phaser';
-import { Role } from '../util/roles';
-import { State } from '../util/healthStates';
+import { Role } from '../../util/roles';
+import { State } from '../../util/healthStates';
 
 /**
  * Entity class agent divided into other subclasses (e.g. police, citizen, etc.).
