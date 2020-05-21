@@ -143,7 +143,7 @@ export class UpgradeController implements TimeSubscriber {
         this.updateCompliance();
         this.updateBudget(this.calculateIncome(), this.calculateExpenses());
 
-        this.printDailyIncomeStatement();
+        // this.printDailyIncomeStatement();
 
         this.stats.resetConsumptionCounters();
     }
