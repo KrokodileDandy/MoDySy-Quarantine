@@ -22,6 +22,28 @@ export class UpgradeController implements TimeSubscriber {
     /** Instance of central singleton controller */
     private contr: Controller;
 
+    /**
+     * Array of all available measures <name of measure> [<dictionary key of measure>]:
+     * * Social Distancing [sc]
+     * * Lock Down [ld]
+     */
+    public measures: {[id: string]: {[id: string]: boolean | string | number}} = {
+        "sc": {
+            "name": "Social Distancing",
+            "active": false,
+            "description": "SD description",
+            "cost": 100_000,
+            "daily_cost": 5_000
+        },
+        "ld": {
+            "name": "Lock Down",
+            "active": false,
+            "description": "LD description",
+            "cost": 100_000,
+            "daily_cost": 5_000
+        }
+    };
+
     private constructor() {
         this.stats = Stats.getInstance();
 
@@ -125,13 +147,16 @@ export class UpgradeController implements TimeSubscriber {
      *   * shw: <salary health workers>
      *   * tk: <bought test kits>
      *   * v: <bought vaccines>
+     *   * ms: <costs of all active measures>
      * 
      * ---
      * __Example usage:__  
      * Acces to the money spend for the salary of police officers through 
      * `getIncomeStatement()["exp"]["spo"];`
      * 
+     * ---
      * @returns Dictionary of two dictionaries "Earnings" and "Expenses"
+     * @see #calculateMeasureExpenses()
      */
     public getIncomeStatement(): {[id: string]: {[id: string]: number}} { // .toLocaleString("es-ES") + " €"
         return {
@@ -142,7 +167,8 @@ export class UpgradeController implements TimeSubscriber {
                 "spo": this.stats.getPOSalary(),
                 "shw": this.stats.getHWSalary(),
                 "tk": this.stats.getDailyTestKitsExpense(),
-                "v": this.stats.getDailyVaccinesExpense()
+                "v": this.stats.getDailyVaccinesExpense(),
+                "ms": this.calculateMeasureExpenses()
             }
         };
     }
@@ -201,7 +227,17 @@ export class UpgradeController implements TimeSubscriber {
     private calculateExpenses(): number {
         const sals = this.stats.getHWSalary() + this.stats.getPOSalary()
         const consumption = this.stats.getDailyTestKitsExpense() + this.stats.getDailyVaccinesExpense();
-        return sals +  consumption;
+        return sals + consumption + this.calculateMeasureExpenses();
+    }
+
+    /** @returns sum of all active measure expenses (daily costs) */
+    private calculateMeasureExpenses(): number {
+        let result = 0;
+        for (const key in this.measures) {
+            const value = this.measures[key];
+            if (value["active"]) result += Number(value["daily_cost"]);
+        }
+        return result;
     }
 
     /**
