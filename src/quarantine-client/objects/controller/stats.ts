@@ -101,10 +101,14 @@ export class Stats {
     public readonly avgPriceTestKit: number;
     /** Current price of a virus test kit in EURO (rounded) */
     public currentPriceTestKit: number;
+    /** Used test kits per week */
+    public usedTestKits: Array<number>;
     /** Average price of a virus vaccination in EURO (rounded) */
     public readonly avgPriceVaccination: number;
     /** Current price of a virus vacination in EURO (rounded) */
     public currentPriceVaccination: number;
+    /** Used vaccines per week */
+    public usedVaccines: Array<number>;
 
     // ----------------------------------------------------------------- FINANCE VARIABLES
     /** Available money in EURO */
@@ -138,5 +142,30 @@ export class Stats {
 
     /** @returns salary for all police officers */
     public getPOSalary(): number {return this.nbrPolice * this.currentSalaryPO;}
+
+    /** @returns prices for all bought test kits of the last week */
+    public getTestKitsPrices(): number {return this.usedTestKits[this.usedTestKits.length - 1];}
+
+    /** @returns prices for all bought vaccines of the last week */
+    public getVaccinesPrices(): number {return this.usedVaccines[this.usedVaccines.length - 1];}
+
+    /**
+     * Returns the income statement of the last week as a dictionary consisting of two dictionaries.
+     * @returns Dictionary of two dictionaries "Earnings" and "Expenses"
+     */
+    public getIncomeStatement(): {[id: string]: {[id: string]: number}} {
+        return {
+            "Earnings": {
+                "Income": this.income
+            },
+            "Expenses": {
+                "Salary police officers": this.getPOSalary(),
+                "Salary health workers": this.getHWSalary(),
+                "Test kits": this.getTestKitsPrices(),
+                "Vaccines": this.getVaccinesPrices()
+            }
+
+        };
+    }
     
 }

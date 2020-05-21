@@ -18,17 +18,18 @@ import { Stats } from './stats';
  * @author Sebastian Führ
  */
 export class Controller implements TimeSubscriber {
-    /** Anonymous class to encapsulate game variables. */
+    /** Singleton instance which holds game variables */
     private stats: Stats;
-
     /** The only existing instance of Controller */
     private static instance: Controller;
  
     /** All population protocol agents of the game */
     private agents: Agent[] = [];
-   
     /** All transition rule currently defined in the population protocol */
     private rules: Rule[] = [];
+
+    private usedTestKits: number;
+    private usesVaccines: number;
 
     private constructor() {
         this.stats = Stats.getInstance();
