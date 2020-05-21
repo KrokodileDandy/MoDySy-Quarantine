@@ -26,10 +26,23 @@ export class Stats {
         this.basicInteractionRate = 0.1;
         this.maxInteractionVariance = 0.05;
 
+        // SALARIES
+        this.avgSalaryPO = 114; // see #79
+        this.currentSalaryPO = this.avgSalaryPO;
+        this.avgSalaryHW = 83; // see #79
+        this.currentSalaryHW = this.avgSalaryHW;
+
+        // CONSUMPTION
+        this.avgPriceTestKit = 44; // see #79
+        this.currentPriceTestKit = this.avgPriceTestKit;
+        this.avgPriceVaccination = 51; // see #79
+        this.currentPriceVaccination = this.avgPriceVaccination;
+
         // FINANCE VARIABLES
         this.budget = 2_000_000_000; // allows to buy 2 upgrades immediately 
         this.maxIncome = 100_000_000; // allows to buy 1 upgrade every 5 days
         this.income = this.maxIncome;
+
     }
 
     /** @returns The singleton instance */
@@ -71,6 +84,25 @@ export class Stats {
     /** Upper bound of the randomly generated interaction variance. */
     public maxInteractionVariance;
 
+    // -------------------------------------------------------------------------- SALARIES
+    /** Average salary of a police officer per day in EURO (rounded) (month = 31 days) */
+    public readonly avgSalaryPO: number;
+    /** Current salary of a police officer per day in EURO (rounded) (month = 31 days) */
+    public currentSalaryPO: number;
+    /** Average salary of a health worker per day in EURO (rounded) (month = 31 days) */
+    public readonly avgSalaryHW: number;
+    /** Current salary of a health worker per day in EURO (rounded) (month = 31 days) */
+    public currentSalaryHW: number;
+
+    // ----------------------------------------------------------------------- CONSUMPTION
+    /** Average price of a virus test kit in EURO (rounded) */
+    public readonly avgPriceTestKit: number;
+    /** Current price of a virus test kit in EURO (rounded) */
+    public currentPriceTestKit: number;
+    /** Average price of a virus vaccination in EURO (rounded) */
+    public readonly avgPriceVaccination: number;
+    /** Current price of a virus vacination in EURO (rounded) */
+    public currentPriceVaccination: number;
 
     // ----------------------------------------------------------------- FINANCE VARIABLES
     /** Available money in EURO */
