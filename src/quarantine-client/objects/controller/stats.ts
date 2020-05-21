@@ -58,13 +58,13 @@ export class Stats {
     /** Population of the country the player is playing in */
     public population: number;
     /** Number of deceased people since the game started */
-    public deceased;
+    public deceased: number;
     /** 
      * Number of currently infected people (known cases). 
      * The game starts with 0 agents with the status INFECTED, but
      * a specific number of agents have the status UNKNOWINGLY_INFECTED.
      */
-    public infected;
+    public infected: number;
 
     /** Number of police officers */
     public nbrPolice: number;
@@ -82,9 +82,9 @@ export class Stats {
      * Basic interaction rate which is used to calculate the number of
      * interactions per tic.
      */
-    public basicInteractionRate;
+    public basicInteractionRate: number;
     /** Upper bound of the randomly generated interaction variance. */
-    public maxInteractionVariance;
+    public maxInteractionVariance: number;
 
     // -------------------------------------------------------------------------- SALARIES
     /** Average salary of a police officer per day in EURO (rounded) (month = 31 days) */
