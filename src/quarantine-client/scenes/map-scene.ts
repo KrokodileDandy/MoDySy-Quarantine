@@ -1,5 +1,5 @@
-import { Controller } from "../objects/controller/controller";
 import { TimeController } from "../objects/controller/timeController";
+import { Stats } from "../objects/controller/stats";
 
 /**
  * Scene to show the infected people on a map
@@ -12,8 +12,8 @@ export class MapScene extends Phaser.Scene {
     /** Graphics object to draw the red circles */
     private graphics: Phaser.GameObjects.Graphics;
 
-    /** Controller to access the current infection numbers */
-    private controller: Controller;
+    /** Singleton to access the current infection numbers */
+    private stats: Stats;
 
     /** Map to show the infected people */
     private map: Phaser.GameObjects.Sprite;
@@ -35,7 +35,7 @@ export class MapScene extends Phaser.Scene {
     init(): void {
         /** The game starts with 0 infected people */
         this.infected = 0;
-        this.controller = Controller.getInstance();
+        this.stats = Stats.getInstance();
 
         /** If the game is restarted, the current graphics object will be destroyed */
         if (this.graphics != null) {
@@ -64,7 +64,7 @@ export class MapScene extends Phaser.Scene {
     /** Add newly infected to the map */
     updateMap(): void {
         /** Get current infection numbers */
-        const currentlyInfected: number = this.controller.getInfected();
+        const currentlyInfected: number = this.stats.getInfected();
 
         /** For the first infected person per day and every thousand after that, add a circle */
         for (this.infected; this.infected < currentlyInfected; this.infected = this.infected + 1000) {

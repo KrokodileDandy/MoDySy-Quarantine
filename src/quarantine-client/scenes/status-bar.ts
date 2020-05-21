@@ -1,5 +1,6 @@
 import { Controller } from "../objects/controller/controller";
 import { UpgradeController } from "../objects/controller/upgradeController";
+import { Stats } from "../objects/controller/stats";
 
 /**
  * Scene which creates a small status bar which acts as an overlay on top of the normal game canvas.
@@ -12,12 +13,15 @@ export class StatusBar extends Phaser.Scene {
     /** Instance of the central controller */
     private controller: Controller;
 
+    private stats: Stats;
+
     constructor() {
         super({
             key: 'StatusBarScene',
             active: true
         });
         this.controller = Controller.getInstance();
+        this.stats = Stats.getInstance();
     }
 
     preload(): void {
@@ -55,10 +59,10 @@ export class StatusBar extends Phaser.Scene {
     /** Fill the status bar with information from the central controller on each call */
     public update(): void {
         document.getElementById("statbar-budget").innerHTML = UpgradeController.getInstance().getBudget() + " €";
-        document.getElementById("statbar-population").innerHTML = "Population: " + this.controller.getPopulation();
-        document.getElementById("statbar-infected").innerHTML = "Infected: " + this.controller.getInfected();
-        document.getElementById("statbar-police").innerHTML = "Police: " + this.controller.getNumberOfPolice();
-        document.getElementById("statbar-hw").innerHTML = "Health Workers: " + this.controller.getNumberOfHealthWorkers();
+        document.getElementById("statbar-population").innerHTML = "Population: " + this.stats.getPopulation();
+        document.getElementById("statbar-infected").innerHTML = "Infected: " + this.stats.getInfected();
+        document.getElementById("statbar-police").innerHTML = "Police: " + this.stats.getNumberOfPolice();
+        document.getElementById("statbar-hw").innerHTML = "Health Workers: " + this.stats.getNumberOfHealthWorkers();
     }
 
 }
