@@ -107,27 +107,54 @@ export class UpgradeController implements TimeSubscriber {
     public notify(): void {
         this.updateCompliance();
         this.updateBudget(this.calculateIncome(), this.calculateExpenses());
+
+        this.printDailyIncomeStatement();
+
         this.stats.resetConsumptionCounters();
-        console.log("Test: " + this.getIncomeStatement());
     }
 
     /**
-     * Returns the income statement of the last week as a dictionary consisting of two dictionaries.
+     * Returns the income statement of the current day as a dictionary consisting of two dictionaries.
+     * 
+     * Key-value pairs:  
+     * * inc: <income dictionary>
+     *   * tax: <taxes>
+     * * exp: <expenses dictionary>
+     *   * spo: <salary police officer>
+     *   * shw: <salary health workers>
+     *   * tk: <bought test kits>
+     *   * v: <bought vaccines>
+     * 
      * @returns Dictionary of two dictionaries "Earnings" and "Expenses"
      */
-    public getIncomeStatement(): {[id: string]: {[id: string]: number}} {
+    public getIncomeStatement(): {[id: string]: {[id: string]: number}} { // .toLocaleString("es-ES") + " €"
         return {
-            "Earnings": {
-                "Income": this.stats.income
+            "inc": {
+                "tax": this.stats.income
             },
-            "Expenses": {
-                "Salary police officers": this.stats.getPOSalary(),
-                "Salary health workers": this.stats.getHWSalary(),
-                "Test kits": this.stats.getTestKitsPrices(),
-                "Vaccines": this.stats.getVaccinesPrices()
+            "exp": {
+                "spo": this.stats.getPOSalary(),
+                "shw": this.stats.getHWSalary(),
+                "tk": this.stats.getDailyTestKitsExpense(),
+                "v": this.stats.getDailyVaccinesExpense()
             }
-
         };
+    }
+
+    /**
+     * Print the income statement of the current day onto the console.
+     */
+    public printDailyIncomeStatement(): void {
+        const dict = this.getIncomeStatement();
+
+        for (const key in dict) {
+            const value = dict[key];
+            console.log(`${key}----------------------------------`);
+            for (const k2 in value) {
+                const v2 = value[k2];
+                console.log(`    ${k2}: ${v2.toLocaleString("es-ES")} €`);
+            }
+        }
     }
 
      // ----------------------------------------------------------------- UPGRADE - PRIVATE
@@ -151,7 +178,7 @@ export class UpgradeController implements TimeSubscriber {
      * @income earnings in EURO
      */
     private calculateIncome(): number {
-        if (this.stats.compliance > 70) this.stats.income = 1;
+        if (this.stats.compliance > 70) this.stats.income = 1 * this.stats.maxIncome;
         else if (this.stats.compliance < 20) this.stats.income = 0;
         else {
             this.stats.income = (this.stats.compliance - 20) * 2 * this.stats.maxIncome;
@@ -164,8 +191,9 @@ export class UpgradeController implements TimeSubscriber {
      * @returns expenses in EURO
      */
     private calculateExpenses(): number {
-        const sals = this.stats.getHWSalary() + this.stats.getPOSalary();
-        return sals;
+        const sals = this.stats.getHWSalary() + this.stats.getPOSalary()
+        const consumption = this.stats.getDailyTestKitsExpense() + this.stats.getDailyVaccinesExpense();
+        return sals +  consumption;
     }
 
     /**
