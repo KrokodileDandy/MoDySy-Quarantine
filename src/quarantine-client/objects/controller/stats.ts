@@ -57,7 +57,6 @@ export class Stats {
      * each array.
      */
     public resetConsumptionCounters(): void {
-        console.log("Day: " + TimeController.getInstance().getDaysSinceGameStart() + " - Length of TK: " + this.usedTestKits.length + "; Length of V: " + this.usedVaccines.length);
         if (TimeController.getInstance().getDaysSinceGameStart() % 7 == 0) { // one week has passed
             this.usedTestKits.push(0);
             this.usedVaccines.push(0);

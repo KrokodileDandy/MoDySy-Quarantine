@@ -151,6 +151,7 @@ export class UpgradeController implements TimeSubscriber {
      * Print the income statement of the current day onto the console.
      */
     public printDailyIncomeStatement(): void {
+        console.log("Day: " + TimeController.getInstance().getDaysSinceGameStart());
         const dict = this.getIncomeStatement();
 
         for (const key in dict) {
@@ -161,6 +162,7 @@ export class UpgradeController implements TimeSubscriber {
                 console.log(`    ${k2}: ${v2.toLocaleString("es-ES")} €`);
             }
         }
+        console.log("Total: " + (this.calculateIncome() - this.calculateExpenses()).toLocaleString("es-ES") + " €");
     }
 
      // ----------------------------------------------------------------- UPGRADE - PRIVATE
