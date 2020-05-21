@@ -1,9 +1,13 @@
+import { TimeController } from "./timeController";
+import { TimeSubscriber } from "../../util/timeSubscriber";
+
 /**
  * Singleton controller which contains game variables (e.g. budget, population size)
+ * and allows manipulation of the same.
  * @author Sebastian Führ
  * @author Marvin Kruber
  */
-export class Stats {
+export class Stats implements TimeSubscriber{
 
     /** The only existing instance of Controller */
     private static instance: Stats;
@@ -41,12 +45,36 @@ export class Stats {
         this.maxIncome = 100_000_000; // allows to buy 1 upgrade every 5 days
         this.income = this.maxIncome;
 
+        TimeController.getInstance().subscribe(this);
     }
 
     /** @returns The singleton instance */
     public static getInstance(): Stats {
         if (!Stats.instance) Stats.instance = new Stats()
         return Stats.instance;
+    }
+
+    /** @see TimeSubscriber */
+    public notify(): void {
+        this.resetConsumptionCounters();
+    }
+
+    /**
+     * Store the numbers of used test kits and vaccines of the day into the respective
+     * arrays and reset the counters.
+     */
+    private resetConsumptionCounters(): void {
+        if (this.daysPassed % 7 == 0) { // one week has passed
+            this.usedTestKits.push(0);
+            this.usedTestKits.push(0);
+        }
+
+        this.usedVaccines[this.usedVaccines.length - 1] += this.usedVaccinesThisDay;
+        this.usedVaccinesThisDay = 0;
+        this.usedTestKits[this.usedTestKits.length - 1] += this.usedTestKitsThisDay;
+        this.usedTestKitsThisDay = 0;
+        console.log("Used TK this week: " + this.usedTestKits[this.usedVaccines.length - 1]);
+        console.log("used V this week: " + this.usedVaccines[this.usedVaccines.length - 1]);
     }
 
     
@@ -73,6 +101,9 @@ export class Stats {
     public happiness: number;
     /** Compliance of the population between 0 and 100.00 */
     public compliance: number;
+
+    /** Days since the game started */
+    private daysPassed = 0;
 
 
     // --------------------------------------------------- PROBABILITIES / VIRUS VARIABLES
@@ -102,13 +133,13 @@ export class Stats {
     /** Used test kits since the stat of the day */
     private usedTestKitsThisDay = 0;
     /** Used test kits per week */
-    public usedTestKits: Array<number>;
+    public usedTestKits = new Array<number>(1);
     /** Average price of a virus vaccination in EURO (rounded) */
     public readonly avgPriceVaccination: number;
     /** Current price of a virus vacination in EURO (rounded) */
     public currentPriceVaccination: number;
     /** Used vaccines per week */
-    public usedVaccines: Array<number>;
+    public usedVaccines = new Array<number>(1);
     /** Used vaccines since the start of the day */
     private usedVaccinesThisDay = 0;
 
