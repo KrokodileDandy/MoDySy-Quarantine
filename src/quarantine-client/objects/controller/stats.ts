@@ -165,11 +165,17 @@ export class Stats {
     /** @returns salary for all police officers */
     public getPOSalary(): number {return this.nbrPolice * this.currentSalaryPO;}
 
+    /** @returns prices for all bought test kits of the current day */
+    public getDailyTestKitsExpense(): number {return this.usedTestKitsThisDay * this.currentPriceTestKit;}
+
+    /** @returns prices for all bought vaccines of the current day */
+    public getDailyVaccinesExpense(): number {return this.usedVaccinesThisDay * this.currentPriceVaccination;}
+
     /** @returns prices for all bought test kits of the current week */
-    public getTestKitsPrices(): number {return this.usedTestKits[this.usedTestKits.length - 1];}
+    public getWeeklyTestKitsExpense(): number {return this.usedTestKits[this.usedTestKits.length - 1] * this.currentPriceTestKit;}
 
     /** @returns prices for all bought vaccines of the current week */
-    public getVaccinesPrices(): number {return this.usedVaccines[this.usedVaccines.length - 1];}
+    public getWeeklyVaccinesExpense(): number {return this.usedVaccines[this.usedVaccines.length - 1] * this.currentPriceVaccination;}
 
     // ------------------------------------------------------------------ SETTER-METHODS
     /** Increase deceased counter by one and decrease infected and population counter by one */
