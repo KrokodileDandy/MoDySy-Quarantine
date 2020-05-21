@@ -5,7 +5,7 @@ import { ChartScene } from './scenes/chart-scene';
 import { AgentScene } from './scenes/agent-scene';
 import { StatusBar } from './scenes/status-bar';
 import { MapScene } from './scenes/map-scene';
-import { StartMenuScene } from './start-menu-scene';
+import { StartMenuScene } from './scenes/start-menu-scene';
 
 const config: Phaser.Types.Core.GameConfig = {
     width: 1600,
