@@ -8,7 +8,8 @@ import { TimeController } from "./timeController";
 
 
 /**
- * Singleton
+ * Singleton controller to manage application logic which is linked to upgrades
+ * and financial tasks.
  * @author Marvin Kruber
  * @author Sebastian Führ
  */
@@ -32,15 +33,13 @@ export class UpgradeController implements TimeSubscriber {
             "name": "Social Distancing",
             "active": false,
             "description": "SD description",
-            "cost": 100_000,
-            "daily_cost": 5_000
+            "daily_cost": 100_000
         },
         "ld": {
             "name": "Lock Down",
             "active": false,
             "description": "LD description",
-            "cost": 100_000,
-            "daily_cost": 5_000
+            "daily_cost": 100_000
         }
     };
 
