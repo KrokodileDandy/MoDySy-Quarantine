@@ -116,7 +116,8 @@ export class UpgradeController implements TimeSubscriber {
     /**
      * Returns the income statement of the current day as a dictionary consisting of two dictionaries.
      * 
-     * Key-value pairs:  
+     * ---
+     * __Key-value pairs:__  
      * * inc: <income dictionary>
      *   * tax: <taxes>
      * * exp: <expenses dictionary>
@@ -124,6 +125,11 @@ export class UpgradeController implements TimeSubscriber {
      *   * shw: <salary health workers>
      *   * tk: <bought test kits>
      *   * v: <bought vaccines>
+     * 
+     * ---
+     * __Example usage:__  
+     * Acces to the money spend for the salary of police officers through 
+     * `getIncomeStatement()["exp"]["spo"];`
      * 
      * @returns Dictionary of two dictionaries "Earnings" and "Expenses"
      */
