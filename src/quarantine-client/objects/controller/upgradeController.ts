@@ -70,10 +70,24 @@ export class UpgradeController implements TimeSubscriber {
         if(uC.isSolvent(price)) {
             uC.buyItem(price);
 
-            const lastRule = uC.contr.getRules().length;
-            uC.contr.getRules()[lastRule] = new Rule(State.HEALTHY, State.CURE, State.IMMUNE, State.CURE);
-            uC.contr.getRules()[lastRule] = new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE);
-            uC.contr.getRules()[lastRule] = new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE);
+            uC.contr.getRules().push(new Rule(State.HEALTHY, State.CURE, State.IMMUNE, State.CURE, () => {
+                if (uC.isSolvent(this.stats.currentPriceVaccination)) {
+                    this.stats.vaccineUsed();
+                    return true;
+                } else return false;
+            }));
+            uC.contr.getRules().push(new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
+                if (uC.isSolvent(this.stats.currentPriceVaccination)) {
+                    this.stats.vaccineUsed();
+                    return true;
+                } else return false;
+            }));
+            uC.contr.getRules().push(new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
+                if (uC.isSolvent(this.stats.currentPriceVaccination)) {
+                    this.stats.vaccineUsed();
+                    return true;
+                } else return false;
+            }));
 
             uC.contr.distributeNewRoles(numberOfNewAgents, Role.HEALTH_WORKER);
             this.stats.increaseHealthWorkers(numberOfNewAgents);
@@ -262,7 +276,7 @@ export class UpgradeController implements TimeSubscriber {
      * @param price Purchase price  
      * @returns Wether the player is solvent
     */
-    private isSolvent(price: number): boolean {
+    public isSolvent(price: number): boolean {
         return this.getBudget() >= price;
     }
 

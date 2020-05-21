@@ -7,7 +7,13 @@ export class Rule {
     public readonly outputState1: State;
     public readonly outputState2: State;
 
-    public calculationRule;
+    /**
+     * Should encapsulate game logic which is triggered by the application of this rule.  
+     * E.g. increment the death counter by one if the transition rule triggered the death
+     * (removal) of a citizen.
+     * @returns weather the operation was successful
+     */
+    public calculationRule: () => boolean;
 
     constructor(inputState1, inputState2, outputState1, outputState2, calculationRule = function(): boolean {return true;}) {
         this.inputState1 = inputState1;

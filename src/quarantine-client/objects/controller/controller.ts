@@ -8,6 +8,7 @@ import { HealthWorker } from '../agents/healthWorker';
 import { TimeSubscriber } from '../../util/timeSubscriber';
 import { TimeController } from './timeController';
 import { Stats } from './stats';
+import { UpgradeController } from './upgradeController';
 
 /**
  * Singleton controller which should only simulates the population protocol.
@@ -49,10 +50,12 @@ export class Controller implements TimeSubscriber {
                 return true;
             }),
             new Rule(State.TEST_KIT, State.UNKNOWINGLY_INFECTED, State.TEST_KIT, State.INFECTED, () => {
-                const stats = Stats.getInstance();
-                stats.foundInfected();
-                stats.testKitUsed();
-                return true;
+                if (UpgradeController.getInstance().isSolvent(this.stats.currentPriceTestKit)) {
+                    const stats = Stats.getInstance();
+                    stats.foundInfected();
+                    stats.testKitUsed();
+                    return true;
+                } else return false;
             })
         ];
     }
@@ -159,13 +162,15 @@ export class Controller implements TimeSubscriber {
     private findRuleAndApply(agent1: Agent, agent2: Agent): void {
         this.rules.forEach(r => {
             if (r.inputState1 == agent1.getHealthState() && r.inputState2 == agent2.getHealthState()) {
-                agent1.setHealthState(r.outputState1);
-                agent2.setHealthState(r.outputState2);
-                r.calculationRule();
+                if (r.calculationRule()) {
+                    agent1.setHealthState(r.outputState1);
+                    agent2.setHealthState(r.outputState2);
+                }
             } else if (r.inputState1 == agent2.getHealthState() && r.inputState2 == agent1.getHealthState()) {
-                agent1.setHealthState(r.outputState2);
-                agent2.setHealthState(r.outputState1);
-                r.calculationRule();
+                if (r.calculationRule()) {
+                    agent1.setHealthState(r.outputState2);
+                    agent2.setHealthState(r.outputState1);
+                }
             }
         });
     }
