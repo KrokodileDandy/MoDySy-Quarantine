@@ -4,6 +4,7 @@ import { Rule } from "./rule";
 import { Role } from "../../util/roles";
 import { Stats } from "./stats";
 import { TimeSubscriber } from "../../util/timeSubscriber";
+import { TimeController } from "./timeController";
 
 
 /**
@@ -25,6 +26,8 @@ export class UpgradeController implements TimeSubscriber {
         this.stats = Stats.getInstance();
 
         this.contr = Controller.getInstance();
+
+        TimeController.getInstance().subscribe(this);
     }
 
     // ----------------------------------------------------------------- UPGRADE - PUBLIC
@@ -104,7 +107,8 @@ export class UpgradeController implements TimeSubscriber {
     public notify(): void {
         this.updateCompliance();
         this.updateBudget(this.calculateIncome(), this.calculateExpenses());
-        console.log(this.getIncomeStatement());
+        this.stats.resetConsumptionCounters();
+        console.log("Test: " + this.getIncomeStatement());
     }
 
     /**

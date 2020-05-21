@@ -1,5 +1,4 @@
 import { TimeController } from "./timeController";
-import { TimeSubscriber } from "../../util/timeSubscriber";
 
 /**
  * Singleton controller which contains game variables (e.g. budget, population size)
@@ -7,7 +6,7 @@ import { TimeSubscriber } from "../../util/timeSubscriber";
  * @author Sebastian Führ
  * @author Marvin Kruber
  */
-export class Stats implements TimeSubscriber{
+export class Stats {
 
     /** The only existing instance of Controller */
     private static instance: Stats;
@@ -44,8 +43,6 @@ export class Stats implements TimeSubscriber{
         this.budget = 2_000_000_000; // allows to buy 2 upgrades immediately 
         this.maxIncome = 100_000_000; // allows to buy 1 upgrade every 5 days
         this.income = this.maxIncome;
-
-        TimeController.getInstance().subscribe(this);
     }
 
     /** @returns The singleton instance */
@@ -54,27 +51,22 @@ export class Stats implements TimeSubscriber{
         return Stats.instance;
     }
 
-    /** @see TimeSubscriber */
-    public notify(): void {
-        this.resetConsumptionCounters();
-    }
-
     /**
      * Store the numbers of used test kits and vaccines of the day into the respective
-     * arrays and reset the counters.
+     * arrays and reset the counters. If a week has passed, a new field is generated in
+     * each array.
      */
-    private resetConsumptionCounters(): void {
-        if (this.daysPassed % 7 == 0) { // one week has passed
+    public resetConsumptionCounters(): void {
+        console.log("Day: " + TimeController.getInstance().getDaysSinceGameStart() + " - Length of TK: " + this.usedTestKits.length + "; Length of V: " + this.usedVaccines.length);
+        if (TimeController.getInstance().getDaysSinceGameStart() % 7 == 0) { // one week has passed
             this.usedTestKits.push(0);
-            this.usedTestKits.push(0);
+            this.usedVaccines.push(0);
         }
 
         this.usedVaccines[this.usedVaccines.length - 1] += this.usedVaccinesThisDay;
         this.usedVaccinesThisDay = 0;
         this.usedTestKits[this.usedTestKits.length - 1] += this.usedTestKitsThisDay;
         this.usedTestKitsThisDay = 0;
-        console.log("Used TK this week: " + this.usedTestKits[this.usedVaccines.length - 1]);
-        console.log("used V this week: " + this.usedVaccines[this.usedVaccines.length - 1]);
     }
 
     
@@ -101,10 +93,6 @@ export class Stats implements TimeSubscriber{
     public happiness: number;
     /** Compliance of the population between 0 and 100.00 */
     public compliance: number;
-
-    /** Days since the game started */
-    private daysPassed = 0;
-
 
     // --------------------------------------------------- PROBABILITIES / VIRUS VARIABLES
     /** 
@@ -133,13 +121,13 @@ export class Stats implements TimeSubscriber{
     /** Used test kits since the stat of the day */
     private usedTestKitsThisDay = 0;
     /** Used test kits per week */
-    public usedTestKits = new Array<number>(1);
+    public usedTestKits = [0];
     /** Average price of a virus vaccination in EURO (rounded) */
     public readonly avgPriceVaccination: number;
     /** Current price of a virus vacination in EURO (rounded) */
     public currentPriceVaccination: number;
     /** Used vaccines per week */
-    public usedVaccines = new Array<number>(1);
+    public usedVaccines = [0];
     /** Used vaccines since the start of the day */
     private usedVaccinesThisDay = 0;
 
@@ -150,6 +138,7 @@ export class Stats implements TimeSubscriber{
     public maxIncome: number;
     /** Current income per tic */
     public income: number;
+
 
     // -------------------------------------------------------------------- GETTER-METHODS
     /** @returns Current population number */
