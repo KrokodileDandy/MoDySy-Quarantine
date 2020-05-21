@@ -27,15 +27,15 @@ export class Stats {
         this.maxInteractionVariance = 0.05;
 
         // SALARIES
-        this.avgSalaryPO = 114; // see #79
+        this.avgSalaryPO = 114; // @see #79
         this.currentSalaryPO = this.avgSalaryPO;
-        this.avgSalaryHW = 83; // see #79
+        this.avgSalaryHW = 83; // @see #79
         this.currentSalaryHW = this.avgSalaryHW;
 
         // CONSUMPTION
-        this.avgPriceTestKit = 44; // see #79
+        this.avgPriceTestKit = 44; // @see #79
         this.currentPriceTestKit = this.avgPriceTestKit;
-        this.avgPriceVaccination = 51; // see #79
+        this.avgPriceVaccination = 51; // @see #79
         this.currentPriceVaccination = this.avgPriceVaccination;
 
         // FINANCE VARIABLES
@@ -52,7 +52,9 @@ export class Stats {
     }
 
     
-    // ------------------------------------------------------------------- STATE VARIABLES    
+    // ------------------------------------------------------------------- STATE VARIABLES
+    /** Scale factor to multiply with population numbers to simulate real population numbers */
+    private readonly populationFactor = 50;  
     /** Population of the country the player is playing in */
     public population: number;
     /** Number of deceased people since the game started */
@@ -111,5 +113,30 @@ export class Stats {
     public maxIncome: number;
     /** Current income per tic */
     public income: number;
+
+    // -------------------------------------------------------------------- GETTER-METHODS
+    /** @returns Current population number */
+    public getPopulation(): number {return this.population * this.populationFactor;}
+
+    /** @returns Number of deceased people since game start */
+    public getDeceased(): number {return this.deceased * this.populationFactor;}
+
+    /**
+     * The number does not include agents with the state UNKNOWINGLY_INFECTED 
+     * @returns Number of currently infected people
+     */
+    public getInfected(): number {return this.infected * this.populationFactor;}
+
+    /** @returns Number of police officers */
+    public getNumberOfPolice(): number {return this.nbrPolice * this.populationFactor;}
+
+    /** @returns Number of health workers */
+    public getNumberOfHealthWorkers(): number {return this.nbrHW * this.populationFactor;}
+
+    /** @returns salary for all health workers */
+    public getHWSalary(): number {return this.nbrHW * this.currentSalaryHW;}
+
+    /** @returns salary for all police officers */
+    public getPOSalary(): number {return this.nbrPolice * this.currentSalaryPO;}
     
 }
