@@ -41,7 +41,7 @@ export class UpgradeController implements TimeSubscriber {
         const price = numberOfNewAgents * 5_000; // = 500_000_000
 
         // There should be enough people left to become health workers
-        if (uC.contr.getPopulation() - uC.contr.getNumberOfHealthWorkers() - uC.contr.getNumberOfPolice() < numberOfNewAgents) return false;
+        if (this.stats.getPopulation() - this.stats.getNumberOfHealthWorkers() - this.stats.getNumberOfPolice() < numberOfNewAgents) return false;
 
         if(uC.isSolvent(price)) {
             uC.buyItem(price);
@@ -103,8 +103,7 @@ export class UpgradeController implements TimeSubscriber {
     /** @see TimeSubscriber */
     public notify(): void {
         this.updateCompliance();
-        this.calculateIncome();
-        this.updateBudget();
+        this.updateBudget(this.calculateIncome(), this.calculateExpenses());
     }
 
     /**
@@ -125,12 +124,29 @@ export class UpgradeController implements TimeSubscriber {
      * When the compliance sinks below 20% the state generates 0 income,
      * while above 70% 100% of the income are generated.
      */
-    private calculateIncome(): void {
+    private calculateIncome(): number {
         if (this.stats.compliance > 70) this.stats.income = 1;
         else if (this.stats.compliance < 20) this.stats.income = 0;
         else {
             this.stats.income = (this.stats.compliance - 20) * 2 * this.stats.maxIncome;
         }
+        return this.stats.income;
+    }
+
+    private calculateExpenses(): number {
+        const sals = this.stats.getHWSalary() + this.stats.getPOSalary();
+        return sals;
+    }
+
+    /**
+     * Budget = Budget + Income - Expenses
+     * @param income
+     * @param expenses
+     * @see #calculateIncome
+     * @see #calculateExpenses
+     */
+    private updateBudget(income: number, expenses: number): void {
+        this.stats.budget += income - expenses;
     }
 
     // ----------------------------------------------------------------- UPGRADE - PRIVATE
@@ -149,9 +165,6 @@ export class UpgradeController implements TimeSubscriber {
     private isSolvent(price: number): boolean {
         return this.getBudget() >= price;
     }
-
-    /** Increases budget by income rate. */
-    public updateBudget(): void {this.stats.budget += this.getIncome()}
 
     // ----------------------------------------------------------------- GETTER-METHODS
     /** @returns The singleton instance */
