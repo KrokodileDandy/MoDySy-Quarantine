@@ -3,7 +3,6 @@ import { MainScene } from './scenes/main-scene';
 import { GuiScene } from "./scenes/gui-scene";
 import { ChartScene } from './scenes/chart-scene';
 import { AgentScene } from './scenes/agent-scene';
-import { StatusBar } from './scenes/status-bar';
 import { MapScene } from './scenes/map-scene';
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -19,7 +18,7 @@ const config: Phaser.Types.Core.GameConfig = {
         createContainer: true // allow manipulation of dom elements within phaser (used by status bar in gui-scene.ts)
     },
 
-    scene: [MainScene, GuiScene, ChartScene, AgentScene, StatusBar, MapScene],
+    scene: [MainScene, GuiScene, ChartScene, AgentScene, MapScene],
     physics: {
         default: 'arcade',
         arcade: {

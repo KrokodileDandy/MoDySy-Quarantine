@@ -8,6 +8,7 @@ import { HealthWorker } from '../agents/healthWorker';
 import { TimeSubscriber } from '../../util/timeSubscriber';
 import { TimeController } from './timeController';
 import { Stats } from './stats';
+import { UpgradeController } from './upgradeController';
 
 /**
  * Singleton controller which should only simulates the population protocol.
@@ -18,20 +19,15 @@ import { Stats } from './stats';
  * @author Sebastian Führ
  */
 export class Controller implements TimeSubscriber {
-    /** Anonymous class to encapsulate game variables. */
+    /** Singleton instance which holds game variables */
     private stats: Stats;
-
     /** The only existing instance of Controller */
     private static instance: Controller;
  
     /** All population protocol agents of the game */
     private agents: Agent[] = [];
-   
     /** All transition rule currently defined in the population protocol */
     private rules: Rule[] = [];
-
-    /** Scale factor to multiply with population numbers to simulate real population numbers */
-    private readonly populationFactor = 50;
 
     private constructor() {
         this.stats = Stats.getInstance();
@@ -50,12 +46,16 @@ export class Controller implements TimeSubscriber {
             new Rule(State.HEALTHY, State.INFECTED, State.UNKNOWINGLY_INFECTED, State.INFECTED),
             new Rule(State.HEALTHY, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED),
             new Rule(State.INFECTED, State.INFECTED, State.INFECTED, State.DECEASED, () => {
-                Controller.getInstance().deceased();
+                Stats.getInstance().deceasedCitizen();
                 return true;
             }),
             new Rule(State.TEST_KIT, State.UNKNOWINGLY_INFECTED, State.TEST_KIT, State.INFECTED, () => {
-                Controller.getInstance().foundInfected();
-                return true;
+                if (UpgradeController.getInstance().isSolvent(this.stats.currentPriceTestKit)) {
+                    const stats = Stats.getInstance();
+                    stats.foundInfected();
+                    stats.testKitUsed();
+                    return true;
+                } else return false;
             })
         ];
     }
@@ -111,7 +111,7 @@ export class Controller implements TimeSubscriber {
      */
     public distributeNewRoles(amt: number, role: Role, testKit = false): boolean {
         // There should be enough people left to be assigned the specific role
-        if (this.getPopulation() - this.getNumberOfHealthWorkers() - this.getNumberOfPolice() < amt) return false;
+        if (this.stats.getPopulation() - this.stats.getNumberOfHealthWorkers() - this.stats.getNumberOfPolice() < amt) return false;
 
         let i = 0;
         /** 
@@ -162,13 +162,15 @@ export class Controller implements TimeSubscriber {
     private findRuleAndApply(agent1: Agent, agent2: Agent): void {
         this.rules.forEach(r => {
             if (r.inputState1 == agent1.getHealthState() && r.inputState2 == agent2.getHealthState()) {
-                agent1.setHealthState(r.outputState1);
-                agent2.setHealthState(r.outputState2);
-                r.calculationRule();
+                if (r.calculationRule()) {
+                    agent1.setHealthState(r.outputState1);
+                    agent2.setHealthState(r.outputState2);
+                }
             } else if (r.inputState1 == agent2.getHealthState() && r.inputState2 == agent1.getHealthState()) {
-                agent1.setHealthState(r.outputState2);
-                agent2.setHealthState(r.outputState1);
-                r.calculationRule();
+                if (r.calculationRule()) {
+                    agent1.setHealthState(r.outputState2);
+                    agent2.setHealthState(r.outputState1);
+                }
             }
         });
     }
@@ -211,48 +213,7 @@ export class Controller implements TimeSubscriber {
     /** @returns Array of active rules */
     public getRules(): Rule[] {return this.rules;}
 
-    // ------------------------------------------------------- GETTER of Stats instance
-    /** @returns Current population number */
-    public getPopulation(): number {return this.stats.population * this.populationFactor;}
-
-    /** @returns Number of deceased people since game start */
-    public getDeceased(): number {return this.stats.deceased * this.populationFactor;}
-
-    /**
-     * The number does not include agents with the state UNKNOWINGLY_INFECTED 
-     * @returns Number of currently infected people
-     */
-    public getInfected(): number {return this.stats.infected * this.populationFactor;}
-
-    /** @returns Number of police officers */
-    public getNumberOfPolice(): number {return this.stats.nbrPolice * this.populationFactor;}
-
-    /** @returns Number of health workers */
-    public getNumberOfHealthWorkers(): number {return this.stats.nbrHW * this.populationFactor;}
-
-
-
     // ------------------------------------------------------------------ SETTER-METHODS
-    /** Increase deceased counter by one and decrease infected and population counter by one */
-    public deceased(): void {
-        this.stats.deceased++;
-        this.stats.population--;
-        this.stats.infected--;
-    }
-
-    /** Increase infected counter by one */
-    public foundInfected(): void {
-        this.stats.infected++;
-    }
-
-    /** Increases the Stats variable nbrPolice
-     * @param amt Number of new police officers
-     */
-    public increasePoliceOfficers(amt: number): void {this.stats.nbrPolice += amt;}
-
-    /** Increases the Stats variable nbrHW
-     * @param amt Number of new health workers
-     */
-    public increaseHealthWorkers(amt: number): void {this.stats.nbrHW += amt;}
+    // ...
 
 }
