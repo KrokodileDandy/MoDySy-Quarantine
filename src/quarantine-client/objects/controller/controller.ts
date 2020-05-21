@@ -30,9 +30,6 @@ export class Controller implements TimeSubscriber {
     /** All transition rule currently defined in the population protocol */
     private rules: Rule[] = [];
 
-    /** Scale factor to multiply with population numbers to simulate real population numbers */
-    private readonly populationFactor = 50;
-
     private constructor() {
         this.stats = Stats.getInstance();
 
@@ -111,7 +108,7 @@ export class Controller implements TimeSubscriber {
      */
     public distributeNewRoles(amt: number, role: Role, testKit = false): boolean {
         // There should be enough people left to be assigned the specific role
-        if (this.getPopulation() - this.getNumberOfHealthWorkers() - this.getNumberOfPolice() < amt) return false;
+        if (this.stats.getPopulation() - this.stats.getNumberOfHealthWorkers() - this.stats.getNumberOfPolice() < amt) return false;
 
         let i = 0;
         /** 
@@ -210,27 +207,6 @@ export class Controller implements TimeSubscriber {
 
     /** @returns Array of active rules */
     public getRules(): Rule[] {return this.rules;}
-
-    // ------------------------------------------------------- GETTER of Stats instance
-    /** @returns Current population number */
-    public getPopulation(): number {return this.stats.population * this.populationFactor;}
-
-    /** @returns Number of deceased people since game start */
-    public getDeceased(): number {return this.stats.deceased * this.populationFactor;}
-
-    /**
-     * The number does not include agents with the state UNKNOWINGLY_INFECTED 
-     * @returns Number of currently infected people
-     */
-    public getInfected(): number {return this.stats.infected * this.populationFactor;}
-
-    /** @returns Number of police officers */
-    public getNumberOfPolice(): number {return this.stats.nbrPolice * this.populationFactor;}
-
-    /** @returns Number of health workers */
-    public getNumberOfHealthWorkers(): number {return this.stats.nbrHW * this.populationFactor;}
-
-
 
     // ------------------------------------------------------------------ SETTER-METHODS
     /** Increase deceased counter by one and decrease infected and population counter by one */
