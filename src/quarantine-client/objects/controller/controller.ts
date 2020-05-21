@@ -28,9 +28,6 @@ export class Controller implements TimeSubscriber {
     /** All transition rule currently defined in the population protocol */
     private rules: Rule[] = [];
 
-    private usedTestKits: number;
-    private usesVaccines: number;
-
     private constructor() {
         this.stats = Stats.getInstance();
 
@@ -48,11 +45,13 @@ export class Controller implements TimeSubscriber {
             new Rule(State.HEALTHY, State.INFECTED, State.UNKNOWINGLY_INFECTED, State.INFECTED),
             new Rule(State.HEALTHY, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED),
             new Rule(State.INFECTED, State.INFECTED, State.INFECTED, State.DECEASED, () => {
-                Controller.getInstance().deceased();
+                Stats.getInstance().deceasedCitizen();
                 return true;
             }),
             new Rule(State.TEST_KIT, State.UNKNOWINGLY_INFECTED, State.TEST_KIT, State.INFECTED, () => {
-                Controller.getInstance().foundInfected();
+                const stats = Stats.getInstance();
+                stats.foundInfected();
+                stats.testKitUsed();
                 return true;
             })
         ];
@@ -210,26 +209,6 @@ export class Controller implements TimeSubscriber {
     public getRules(): Rule[] {return this.rules;}
 
     // ------------------------------------------------------------------ SETTER-METHODS
-    /** Increase deceased counter by one and decrease infected and population counter by one */
-    public deceased(): void {
-        this.stats.deceased++;
-        this.stats.population--;
-        this.stats.infected--;
-    }
-
-    /** Increase infected counter by one */
-    public foundInfected(): void {
-        this.stats.infected++;
-    }
-
-    /** Increases the Stats variable nbrPolice
-     * @param amt Number of new police officers
-     */
-    public increasePoliceOfficers(amt: number): void {this.stats.nbrPolice += amt;}
-
-    /** Increases the Stats variable nbrHW
-     * @param amt Number of new health workers
-     */
-    public increaseHealthWorkers(amt: number): void {this.stats.nbrHW += amt;}
+    // ...
 
 }

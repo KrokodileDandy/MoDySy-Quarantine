@@ -52,7 +52,7 @@ export class UpgradeController implements TimeSubscriber {
             uC.contr.getRules()[lastRule] = new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE);
 
             uC.contr.distributeNewRoles(numberOfNewAgents, Role.HEALTH_WORKER);
-            this.contr.increaseHealthWorkers(numberOfNewAgents);
+            this.stats.increaseHealthWorkers(numberOfNewAgents);
             return true;
         } else return false;
     }
@@ -66,7 +66,7 @@ export class UpgradeController implements TimeSubscriber {
         const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.POLICE)) {
             uC.buyItem(price);
-            this.contr.increasePoliceOfficers(amt);
+            this.stats.increasePoliceOfficers(amt);
             return true;
         } else return false;
     }
@@ -80,7 +80,7 @@ export class UpgradeController implements TimeSubscriber {
         const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER)) {
             uC.buyItem(price);
-            this.contr.increaseHealthWorkers(amt);
+            this.stats.increaseHealthWorkers(amt);
             return true;
         } else return false;
     }
@@ -95,7 +95,7 @@ export class UpgradeController implements TimeSubscriber {
         const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER, true)) {
             uC.buyItem(price);
-            this.contr.increaseHealthWorkers(amt);
+            this.stats.increaseHealthWorkers(amt);
             return true;
         } else return false;
     }
@@ -104,8 +104,29 @@ export class UpgradeController implements TimeSubscriber {
     public notify(): void {
         this.updateCompliance();
         this.updateBudget(this.calculateIncome(), this.calculateExpenses());
+        console.log(this.getIncomeStatement());
     }
 
+    /**
+     * Returns the income statement of the last week as a dictionary consisting of two dictionaries.
+     * @returns Dictionary of two dictionaries "Earnings" and "Expenses"
+     */
+    public getIncomeStatement(): {[id: string]: {[id: string]: number}} {
+        return {
+            "Earnings": {
+                "Income": this.stats.income
+            },
+            "Expenses": {
+                "Salary police officers": this.stats.getPOSalary(),
+                "Salary health workers": this.stats.getHWSalary(),
+                "Test kits": this.stats.getTestKitsPrices(),
+                "Vaccines": this.stats.getVaccinesPrices()
+            }
+
+        };
+    }
+
+     // ----------------------------------------------------------------- UPGRADE - PRIVATE
     /**
      * Calculate the compliance depending on the populations happiness
      * 
@@ -123,6 +144,7 @@ export class UpgradeController implements TimeSubscriber {
      * Calculate the income depending on the population compliance.
      * When the compliance sinks below 20% the state generates 0 income,
      * while above 70% 100% of the income are generated.
+     * @income earnings in EURO
      */
     private calculateIncome(): number {
         if (this.stats.compliance > 70) this.stats.income = 1;
@@ -133,6 +155,10 @@ export class UpgradeController implements TimeSubscriber {
         return this.stats.income;
     }
 
+    /**
+     * Calculate the sum of all expenses of the day
+     * @returns expenses in EURO
+     */
     private calculateExpenses(): number {
         const sals = this.stats.getHWSalary() + this.stats.getPOSalary();
         return sals;
@@ -149,7 +175,6 @@ export class UpgradeController implements TimeSubscriber {
         this.stats.budget += income - expenses;
     }
 
-    // ----------------------------------------------------------------- UPGRADE - PRIVATE
     /**
      * Reduces the current budget by the given price
      * @param price Price of respective item

@@ -15,8 +15,6 @@ export class Stats {
     private constructor() {
         // STATE VARIABLES
         this.population = 1_620_000; //83_149_300: german population in september 2019 (wikipedia)
-        this.deceased = 0;
-        this.infected = 0;
         this.nbrPolice = this.population * 0.01;
         this.nbrHW = this.population * 0.01;
         this.happiness = 100.00;
@@ -58,13 +56,13 @@ export class Stats {
     /** Population of the country the player is playing in */
     public population: number;
     /** Number of deceased people since the game started */
-    public deceased: number;
+    public deceased = 0;
     /** 
      * Number of currently infected people (known cases). 
      * The game starts with 0 agents with the status INFECTED, but
      * a specific number of agents have the status UNKNOWINGLY_INFECTED.
      */
-    public infected: number;
+    public infected = 0;
 
     /** Number of police officers */
     public nbrPolice: number;
@@ -101,6 +99,8 @@ export class Stats {
     public readonly avgPriceTestKit: number;
     /** Current price of a virus test kit in EURO (rounded) */
     public currentPriceTestKit: number;
+    /** Used test kits since the stat of the day */
+    private usedTestKitsThisDay = 0;
     /** Used test kits per week */
     public usedTestKits: Array<number>;
     /** Average price of a virus vaccination in EURO (rounded) */
@@ -109,6 +109,8 @@ export class Stats {
     public currentPriceVaccination: number;
     /** Used vaccines per week */
     public usedVaccines: Array<number>;
+    /** Used vaccines since the start of the day */
+    private usedVaccinesThisDay = 0;
 
     // ----------------------------------------------------------------- FINANCE VARIABLES
     /** Available money in EURO */
@@ -143,29 +145,39 @@ export class Stats {
     /** @returns salary for all police officers */
     public getPOSalary(): number {return this.nbrPolice * this.currentSalaryPO;}
 
-    /** @returns prices for all bought test kits of the last week */
+    /** @returns prices for all bought test kits of the current week */
     public getTestKitsPrices(): number {return this.usedTestKits[this.usedTestKits.length - 1];}
 
-    /** @returns prices for all bought vaccines of the last week */
+    /** @returns prices for all bought vaccines of the current week */
     public getVaccinesPrices(): number {return this.usedVaccines[this.usedVaccines.length - 1];}
 
-    /**
-     * Returns the income statement of the last week as a dictionary consisting of two dictionaries.
-     * @returns Dictionary of two dictionaries "Earnings" and "Expenses"
-     */
-    public getIncomeStatement(): {[id: string]: {[id: string]: number}} {
-        return {
-            "Earnings": {
-                "Income": this.income
-            },
-            "Expenses": {
-                "Salary police officers": this.getPOSalary(),
-                "Salary health workers": this.getHWSalary(),
-                "Test kits": this.getTestKitsPrices(),
-                "Vaccines": this.getVaccinesPrices()
-            }
-
-        };
+    // ------------------------------------------------------------------ SETTER-METHODS
+    /** Increase deceased counter by one and decrease infected and population counter by one */
+    public deceasedCitizen(): void {
+        this.deceased++;
+        this.population--;
+        this.infected--;
     }
+
+    /** Increase infected counter by one */
+    public foundInfected(): void {
+        this.infected++;
+    }
+
+    /** Increases the Stats variable nbrPolice
+     * @param amt Number of new police officers
+     */
+    public increasePoliceOfficers(amt: number): void {this.nbrPolice += amt;}
+
+    /** Increases the Stats variable nbrHW
+     * @param amt Number of new health workers
+     */
+    public increaseHealthWorkers(amt: number): void {this.nbrHW += amt;}
+
+    /** Increse the test kit counter for the current day by one */
+    public testKitUsed(): void {this.usedTestKitsThisDay++;}
+
+    /** Increse the vaccine counter for the current day by one */
+    public vaccineUsed(): void {this.usedVaccinesThisDay++;}
     
 }
