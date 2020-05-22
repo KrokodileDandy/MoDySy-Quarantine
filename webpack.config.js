@@ -32,7 +32,7 @@ module.exports = {
     },
     plugins: [
         new CopyPlugin([ //TODO Could crash because of asset copying
-            { from: path.resolve(__dirname, 'src/quarantine-client/assets'), to: 'assets' },
+            //{ from: path.resolve(__dirname, 'src/quarantine-client/assets'), to: 'assets' },
             { from: path.resolve(__dirname, 'index.html'), to: 'index.html' },
         ]),
     ],

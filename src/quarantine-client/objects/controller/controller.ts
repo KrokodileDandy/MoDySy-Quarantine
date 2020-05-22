@@ -1,10 +1,10 @@
-import { Agent } from '../agent';
-import { Police } from '../police';
-import { Citizen } from '../citizen';
+import { Agent } from '../agents/agent';
+import { Police } from '../agents/police';
+import { Citizen } from '../agents/citizen';
 import { Role} from '../../util/roles';
 import { State } from '../../util/healthStates';
 import { Rule } from './rule';
-import { HealthWorker } from '../healthWorker';
+import { HealthWorker } from '../agents/healthWorker';
 import { TimeSubscriber } from '../../util/timeSubscriber';
 import { TimeController } from './timeController';
 import { UpgradeController } from './upgradeController';

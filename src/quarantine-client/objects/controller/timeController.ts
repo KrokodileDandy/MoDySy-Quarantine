@@ -11,10 +11,12 @@ import { TimeSubscriber } from '../../util/timeSubscriber';
 export class TimeController {
 
     /** Tics per day */
-    private readonly ticsPerDay = 24;
+    private ticsPerDay = 24;
 
     /** Tics since  */
     private ticAccumulator = 0;
+
+    private hoursPerTenTics = 1;
 
     /** Hours passed since game start */
     private hoursSinceGameStart = 0;
@@ -40,11 +42,33 @@ export class TimeController {
      */
     public tic(): void {
         this.ticAccumulator += 1;
-        if (this.ticAccumulator % 10 == 0) this.hoursSinceGameStart++;
-        if (this.ticAccumulator == this.ticsPerDay*10) {
+        if (this.ticAccumulator % 10 == 0) this.hoursSinceGameStart += this.hoursPerTenTics;
+        if (this.ticAccumulator >= this.ticsPerDay * 10) { //>= if player wants to speed up the game and ticAccumulator would be greater than (updated this.ticsPerDay)*10
             this.ticAccumulator = 0.0;
             this.subscribers.forEach(s => s.notify());
         }
+    }
+
+    /**Changes tics per day to the given value. This way it affects the game speed. 
+     * @param ticsPerDay New number of tics per day
+     */
+    private changeGameSpeed(ticsPerDay: number): void {
+        this.ticsPerDay = ticsPerDay; 
+        this.hoursPerTenTics = 24 / this.ticsPerDay;
+    }
+
+    /**
+     * Changes the speed mode of the game. Currently, there are three different speed modes available.
+     * @param speedMode - 0 = normal speed,  
+     *                   -1 = half speed,  
+     *                  1.5 = 1.5x speed,  
+     *                    2 = doubled speed
+     */
+    public setGameSpeed(speedMode = 0): void {
+        if(speedMode == -1) this.changeGameSpeed(48); //slow down
+        else if (speedMode == 1) this.changeGameSpeed(18) //speed up x1.5
+        else if(speedMode == 2) this.changeGameSpeed(12); //speed up x2
+        else this.changeGameSpeed(24);
     }
 
     /**
@@ -70,8 +94,8 @@ export class TimeController {
     public getTicsPerDay(): number {return this.ticsPerDay;}
 
     /** @returns Hous passed since game start */
-    public getHoursSinceGameStart(): number {return this.hoursSinceGameStart}
+    public getHoursSinceGameStart(): number {return Math.floor(this.hoursSinceGameStart);} //return Math.floor(this.hoursSinceGameStart)
 
     /** @returns Days passed since game start */
-    public getDaysSinceGameStart(): number {return Math.floor(this.hoursSinceGameStart / 24)}
+    public getDaysSinceGameStart(): number {return Math.floor(this.hoursSinceGameStart / 24);}
 }
