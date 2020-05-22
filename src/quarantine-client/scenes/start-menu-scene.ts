@@ -17,26 +17,28 @@ export class StartMenuScene extends Phaser.Scene {
     preload(): void {
         // Main menu foreground     // TODO: background
         this.load.image('Logo', 'assets/sprites/start-menu/quarantine-logo-14.png');
-        // New Game Button
+        // New Game button
         this.load.image('NewGame', 'assets/sprites/start-menu/new-game-button-neutral.png');
         this.load.image('NewGameH', 'assets/sprites/start-menu/new-game-button-hovered.png');
         this.load.image('NewGameP', 'assets/sprites/start-menu/new-game-button-pressed.png');
-        // Easy Button
+        // Easy button
         this.load.image('Easy', 'assets/sprites/start-menu/easy-button-neutral.png');
         this.load.image('EasyH', 'assets/sprites/start-menu/easy-button-hovered.png');
         this.load.image('EasyP', 'assets/sprites/start-menu/easy-button-pressed.png');
-        // Normal Button
+        // Normal button
         this.load.image('Normal', 'assets/sprites/start-menu/normal-button-neutral.png');
         this.load.image('NormalH', 'assets/sprites/start-menu/normal-button-hovered.png');
         this.load.image('NormalP', 'assets/sprites/start-menu/normal-button-pressed.png');
-        // Hard Button
+        // Hard button
         this.load.image('Hard', 'assets/sprites/start-menu/hard-button-neutral.png');
         this.load.image('HardH', 'assets/sprites/start-menu/hard-button-hovered.png');
         this.load.image('HardP', 'assets/sprites/start-menu/hard-button-pressed.png');
-        // Start Button
+        // Start button
         this.load.image('Start', 'assets/sprites/start-menu/start-button-neutral.png');
         this.load.image('StartH', 'assets/sprites/start-menu/start-button-hovered.png');
         this.load.image('StartP', 'assets/sprites/start-menu/start-button-pressed.png');
+        // Temporary skip button to allow faster development by skipping to choose the difficulty (delete later).
+        this.load.image('Skip', 'assets/sprites/arrow-button-right.png');
     }
 
     create(): void {
@@ -67,6 +69,13 @@ export class StartMenuScene extends Phaser.Scene {
             newGameButton.setTexture('NewGameH');
             newGameButton.visible = false;
             this.createDifficultyButtons();
+        });
+        // Delete later
+        const skipButton = this.add.sprite(1800, 750, 'Skip').setScale(0.4);
+        skipButton.setInteractive();
+        skipButton.on('pointerdown', () => {
+            this.scene.setVisible(false);
+            this.loadScenes();
         });
     }
 
