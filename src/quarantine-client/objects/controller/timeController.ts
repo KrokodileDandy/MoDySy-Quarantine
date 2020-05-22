@@ -13,9 +13,10 @@ export class TimeController {
     /** Tics per day */
     private ticsPerDay = 24;
 
-    /** Tics since  */
+    /** Phaser tics since the last ingame day */
     private ticAccumulator = 0;
 
+    /** Past ingame hours during ten phaser tics */
     private hoursPerTenTics = 1;
 
     /** Hours passed since game start */
