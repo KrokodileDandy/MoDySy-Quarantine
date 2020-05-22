@@ -14,10 +14,6 @@ export class StartMenuScene extends Phaser.Scene {
         super(config);
     }
 
-    init(): void {
-        console.log('Init');
-    }
-
     preload(): void {
         // Main menu foreground     // TODO: background
         this.load.image('Logo', 'assets/sprites/start-menu/quarantine-logo-14.png');
@@ -46,10 +42,6 @@ export class StartMenuScene extends Phaser.Scene {
     create(): void {
         this.add.image(960, 470, 'Logo')   // TODO: has to be centered all time 
         this.createMenuButtons();
-    }
-
-    update(): void {
-        console.log('Update');
     }
 
     createMenuButtons(): void {
