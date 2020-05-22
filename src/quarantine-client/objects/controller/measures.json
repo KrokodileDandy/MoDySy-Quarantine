@@ -1,0 +1,14 @@
+{
+    "sd": {
+        "name": "Social Distancing",
+        "active": false,
+        "description": "SD description",
+        "daily_cost": 100000
+    },
+    "ld": {
+        "name": "Lock Down",
+        "active": false,
+        "description": "LD description",
+        "daily_cost": 100000
+    }
+}

@@ -28,24 +28,11 @@ export class UpgradeController implements TimeSubscriber {
      * * Social Distancing [sc]
      * * Lock Down [ld]
      */
-    public measures: {[id: string]: {[id: string]: boolean | string | number}} = {
-        "sc": {
-            "name": "Social Distancing",
-            "active": false,
-            "description": "SD description",
-            "daily_cost": 100_000
-        },
-        "ld": {
-            "name": "Lock Down",
-            "active": false,
-            "description": "LD description",
-            "daily_cost": 100_000
-        }
-    };
+    public measures = require("./measures.json");
 
     private constructor() {
         this.stats = Stats.getInstance();
-
+        console.log(this.getIncomeStatement()["exp"]["spo"]);
         this.contr = Controller.getInstance();
 
         TimeController.getInstance().subscribe(this);
