@@ -26,7 +26,7 @@ export class GuiScene extends Phaser.Scene {
   constructor() {
     super({
       key: "GuiScene",
-      active: true
+      active: false
     });
   }
 
