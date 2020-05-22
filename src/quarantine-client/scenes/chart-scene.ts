@@ -1,9 +1,9 @@
 import * as Chart from "chart.js";
-import { Controller } from "../objects/controller/controller";
 import { GuiScene } from "./gui-scene";
 import { TimeSubscriber } from "../util/timeSubscriber";
 import { TimeController } from "../objects/controller/timeController";
 import { UpgradeController } from "../objects/controller/upgradeController";
+import { Stats } from "../objects/controller/stats";
 
 /**
  * Scene for creating and updating the graphical
@@ -26,8 +26,8 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
     /** Chart to show the infection numbers */
     private chart;
 
-    /** Controller to access the current infection numbers */
-    private controller: Controller;
+    /** Singleton to access the current infection numbers */
+    private stats: Stats;
 
     private upgradeController: UpgradeController;
 
@@ -43,7 +43,7 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
         /** The game starts on day 0 with 0 infected people */
         this.day = 0;
         this.infected = 0;
-        this.controller = Controller.getInstance();
+        this.stats = Stats.getInstance();
         this.upgradeController = UpgradeController.getInstance();
 
         this.initialMoney = this.upgradeController.getBudget();
@@ -71,7 +71,7 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
         this.chart.data.labels.push('Day ' + this.day);
 
         /** Get current infection numbers */
-        const currentlyInfected = this.controller.getInfected();
+        const currentlyInfected = this.stats.getInfected();
 
         /** Update both datasets */
         this.chart.data.datasets.forEach((dataset) => {
