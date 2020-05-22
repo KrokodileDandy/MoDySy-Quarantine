@@ -3,6 +3,7 @@ import { ItemMenu } from '../menu-elements/menu'
 import { ChartScene } from "./chart-scene";
 import { UpgradeController } from "../objects/controller/upgradeController";
 import { MapScene } from "./map-scene";
+import { TimeController } from "../objects/controller/timeController";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -11,6 +12,7 @@ export class GuiScene extends Phaser.Scene {
   private popUpSprite: Phaser.GameObjects.Sprite;
   private showMoney: Phaser.GameObjects.Text;
   private showCases: Phaser.GameObjects.Text;
+  private timeController: TimeController; 
 
 
 
@@ -42,6 +44,7 @@ export class GuiScene extends Phaser.Scene {
     this.createSettingsButtons();
 
     this.uC = UpgradeController.getInstance();
+    this.timeController = TimeController.getInstance()
 
     // Creates Itemmenu and it to this scene
     this.menu = new ItemMenu(this, 0, 250);
@@ -75,7 +78,7 @@ export class GuiScene extends Phaser.Scene {
         main.scene.resume();
         chart.scene.resume();
         map.scene.resume();
-        this.mainSceneIsPaused = true;
+        this.mainSceneIsPaused = false;
       }
     });
   }
