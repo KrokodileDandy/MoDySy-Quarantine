@@ -3,6 +3,7 @@ import { ItemMenu } from '../menu-elements/menu'
 import { ChartScene } from "./chart-scene";
 import { UpgradeController } from "../objects/controller/upgradeController";
 import { MapScene } from "./map-scene";
+import { TimeController } from "../objects/controller/timeController";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -11,6 +12,7 @@ export class GuiScene extends Phaser.Scene {
   private popUpSprite: Phaser.GameObjects.Sprite;
   private showMoney: Phaser.GameObjects.Text;
   private showCases: Phaser.GameObjects.Text;
+  private timeController: TimeController; 
 
 
 
@@ -24,7 +26,7 @@ export class GuiScene extends Phaser.Scene {
   constructor() {
     super({
       key: "GuiScene",
-      active: true
+      active: false
     });
   }
 
@@ -42,9 +44,10 @@ export class GuiScene extends Phaser.Scene {
     this.createSettingsButtons();
 
     this.uC = UpgradeController.getInstance();
+    this.timeController = TimeController.getInstance()
 
     // Creates Itemmenu and it to this scene
-    this.menu = new ItemMenu(this, 0, 250);
+    this.menu = new ItemMenu(this, 0, 750);
   }
 
   // -------------------------------------------------------------------------- GAME MENU
@@ -75,7 +78,7 @@ export class GuiScene extends Phaser.Scene {
         main.scene.resume();
         chart.scene.resume();
         map.scene.resume();
-        this.mainSceneIsPaused = true;
+        this.mainSceneIsPaused = false;
       }
     });
   }
@@ -83,30 +86,30 @@ export class GuiScene extends Phaser.Scene {
   // Creates menu buttons
   createMenuButtons(): void {
     // Create and set the buttons to the right positions
-    const menuWhite = this.add.sprite(1000, 70, 'menu-white').setInteractive();
-    const menuBlack = this.add.sprite(1000, 70, 'menu-black').setInteractive();
+    const menuWhite = this.add.sprite(1000, 570, 'menu-white').setInteractive();
+    const menuBlack = this.add.sprite(1000, 570, 'menu-black').setInteractive();
 
-    const stateWhite = this.add.sprite(1000, 120, 'statemeasure-white').setInteractive();
-    const stateBlack = this.add.sprite(1000, 120, 'statemeasure-black').setInteractive();
+    const stateWhite = this.add.sprite(1000, 620, 'statemeasure-white').setInteractive();
+    const stateBlack = this.add.sprite(1000, 620, 'statemeasure-black').setInteractive();
 
-    const investmentWhite = this.add.sprite(1000, 170, 'investment-white').setInteractive();
-    const investmentBlack = this.add.sprite(1000, 170, 'investment-black').setInteractive();
+    const investmentWhite = this.add.sprite(1000, 670, 'investment-white').setInteractive();
+    const investmentBlack = this.add.sprite(1000, 670, 'investment-black').setInteractive();
 
-    const lockdownWhite = this.add.sprite(875, 120, 'lockdown-white').setInteractive();
-    const lockdownBlack = this.add.sprite(875, 120, 'lockdown-black').setInteractive();
+    const lockdownWhite = this.add.sprite(875, 620, 'lockdown-white').setInteractive();
+    const lockdownBlack = this.add.sprite(875, 620, 'lockdown-black').setInteractive();
 
-    const socialdistancingWhite = this.add.sprite(750, 120, 'socialdistancing-white').setInteractive();
-    const socialdistancingBlack = this.add.sprite(750, 120, 'socialdistancing-black').setInteractive().on('pointerdown', () => {
+    const socialdistancingWhite = this.add.sprite(750, 620, 'socialdistancing-white').setInteractive();
+    const socialdistancingBlack = this.add.sprite(750, 620, 'socialdistancing-black').setInteractive().on('pointerdown', () => {
       this.uC.buyHealthWorkers(this.uC);
     });
 
-    const policeWhite = this.add.sprite(875, 170, 'police-white').setInteractive();
-    const policeBlack = this.add.sprite(875, 170, 'police-black').setInteractive().on('pointerdown', () => {
+    const policeWhite = this.add.sprite(875, 670, 'police-white').setInteractive();
+    const policeBlack = this.add.sprite(875, 670, 'police-black').setInteractive().on('pointerdown', () => {
       this.uC.buyPoliceOfficers(this.uC);
     });
 
-    const researchWhite = this.add.sprite(750, 170, 'research-white').setInteractive();
-    const researchBlack = this.add.sprite(750, 170, 'research-black').setInteractive().on('pointerdown', () => {
+    const researchWhite = this.add.sprite(750, 670, 'research-white').setInteractive();
+    const researchBlack = this.add.sprite(750, 670, 'research-black').setInteractive().on('pointerdown', () => {
       if (!this.cureFound) this.uC.introduceCure(this.uC);
       else this.uC.buyTestKitHWs(this.uC);
     });
@@ -164,26 +167,26 @@ export class GuiScene extends Phaser.Scene {
   // create settings buttons
   createSettingsButtons(): void {
     // Create and set the buttons to the right positions
-    const settingsWhite = this.add.sprite(1125, 70, 'settings-white').setInteractive();
-    const settingsBlack = this.add.sprite(1125, 70, 'settings-black').setInteractive();
+    const settingsWhite = this.add.sprite(1125, 570, 'settings-white').setInteractive();
+    const settingsBlack = this.add.sprite(1125, 570, 'settings-black').setInteractive();
 
-    const pauseWhite = this.add.sprite(1125, 120, 'pause-white').setInteractive();
-    const pauseBlack = this.add.sprite(1125, 120, 'pause-black').setInteractive();
+    const pauseWhite = this.add.sprite(1125, 620, 'pause-white').setInteractive();
+    const pauseBlack = this.add.sprite(1125, 620, 'pause-black').setInteractive();
 
-    const resetWhite = this.add.sprite(1250, 120, 'reset-white').setInteractive();
-    const resetBlack = this.add.sprite(1250, 120, 'reset-black').setInteractive();
+    const resetWhite = this.add.sprite(1250, 620, 'reset-white').setInteractive();
+    const resetBlack = this.add.sprite(1250, 620, 'reset-black').setInteractive();
 
-    const resumeWhite = this.add.sprite(1375, 120, 'resume-white').setInteractive();
-    const resumeBlack = this.add.sprite(1375, 120, 'resume-black').setInteractive();
+    const resumeWhite = this.add.sprite(1375, 620, 'resume-white').setInteractive();
+    const resumeBlack = this.add.sprite(1375, 620, 'resume-black').setInteractive();
 
-    const gamespeedWhite = this.add.sprite(1125, 170, 'gamespeed-white').setInteractive();
-    const gamespeedBlack = this.add.sprite(1125, 170, 'gamespeed-black').setInteractive();
+    const gamespeedWhite = this.add.sprite(1125, 670, 'gamespeed-white').setInteractive();
+    const gamespeedBlack = this.add.sprite(1125, 670, 'gamespeed-black').setInteractive();
 
-    const fasterWhite = this.add.sprite(1250, 170, 'faster-white').setInteractive();
-    const fasterBlack = this.add.sprite(1250, 170, 'faster-black').setInteractive();
+    const fasterWhite = this.add.sprite(1250, 670, 'faster-white').setInteractive();
+    const fasterBlack = this.add.sprite(1250, 670, 'faster-black').setInteractive();
 
-    const slowerWhite = this.add.sprite(1375, 170, 'slower-white').setInteractive();
-    const slowerBlack = this.add.sprite(1375, 170, 'slower-black').setInteractive();
+    const slowerWhite = this.add.sprite(1375, 670, 'slower-white').setInteractive();
+    const slowerBlack = this.add.sprite(1375, 670, 'slower-black').setInteractive();
 
     // Create a list with all of the settings buttons
     const sprites = [settingsWhite, settingsBlack, pauseWhite, pauseBlack, resetWhite, resetBlack, resumeWhite, resumeBlack, gamespeedWhite, gamespeedBlack, slowerWhite, slowerBlack, fasterWhite, fasterBlack];
@@ -303,12 +306,12 @@ export class GuiScene extends Phaser.Scene {
   /** function that creates daily report */
   createPopUp(day: number, money: number, cases: number): void {
 
-    this.popUpSprite = this.add.sprite(500, 150, 'popup-box');
+    this.popUpSprite = this.add.sprite(500, 650, 'popup-box');
     this.popUpSprite.displayWidth = 250;
     this.popUpSprite.displayHeight = 150;
-    this.day = this.add.text(450, 90, `Day ${day}`, { fill: '#000000', font: '20px Arial' });
-    this.showMoney = this.add.text(400, 140, `money = ${money}`, { fill: '#000000' });
-    this.showCases = this.add.text(400, 190, `cases = ${cases}`, { fill: '#000000' });
+    this.day = this.add.text(450, 590, `Day ${day}`, { fill: '#000000', font: '20px Arial' });
+    this.showMoney = this.add.text(400, 640, `money = ${money}`, { fill: '#000000' });
+    this.showCases = this.add.text(400, 690, `cases = ${cases}`, { fill: '#000000' });
     this.time.addEvent({ delay: 1000, callback: this.destroyPopUp, callbackScope: this });
   }
 
