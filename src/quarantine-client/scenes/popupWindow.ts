@@ -59,7 +59,7 @@ export class PopupWindow extends Phaser.Scene{
     * This public method can callable from outside
     * For example: To show Modal
     * ----------------------------------------------------
-    * var modal_example = new PopupWindows( parent_scene );
+    * var modal_example = new PopupWindow( parent_scene );
     * modal_example.createModal( popupContainer );
     * ----------------------------------------------------
     * @param popupContainer Phaser.GameObjects.Container
