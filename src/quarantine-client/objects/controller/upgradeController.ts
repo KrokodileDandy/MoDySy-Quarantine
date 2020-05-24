@@ -22,33 +22,21 @@ export class UpgradeController implements TimeSubscriber {
     private static instance: UpgradeController;
     /** Instance of central singleton controller */
     private contr: Controller;
+    /** Instance of singleton time controller */
+    private tC: TimeController;
 
     /**
      * Array of all available measures <name of measure> [<dictionary key of measure>]:
      * * Social Distancing [sc]
      * * Lock Down [ld]
      */
-    public measures: {[id: string]: {[id: string]: boolean | string | number}} = {
-        "sc": {
-            "name": "Social Distancing",
-            "active": false,
-            "description": "SD description",
-            "daily_cost": 100_000
-        },
-        "ld": {
-            "name": "Lock Down",
-            "active": false,
-            "description": "LD description",
-            "daily_cost": 100_000
-        }
-    };
+    public measures = require("./measures.json");
 
     private constructor() {
         this.stats = Stats.getInstance();
-
         this.contr = Controller.getInstance();
 
-        TimeController.getInstance().subscribe(this);
+        this.tC = TimeController.getInstance().subscribe(this);
     }
 
     // ----------------------------------------------------------------- UPGRADE - PUBLIC
@@ -138,12 +126,65 @@ export class UpgradeController implements TimeSubscriber {
         } else return false;
     }
 
+    /**
+     * Wrapper for activating/deactivating "lockdown" measure. {@see upgradeController.ts#activateMeasure}
+     * @param uC UpgradeController needed for closure {@see menu.ts#buildClosure}
+     * @returns if "lockdown" was activated/deactivated successfully
+     */
+    public activateLockdown(uC: UpgradeController): boolean { 
+        return uC.activateMeasure("ld");
+    }
+
+    /**
+     * Wrapper for activating/deactivating "social distancing" measure. {@see upgradeController.ts#activateMeasure}
+     * @param uC UpgradeController needed for closure {@see menu.ts#buildClosure}
+     * @returns if "lockdown" was activated/deactivated successfully
+     */
+    public activateSocialDistancing(uC: UpgradeController): boolean {
+        return uC.activateMeasure("sd")
+    }
+
+    /**
+     * Activates the specified measure and changes all affiliated game variables (@see measures.json). 
+     * A second invokation of this method causes the deactivation! Before the measure is activated, 
+     * it is checked whether the player is able to pay the daily costs of the measure (at least for the next day).
+     * There is a cooldown of 1 (ingame) day before the method can be executed successfully again. 
+     * @param measure Measure code of measure.json
+     * @returns if measure was activated/deactivated sucessfully
+     */
+    private activateMeasure(measure: string): boolean {
+        const activationDay = this.tC.getDaysSinceGameStart();
+
+        //Could only be activated if the player has enough budget to finance this measure for at least one day
+        if((!this.isSolvent(this.measures[measure]["daily_cost"]) && !this.measures[measure]["active"]) || 
+       (activationDay == this.measures[measure]["activated_on_day"])) return false; //implements cooldown
+
+        this.measures[measure]["activated_on_day"] = activationDay;
+        this.measures[measure]["active"] = !this.measures[measure]["active"]; //set measure to active or inactive
+
+        //Decreases the values of the game variables when measure is activated
+        if(this.measures[measure]["active"]) {
+            this.stats.happinessRate -= this.measures[measure]["frustration"];
+            this.stats.basicInteractionRate /= this.measures[measure]["isolation_factor"];
+            this.stats.maxInteractionVariance /= this.measures[measure]["isolation_factor"];
+        }
+        else {
+            this.stats.happinessRate += this.measures[measure]["frustration"];
+            this.stats.basicInteractionRate *= this.measures[measure]["isolation_factor"];
+            this.stats.maxInteractionVariance *= this.measures[measure]["isolation_factor"];
+        }
+
+        return true;
+    }
+
     /** @see TimeSubscriber */
     public notify(): void {
+        this.updateHappiness();
         this.updateCompliance();
         this.updateBudget(this.calculateIncome(), this.calculateExpenses());
 
         // this.printDailyIncomeStatement();
+        console.log(`Happiness: ${this.stats.happiness} \nCompliance:${this.stats.compliance} \nInteraction Rate: ${this.stats.basicInteractionRate} \nIncome: ${this.stats.income}`);
 
         this.stats.resetConsumptionCounters();
     }
@@ -214,8 +255,18 @@ export class UpgradeController implements TimeSubscriber {
      * |        50 |      45.4 |  
      * |         0 |        10 |
      */
-    private updateCompliance(): number {
-        return this.stats.compliance = 19/4950 * Math.pow(this.stats.happiness, 2) + 511/990 * this.stats.happiness + 10;
+    private updateCompliance(): void {
+        this.stats.compliance = 19/4950 * Math.pow(this.stats.happiness, 2) + 511/990 * this.stats.happiness + 10;
+    }
+
+    /**
+     * Calculate happiness based on the currrent happiness rate
+     */
+    private updateHappiness(): void {
+        const result = this.stats.happiness + this.stats.happinessRate;
+        if(result >= 100) this.stats.happiness = 100;
+        else if(result <= 0) this.stats.happiness = 0;
+        else this.stats.happiness = result;
     }
 
     /**
@@ -228,7 +279,7 @@ export class UpgradeController implements TimeSubscriber {
         if (this.stats.compliance > 70) this.stats.income = 1 * this.stats.maxIncome;
         else if (this.stats.compliance < 20) this.stats.income = 0;
         else {
-            this.stats.income = (this.stats.compliance - 20) * 2 * this.stats.maxIncome;
+            this.stats.income = Math.floor((this.stats.compliance - 20) * 2 * this.stats.maxIncome /100); //TODO
         }
         return this.stats.income;
     }
@@ -248,7 +299,7 @@ export class UpgradeController implements TimeSubscriber {
         let result = 0;
         for (const key in this.measures) {
             const value = this.measures[key];
-            if (value["active"]) result += Number(value["daily_cost"]);
+            if (value["active"]) result += value["daily_cost"];
         }
         return result;
     }

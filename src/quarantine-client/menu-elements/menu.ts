@@ -52,8 +52,8 @@ export class ItemMenu extends Phaser.GameObjects.Container {
     /** Adds all items to the menu */
     private fillWithItems(): Phaser.GameObjects.GameObject[] {
         return [
-        new Item(this.scene, 175, -15, 'lockdown', 1000000 , 'bar-lockdown-white', this.buildClosure(this.upgradeContr.buyTestKitHWs)),
-        new Item(this.scene, 325, -15, 'socialdistancing', 4000000, 'bar-socialdistancing-white', this.buildClosure(this.upgradeContr.buyHealthWorkers)),
+        new Item(this.scene, 175, -15, 'lockdown', 1000000 , 'bar-lockdown-white', this.buildClosure(this.upgradeContr.activateLockdown)),
+        new Item(this.scene, 325, -15, 'socialdistancing', 4000000, 'bar-socialdistancing-white', this.buildClosure(this.upgradeContr.activateSocialDistancing)),
         new Item(this.scene, 475, -15, 'police', 2500000, 'bar-police-white', this.buildClosure(this.upgradeContr.buyPoliceOfficers)),
         new Item(this.scene, 625, -15, 'research', 5000000 , 'bar-research-white', this.buildClosure(this.upgradeContr.introduceCure)),
         /*new Item(this.scene, 775, -15, 'police', 25, 'bar-police-white', console.log),
