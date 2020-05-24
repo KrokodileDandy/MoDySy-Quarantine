@@ -122,7 +122,7 @@ Insert your documentation in our [wiki](https://git.mtv.tu-berlin.de/modysy-2020
 2. Make your commit: `git commit -m "Ausführliche Beschreibung der vorgenommenen Änderungen."`
 3. Upload your commit with all the changes: `git push`
 
-### Merge Request erstellen
+### Create Merge Request
 1. Click 'Create merge request' on GitLab
 2. Chose a descriptive title
 3. In the description field
