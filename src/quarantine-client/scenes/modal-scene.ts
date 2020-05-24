@@ -1,13 +1,15 @@
 import "phaser";
 
-
 /**
- * Scene to show popup of the game.
- * Status: Bug by adding an object to content. I'm fixing
+ * Modal Scene to show popup in the game.
  * @author Vinh Hien
  */
 
-export class PopupWindows extends Phaser.Scene{
+export class PopupWindow extends Phaser.Scene{
+    /*
+    * constructor
+    * @param parent is parent scene, who call popupWindow
+    */ 
     constructor(parent: Phaser.Scene){
         super({
             key: "modal"
@@ -15,45 +17,54 @@ export class PopupWindows extends Phaser.Scene{
         this.parent = parent;
     }
 
-    /** Save the parent scene */
+    /** Parent scene */
     private parent: Phaser.Scene;
-    /** Container saves the informations */
-    private gameContain: Phaser.GameObjects.Container;
-    /** List of gameObjects */
-    //private gameObjs: [Phaser.GameObjects.GameObject];
 
-    init(){
-        console.log("init popupwindows ok");
-       //this.gameContain = this.add.container(500,500);
+    init(popupContainer: Phaser.GameObjects.Container){
+        this.addCloseBtn();
+        this.addContainer(popupContainer);
     }
 
-    create(){
-        /** Add background and cancel button to back to parent scene*/
-        var background = this.add.image(0,0, 'assets/sprites/popup.jpg').setOrigin(0).setDepth(0);
-        var cancelBtn = this.add.image(380, 20 , 'assets/sprites/cancel.jpg').setOrigin(0).setDepth(1);
+    /*
+    * Add close button to close modal scene and back to parent scene
+    */
+    private addCloseBtn(): void{
+        // add close button to top right of popup scene
+        var cancelBtn = this.add.image(this.game.renderer.width - 80, 0, 'assets/sprites/cancel.jpg').setOrigin(0).setDepth(1);
 
-        /** Close and back to the parent scence when click cancel button*/
+        // set Interactive
         cancelBtn.setInteractive();
+        
+        // button click event
         cancelBtn.on("pointerup", ()=>{
-            //console.log("you click on cancel");
+            //stop this modal scene
             this.scene.stop();
-        });
-       
-        //console.log("create modal done");
+            });
     }
 
-    /** to add objects to game content
-     *  status: bugs [1. all of elements by input array must be same type. 
-     *  2. Some speticifity are needed when container containts a scene suck as "an close button required for every scenes?" etc.-> general prob]
+    /*
+    * Add existing Container to Modal-scene
+    * @param popupContainer Phaser.GameObjects.Container
     */
-    /*public addObj(objs: [Phaser.GameObjects.GameObject]){
-        this.gameContain.add(objs);
-    }
-    */
+    private addContainer(popupContainer: Phaser.GameObjects.Container): void{
+        //center the Container
+        popupContainer.setX(this.game.renderer.width / 2);
+        popupContainer.setY(this.game.renderer.height / 2);
 
-    /** To show modal*/
-    public createModal(){
-        //console.log("i'm in function");
-        this.parent.scene.run("modal");   
+        // add container to scene
+        this.add.existing(popupContainer);
+    }
+
+    /*
+    * This public method can callable from outside
+    * For example: To show Modal
+    * ----------------------------------------------------
+    * var modal_example = new PopupWindows( parent_scene );
+    * modal_example.createModal( popupContainer );
+    * ----------------------------------------------------
+    * @param popupContainer Phaser.GameObjects.Container
+    */
+    public createModal(popupContainer: Phaser.GameObjects.Container): void{
+        this.parent.scene.launch( "modal", popupContainer);   
     }
 }
