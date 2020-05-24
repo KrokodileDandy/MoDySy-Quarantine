@@ -45,42 +45,34 @@ export class UpgradeController implements TimeSubscriber {
      * This method is required to call before the buyHealthWorkers-method. Otherwise the agents array
      * will have health workers but they won't do anything. (Because the transition rules are not yet
      * defined.)
-     * @param uC UpgradeController needed for closure {@see menu.ts#buildClosure}
      * @returns Boolean if the operation was successful, false if there are not enough people left to become health workers
      */
-    public introduceCure(uC: UpgradeController): boolean {
-        const numberOfNewAgents = 100_000;
-        const price = numberOfNewAgents * 5_000; // = 500_000_000
+    private introduceCure(): void {
+        const numberOfNewAgents = this.measures["research"]["number_of_new_health_workers"];
 
-        // There should be enough people left to become health workers
-        if (this.stats.getPopulation() - this.stats.getNumberOfHealthWorkers() - this.stats.getNumberOfPolice() < numberOfNewAgents) return false;
+        this.contr.getRules().push(new Rule(State.HEALTHY, State.CURE, State.IMMUNE, State.CURE, () => {
+            if (this.isSolvent(this.stats.currentPriceVaccination)) {
+                this.stats.vaccineUsed();
+                return true;
+            } else return false;
+        }));
 
-        if(uC.isSolvent(price)) {
-            uC.buyItem(price);
+        this.contr.getRules().push(new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
+            if (this.isSolvent(this.stats.currentPriceVaccination)) {
+                this.stats.vaccineUsed();
+                return true;
+            } else return false;
+        }));
 
-            uC.contr.getRules().push(new Rule(State.HEALTHY, State.CURE, State.IMMUNE, State.CURE, () => {
-                if (uC.isSolvent(this.stats.currentPriceVaccination)) {
-                    this.stats.vaccineUsed();
-                    return true;
-                } else return false;
-            }));
-            uC.contr.getRules().push(new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
-                if (uC.isSolvent(this.stats.currentPriceVaccination)) {
-                    this.stats.vaccineUsed();
-                    return true;
-                } else return false;
-            }));
-            uC.contr.getRules().push(new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
-                if (uC.isSolvent(this.stats.currentPriceVaccination)) {
-                    this.stats.vaccineUsed();
-                    return true;
-                } else return false;
-            }));
+        this.contr.getRules().push(new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
+            if (this.isSolvent(this.stats.currentPriceVaccination)) {
+                this.stats.vaccineUsed();
+                return true;
+            } else return false;
+        }));
 
-            uC.contr.distributeNewRoles(numberOfNewAgents, Role.HEALTH_WORKER);
-            this.stats.increaseHealthWorkers(numberOfNewAgents);
-            return true;
-        } else return false;
+        this.contr.distributeNewRoles(numberOfNewAgents, Role.HEALTH_WORKER);
+        this.stats.increaseHealthWorkers(numberOfNewAgents);
     }
 
     /**
@@ -174,6 +166,25 @@ export class UpgradeController implements TimeSubscriber {
             this.stats.maxInteractionVariance *= this.measures[measure]["isolation_factor"];
         }
 
+        return true;
+    }
+
+    /**
+     * Buys the next research level. When the maximum is reached, the method {@see UpgradeController#introduceCure }
+     * gets called.
+     * @param uC UpgradeController instance
+     * @returns Wether the research level reached level 10, the upgrade can be bought or the upgrade was successful
+     */
+    public buyResearchLevel(uC: UpgradeController): boolean {
+        const currLv = uC.measures["research"]["current_level"];
+        const price = uC.measures["research"]["prices"][currLv];
+
+        if (!uC.isSolvent(price) || currLv == 9) return false;
+        uC.buyItem(price);
+        
+        uC.measures["research"]["current_level"] += 1;
+
+        if (currLv + 1 == 9) uC.introduceCure();
         return true;
     }
 
@@ -273,7 +284,7 @@ export class UpgradeController implements TimeSubscriber {
      * Calculate the income depending on the population compliance.
      * When the compliance sinks below 20% the state generates 0 income,
      * while above 70% 100% of the income are generated.
-     * @income earnings in EURO
+     * @returns earnings in EURO
      */
     private calculateIncome(): number {
         if (this.stats.compliance > 70) this.stats.income = 1 * this.stats.maxIncome;
