@@ -21,6 +21,7 @@ export class Stats {
         this.nbrPolice = this.population * 0.01;
         this.nbrHW = this.population * 0.01;
         this.happiness = 100.00;
+        this.happinessRate = 0;
         this.compliance = 100.00;
 
         // PROBABILITIES / VIRUS VARIABLES
@@ -90,6 +91,8 @@ export class Stats {
 
     /** Overall happiness of the population between 0 and 100.00 */
     public happiness: number;
+    /** Current happiness tendency (by default the value is 0) */
+    public happinessRate: number;
     /** Compliance of the population between 0 and 100.00 */
     public compliance: number;
 

@@ -21,7 +21,7 @@ export class MapScene extends Phaser.Scene {
     constructor() {
         super({
             key: 'MapScene',
-            active: true
+            active: false
         });
         TimeController.getInstance().subscribe(this);
     }
@@ -48,8 +48,8 @@ export class MapScene extends Phaser.Scene {
 
     create(): void {
         /** Add the map to the scene */
-        this.map = this.add.sprite(0, 0, 'germanyMap');
-        this.map.setScale(0.28, 0.28);
+        this.map = this.add.sprite(1300, 0, 'germanyMap');
+        this.map.setScale(0.39, 0.39);
         this.map.setOrigin(0, 0);
 
         /** Select red color to fill the circles */

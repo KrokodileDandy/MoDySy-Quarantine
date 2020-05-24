@@ -22,33 +22,21 @@ export class UpgradeController implements TimeSubscriber {
     private static instance: UpgradeController;
     /** Instance of central singleton controller */
     private contr: Controller;
+    /** Instance of singleton time controller */
+    private tC: TimeController;
 
     /**
      * Array of all available measures <name of measure> [<dictionary key of measure>]:
      * * Social Distancing [sc]
      * * Lock Down [ld]
      */
-    public measures: {[id: string]: {[id: string]: boolean | string | number}} = {
-        "sc": {
-            "name": "Social Distancing",
-            "active": false,
-            "description": "SD description",
-            "daily_cost": 100_000
-        },
-        "ld": {
-            "name": "Lock Down",
-            "active": false,
-            "description": "LD description",
-            "daily_cost": 100_000
-        }
-    };
+    public measures = require("./measures.json");
 
     private constructor() {
         this.stats = Stats.getInstance();
-
         this.contr = Controller.getInstance();
 
-        TimeController.getInstance().subscribe(this);
+        this.tC = TimeController.getInstance().subscribe(this);
     }
 
     // ----------------------------------------------------------------- UPGRADE - PUBLIC
@@ -57,42 +45,34 @@ export class UpgradeController implements TimeSubscriber {
      * This method is required to call before the buyHealthWorkers-method. Otherwise the agents array
      * will have health workers but they won't do anything. (Because the transition rules are not yet
      * defined.)
-     * @param uC UpgradeController needed for closure {@see menu.ts#buildClosure}
      * @returns Boolean if the operation was successful, false if there are not enough people left to become health workers
      */
-    public introduceCure(uC: UpgradeController): boolean {
-        const numberOfNewAgents = 100_000;
-        const price = numberOfNewAgents * 5_000; // = 500_000_000
+    private introduceCure(): void {
+        const numberOfNewAgents = this.measures["research"]["number_of_new_health_workers"];
 
-        // There should be enough people left to become health workers
-        if (this.stats.getPopulation() - this.stats.getNumberOfHealthWorkers() - this.stats.getNumberOfPolice() < numberOfNewAgents) return false;
+        this.contr.getRules().push(new Rule(State.HEALTHY, State.CURE, State.IMMUNE, State.CURE, () => {
+            if (this.isSolvent(this.stats.currentPriceVaccination)) {
+                this.stats.vaccineUsed();
+                return true;
+            } else return false;
+        }));
 
-        if(uC.isSolvent(price)) {
-            uC.buyItem(price);
+        this.contr.getRules().push(new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
+            if (this.isSolvent(this.stats.currentPriceVaccination)) {
+                this.stats.vaccineUsed();
+                return true;
+            } else return false;
+        }));
 
-            uC.contr.getRules().push(new Rule(State.HEALTHY, State.CURE, State.IMMUNE, State.CURE, () => {
-                if (uC.isSolvent(this.stats.currentPriceVaccination)) {
-                    this.stats.vaccineUsed();
-                    return true;
-                } else return false;
-            }));
-            uC.contr.getRules().push(new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
-                if (uC.isSolvent(this.stats.currentPriceVaccination)) {
-                    this.stats.vaccineUsed();
-                    return true;
-                } else return false;
-            }));
-            uC.contr.getRules().push(new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
-                if (uC.isSolvent(this.stats.currentPriceVaccination)) {
-                    this.stats.vaccineUsed();
-                    return true;
-                } else return false;
-            }));
+        this.contr.getRules().push(new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
+            if (this.isSolvent(this.stats.currentPriceVaccination)) {
+                this.stats.vaccineUsed();
+                return true;
+            } else return false;
+        }));
 
-            uC.contr.distributeNewRoles(numberOfNewAgents, Role.HEALTH_WORKER);
-            this.stats.increaseHealthWorkers(numberOfNewAgents);
-            return true;
-        } else return false;
+        this.contr.distributeNewRoles(numberOfNewAgents, Role.HEALTH_WORKER);
+        this.stats.increaseHealthWorkers(numberOfNewAgents);
     }
 
     /**
@@ -138,12 +118,84 @@ export class UpgradeController implements TimeSubscriber {
         } else return false;
     }
 
+    /**
+     * Wrapper for activating/deactivating "lockdown" measure. {@see upgradeController.ts#activateMeasure}
+     * @param uC UpgradeController needed for closure {@see menu.ts#buildClosure}
+     * @returns if "lockdown" was activated/deactivated successfully
+     */
+    public activateLockdown(uC: UpgradeController): boolean { 
+        return uC.activateMeasure("ld");
+    }
+
+    /**
+     * Wrapper for activating/deactivating "social distancing" measure. {@see upgradeController.ts#activateMeasure}
+     * @param uC UpgradeController needed for closure {@see menu.ts#buildClosure}
+     * @returns if "lockdown" was activated/deactivated successfully
+     */
+    public activateSocialDistancing(uC: UpgradeController): boolean {
+        return uC.activateMeasure("sd")
+    }
+
+    /**
+     * Activates the specified measure and changes all affiliated game variables (@see measures.json). 
+     * A second invokation of this method causes the deactivation! Before the measure is activated, 
+     * it is checked whether the player is able to pay the daily costs of the measure (at least for the next day).
+     * There is a cooldown of 1 (ingame) day before the method can be executed successfully again. 
+     * @param measure Measure code of measure.json
+     * @returns if measure was activated/deactivated sucessfully
+     */
+    private activateMeasure(measure: string): boolean {
+        const activationDay = this.tC.getDaysSinceGameStart();
+
+        //Could only be activated if the player has enough budget to finance this measure for at least one day
+        if((!this.isSolvent(this.measures[measure]["daily_cost"]) && !this.measures[measure]["active"]) || 
+       (activationDay == this.measures[measure]["activated_on_day"])) return false; //implements cooldown
+
+        this.measures[measure]["activated_on_day"] = activationDay;
+        this.measures[measure]["active"] = !this.measures[measure]["active"]; //set measure to active or inactive
+
+        //Decreases the values of the game variables when measure is activated
+        if(this.measures[measure]["active"]) {
+            this.stats.happinessRate -= this.measures[measure]["frustration"];
+            this.stats.basicInteractionRate /= this.measures[measure]["isolation_factor"];
+            this.stats.maxInteractionVariance /= this.measures[measure]["isolation_factor"];
+        }
+        else {
+            this.stats.happinessRate += this.measures[measure]["frustration"];
+            this.stats.basicInteractionRate *= this.measures[measure]["isolation_factor"];
+            this.stats.maxInteractionVariance *= this.measures[measure]["isolation_factor"];
+        }
+
+        return true;
+    }
+
+    /**
+     * Buys the next research level. When the maximum is reached, the method {@see UpgradeController#introduceCure }
+     * gets called.
+     * @param uC UpgradeController instance
+     * @returns Wether the research level reached level 10, the upgrade can be bought or the upgrade was successful
+     */
+    public buyResearchLevel(uC: UpgradeController): boolean {
+        const currLv = uC.measures["research"]["current_level"];
+        const price = uC.measures["research"]["prices"][currLv];
+
+        if (!uC.isSolvent(price) || currLv == 9) return false;
+        uC.buyItem(price);
+        
+        uC.measures["research"]["current_level"] += 1;
+
+        if (currLv + 1 == 9) uC.introduceCure();
+        return true;
+    }
+
     /** @see TimeSubscriber */
     public notify(): void {
+        this.updateHappiness();
         this.updateCompliance();
         this.updateBudget(this.calculateIncome(), this.calculateExpenses());
 
         // this.printDailyIncomeStatement();
+        console.log(`Happiness: ${this.stats.happiness} \nCompliance:${this.stats.compliance} \nInteraction Rate: ${this.stats.basicInteractionRate} \nIncome: ${this.stats.income}`);
 
         this.stats.resetConsumptionCounters();
     }
@@ -214,21 +266,31 @@ export class UpgradeController implements TimeSubscriber {
      * |        50 |      45.4 |  
      * |         0 |        10 |
      */
-    private updateCompliance(): number {
-        return this.stats.compliance = 19/4950 * Math.pow(this.stats.happiness, 2) + 511/990 * this.stats.happiness + 10;
+    private updateCompliance(): void {
+        this.stats.compliance = 19/4950 * Math.pow(this.stats.happiness, 2) + 511/990 * this.stats.happiness + 10;
+    }
+
+    /**
+     * Calculate happiness based on the currrent happiness rate
+     */
+    private updateHappiness(): void {
+        const result = this.stats.happiness + this.stats.happinessRate;
+        if(result >= 100) this.stats.happiness = 100;
+        else if(result <= 0) this.stats.happiness = 0;
+        else this.stats.happiness = result;
     }
 
     /**
      * Calculate the income depending on the population compliance.
      * When the compliance sinks below 20% the state generates 0 income,
      * while above 70% 100% of the income are generated.
-     * @income earnings in EURO
+     * @returns earnings in EURO
      */
     private calculateIncome(): number {
         if (this.stats.compliance > 70) this.stats.income = 1 * this.stats.maxIncome;
         else if (this.stats.compliance < 20) this.stats.income = 0;
         else {
-            this.stats.income = (this.stats.compliance - 20) * 2 * this.stats.maxIncome;
+            this.stats.income = Math.floor((this.stats.compliance - 20) * 2 * this.stats.maxIncome /100); //TODO
         }
         return this.stats.income;
     }
@@ -248,7 +310,7 @@ export class UpgradeController implements TimeSubscriber {
         let result = 0;
         for (const key in this.measures) {
             const value = this.measures[key];
-            if (value["active"]) result += Number(value["daily_cost"]);
+            if (value["active"]) result += value["daily_cost"];
         }
         return result;
     }

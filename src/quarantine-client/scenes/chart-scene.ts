@@ -29,12 +29,22 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
     /** Singleton to access the current infection numbers */
     private stats: Stats;
 
+    /** Singleton to access the upgrade controller */
     private upgradeController: UpgradeController;
+
+    /** Container to change the size of the chart */
+    private chartContainer: HTMLDivElement;
+
+    /** Canvas element to render the chart */
+    private canvas: HTMLCanvasElement;
+
+    /** Dom element to add the chart to the scene */
+    private canvasDomElement: Phaser.GameObjects.DOMElement;
 
     constructor() {
         super({
             key: 'ChartScene',
-            active: true
+            active: false
         });
         TimeController.getInstance().subscribe(this);
     }
@@ -109,11 +119,29 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
 
     /** Function to initialize the chart at the start of the game */
     private initializeChart(): void {
-        /** Get canvas from index.html to render the chart */
-        const canvas = document.getElementById('chart');
+        /** Create the chart container and set the attributes */
+        this.chartContainer = document.createElement('div');
+        this.chartContainer.setAttribute('id', 'chart-container');
+        this.chartContainer.setAttribute('style', 'width: 50%');
+
+        /** Create the canvas and set the attributes */
+        this.canvas = document.createElement('canvas');
+        this.canvas.setAttribute('id', 'chart');
+        this.canvas.setAttribute('aria-label', 'infection numbers');
+        this.canvas.setAttribute('role', 'img');
+
+        /** Append the canvas to the container */
+        this.chartContainer.appendChild(this.canvas);
+
+        /** Append the container to the parent container in index.html, otherwise the chart will not be displayed */
+        document.getElementById('parent-chart-container').appendChild(this.chartContainer);
+
+        /** Add the canvas to the scene */
+        this.canvasDomElement = this.add.dom(0, 0, this.canvas);
+        this.canvasDomElement.setOrigin(0, 0);
 
         /** Create new chart */
-        this.chart = new Chart(canvas, {
+        this.chart = new Chart(this.canvas, {
             /** Line chart to show the total number of people infected */
             type: 'line',
 
