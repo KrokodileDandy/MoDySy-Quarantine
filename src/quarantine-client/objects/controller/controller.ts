@@ -111,7 +111,10 @@ export class Controller implements TimeSubscriber {
      */
     public distributeNewRoles(amt: number, role: Role, testKit = false): boolean {
         // There should be enough people left to be assigned the specific role
-        if (this.stats.getPopulation() - this.stats.getNumberOfHealthWorkers() - this.stats.getNumberOfPolice() < amt) return false;
+        if (this.stats.getPopulation() - this.stats.getNumberOfHealthWorkers() - this.stats.getNumberOfPolice() < amt) {
+            amt = this.stats.getPopulation() - this.stats.getNumberOfHealthWorkers() - this.stats.getNumberOfPolice();
+            // TODO Use case where hw's come from other countries to allow maximum amount of cure hw's
+        }
 
         let i = 0;
         /** 
