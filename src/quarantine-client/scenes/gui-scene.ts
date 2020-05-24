@@ -110,8 +110,10 @@ export class GuiScene extends Phaser.Scene {
 
     const researchWhite = this.add.sprite(750, 670, 'research-white').setInteractive();
     const researchBlack = this.add.sprite(750, 670, 'research-black').setInteractive().on('pointerdown', () => {
+      /*
       if (!this.cureFound) this.uC.introduceCure(this.uC);
       else this.uC.buyTestKitHWs(this.uC);
+      */
     });
 
     // Create a list of all measures, taking in consideration both of the colors
