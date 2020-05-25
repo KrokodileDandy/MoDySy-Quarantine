@@ -38,13 +38,17 @@ export class Controller implements TimeSubscriber {
         TimeController.getInstance().subscribe(this);
 
         this.distributeRandomlyInfected(1_000);
+        this.stats.unknowinglyInfected = 1_000;
     }
 
     /** Initiate basic transition rules at gamestart. */
     private initiateRules(): void {
         this.rules = [
             new Rule(State.HEALTHY, State.INFECTED, State.UNKNOWINGLY_INFECTED, State.INFECTED),
-            new Rule(State.HEALTHY, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED),
+            new Rule(State.HEALTHY, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED, () => {
+                Stats.getInstance().addUnknowinglyInfected();
+                return true;
+            }),
             new Rule(State.INFECTED, State.INFECTED, State.INFECTED, State.DECEASED, () => {
                 Stats.getInstance().deceasedCitizen();
                 return true;
@@ -54,6 +58,7 @@ export class Controller implements TimeSubscriber {
                     const stats = Stats.getInstance();
                     stats.foundInfected();
                     stats.testKitUsed();
+                    stats.firstCaseFound = true;
                     return true;
                 } else return false;
             })
@@ -178,6 +183,22 @@ export class Controller implements TimeSubscriber {
         });
     }
 
+    /**
+     * Checks wether some win or loss condition is matched. Opens a
+     * popup message if this is the case.
+     */
+    private checkWinLoss(): void {
+        if (this.stats.infected == 0 && this.stats.firstCaseFound) { // false WIN
+            //
+        } else if (this.stats.unknowinglyInfected == 0 && this.stats.infected == 0) { // true WIN
+            //
+        } else if (this.stats.population - this.stats.nbrHW == 0) { // LOOSE
+            //
+        } else if (this.stats.budget < this.stats.lowerBoundBankruptcy) { // LOOSE - bancrupt
+            // event with loose
+        }
+    }
+
     /** Implements the game logic. Select random pairs of agents to apply transition rules. */
     public update(): void {
         // number of interactions between agent pairs in the current tic
@@ -201,6 +222,7 @@ export class Controller implements TimeSubscriber {
                 this.agents.splice(idxAgent2, 1);
             }
         }
+        this.checkWinLoss();
     }
 
     /** @see TimeSubscriber */
