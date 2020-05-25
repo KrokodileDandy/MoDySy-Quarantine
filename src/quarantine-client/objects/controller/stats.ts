@@ -44,6 +44,7 @@ export class Stats {
         this.budget = 2_000_000_000; // allows to buy 2 upgrades immediately 
         this.maxIncome = 100_000_000; // allows to buy 1 upgrade every 5 days
         this.income = this.maxIncome;
+        this.lowerBoundBankruptcy = -200_000;
     }
 
     /** @returns The singleton instance */
@@ -83,6 +84,12 @@ export class Stats {
      * a specific number of agents have the status UNKNOWINGLY_INFECTED.
      */
     public infected = 0;
+    /**
+     * Number of currently, unknowingly infected citizens.
+     */
+    public unknowinglyInfected = 0;
+    /** Wether the first infected citizen was detected (with a test kit) or not */
+    public firstCaseFound = false;
 
     /** Number of police officers */
     public nbrPolice: number;
@@ -140,6 +147,8 @@ export class Stats {
     public maxIncome: number;
     /** Current income per tic */
     public income: number;
+    /** When this lower bound is reached, the game should be lost */
+    public lowerBoundBankruptcy: number;
 
 
     // -------------------------------------------------------------------- GETTER-METHODS
@@ -190,6 +199,24 @@ export class Stats {
     /** Increase infected counter by one */
     public foundInfected(): void {
         this.infected++;
+        this.unknowinglyInfected--;
+    }
+
+    /** Decrease infected counter by one and consume one vaccine */
+    public cureInfected(): void {
+        this.infected--;
+        this.vaccineUsed();
+    }
+
+    /** Increase unknowingly infected counter by one */
+    public addUnknowinglyInfected(): void {
+        this.unknowinglyInfected++;
+    }
+
+    /** Decrease unknowingly infected counter by one and consume one vaccine */
+    public cureUnknowinglyInfected(): void {
+        this.unknowinglyInfected--;
+        this.vaccineUsed();
     }
 
     /** Increases the Stats variable nbrPolice
