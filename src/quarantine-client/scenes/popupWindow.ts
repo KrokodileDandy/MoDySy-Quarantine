@@ -1,7 +1,7 @@
 import "phaser";
 
 /**
- * Modal Scene to show popup in the game.
+ * Modal scene to show popup in the game.
  * @author Vinh Hien Tran
  */
 export class PopupWindow extends Phaser.Scene {
@@ -22,9 +22,7 @@ export class PopupWindow extends Phaser.Scene {
         this.addContainer(popupContainer);
     }
 
-    /**
-    * Add close button to close modal scene and back to parent scene
-    */
+    /** Add close button to close modal scene and back to parent scene */
     private addCloseBtn(): void {
         // add close button to top right of popup scene
         const cancelBtn = this.add.image(this.game.renderer.width - 80, 0, 'assets/sprites/cancel.jpg').setOrigin(0).setDepth(1);
@@ -55,10 +53,12 @@ export class PopupWindow extends Phaser.Scene {
     /**
     * This public method can callable from outside
     * For example: To show Modal
-    * ----------------------------------------------------
+    * 
+    * ```
     * var modal_example = new PopupWindow( parent_scene );
     * modal_example.createModal( popupContainer );
-    * ----------------------------------------------------
+    * ```
+    * 
     * @param popupContainer Phaser.GameObjects.Container
     */
     public createModal(popupContainer: Phaser.GameObjects.Container): void {
