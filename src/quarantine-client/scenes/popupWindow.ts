@@ -29,7 +29,7 @@ export class PopupWindow extends Phaser.Scene {
     /** Add close button to close modal scene and back to parent scene */
     private addCloseBtn(): void {
         // add close button to top right of popup scene
-        const cancelBtn = this.add.image(this.game.renderer.width - 80, 0, 'assets/sprites/cancel.jpg').setOrigin(0).setDepth(1);
+        const cancelBtn = this.add.image(this.game.renderer.width - 80, 0, 'cancel').setOrigin(0).setDepth(1);
 
         // set Interactive
         cancelBtn.setInteractive();
