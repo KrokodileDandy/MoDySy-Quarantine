@@ -116,8 +116,8 @@ export class GuiScene extends Phaser.Scene {
       else this.uC.buyTestKitHWs(this.uC);
       */
       console.log("view modal");
-      let modalexample = new PopupWindow(this);
-      let containerexample = new Phaser.GameObjects.Container(this);
+      const modalexample = new PopupWindow(this);
+      const containerexample = new Phaser.GameObjects.Container(this);
       containerexample.add(new Phaser.GameObjects.Text(this, 0, 0, 'Hello from Gui.ts', {fontSize: '120px', color: 'black'}));
       modalexample.createModal(containerexample);
       console.log("create modal, ok");
