@@ -59,14 +59,14 @@ export class UpgradeController implements TimeSubscriber {
 
         this.contr.getRules().push(new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
             if (this.isSolvent(this.stats.currentPriceVaccination)) {
-                this.stats.vaccineUsed();
+                this.stats.cureInfected();
                 return true;
             } else return false;
         }));
 
         this.contr.getRules().push(new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
             if (this.isSolvent(this.stats.currentPriceVaccination)) {
-                this.stats.vaccineUsed();
+                this.stats.cureUnknowinglyInfected();
                 return true;
             } else return false;
         }));
