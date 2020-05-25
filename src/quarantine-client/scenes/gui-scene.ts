@@ -115,12 +115,6 @@ export class GuiScene extends Phaser.Scene {
       if (!this.cureFound) this.uC.introduceCure(this.uC);
       else this.uC.buyTestKitHWs(this.uC);
       */
-      console.log("view modal");
-      const modalexample = new PopupWindow(this);
-      const containerexample = new Phaser.GameObjects.Container(this);
-      containerexample.add(new Phaser.GameObjects.Text(this, 0, 0, 'Hello from Gui.ts', {fontSize: '120px', color: 'black'}));
-      modalexample.createModal(containerexample);
-      console.log("create modal, ok");
     });
 
     // Create a list of all measures, taking in consideration both of the colors
