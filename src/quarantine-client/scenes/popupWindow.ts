@@ -17,7 +17,11 @@ export class PopupWindow extends Phaser.Scene {
     /** Parent scene */
     private parent: Phaser.Scene;
 
-    init(popupContainer: Phaser.GameObjects.Container): void {
+    preload(){
+        this.load.image('cancel', 'assets/sprites/cancel.jpg');
+    }
+
+    create(popupContainer: Phaser.GameObjects.Container): void {
         this.addCloseBtn();
         this.addContainer(popupContainer);
     }
