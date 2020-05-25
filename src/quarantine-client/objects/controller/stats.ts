@@ -1,4 +1,5 @@
 import { TimeController } from "./timeController";
+import { DifficultyLevel} from "../../util/difficultyLevels";
 
 /**
  * Singleton controller which contains game variables (e.g. budget, population size)
@@ -15,40 +16,48 @@ export class Stats {
      * Different difficulty levels can be reached through defining different
      * values for nbrPolice, budget, income...
      */
-    private constructor() {
+    private constructor(difficulty: DifficultyLevel) {
+        let values;
+        if(difficulty == DifficultyLevel.EASY) values = require("./difficulty-levels/easy.json");
+        else if (difficulty == DifficultyLevel.NORMAL) values = require("./difficulty-levels/normal.json");
+        else values = require("./difficulty-levels/hard.json");
         // STATE VARIABLES
-        this.population = 1_620_000; //83_149_300: german population in september 2019 (wikipedia)
-        this.nbrPolice = this.population * 0.01;
-        this.nbrHW = this.population * 0.01;
-        this.happiness = 100.00;
-        this.happinessRate = 0;
-        this.compliance = 100.00;
+        this.population = values["population"]; //83_149_300: german population in september 2019 (wikipedia)
+        this.nbrPolice = this.population * values["portion_of_police"];
+        this.nbrHW = this.population * values["portion_of_healthworkers"];
+        this.happiness = values["happiness"];
+        this.happinessRate = values["happinessRate"];
+        this.compliance = values["compliance"];
 
         // PROBABILITIES / VIRUS VARIABLES
-        this.basicInteractionRate = 0.1;
-        this.maxInteractionVariance = 0.05;
+        this.basicInteractionRate = values["basicInteractionRate"];
+        this.maxInteractionVariance = values["maxInteractionVariance"];
 
         // SALARIES
-        this.avgSalaryPO = 114; // @see #79
+        this.avgSalaryPO = values["avgSalaryPO"]; // @see #79
         this.currentSalaryPO = this.avgSalaryPO;
-        this.avgSalaryHW = 83; // @see #79
+        this.avgSalaryHW = values["avgSalaryHW"]; // @see #79
         this.currentSalaryHW = this.avgSalaryHW;
 
         // CONSUMPTION
-        this.avgPriceTestKit = 44; // @see #79
+        this.avgPriceTestKit = values["avgPriceTestKit"]; // @see #79
         this.currentPriceTestKit = this.avgPriceTestKit;
-        this.avgPriceVaccination = 51; // @see #79
+        this.avgPriceVaccination = values["avgPriceVaccination"]; // @see #79
         this.currentPriceVaccination = this.avgPriceVaccination;
 
         // FINANCE VARIABLES
-        this.budget = 2_000_000_000; // allows to buy 2 upgrades immediately 
-        this.maxIncome = 100_000_000; // allows to buy 1 upgrade every 5 days
-        this.income = this.maxIncome;
+        this.budget = values["budget"]; // allows to buy 2 upgrades immediately 
+        this.maxIncome = values["maxIncome"]; // allows to buy 1 upgrade every 5 days
+        this.income = values["income"];
     }
 
-    /** @returns The singleton instance */
-    public static getInstance(): Stats {
-        if (!Stats.instance) Stats.instance = new Stats()
+    /** 
+     * @param difficultyLvl Used to instantiate the stats object with different values 
+     *                      depending on the difficulty level. This parameter is OPTIONAL!!!
+     * @returns The singleton instance 
+     */
+    public static getInstance(difficultyLvl: DifficultyLevel = null): Stats {
+        if (!Stats.instance) Stats.instance = new Stats(difficultyLvl)
         return Stats.instance;
     }
 
