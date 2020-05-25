@@ -1,6 +1,5 @@
 import 'phaser';
 import { StartMenuScene } from './scenes/start-menu-scene';
-import { PopupWindow} from './scenes/popupWindow';
 
 const config: Phaser.Types.Core.GameConfig = {
     width: 1600,
@@ -15,7 +14,7 @@ const config: Phaser.Types.Core.GameConfig = {
         createContainer: true // allow manipulation of dom elements within phaser (used by status bar in gui-scene.ts)
     },
 
-    scene: [StartMenuScene, PopupWindow],
+    scene: StartMenuScene,
     physics: {
         default: 'arcade',
         arcade: {
