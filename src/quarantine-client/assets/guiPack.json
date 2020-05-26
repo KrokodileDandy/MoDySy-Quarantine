@@ -210,6 +210,16 @@
           "type": "image",
           "key": "popup-box",
           "url": "assets/sprites/popup-box.png"
+        },
+        {
+          "type": "image",
+          "key": "cancelButton",
+          "url": "assets/sprites/cancel.jpg"
+        },
+        {
+          "type": "image",
+          "key": "log-background",
+          "url": "assets/sprites/log-background.jpg"
         }
       ]
   }
