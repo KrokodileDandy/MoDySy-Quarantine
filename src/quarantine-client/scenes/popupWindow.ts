@@ -8,6 +8,9 @@ import { MapScene } from "./map-scene";
  * @author Vinh Hien Tran
  */
 export class PopupWindow extends Phaser.GameObjects.Container {
+
+    private pause: boolean;
+
     /**
      * @param scene scene to which this GameObject belongs
      * @param x x-index position of this modal
@@ -17,8 +20,10 @@ export class PopupWindow extends Phaser.GameObjects.Container {
      * @param data list of objects
      * @param backgroundKey : key of background image
      */
-    public constructor(scene: Phaser.Scene, x: number, y: number, backgroundKey: string, closeBtnX: number, closeBtnY: number, data: Phaser.GameObjects.GameObject[]) {
+    public constructor(scene: Phaser.Scene, x: number, y: number, backgroundKey: string,
+            closeBtnX: number, closeBtnY: number, data: Phaser.GameObjects.GameObject[]) {
         super(scene, x, y);
+
         //add background
         this.addBackground(backgroundKey);
         //add close btn
@@ -84,7 +89,6 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         chart.scene.sendToBack();
         map.scene.sendToBack();
 
-        //chart scene sleeps
         chart.scene.sleep();
 
         this.scene.add.existing(this);
