@@ -111,10 +111,8 @@ export class GuiScene extends Phaser.Scene {
 
     const researchWhite = this.add.sprite(750, 670, 'research-white').setInteractive();
     const researchBlack = this.add.sprite(750, 670, 'research-black').setInteractive().on('pointerdown', () => {
-      /*
-      if (!this.cureFound) this.uC.introduceCure(this.uC);
-      else this.uC.buyTestKitHWs(this.uC);
-      */
+      // can be left here as a test, because this menu will probably be removed later
+      new PopupWindow(this, 0, 0, 'log-background', 530, 130, [new Phaser.GameObjects.Text(this, 700, 300, 'hello from gui',{color:'red', fontSize: '50px'})]);
     });
 
     // Create a list of all measures, taking in consideration both of the colors

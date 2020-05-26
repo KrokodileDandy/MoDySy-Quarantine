@@ -4,7 +4,7 @@ import { ChartScene } from "./chart-scene";
 import { MapScene } from "./map-scene";
 
 /**
- * Modal scene to show popup in the game.
+ * Creates a popup window on creation which holds multiple phaser game objects.
  * @author Vinh Hien Tran
  */
 export class PopupWindow extends Phaser.GameObjects.Container {
@@ -25,24 +25,31 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         this.addCloseBtn(closeBtnX, closeBtnY);
         //add object
         this.addGameObjects(data);
+
+        this.createModal();
     }
 
-    /** add all of inputing objected to container */ 
+    /** 
+     * Add phaser 3 game objects to the popup.
+     * @param objs Array of game objects to add into the popup
+     */ 
     public addGameObjects(objs: Phaser.GameObjects.GameObject[]): void {
         this.add(objs).setDepth(3);
     }
 
-    /** set background  */ 
+    /**
+     * Set the background of this container
+     * @param backgroundImg string of image path
+     */ 
     private addBackground(backgroundImg: string): void {
         this.add(new Phaser.GameObjects.Image(this.scene, this.scene.game.renderer.width / 2, this.scene. game.renderer.height / 2, backgroundImg).setDepth(2));
     }
 
-    /** add text :for popup info  */ 
-    private addText(text: string, x: number, y: number): void {
-        this.add(new Phaser.GameObjects.Text(this.scene, x, y, text, {fontSize: '30px', color: 'black'}).setDepth(4));
-    }
-
-    /** Add close button to close modal scene and back to parent scene  */
+    /**
+     * Add close button which destroys the popup and returns to parent scene
+     * @param x x-coordinate of the close button
+     * @param y y-coordinate of the close button
+     */
     private addCloseBtn(x: number, y: number): void {
         // add close button to top right of popup scene
         const cancelBtn = new Phaser.GameObjects.Image(this.scene, x, y, 'cancelButton').setOrigin(0).setDepth(1);
@@ -66,11 +73,10 @@ export class PopupWindow extends Phaser.GameObjects.Container {
     * This public method can callable from outside
     * For example: To show Modal
     * ```
-    * const modal = new PopupWindow(this, 0, 0, 'log-background', 530, 130, [new Phaser.GameObjects.Text(this, 700, 300, 'hello from gui',{color:'red', fontSize: '50px'})]);
-    * modal.createModal();
+    * new PopupWindow(this, 0, 0, 'log-background', 530, 130, [new Phaser.GameObjects.Text(this, 700, 300, 'hello from gui',{color:'red', fontSize: '50px'})]);
     * ```
     */
-    public createModal(): void {
+    private createModal(): void {
         // send the scenes to back
         const main = this.scene.scene.get('MainScene') as MainScene;
         const chart = this.scene.scene.get('ChartScene') as ChartScene;
