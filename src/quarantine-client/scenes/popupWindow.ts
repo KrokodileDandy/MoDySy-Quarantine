@@ -39,7 +39,7 @@ export class PopupWindow extends Phaser.GameObjects.Container {
 
     /**
      * Set the background of this container
-     * @param backgroundImg string of image path
+     * @param backgroundImg string of image object's key
      */ 
     private addBackground(backgroundImg: string): void {
         this.add(new Phaser.GameObjects.Image(this.scene, this.scene.game.renderer.width / 2, this.scene. game.renderer.height / 2, backgroundImg).setDepth(2));
