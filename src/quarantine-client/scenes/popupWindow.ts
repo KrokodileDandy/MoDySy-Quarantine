@@ -25,8 +25,6 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         this.addCloseBtn(closeBtnX, closeBtnY);
         //add object
         this.addGameObjects(data);
-
-        this.createModal();
     }
 
     /** 
@@ -76,7 +74,7 @@ export class PopupWindow extends Phaser.GameObjects.Container {
     * new PopupWindow(this, 0, 0, 'log-background', 530, 130, [new Phaser.GameObjects.Text(this, 700, 300, 'hello from gui',{color:'red', fontSize: '50px'})]);
     * ```
     */
-    private createModal(): void {
+    public createModal(): void {
         // send the scenes to back
         const main = this.scene.scene.get('MainScene') as MainScene;
         const chart = this.scene.scene.get('ChartScene') as ChartScene;
