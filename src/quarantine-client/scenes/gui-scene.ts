@@ -5,6 +5,9 @@ import { UpgradeController } from "../objects/controller/upgradeController";
 import { MapScene } from "./map-scene";
 import { TimeController } from "../objects/controller/timeController";
 import { PopupWindow } from "./popupWindow";
+import { Controller } from "../objects/controller/controller";
+import { Rule } from "../objects/controller/rule";
+import { State } from "../util/healthStates";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -334,7 +337,13 @@ export class GuiScene extends Phaser.Scene {
     const popupRules = new PopupWindow(this, 0, 0, 'log-background', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, 'The Rules',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
     
     /*---------START: add Rules ---------- */
+    const allRules = Controller.getInstance().getRules();
+    let ruleIndex = 0;
 
+    allRules.forEach(r => {
+      this.addRuleToContainer(r, ruleIndex);
+      ruleIndex++;
+    });
     /*---------END: add Rules ---------- */
 
     // popup info as a seconde popup
@@ -369,6 +378,41 @@ export class GuiScene extends Phaser.Scene {
       rulesBtn.setTexture('rules_on_click');
       popupRules.createModal();
     });
+  }
+
+  addRuleToContainer(rule: Rule, ruleIndex: number): void {
+    let x = 550;
+    let y = 150 + ruleIndex * 80;
+    console.log(this.getTextures(rule.inputState1));
+    console.log(this.getTextures(rule.inputState2));
+    console.log(this.getTextures(rule.outputState1));
+    console.log(this.getTextures(rule.outputState2));
+  }
+
+  getTextures(str: string): string {
+    switch (str) {
+      case State.HEALTHY:
+        return 'healthy';
+
+      case State.INFECTED:
+        return 'infected';
+
+      case State.UNKNOWINGLY_INFECTED:
+        return 'unknowingly-infected';
+
+      case State.CURE:
+        return 'cure';
+  
+      case State.DECEASED:
+        return 'deceased';
+  
+      case State.IMMUNE:
+        return 'immune';
+        
+      case State.TEST_KIT:
+        return 'test-kit';
+    }
+    
   }
 
   /*---------END: Rules button  ---------- */
