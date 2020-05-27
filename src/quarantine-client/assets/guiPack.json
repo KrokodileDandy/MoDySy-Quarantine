@@ -220,6 +220,81 @@
           "type": "image",
           "key": "log-background",
           "url": "assets/sprites/log-background.jpg"
+        },
+        {
+          "type": "image",
+          "key": "rules",
+          "url": "assets/sprites/main-scene/rules.png"
+        },
+        {
+          "type": "image",
+          "key": "rules_hover",
+          "url": "assets/sprites/main-scene/rules_hover.png"
+        },
+        {
+          "type": "image",
+          "key": "rules_on_click",
+          "url": "assets/sprites/main-scene/rules_on_click.jpg"
+        },
+        {
+          "type": "image",
+          "key": "information",
+          "url": "assets/sprites/main-scene/information.png"
+        },
+        {
+          "type": "image",
+          "key": "note",
+          "url": "assets/sprites/messages/note.png"
+        },
+        {
+          "type": "image",
+          "key": "unknowingly-infected",
+          "url": "assets/sprites/main-scene/unknowingly-infected.png"
+        },
+        {
+          "type": "image",
+          "key": "test-kit",
+          "url": "assets/sprites/main-scene/test-kit.png"
+        },
+        {
+          "type": "image",
+          "key": "infected",
+          "url": "assets/sprites/main-scene/infected.png"
+        },
+        {
+          "type": "image",
+          "key": "immune",
+          "url": "assets/sprites/main-scene/immune.png"
+        },
+        {
+          "type": "image",
+          "key": "healthy",
+          "url": "assets/sprites/main-scene/healthy.png"
+        },
+        {
+          "type": "image",
+          "key": "deceased",
+          "url": "assets/sprites/main-scene/deceased.png"
+        },
+        {
+          "type": "image",
+          "key": "cure",
+          "url": "assets/sprites/main-scene/cure.png"
+        },
+        {
+          "type": "image",
+          "key": "pprules-arrow",
+          "url": "assets/sprites/main-scene/pprules-arrow.png"
+        },
+        {
+          "type": "image",
+          "key": "background",
+          "url": "assets/sprites/main-scene/background.png"
+        },
+        {
+          "type": "image",
+          "key": "close-button",
+          "url": "assets/sprites/messages/close-button.png"
         }
       ]
   }
