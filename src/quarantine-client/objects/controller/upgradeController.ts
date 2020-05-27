@@ -30,7 +30,7 @@ export class UpgradeController implements TimeSubscriber {
      * * Social Distancing [sc]
      * * Lock Down [ld]
      */
-    public measures = require("./measures.json");
+    public measures = require("./../../../../res/json/measures.json");
 
     private constructor() {
         this.stats = Stats.getInstance();

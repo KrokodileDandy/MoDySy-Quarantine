@@ -5,8 +5,8 @@ import { UpgradeController } from "../objects/controller/upgradeController";
 import { MapScene } from "./map-scene";
 import { PopupWindow } from "./popupWindow";
 import { Controller } from "../objects/controller/controller";
-import { Rule } from "../objects/controller/rule";
-import { State } from "../util/healthStates";
+import { State } from "../util/enums/healthStates";
+import { Rule } from "../objects/entities/rule";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {

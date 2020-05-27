@@ -28,15 +28,15 @@ export class EventController implements TimeSubscriber {
     notify(): void {
         this.decreaseEventCounters();
         if (!this.timeSpanLegendary) {
-            
+            //
         } else if (!this.timeSpanEpic) {
-
+            //
         } else if (!this.timeSpanVeryRare) {
-
+            //
         } else if (!this.timeSpanRare) {
-
+            //
         } else if (!this.timeSpanCommon) {
-
+            //
         }
         this.resetTriggeredEventCounters();
     }

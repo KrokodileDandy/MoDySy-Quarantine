@@ -18,9 +18,9 @@ export class Stats {
      */
     private constructor(difficulty: DifficultyLevel) {
         let values;
-        if(difficulty == DifficultyLevel.EASY) values = require("./difficulty-levels/easy.json");
-        else if (difficulty == DifficultyLevel.NORMAL) values = require("./difficulty-levels/normal.json");
-        else values = require("./../../res/json/difficulty-levels/hard.json");
+        if(difficulty == DifficultyLevel.EASY) values = require("./../../../../res/json//difficulty-levels/easy.json");
+        else if (difficulty == DifficultyLevel.NORMAL) values = require("./../../../../res/json//difficulty-levels/normal.json");
+        else values = require("./../../../../res/json/difficulty-levels/hard.json");
         // STATE VARIABLES
         this.population = values["population"]; //83_149_300: german population in september 2019 (wikipedia)
         this.nbrPolice = this.population * values["portion_of_police"];
