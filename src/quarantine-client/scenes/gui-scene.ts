@@ -334,14 +334,14 @@ export class GuiScene extends Phaser.Scene {
   /*---------START: Rules button ---------- */
   createRulesBtn(): void {
     const rulesBtn = this.add.image(this.game.renderer.width - 100, this.game.renderer.height -250, 'rules').setDepth(1);
-    const popupRules = new PopupWindow(this, 0, 0, 'log-background', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, 'The Rules',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
+    const popupRules = new PopupWindow(this, 0, 0, 'background', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, 'The Rules',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
     
     /*---------START: add Rules ---------- */
     const allRules = Controller.getInstance().getRules();
     let ruleIndex = 0;
 
     allRules.forEach(r => {
-      this.addRuleToContainer(r, ruleIndex);
+      this.addRuleToContainer(popupRules, r, ruleIndex);
       ruleIndex++;
     });
     /*---------END: add Rules ---------- */
@@ -353,7 +353,7 @@ export class GuiScene extends Phaser.Scene {
     info.on('pointerup', () => {
       const popupTitle = 'The Information';
       const popupStr = 'The Agents exchange their state when they are close together';
-      const popupInfo = new PopupWindow(this, 0, 0, 'log-background', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, popupTitle,{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],true);
+      const popupInfo = new PopupWindow(this, 0, 0, 'background', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, popupTitle,{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],true);
 
       popupInfo.add(new Phaser.GameObjects.Text(this,550, 220 , popupStr, {color:'Black', fontSize: '30px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'} ));
 
@@ -380,13 +380,24 @@ export class GuiScene extends Phaser.Scene {
     });
   }
 
-  addRuleToContainer(rule: Rule, ruleIndex: number): void {
+  addRuleToContainer(container: Phaser.GameObjects.Container, rule: Rule, ruleIndex: number): void {
     let x = 550;
-    let y = 150 + ruleIndex * 80;
-    console.log(this.getTextures(rule.inputState1));
-    console.log(this.getTextures(rule.inputState2));
-    console.log(this.getTextures(rule.outputState1));
-    console.log(this.getTextures(rule.outputState2));
+    let y = 200 + ruleIndex * 170;
+    const pos1 = new Phaser.GameObjects.Image(this, x, y, this.getTextures(rule.inputState1)).setOrigin(0);
+    container.add(pos1);
+
+    const pos2 = new Phaser.GameObjects.Image(this, x + 200, y, this.getTextures(rule.inputState2)).setOrigin(0);
+    container.add(pos2);
+
+    const pos3 = new Phaser.GameObjects.Image(this, x + 420, y, this.getTextures(rule.outputState1)).setOrigin(0);
+    container.add(pos3);
+
+    const pos4 = new Phaser.GameObjects.Image(this, x + 620, y, this.getTextures(rule.outputState2)).setOrigin(0);
+    container.add(pos4);
+    
+    const arrow = new Phaser.GameObjects.Image(this, x + 340, y + 30, 'pprules-arrow').setOrigin(0);
+    container.add(arrow);
+
   }
 
   getTextures(str: string): string {
