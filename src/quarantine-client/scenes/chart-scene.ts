@@ -66,8 +66,9 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
     }
 
     create(): void {
-        /** Initialize the chart */
+        /** Initialize the chart and create the form to customize the chart */
         this.initializeChart();
+        this.createForm();
     }
 
     /** 
@@ -112,6 +113,65 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
         
         /** Render the new chart in index.html */
         this.chart.update();
+    }
+
+        /** Create the form, which allows to customize the chart */
+    createForm(): void {
+        /** Create the form */
+        const form = document.createElement('form');
+        form.setAttribute('id', 'chart-form');
+
+        const textNodeAxis = document.createTextNode('Choose axis:');
+        form.appendChild(textNodeAxis);
+
+        /** Create the dropdown menu and associated options to change between the linear and logarithmic scale */
+        const selectChartAxis = document.createElement('select');
+        selectChartAxis.setAttribute('id', 'chart-axis');
+        form.appendChild(selectChartAxis);
+
+        const optionLinearAxis = document.createElement('option');
+        optionLinearAxis.setAttribute('value', 'linear');
+        optionLinearAxis.appendChild(document.createTextNode('linear'));
+
+        const optionLogarithmicAxis = document.createElement('option');
+        optionLogarithmicAxis.setAttribute('value', 'logarithmic');
+        optionLogarithmicAxis.appendChild(document.createTextNode('logarithmic'));
+
+        selectChartAxis.appendChild(optionLinearAxis);
+        selectChartAxis.appendChild(optionLogarithmicAxis);
+        
+        /** Create the button to submit the form */
+        const updateButton = document.createElement('input');
+        updateButton.setAttribute('id', 'update-button');
+        updateButton.setAttribute('type', 'submit');
+        updateButton.setAttribute('value', 'Update Chart');
+        form.appendChild(updateButton);
+
+        /** Change what happens when you submit the form */
+        form.onsubmit = function(event): void {
+            /** Prevent the default behaviour of the button */
+            event.preventDefault();
+
+            /** Change the scale and update the chart */
+            this.chart.options.scales.yAxes[0].type = selectChartAxis.options[selectChartAxis.selectedIndex].value;
+            this.chart.update();
+        }.bind(this);
+
+        /** Change the style of the form */
+        const style = document.createElement('style');
+        style.innerHTML = `
+        #chart-axis {
+            margin-left: 5px;
+            margin-right: 30px;
+        }`;
+        document.head.appendChild(style);
+
+        /** Add the form to the scene */
+        const formDomElement = this.add.dom(10, this.canvas.clientHeight, form);
+        formDomElement.setOrigin(0, 0);
+
+        /** Append the form to the container in index.html, otherwise the form will not be displayed */
+        document.getElementById('form-container').appendChild(form);
     }
 
     /** @see TimeSubscriber */
@@ -169,6 +229,25 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
                 title: {
                     display: true,
                     text: 'Infection Numbers'
+                },
+
+                scales: {
+                    yAxes: [{
+                        /** Default type of the y-axis is linear */
+                        type: 'linear',
+                        display: true,
+                        ticks: {
+                            /** Minimum value of the scale is 0 */
+                            min: 0,
+                            /** The logarithmic scale uses the scientific notation for the labels on the y-axis,
+                             * this callback function converts them to the normal notation */
+                            callback: function (label): number {
+                                return Number(label.toString());
+                            },
+                            /** Show a maximum of 10 labels on the y-axis */
+                            maxTicksLimit: 10
+                        }
+                    }]
                 },
 
                 /** Resize the canvas when the size of chart-container changes */
