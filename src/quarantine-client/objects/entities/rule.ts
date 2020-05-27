@@ -1,4 +1,4 @@
-import { State } from "../../util/healthStates";
+import { State } from "../../util/enums/healthStates";
 
 /** Represents a transition rule of the population protocol. */
 export class Rule {

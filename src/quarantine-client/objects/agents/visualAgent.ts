@@ -1,6 +1,6 @@
 import { Agent } from "./agent";
-import { Role } from "../../util/roles";
-import { State } from "../../util/healthStates";
+import { Role } from "../../util/enums/roles";
+import { State } from "../../util/enums/healthStates";
 
 /**
  * Moving agent entities as VisualAgents.

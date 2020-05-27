@@ -1,5 +1,5 @@
 import { TimeController } from "./timeController";
-import { DifficultyLevel} from "../../util/difficultyLevels";
+import { DifficultyLevel} from "../../util/enums/difficultyLevels";
 
 /**
  * Singleton controller which contains game variables (e.g. budget, population size)

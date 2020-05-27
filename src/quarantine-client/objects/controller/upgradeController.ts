@@ -1,7 +1,7 @@
 import { Controller } from "./controller";
-import { State } from "../../util/healthStates";
-import { Rule } from "./rule";
-import { Role } from "../../util/roles";
+import { State } from "../../util/enums/healthStates";
+import { Rule } from "../entities/rule";
+import { Role } from "../../util/enums/roles";
 import { Stats } from "./stats";
 import { TimeSubscriber } from "../../util/timeSubscriber";
 import { TimeController } from "./timeController";

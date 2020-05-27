@@ -1,9 +1,9 @@
 import { Agent } from '../agents/agent';
 import { Police } from '../agents/police';
 import { Citizen } from '../agents/citizen';
-import { Role} from '../../util/roles';
-import { State } from '../../util/healthStates';
-import { Rule } from './rule';
+import { Role} from '../../util/enums/roles';
+import { State } from '../../util/enums/healthStates';
+import { Rule } from '../entities/rule';
 import { HealthWorker } from '../agents/healthWorker';
 import { TimeSubscriber } from '../../util/timeSubscriber';
 import { TimeController } from './timeController';
