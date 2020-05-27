@@ -49,6 +49,9 @@ export class GuiScene extends Phaser.Scene {
 
     // Creates Itemmenu and it to this scene
     this.menu = new ItemMenu(this, 0, 750);
+
+    // Creates Rules button
+    this.createRulesBtn();
   }
 
   // -------------------------------------------------------------------------- GAME MENU
@@ -112,8 +115,6 @@ export class GuiScene extends Phaser.Scene {
     const researchWhite = this.add.sprite(750, 670, 'research-white').setInteractive();
     const researchBlack = this.add.sprite(750, 670, 'research-black').setInteractive().on('pointerdown', () => {
       // can be left here as a test, because this menu will probably be removed later
-      const modal = new PopupWindow(this, 0, 0, 'log-background', 530, 130, [new Phaser.GameObjects.Text(this, 700, 300, 'hello from gui',{color:'red', fontSize: '50px'})]);
-      modal.createModal();
     });
 
     // Create a list of all measures, taking in consideration both of the colors
@@ -327,6 +328,50 @@ export class GuiScene extends Phaser.Scene {
     }
   }
 
+  /*---------START: Rules button ---------- */
+  createRulesBtn(): void {
+    const rulesBtn = this.add.image(this.game.renderer.width - 100, this.game.renderer.height -250, 'rules').setDepth(1);
+    const popupRules = new PopupWindow(this, 0, 0, 'log-background', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, 'The Rules',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
+    
+    /*---------START: add Rules ---------- */
+
+    /*---------END: add Rules ---------- */
+
+    // popup info as a seconde popup
+    const info = new Phaser.GameObjects.Image(this, 800, 150, 'information');
+    info.setInteractive();
+
+    info.on('pointerup', () => {
+      const popupTitle = 'The Information';
+      const popupStr = 'The Agents exchange their state when they are close together';
+      const popupInfo = new PopupWindow(this, 0, 0, 'log-background', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, popupTitle,{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],true);
+
+      popupInfo.add(new Phaser.GameObjects.Text(this,550, 220 , popupStr, {color:'Black', fontSize: '30px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'} ));
+
+      popupInfo.createModal();
+    });
+    //add popup Info into popup Rules.
+    popupRules.add(info);
+    
+    rulesBtn.setInteractive();
+
+    // Change the button textures on hover, press, etc.
+    rulesBtn.on('pointerover', () => {
+      rulesBtn.setTexture('rules_hover');
+    });
+    rulesBtn.on('pointerout', () => {
+      rulesBtn.setTexture('rules');
+    });
+    rulesBtn.on('pointerdown', () => {
+      rulesBtn.setTexture('rules');
+    });
+    rulesBtn.on('pointerup', () => {
+      rulesBtn.setTexture('rules_on_click');
+      popupRules.createModal();
+    });
+  }
+
+  /*---------END: Rules button  ---------- */
 
   update(): void {
     if (!this.mainSceneIsPaused) this.menu.updateItemMenu(); // has to be invoked each tic/ ingame hour TODO
