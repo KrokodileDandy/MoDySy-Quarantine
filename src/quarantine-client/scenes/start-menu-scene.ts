@@ -3,6 +3,8 @@ import { GuiScene } from "./gui-scene";
 import { ChartScene } from "./chart-scene";
 import { AgentScene } from "./agent-scene";
 import { MapScene } from "./map-scene";
+import { Stats } from "../objects/controller/stats";
+import { DifficultyLevel } from "../util/difficultyLevels";
 
 /**
  * Menu scene at the start of the game.
@@ -74,6 +76,8 @@ export class StartMenuScene extends Phaser.Scene {
         const skipButton = this.add.sprite(1800, 750, 'Skip').setScale(0.4);
         skipButton.setInteractive();
         skipButton.on('pointerdown', () => {
+            //loads the "NORMAL" game stats @see{res/json/difficulty-levels/normal.json}
+            Stats.getInstance(DifficultyLevel.NORMAL); 
             this.scene.setVisible(false);
             this.loadScenes();
         });
@@ -106,6 +110,9 @@ export class StartMenuScene extends Phaser.Scene {
             easyButton.visible = false;
             normalButton.visible = false;
             hardButton.visible = false;
+
+            //loads the "EASY" game stats @see{res/json/difficulty-levels/easy.json}
+            Stats.getInstance(DifficultyLevel.EASY);
             this.createStartButton();
         });
         // Change the button textures on hover, press, etc.
@@ -123,6 +130,9 @@ export class StartMenuScene extends Phaser.Scene {
             easyButton.visible = false;
             normalButton.visible = false;
             hardButton.visible = false;
+
+            //loads the "NORMAL" game stats @see{res/json/difficulty-levels/normal.json}
+            Stats.getInstance(DifficultyLevel.NORMAL); 
             this.createStartButton();
         });
         // Change the button textures on hover, press, etc.
@@ -140,6 +150,9 @@ export class StartMenuScene extends Phaser.Scene {
             easyButton.visible = false;
             normalButton.visible = false;
             hardButton.visible = false;
+
+            //loads the "HARD" game stats @see{res/json/difficulty-levels/hard.json}
+            Stats.getInstance(DifficultyLevel.HARD);
             this.createStartButton();
         });
     }
