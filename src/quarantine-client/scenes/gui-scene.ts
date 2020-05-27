@@ -381,8 +381,8 @@ export class GuiScene extends Phaser.Scene {
   }
 
   addRuleToContainer(container: Phaser.GameObjects.Container, rule: Rule, ruleIndex: number): void {
-    let x = 550;
-    let y = 200 + ruleIndex * 170;
+    const x = 550;
+    const y = 200 + ruleIndex * 170;
     const pos1 = new Phaser.GameObjects.Image(this, x, y, this.getTextures(rule.inputState1)).setOrigin(0);
     container.add(pos1);
 
