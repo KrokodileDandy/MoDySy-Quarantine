@@ -1,3 +1,4 @@
+import 'phaser';
 import { PopupWindow } from "../../scenes/popupWindow";
 import { GuiScene } from "../../scenes/gui-scene";
 
@@ -16,7 +17,8 @@ export class Event {
      */
     public constructor(executeEventFunction: Function, title: string, description: string, imagePath = "letter") {
         const ppTitle = new Phaser.GameObjects.Text(GuiScene.instance, 550, 130, title, {});
-        //const popup = new PopupWindow(GuiScene.instance, 0, 0, 'log-background', 800, 600, true, [ppTitle], true);
+        const ppDescription = new Phaser.GameObjects.Text(GuiScene.instance, 550, 130, description, {});
+        const popup = new PopupWindow(GuiScene.instance, 0, 0, 'log-background', 800, 600, true, [ppTitle, ppDescription], true);
 
         executeEventFunction();
     }
