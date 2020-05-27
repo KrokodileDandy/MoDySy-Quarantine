@@ -220,6 +220,11 @@
           "type": "image",
           "key": "log-background",
           "url": "assets/sprites/log-background.jpg"
+        },
+        {
+          "type": "image",
+          "key": "letter",
+          "url": "assets/sprites/main-scene/letter.jpg"
         }
       ]
   }

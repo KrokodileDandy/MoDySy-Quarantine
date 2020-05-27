@@ -1,6 +1,10 @@
 import { State } from "../../util/enums/healthStates";
 
-/** Represents a transition rule of the population protocol. */
+/**
+ * Represents a transition rule of the population protocol.
+ * @author Marvin Kruber
+ * @author Sebastian Führ
+ */
 export class Rule {
     public readonly inputState1: State;
     public readonly inputState2: State;
