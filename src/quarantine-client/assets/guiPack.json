@@ -34,12 +34,12 @@
         {
           "type": "image",
           "key": "bar-research-white",
-          "url": "assets/sprites/bar-research-white.png"
+          "url": "assets/sprites/main-scene/flask-button.png"
         },
         {
           "type": "image",
           "key": "bar-research-black",
-          "url": "assets/sprites/bar-research-black.png"
+          "url": "assets/sprites/main-scene/flask-button-pressed.png"
         },
         {
           "type": "image",

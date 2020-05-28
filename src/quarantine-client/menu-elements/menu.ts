@@ -55,7 +55,11 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         new Item(this.scene, 175, -15, 'lockdown', 1000000 , 'bar-lockdown-white', this.buildClosure(this.upgradeContr.activateLockdown)),
         new Item(this.scene, 325, -15, 'socialdistancing', 4000000, 'bar-socialdistancing-white', this.buildClosure(this.upgradeContr.activateSocialDistancing)),
         new Item(this.scene, 475, -15, 'police', 2500000, 'bar-police-white', this.buildClosure(this.upgradeContr.buyPoliceOfficers)),
-        new Item(this.scene, 625, -15, 'research', 10 , 'bar-research-white', this.buildClosure(this.upgradeContr.buyResearchLevel)),
+        new Phaser.GameObjects.Container(this.scene, 0, 0, [
+            new Item(this.scene, 625, -15, 'research', 10, 'bar-research-white', this.buildClosure(this.upgradeContr.buyResearchLevel))
+            
+        ])
+        //new Item(this.scene, 625, -15, 'research', 10 , 'bar-research-white', this.buildClosure(this.upgradeContr.buyResearchLevel)),
         /*new Item(this.scene, 775, -15, 'police', 25, 'bar-police-white', console.log),
         new Item(this.scene, 925, -15, 'comingSoon', 25, 'bar-police-black', console.log),
         new Item(this.scene, 1075, -15, 'comingSoon', 25, 'bar-police-black', console.log)*/
