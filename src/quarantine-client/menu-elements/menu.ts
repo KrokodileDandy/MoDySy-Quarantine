@@ -56,8 +56,15 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         new Item(this.scene, 325, -15, 'socialdistancing', 4000000, 'bar-socialdistancing-white', this.buildClosure(this.upgradeContr.activateSocialDistancing)),
         new Item(this.scene, 475, -15, 'police', 2500000, 'bar-police-white', this.buildClosure(this.upgradeContr.buyPoliceOfficers)),
         new Phaser.GameObjects.Container(this.scene, 0, 0, [
-            new Item(this.scene, 625, -15, 'research', 10, 'bar-research-white', this.buildClosure(this.upgradeContr.buyResearchLevel))
-            
+            new Item(this.scene, 625, -15, 'research', 10, 'bar-research-white', this.buildClosure(this.upgradeContr.buyResearchLevel)),
+            this.scene.add.text(575, 75, `Price: 000.000.000`, {
+                fontFamily: 'Arial',
+                color: '#000000',
+            }), //.setFontSize(12).setScale(1, 3). setLineSpacing(10),
+            this.scene.add.text(685, -75, `Progress: `, {
+                fontFamily: 'Arial',
+                color: '#000000',
+            }) //.setFontSize(12).setScale(1, 3). setLineSpacing(10)
         ])
         //new Item(this.scene, 625, -15, 'research', 10 , 'bar-research-white', this.buildClosure(this.upgradeContr.buyResearchLevel)),
         /*new Item(this.scene, 775, -15, 'police', 25, 'bar-police-white', console.log),
