@@ -214,7 +214,7 @@
         {
           "type": "image",
           "key": "cancelButton",
-          "url": "assets/sprites/cancel.jpg"
+          "url": "assets/sprites/close-button.png"
         },
         {
           "type": "image",
@@ -228,8 +228,8 @@
         },
         {
           "type": "image",
-          "key": "rules_hover",
-          "url": "assets/sprites/main-scene/rules_hover.png"
+          "key": "rules-hover",
+          "url": "assets/sprites/main-scene/rules-hover.png"
         },
         {
           "type": "image",
@@ -295,6 +295,16 @@
           "type": "image",
           "key": "close-button",
           "url": "assets/sprites/messages/close-button.png"
+        },
+        {
+          "type": "image",
+          "key": "restart",
+          "url": "assets/sprites/main-scene/restart.png"
+        },
+        {
+          "type": "image",
+          "key": "restart-hover",
+          "url": "assets/sprites/main-scene/restart-hover.png"
         }
       ]
   }
