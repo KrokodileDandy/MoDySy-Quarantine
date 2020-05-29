@@ -10,6 +10,7 @@ import { MapScene } from "./map-scene";
 export class PopupWindow extends Phaser.GameObjects.Container {
 
     private pause: boolean;
+    private isChild: boolean;
 
     /**
      * @param scene scene to which this GameObject belongs
@@ -19,11 +20,16 @@ export class PopupWindow extends Phaser.GameObjects.Container {
      * @param closeBtnY y-index position of this close btn
      * @param data list of objects
      * @param backgroundKey : key of background image
+     * @param pause this attribute is true, when the game should be paused when popup windows actives
+     * @param isChild this attribute is true, when the popup windows will be opened by another popup windows 
      */
     public constructor(scene: Phaser.Scene, x: number, y: number, backgroundKey: string,
-            closeBtnX: number, closeBtnY: number, data: Phaser.GameObjects.GameObject[]) {
+            closeBtnX: number, closeBtnY: number, pause: boolean, data: Phaser.GameObjects.GameObject[], isChild: boolean) {
         super(scene, x, y);
-
+        //set pause
+        this.pause = pause;
+        //set child
+        this.isChild = isChild;
         //add background
         this.addBackground(backgroundKey);
         //add close btn
@@ -64,10 +70,22 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         cancelBtn.on("pointerup", () => {
             //stop this modal scene
             this.setVisible(false);
-            const chart = this.scene.scene.get('ChartScene') as ChartScene;
-            chart.scene.wake();
-            //remove destroy() later if needed
-            this.destroy();
+            //if this popup windows not a child, wake up the chart scene.
+            if(!this.isChild){
+                const chart = this.scene.scene.get('ChartScene') as ChartScene;
+
+                chart.scene.wake();
+            // resume the game if game was paused.    
+            if(this.pause){
+                const main = this.scene.scene.get('MainScene') as MainScene;
+                const map = this.scene.scene.get('MapScene') as MapScene;
+
+                main.scene.resume();
+                chart.scene.resume();
+                map.scene.resume();
+            }
+            }
+            //
         });
         this.add(cancelBtn);
     }
@@ -80,16 +98,24 @@ export class PopupWindow extends Phaser.GameObjects.Container {
     * ```
     */
     public createModal(): void {
-        // send the scenes to back
-        const main = this.scene.scene.get('MainScene') as MainScene;
-        const chart = this.scene.scene.get('ChartScene') as ChartScene;
-        const map = this.scene.scene.get('MapScene') as MapScene;
+        if(!this.isChild){
+            // send the scenes to back
+            const main = this.scene.scene.get('MainScene') as MainScene;
+            const chart = this.scene.scene.get('ChartScene') as ChartScene;
+            const map = this.scene.scene.get('MapScene') as MapScene;
         
-        main.scene.sendToBack();
-        chart.scene.sendToBack();
-        map.scene.sendToBack();
+            main.scene.sendToBack();
+            chart.scene.sendToBack();
+            map.scene.sendToBack();
 
-        chart.scene.sleep();
+            chart.scene.sleep();
+
+            if(this.pause){
+                main.scene.pause();
+                chart.scene.pause();
+                map.scene.pause();
+            }
+        }
 
         this.scene.add.existing(this);
         this.setVisible(true);
