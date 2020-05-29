@@ -218,11 +218,6 @@
         },
         {
           "type": "image",
-          "key": "log-background",
-          "url": "assets/sprites/log-background.jpg"
-        },
-        {
-          "type": "image",
           "key": "rules",
           "url": "assets/sprites/main-scene/rules.png"
         },

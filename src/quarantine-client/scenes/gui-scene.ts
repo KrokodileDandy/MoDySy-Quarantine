@@ -445,13 +445,17 @@ export class GuiScene extends Phaser.Scene {
     });
 
     resetBtn.on('pointerup', () => {
-      const main = this.scene.get('MainScene') as MainScene;
-      const chart = this.scene.get('ChartScene') as ChartScene;
-      const map = this.scene.get('MapScene') as MapScene;
+      const popupMss = new PopupWindow(this, 0, 0, 'note', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, 'test',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
+      const okbtn = new Phaser.GameObjects.Text(this, 550, 200, 'ok',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
+      popupMss.addGameObjects([okbtn]);
+      popupMss.createModal();
+      //const main = this.scene.get('MainScene') as MainScene;
+      //const chart = this.scene.get('ChartScene') as ChartScene;
+      //const map = this.scene.get('MapScene') as MapScene;
       
-      main.scene.restart();
-      chart.scene.restart();
-      map.scene.restart();
+      //main.scene.restart();
+      //chart.scene.restart();
+      //map.scene.restart();
     });
   }
   /*---------END: Reset button  ---------- */
