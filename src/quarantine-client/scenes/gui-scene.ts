@@ -55,6 +55,9 @@ export class GuiScene extends Phaser.Scene {
 
     // Creates Rules button
     this.createRulesBtn();
+
+    // Creates Reset button
+    this.createResetBtn();
   }
 
   // -------------------------------------------------------------------------- GAME MENU
@@ -366,7 +369,7 @@ export class GuiScene extends Phaser.Scene {
 
     // Change the button textures on hover, press, etc.
     rulesBtn.on('pointerover', () => {
-      rulesBtn.setTexture('rules_hover');
+      rulesBtn.setTexture('rules-hover');
     });
     rulesBtn.on('pointerout', () => {
       rulesBtn.setTexture('rules');
@@ -425,8 +428,33 @@ export class GuiScene extends Phaser.Scene {
     }
     
   }
-
   /*---------END: Rules button  ---------- */
+
+  /*---------START: Reset button  ---------- */
+  createResetBtn(): void {    
+    const resetBtn = this.add.image(this.game.renderer.width - 100, 60, 'restart').setOrigin(0);
+    resetBtn.setInteractive();
+    
+    // hover, click event etc.
+    resetBtn.on('pointerover', () => {
+      resetBtn.setTexture('restart-hover');
+    });
+
+    resetBtn.on('pointerout', () => {
+      resetBtn.setTexture('restart');
+    });
+
+    resetBtn.on('pointerup', () => {
+      const main = this.scene.get('MainScene') as MainScene;
+      const chart = this.scene.get('ChartScene') as ChartScene;
+      const map = this.scene.get('MapScene') as MapScene;
+      
+      main.scene.restart();
+      chart.scene.restart();
+      map.scene.restart();
+    });
+  }
+  /*---------END: Reset button  ---------- */
 
   update(): void {
     if (!this.mainSceneIsPaused) this.menu.updateItemMenu(); // has to be invoked each tic/ ingame hour TODO
