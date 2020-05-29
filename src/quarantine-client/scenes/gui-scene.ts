@@ -127,8 +127,8 @@ export class GuiScene extends Phaser.Scene {
 
     const info = this.add.sprite(2750, 70, 'information').setInteractive();
     const restart = this.add.sprite(2750, 190, 'restart').setInteractive();
-    const music_on = this.add.sprite(2750, 310, 'music_on').setInteractive();
-    const sound_on = this.add.sprite(2750, 430, 'sound_on').setInteractive();
+    const musicOn = this.add.sprite(2750, 310, 'music_on').setInteractive();
+    const soundOn = this.add.sprite(2750, 430, 'sound_on').setInteractive();
 
     const pause = this.add.sprite(1600, 50, 'pause').setInteractive();
     const resume = this.add.sprite(1700, 50, 'resume-button').setInteractive();
