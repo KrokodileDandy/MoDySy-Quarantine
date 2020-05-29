@@ -445,17 +445,40 @@ export class GuiScene extends Phaser.Scene {
     });
 
     resetBtn.on('pointerup', () => {
-      const popupMss = new PopupWindow(this, 0, 0, 'note', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, 'test',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
-      const okbtn = new Phaser.GameObjects.Text(this, 550, 200, 'ok',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'});
-      popupMss.addGameObjects([okbtn]);
-      popupMss.createModal();
-      //const main = this.scene.get('MainScene') as MainScene;
-      //const chart = this.scene.get('ChartScene') as ChartScene;
-      //const map = this.scene.get('MapScene') as MapScene;
+      //creates popup messages
+      const popupMss = new PopupWindow(this, 0, 0, 'note', this.game.renderer.width / 2 + 60, this.game.renderer.height / 2 - 70, true, [new Phaser.GameObjects.Text(this, this.game.renderer.width / 2 - 100, this.game.renderer.height / 2, 'Do you want restart this game ?',{color:'Black', fontSize: '14px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
+      //creates confirm button
+      const restartOKBtn = new Phaser.GameObjects.Image(this,this.game.renderer.width / 2, this.game.renderer.height / 2 + 50, 'restart-popup');
       
-      //main.scene.restart();
-      //chart.scene.restart();
-      //map.scene.restart();
+      //confirm button interactive events
+      restartOKBtn.setInteractive();
+      //hover, click event etc
+      restartOKBtn.on('pointerover', () => {
+        restartOKBtn.setTexture('restart-popup-hover');
+      });
+  
+      restartOKBtn.on('pointerout', () => {
+        restartOKBtn.setTexture('restart-popup');
+      });
+
+      //do restart the game when btn were clicked
+      restartOKBtn.on('pointerup', () => {
+        const main = this.scene.get('MainScene') as MainScene;
+        const chart = this.scene.get('ChartScene') as ChartScene;
+        const map = this.scene.get('MapScene') as MapScene;
+      
+        main.scene.restart();
+        chart.scene.restart();
+        map.scene.restart();
+
+        //close modal
+        popupMss.closeModal();
+      });
+
+      //add confirm to object container and show the popup
+      popupMss.addGameObjects([restartOKBtn]);
+      popupMss.createModal();
+
     });
   }
   /*---------END: Reset button  ---------- */
