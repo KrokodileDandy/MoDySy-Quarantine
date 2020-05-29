@@ -38,11 +38,6 @@
         },
         {
           "type": "image",
-          "key": "bar-research-black",
-          "url": "assets/sprites/main-scene/flask-button-pressed.png"
-        },
-        {
-          "type": "image",
           "key": "bar-socialdistancing-white",
           "url": "assets/sprites/bar-socialdistancing-white.png"
         },

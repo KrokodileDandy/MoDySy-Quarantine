@@ -30,9 +30,9 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         this.income = this.upgradeContr.getIncome();
 
         //Create itembar which contains all items and scale it
-        const itemBar = new Phaser.GameObjects.Container(this.scene, 250, 100, this.fillWithItems() ).setScale(1.05, 1);
+        const itemBar = new Phaser.GameObjects.Container(this.scene, 250, 100, this.fillWithItems() );  //.setScale(1.05, 1);
 
-        this.setScale(1.8, 1);
+        //this.setScale(1.8, 1);
         this.scene.add.existing(this);
         this.scene.add.existing(itemBar);
         

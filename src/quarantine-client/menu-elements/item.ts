@@ -34,7 +34,7 @@ export class Item extends Phaser.GameObjects.Image{
 
         this.scene.add.existing(this);
 
-        this.setScale(0.8, 1); //scale the displayed image
+        //this.setScale(0.8, 1); //scale the displayed image
 
         this.title = title;
         this.price = price;
@@ -42,12 +42,15 @@ export class Item extends Phaser.GameObjects.Image{
 
         this.setInteractive()
             .on('pointerover', () => { // changes the texture on hover
-                this.setTexture(`bar-${this.title}-black`);
+                this.setScale(1.1);
+                //this.setTexture(`bar-${this.title}-black`);
             })
             .on('pointerout', () => { // switch back to the original texture
-                this.setTexture(`bar-${this.title}-white`);
+                this.setScale(1);
+                //this.setTexture(`bar-${this.title}-white`);
             })
             .on('pointerdown', () => { // "try to buy this item"
+                this.setScale(0.9);
                 this.eventListener(this.price);
             });
         ArrowButton.getEmitter().on('myButtonClick', (direction) => { //creates the link between Arrow-Button and Item by using an event (handler)
