@@ -13,7 +13,7 @@ export class GuiScene extends Phaser.Scene {
   private popUpSprite: Phaser.GameObjects.Sprite;
   private showMoney: Phaser.GameObjects.Text;
   private showCases: Phaser.GameObjects.Text;
-  private timeController: TimeController; 
+  private timeController: TimeController;
 
 
 
@@ -41,14 +41,18 @@ export class GuiScene extends Phaser.Scene {
 
 
   create(): void {
-    this.createMenuButtons();
-    this.createSettingsButtons();
+    //this.createMenuButtons();
+    //this.createSettingsButtons();
+    this.poseSprites();
 
     this.uC = UpgradeController.getInstance();
     this.timeController = TimeController.getInstance()
 
     // Creates Itemmenu and it to this scene
     this.menu = new ItemMenu(this, 0, 750);
+    //this.add.image(1300, 400, 'background');
+
+
   }
 
   // -------------------------------------------------------------------------- GAME MENU
@@ -83,7 +87,56 @@ export class GuiScene extends Phaser.Scene {
       }
     });
   }
+  poseSprites(): void {
+    const notebook = this.add.sprite(550, 1300, 'notebook').setInteractive();
+    const tablet = this.add.sprite(750, 350, 'tablet').setInteractive();
 
+    const researchButton = this.add.sprite(200, 825, 'flask-button').setInteractive();
+    const lockdownButton = this.add.sprite(200, 1005, 'lockdown-button').setInteractive();
+    const policeButton = this.add.sprite(200, 1180, 'police-button').setInteractive();
+    const doctorButton = this.add.sprite(200, 1360, 'doctor-button').setInteractive();
+
+    const pinkNote = this.add.sprite(800, 1300, 'note-pink').setInteractive();
+    const noteOrange = this.add.sprite(820, 920, 'note').setInteractive();
+
+    const per = this.add.sprite(500, 780, '25percent').setInteractive();
+    const money = this.add.sprite(500, 870, 'money').setInteractive();
+
+
+
+    const calendar = this.add.sprite(500, 1000, 'calendar').setInteractive();
+    const person = this.add.sprite(500, 1140, 'man').setInteractive();
+    const plusButton = this.add.sprite(580, 1115, 'plus').setInteractive();
+    const minusButton = this.add.sprite(580, 1165, 'minus').setInteractive();
+    const money1 = this.add.sprite(500, 1220, 'money').setInteractive();
+
+    const person1 = this.add.sprite(500, 1300, 'man').setInteractive();
+    const plusButton1 = this.add.sprite(580, 1275, 'plus').setInteractive();
+    const minusButton1 = this.add.sprite(580, 1325, 'minus').setInteractive();
+    const money2 = this.add.sprite(500, 1380, 'money').setInteractive();
+
+    const money3 = this.add.sprite(900, 1180, 'money').setInteractive();
+
+    const news = this.add.sprite(1800, 1150, 'news').setInteractive();
+    const logBook = this.add.sprite(1800, 400, 'log').setInteractive();
+    const grayBackground = this.add.sprite(2350, 400, 'gray-background').setInteractive();
+
+    const letter = this.add.sprite(2750, 850, 'letter').setInteractive();
+    const yourSkills = this.add.sprite(2750, 1075, 'your_skills').setInteractive();
+    const rules = this.add.sprite(2750, 1300, 'rules').setInteractive();
+
+    const info = this.add.sprite(2750, 70, 'information').setInteractive();
+    const restart = this.add.sprite(2750, 190, 'restart').setInteractive();
+    const music_on = this.add.sprite(2750, 310, 'music_on').setInteractive();
+    const sound_on = this.add.sprite(2750, 430, 'sound_on').setInteractive();
+
+    const pause = this.add.sprite(1600, 50, 'pause').setInteractive();
+    const resume = this.add.sprite(1700, 50, 'resume-button').setInteractive();
+    const speed1x = this.add.sprite(1800, 50, 'speed1x').setInteractive();
+    const speed2x = this.add.sprite(1900, 50, 'speed2x').setInteractive();
+    const speed3x = this.add.sprite(2000, 50, 'speed3x').setInteractive();
+
+  }
   // Creates menu buttons
   createMenuButtons(): void {
     // Create and set the buttons to the right positions
