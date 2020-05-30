@@ -310,6 +310,21 @@
           "type": "image",
           "key": "restart-popup-hover",
           "url": "assets/sprites/messages/restart-hover.png"
+        },
+        {
+          "type": "image",
+          "key": "log",
+          "url": "assets/sprites/main-scene/log.png"
+        },
+        {
+          "type": "image",
+          "key": "open-notebook",
+          "url": "assets/sprites/skill-tree/open-notebook.png"
+        },
+        {
+          "type": "image",
+          "key": "arrow-next",
+          "url": "assets/sprites/log-book/arrow.png"
         }
       ]
   }

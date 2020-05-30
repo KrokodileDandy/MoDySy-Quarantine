@@ -8,6 +8,7 @@ import { PopupWindow } from "./popupWindow";
 import { Controller } from "../objects/controller/controller";
 import { Rule } from "../objects/controller/rule";
 import { State } from "../util/healthStates";
+import { LogBook } from "./logBook";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -58,6 +59,8 @@ export class GuiScene extends Phaser.Scene {
 
 		// Creates Reset button
 		this.createResetBtn();
+
+		this.createLogBookBtn();
 	}
 
 	// -------------------------------------------------------------------------- GAME MENU
@@ -482,6 +485,26 @@ export class GuiScene extends Phaser.Scene {
 		});
 	}
 	/*---------END: Reset button  ---------- */
+
+	private createLogBookBtn(): void {
+		const resetBtn = this.add.image(800, 30, 'log').setOrigin(0);
+		resetBtn.angle = 5;
+		resetBtn.setInteractive();
+
+		// hover, click event etc.
+		resetBtn.on('pointerover', () => {
+			//resetBtn.setTexture('');
+		});
+
+		resetBtn.on('pointerout', () => {
+			//resetBtn.setTexture('');
+		});
+
+		resetBtn.on('pointerup', () => {
+			const lBSubScene = new LogBook(this);
+			lBSubScene.createModal(); // open log book sub scene
+		});
+	}
 
 	update(): void {
 		if (!this.mainSceneIsPaused) this.menu.updateItemMenu(); // has to be invoked each tic/ ingame hour TODO
