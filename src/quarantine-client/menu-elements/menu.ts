@@ -16,7 +16,11 @@ export class ItemMenu extends Phaser.GameObjects.Container {
     private budget: number;
     private income: number;
     private researchLv: number;
+    private researchPrice: string;
+    public researchText: Phaser.GameObjects.Text;
     public upgradeContr: UpgradeController;
+
+    
     
     public measures = require("../objects/controller/measures.json");
 
@@ -32,7 +36,8 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         this.upgradeContr = UpgradeController.getInstance();
         this.budget = this.upgradeContr.getBudget();
         this.income = this.upgradeContr.getIncome();
-        this.researchLv = this.upgradeContr.getResearchLv(this.upgradeContr);
+        this.researchLv = this.measures['research']['current_level'];
+        this.researchPrice = this.measures['research']['prices'][this.researchLv];
 
         //Create itembar which contains all items and scale it
         const itemBar = new Phaser.GameObjects.Container(this.scene, 100, -300, this.fillWithItems() );  //.setScale(1.05, 1);
@@ -56,30 +61,22 @@ export class ItemMenu extends Phaser.GameObjects.Container {
 
     /** Adds all items to the menu */
     private fillWithItems(): Phaser.GameObjects.GameObject[] {
-        //const currLv = this.measures['research']['current_level'];
-        const price = this.measures['research']['prices'][0];
-
-        const researchPrice = this.scene.add.text(50, 35, `${price} €`, {
-            fontFamily:'Arial',
-            color:'#000000',
-        }); 
 
         return [
         //new Item(this.scene, 175, -15, 'lockdown', 1000000 , 'bar-lockdown-white', this.buildClosure(this.upgradeContr.activateLockdown)),
         //new Item(this.scene, 325, -15, 'socialdistancing', 4000000, 'bar-socialdistancing-white', this.buildClosure(this.upgradeContr.activateSocialDistancing)),
         //new Item(this.scene, 475, -15, 'police', 2500000, 'bar-police-white', this.buildClosure(this.upgradeContr.buyPoliceOfficers)),
-        new Phaser.GameObjects.Container(this.scene, 0, 200, [
+        new Phaser.GameObjects.Container(this.scene, 0, 100, [
             new Item(this.scene, 75, 0, 'research', 10, 'bar-research-white', this.buildClosure(this.upgradeContr.buyResearchLevel)).setScale(0.5),
-            researchPrice,
+            this.researchText = this.scene.add.text(50, 35, `${this.researchPrice} €`, {
+                fontFamily:'Arial',
+                color:'#000000',
+            }),
             this.scene.add.text(110, -30, `Progress: `, {
                 fontFamily:'Arial',
                 color:'#000000',
             }),
-            this.scene.add.text(110, 10, `${price} €/Day`, {
-                fontFamily:'Arial',
-                color:'#000000',
-            }),
-            this.scene.add.text(210, 10, `${this.measures['research']['current_level']}`, {
+            this.scene.add.text(110, 10, `${this.researchPrice} €/Day`, {
                 fontFamily:'Arial',
                 color:'#000000',
             }),
@@ -108,8 +105,8 @@ export class ItemMenu extends Phaser.GameObjects.Container {
 
         this.budget = this.upgradeContr.getBudget();
         this.income = this.upgradeContr.getIncome();
-        this.researchLv = this.upgradeContr.getResearchLv(this.upgradeContr);
         (this.getAt(1) as GameObjects.Text).setText(`Budget: ${this.budget}\nIncome: ${this.income}`);
+        this.researchText.setText(`${price} €`);
     }
 
     //-------------------------------------------------------------------------------------------------

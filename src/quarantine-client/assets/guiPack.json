@@ -213,11 +213,6 @@
         },
         {
           "type": "image",
-          "key": "log-background",
-          "url": "assets/sprites/log-background.jpg"
-        },
-        {
-          "type": "image",
           "key": "rules",
           "url": "assets/sprites/main-scene/rules.png"
         },
@@ -325,6 +320,16 @@
           "type": "image",
           "key": "money",
           "url": "assets/sprites/main-scene/money.png"
+        },
+        {
+          "type": "image",
+          "key": "restart-popup",
+          "url": "assets/sprites/messages/restart.png"
+        },
+        {
+          "type": "image",
+          "key": "restart-popup-hover",
+          "url": "assets/sprites/messages/restart-hover.png"
         }
       ]
   }
