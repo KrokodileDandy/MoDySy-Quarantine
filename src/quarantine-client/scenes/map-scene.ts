@@ -70,8 +70,8 @@ export class MapScene extends Phaser.Scene {
         for (this.infected; this.infected < currentlyInfected; this.infected = this.infected + 1000) {
             /** Place a circle at a random position on the map */
             const myCircle = new Phaser.Geom.Circle(
-                Phaser.Math.Between(this.map.getTopLeft().x, this.map.getBottomRight().x - 5), 
-                Phaser.Math.Between(this.map.getTopLeft().y, this.map.getBottomRight().y - 5), 1.5);
+                Phaser.Math.Between(this.map.getTopLeft().x + 5, this.map.getBottomRight().x - 5), 
+                Phaser.Math.Between(this.map.getTopLeft().y + 5, this.map.getBottomRight().y - 5), 1.5);
 
             /** Fill the circle with the selected color */
             this.graphics.fillCircleShape(myCircle);
