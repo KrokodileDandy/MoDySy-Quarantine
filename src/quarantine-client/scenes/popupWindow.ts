@@ -68,26 +68,30 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         
         // button click event
         cancelBtn.on("pointerup", () => {
-            //stop this modal scene
-            this.setVisible(false);
-            //if this popup windows not a child, wake up the chart scene.
-            if(!this.isChild){
-                const chart = this.scene.scene.get('ChartScene') as ChartScene;
-
-                chart.scene.wake();
-            // resume the game if game was paused.    
-            if(this.pause){
-                const main = this.scene.scene.get('MainScene') as MainScene;
-                const map = this.scene.scene.get('MapScene') as MapScene;
-
-                main.scene.resume();
-                chart.scene.resume();
-                map.scene.resume();
-            }
-            }
-            //
+            this.closeModal();
         });
         this.add(cancelBtn);
+    }
+
+    /** this method will close modal, callable by anthoner class and designed for future confirm button */
+    public closeModal(): void {
+        //stop this modal scene
+        this.setVisible(false);
+        //if this popup windows not a child, wake up the chart scene.
+        if(!this.isChild){
+            const chart = this.scene.scene.get('ChartScene') as ChartScene;
+
+            chart.scene.wake();
+        // resume the game if game was paused.    
+        if(this.pause){
+            const main = this.scene.scene.get('MainScene') as MainScene;
+            const map = this.scene.scene.get('MapScene') as MapScene;
+
+            main.scene.resume();
+            chart.scene.resume();
+            map.scene.resume();
+        }
+        }
     }
     
     /**
