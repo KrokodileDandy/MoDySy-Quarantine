@@ -356,6 +356,8 @@ export class UpgradeController implements TimeSubscriber {
     /** @returns Current income per tic */
     public getIncome(): number {return this.stats.income;}
 
+    /** @returns Current research level */
+    public getResearchLv(uC: UpgradeController): number {return uC.measures["research"]["current_level"];}
     // ------------------------------------------------------------------ SETTER-METHODS
     // allows encapsulation of application logic
     // private setIncome(amt: number) {}
