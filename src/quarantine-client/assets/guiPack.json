@@ -168,6 +168,21 @@
       },
       {
         "type": "image",
+        "key": "vitamines",
+        "url": "assets/sprites/skill tree/vitamines.png"
+      },
+      {
+        "type": "image",
+        "key": "medicine",
+        "url": "assets/sprites/skill tree/medicine.png"
+      },
+      {
+        "type": "image",
+        "key": "physician",
+        "url": "assets/sprites/skill tree/physician.png"
+      },
+      {
+        "type": "image",
         "key": "speed2x",
         "url": "assets/sprites/main-scene/speed2x.png"
       },

@@ -109,8 +109,6 @@ export class GuiScene extends Phaser.Scene {
     const per = this.add.sprite(700, 880, 'progress').setInteractive();
     const money = this.add.sprite(700, 970, 'money').setInteractive();
 
-
-
     const calendar = this.add.sprite(700, 1100, 'calendar').setInteractive();
     const person = this.add.sprite(700, 1240, 'man').setInteractive();
     const plusButton = this.add.sprite(780, 1215, 'plus').setInteractive();
