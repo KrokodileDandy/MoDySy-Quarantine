@@ -163,6 +163,11 @@
       },
       {
         "type": "image",
+        "key": "progress",
+        "url": "assets/sprites/main-scene/progress.png"
+      },
+      {
+        "type": "image",
         "key": "speed2x",
         "url": "assets/sprites/main-scene/speed2x.png"
       },
@@ -191,7 +196,7 @@
 
 
 
-      
+
         {
           "type": "image",
           "key": "menu-white",

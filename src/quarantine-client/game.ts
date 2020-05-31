@@ -6,7 +6,7 @@ const config: Phaser.Types.Core.GameConfig = {
     height: 800,
     backgroundColor: Phaser.Display.Color.GetColor(255, 255, 255),
     scale: {
-        mode: Phaser.Scale.RESIZE,
+        mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
 
@@ -32,5 +32,7 @@ export class Game extends Phaser.Game {
 }
 
 window.addEventListener("load", () => {
-    new Game(config);
+    const game = new Game(config);
+    const scaleManager = game.scale;
+    scaleManager.setGameSize(3200,1600);
 });
