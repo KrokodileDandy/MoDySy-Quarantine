@@ -182,7 +182,7 @@ export class StartMenuScene extends Phaser.Scene {
         this.scene.add('MainScene', MainScene, true);
         this.scene.add('GuiScene', GuiScene, true);
         this.scene.add('ChartScene', ChartScene, true);
-        this.scene.add('AgentScene', AgentScene, false);
+        //this.scene.add('AgentScene', AgentScene, false);
         this.scene.add('MapScene', MapScene, true);
     }
 }

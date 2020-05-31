@@ -355,7 +355,6 @@ export class UpgradeController implements TimeSubscriber {
 
     /** @returns Current income per tic */
     public getIncome(): number {return this.stats.income;}
-
     // ------------------------------------------------------------------ SETTER-METHODS
     // allows encapsulation of application logic
     // private setIncome(amt: number) {}

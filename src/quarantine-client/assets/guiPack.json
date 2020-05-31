@@ -444,6 +444,31 @@
         },
         {
           "type": "image",
+          "key": "25percent",
+          "url": "assets/sprites/main-scene/25percent.png"
+        },
+        {
+          "type": "image",
+          "key": "50percent",
+          "url": "assets/sprites/main-scene/50percent.png"
+        },
+        {
+          "type": "image",
+          "key": "75percent",
+          "url": "assets/sprites/main-scene/75percent.png"
+        },
+        {
+          "type": "image",
+          "key": "90percent",
+          "url": "assets/sprites/main-scene/90percent.png"
+        },
+        {
+          "type": "image",
+          "key": "money",
+          "url": "assets/sprites/main-scene/money.png"
+        },
+        {
+          "type": "image",
           "key": "restart-popup",
           "url": "assets/sprites/messages/restart.png"
         },
