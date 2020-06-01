@@ -197,7 +197,7 @@ export class UpgradeController implements TimeSubscriber {
         // this.printDailyIncomeStatement();
         console.log(`Happiness: ${this.stats.happiness} \nCompliance:${this.stats.compliance} \nInteraction Rate: ${this.stats.basicInteractionRate} \nIncome: ${this.stats.income}`);
 
-        this.stats.resetConsumptionCounters();
+        this.stats.updateWeek(this.getIncomeStatement());
     }
 
     /**
@@ -238,25 +238,8 @@ export class UpgradeController implements TimeSubscriber {
         };
     }
 
-    /**
-     * Print the income statement of the current day onto the console.
-     */
-    public printDailyIncomeStatement(): void {
-        console.log("Day: " + TimeController.getInstance().getDaysSinceGameStart());
-        const dict = this.getIncomeStatement();
 
-        for (const key in dict) {
-            const value = dict[key];
-            console.log(`${key}----------------------------------`);
-            for (const k2 in value) {
-                const v2 = value[k2];
-                console.log(`    ${k2}: ${v2.toLocaleString("es-ES")} €`);
-            }
-        }
-        console.log("Total: " + (this.calculateIncome() - this.calculateExpenses()).toLocaleString("es-ES") + " €");
-    }
-
-     // ----------------------------------------------------------------- UPGRADE - PRIVATE
+    // ----------------------------------------------------------------- UPGRADE - PRIVATE
     /**
      * Calculate the compliance depending on the populations happiness
      * 
@@ -355,6 +338,9 @@ export class UpgradeController implements TimeSubscriber {
 
     /** @returns Current income per tic */
     public getIncome(): number {return this.stats.income;}
+
+    /** @returns Current research level */
+    public getCurrentResearchLevel(): number {return this.measures["research"]["current_level"];}
 
     // ------------------------------------------------------------------ SETTER-METHODS
     // allows encapsulation of application logic

@@ -1,13 +1,14 @@
 import { PopupWindow } from "./popupWindow";
-import { MainScene } from "./main-scene";
-import { ChartScene } from "./chart-scene";
+import { LogBook } from "../objects/controller/logBook";
 
 /**
  * @author Sebastian Führ
  */
-export class LogBook extends PopupWindow {
+export class LogBookView extends PopupWindow {
 
-    constructor(scene: Phaser.Scene) {
+    private currWeek: number;
+
+    constructor(scene: Phaser.Scene, week: number) {
         super(
             scene, 
             0, 
@@ -21,12 +22,14 @@ export class LogBook extends PopupWindow {
                     scene,
                     400, 
                     50, 
-                    'Log', 
+                    "Log - Week " + week, 
                     { color: 'Black', fontSize: '70px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
                 )
             ],
             false
         );
+
+        this.currWeek = week;
 
         this.addGameObjects(this.createFBBtns());
     }
@@ -40,25 +43,27 @@ export class LogBook extends PopupWindow {
         //confirm button interactive events
         nextBtn.setInteractive();
 
-        nextBtn.on('pointerover', () => {
-            // nextBtn.setTexture('arrow');
-            nextBtn.scaleX = 1.2;
-            nextBtn.scaleY = 1.2;
-        });
+        // hover effects
+        nextBtn.on('pointerover', () => {nextBtn.scale = 1.2;});
+        nextBtn.on('pointerout', () => {nextBtn.scale = 1;});
 
-        nextBtn.on('pointerout', () => {
-            //nextBtn.setTexture('arrow');
-            nextBtn.scaleX = 1;
-            nextBtn.scaleY = 1;
-        });
-
-        //do restart the game when btn were clicked
         nextBtn.on('pointerup', () => {
-            // view next week (if possible)
+            if (LogBook.getInstance().showNextWeek(this.currWeek)) this.closeModal();
         });
 
         const prevBtn = new Phaser.GameObjects.Image(this.scene, 320, 870, 'arrow-next');
         prevBtn.angle = 180;
+
+        //confirm button interactive events
+        prevBtn.setInteractive();
+
+        // hover effects
+        prevBtn.on('pointerover', () => {prevBtn.scale = 1.2;});
+        prevBtn.on('pointerout', () => {prevBtn.scale = 1;});
+
+        prevBtn.on('pointerup', () => {
+            if (LogBook.getInstance().showPrevWeek(this.currWeek)) this.closeModal();
+        });
 
         return [nextBtn, prevBtn];
     }

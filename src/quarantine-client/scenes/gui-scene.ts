@@ -8,7 +8,8 @@ import { PopupWindow } from "./popupWindow";
 import { Controller } from "../objects/controller/controller";
 import { Rule } from "../objects/controller/rule";
 import { State } from "../util/healthStates";
-import { LogBook } from "./logBook";
+import { LogBookView } from "./logBookView";
+import { LogBook } from "../objects/controller/logBook";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -486,23 +487,21 @@ export class GuiScene extends Phaser.Scene {
 	}
 	/*---------END: Reset button  ---------- */
 
+	/**
+	 * Insert a log book into the gui scene. When clicked, a specific
+	 * sub menu opens.
+	 */
 	private createLogBookBtn(): void {
-		const resetBtn = this.add.image(800, 30, 'log').setOrigin(0);
-		resetBtn.angle = 5;
-		resetBtn.setInteractive();
+		const lbBtn = this.add.image(800, 30, 'log').setOrigin(0);
+		lbBtn.angle = 5;
+		lbBtn.setInteractive();
 
-		// hover, click event etc.
-		resetBtn.on('pointerover', () => {
-			//resetBtn.setTexture('');
-		});
+		// hover effect
+		lbBtn.on('pointerover', () => {lbBtn.scale = 1.05;});
+		lbBtn.on('pointerout', () => {lbBtn.scale = 1;});
 
-		resetBtn.on('pointerout', () => {
-			//resetBtn.setTexture('');
-		});
-
-		resetBtn.on('pointerup', () => {
-			const lBSubScene = new LogBook(this);
-			lBSubScene.createModal(); // open log book sub scene
+		lbBtn.on('pointerup', () => {
+			LogBook.getInstance().open(this); // open log book sub scene
 		});
 	}
 
