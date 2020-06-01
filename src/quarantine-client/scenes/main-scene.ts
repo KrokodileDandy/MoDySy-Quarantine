@@ -19,7 +19,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     preload(): void {
-
+      this.load.image('background', 'assets/sprites/main-scene/background.png');
         /*this.load.pack(
             'preload',
             'assets/pack.json',
@@ -33,6 +33,7 @@ export class MainScene extends Phaser.Scene {
 
     create(): void {
         console.log('Create');
+        this.add.image(1600, 300, 'background');
 
         this.timeController = TimeController.getInstance();
         this.controller = Controller.getInstance();

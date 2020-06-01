@@ -44,8 +44,9 @@ export class GuiScene extends Phaser.Scene {
 
 
   create(): void {
-    this.createMenuButtons();
-    this.createSettingsButtons();
+    //this.createMenuButtons();
+    //this.createSettingsButtons();
+    this.poseSprites();
 
     this.uC = UpgradeController.getInstance();
 
@@ -54,6 +55,10 @@ export class GuiScene extends Phaser.Scene {
 
     // Creates Rules button
     this.createRulesBtn();
+
+    // Creates Reset button
+    this.createResetBtn();
+
   }
 
   // -------------------------------------------------------------------------- GAME MENU
@@ -89,6 +94,54 @@ export class GuiScene extends Phaser.Scene {
     });
   }
 
+  poseSprites(): void {
+    const notebook = this.add.sprite(750, 1400, 'notebook').setInteractive();
+    const tablet = this.add.sprite(750, 350, 'tablet').setInteractive();
+
+    const researchButton = this.add.sprite(400, 925, 'flask-button').setInteractive();
+    const lockdownButton = this.add.sprite(400, 1105, 'lockdown-button').setInteractive();
+    const policeButton = this.add.sprite(400, 1280, 'police-button').setInteractive();
+    const doctorButton = this.add.sprite(400, 1460, 'doctor-button').setInteractive();
+
+    const pinkNote = this.add.sprite(1000, 1400, 'note-pink').setInteractive();
+    const noteOrange = this.add.sprite(1020, 1020, 'note').setInteractive();
+
+    const per = this.add.sprite(700, 880, 'progress').setInteractive();
+    const money = this.add.sprite(700, 970, 'money').setInteractive();
+
+    const calendar = this.add.sprite(700, 1100, 'calendar').setInteractive();
+    const person = this.add.sprite(700, 1240, 'man').setInteractive();
+    const plusButton = this.add.sprite(780, 1215, 'plus').setInteractive();
+    const minusButton = this.add.sprite(780, 1265, 'minus').setInteractive();
+    const money1 = this.add.sprite(700, 1320, 'money').setInteractive();
+
+    const person1 = this.add.sprite(700, 1400, 'man').setInteractive();
+    const plusButton1 = this.add.sprite(780, 1375, 'plus').setInteractive();
+    const minusButton1 = this.add.sprite(780, 1425, 'minus').setInteractive();
+    const money2 = this.add.sprite(700, 1480, 'money').setInteractive();
+
+    const money3 = this.add.sprite(1100, 1280, 'money').setInteractive();
+
+    const news = this.add.sprite(2300, 1250, 'news').setInteractive();
+    const logBook = this.add.sprite(1950, 400, 'log').setInteractive();
+    const grayBackground = this.add.sprite(2650, 400, 'gray-background').setInteractive();
+
+    const letter = this.add.sprite(3100, 850, 'letter').setInteractive();
+    const yourSkills = this.add.sprite(3100, 1075, 'your_skills').setInteractive();
+    const rules = this.add.sprite(3100, 1300, 'rules').setInteractive();
+
+    const info = this.add.sprite(3100, 70, 'information').setInteractive();
+    const restart = this.add.sprite(3100, 190, 'restart').setInteractive();
+    const musicOn = this.add.sprite(3100, 310, 'music_on').setInteractive();
+    const soundOn = this.add.sprite(3100, 430, 'sound_on').setInteractive();
+
+    const pause = this.add.sprite(1600, 50, 'pause').setInteractive();
+    const resume = this.add.sprite(1700, 50, 'resume-button').setInteractive();
+    const speed1x = this.add.sprite(1800, 50, 'speed1x').setInteractive();
+    const speed2x = this.add.sprite(1900, 50, 'speed2x').setInteractive();
+    const speed3x = this.add.sprite(2000, 50, 'speed3x').setInteractive();
+  }
+  
   // Creates menu buttons
   createMenuButtons(): void {
     // Create and set the buttons to the right positions
@@ -334,7 +387,7 @@ export class GuiScene extends Phaser.Scene {
   createRulesBtn(): void {
     const rulesBtn = this.add.image(this.game.renderer.width - 100, this.game.renderer.height -250, 'rules').setDepth(1);
     const popupRules = new PopupWindow(this, 0, 0, 'background', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, 'The Rules',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
-    
+
     /*---------START: add Rules ---------- */
     const allRules = Controller.getInstance().getRules();
     let ruleIndex = 0;
@@ -360,12 +413,12 @@ export class GuiScene extends Phaser.Scene {
     });
     //add popup Info into popup Rules.
     popupRules.add(info);
-    
+
     rulesBtn.setInteractive();
 
     // Change the button textures on hover, press, etc.
     rulesBtn.on('pointerover', () => {
-      rulesBtn.setTexture('rules_hover');
+      rulesBtn.setTexture('rules-hover');
     });
     rulesBtn.on('pointerout', () => {
       rulesBtn.setTexture('rules');
@@ -393,7 +446,7 @@ export class GuiScene extends Phaser.Scene {
 
     const pos4 = new Phaser.GameObjects.Image(this, x + 620, y, this.getTextures(rule.outputState2)).setOrigin(0);
     container.add(pos4);
-    
+
     const arrow = new Phaser.GameObjects.Image(this, x + 340, y + 30, 'pprules-arrow').setOrigin(0);
     container.add(arrow);
 
@@ -412,20 +465,72 @@ export class GuiScene extends Phaser.Scene {
 
       case State.CURE:
         return 'cure';
-  
+
       case State.DECEASED:
         return 'deceased';
-  
+
       case State.IMMUNE:
         return 'immune';
-        
+
       case State.TEST_KIT:
         return 'test-kit';
     }
-    
-  }
 
+  }
   /*---------END: Rules button  ---------- */
+
+  /*---------START: Reset button  ---------- */
+  createResetBtn(): void {
+    const resetBtn = this.add.image(this.game.renderer.width - 100, 60, 'restart').setOrigin(0);
+    resetBtn.setInteractive();
+
+    // hover, click event etc.
+    resetBtn.on('pointerover', () => {
+      resetBtn.setTexture('restart-hover');
+    });
+
+    resetBtn.on('pointerout', () => {
+      resetBtn.setTexture('restart');
+    });
+
+    resetBtn.on('pointerup', () => {
+      //creates popup messages
+      const popupMss = new PopupWindow(this, 0, 0, 'note', this.game.renderer.width / 2 + 60, this.game.renderer.height / 2 - 70, true, [new Phaser.GameObjects.Text(this, this.game.renderer.width / 2 - 100, this.game.renderer.height / 2, 'Do you want to restart this game ?',{color:'Black', fontSize: '14px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
+      //creates confirm button
+      const restartOKBtn = new Phaser.GameObjects.Image(this,this.game.renderer.width / 2, this.game.renderer.height / 2 + 50, 'restart-popup');
+      
+      //confirm button interactive events
+      restartOKBtn.setInteractive();
+      //hover, click event etc
+      restartOKBtn.on('pointerover', () => {
+        restartOKBtn.setTexture('restart-popup-hover');
+      });
+  
+      restartOKBtn.on('pointerout', () => {
+        restartOKBtn.setTexture('restart-popup');
+      });
+
+      //do restart the game when btn were clicked
+      restartOKBtn.on('pointerup', () => {
+        const main = this.scene.get('MainScene') as MainScene;
+        const chart = this.scene.get('ChartScene') as ChartScene;
+        const map = this.scene.get('MapScene') as MapScene;
+      
+        main.scene.restart();
+        chart.scene.restart();
+        map.scene.restart();
+
+        //close modal
+        popupMss.closeModal();
+      });
+
+      //add confirm to object container and show the popup
+      popupMss.addGameObjects([restartOKBtn]);
+      popupMss.createModal();
+
+    });
+  }
+  /*---------END: Reset button  ---------- */
 
   update(): void {
     if (!this.mainSceneIsPaused) this.menu.updateItemMenu(); // has to be invoked each tic/ ingame hour TODO

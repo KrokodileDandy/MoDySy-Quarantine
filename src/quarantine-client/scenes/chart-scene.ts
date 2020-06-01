@@ -26,6 +26,18 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
     /** Chart to show the infection numbers */
     private chart;
 
+    /** Number of days/data points to be displayed in the chart */
+    private timeframe: number;
+
+    /** Array with the labels to display each day on the x-axis of the chart */
+    private labels: Array<string> = [];
+
+    /** Array with the total number of infected people after each completed day */
+    private dataTotalCases: Array<number> = [];
+
+    /** Array with the number of newly infected for each completed day */
+    private dataNewCases: Array<number> = [];
+
     /** Singleton to access the current infection numbers */
     private stats: Stats;
 
@@ -53,12 +65,19 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
         /** The game starts on day 0 with 0 infected people */
         this.day = 0;
         this.infected = 0;
+        this.labels = ['Day 0'];
+        this.dataTotalCases.push(0);
+        this.dataNewCases.push(0);
+
         this.stats = Stats.getInstance();
         this.upgradeController = UpgradeController.getInstance();
 
         this.initialMoney = this.upgradeController.getBudget();
         this.initialInfected = 0;
 
+        /** By default show all available data points */
+        this.timeframe = 0;
+        
         /** If the game is restarted, the current chart will be destroyed */
         if (this.chart != null) {
             this.chart.destroy();
@@ -66,8 +85,9 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
     }
 
     create(): void {
-        /** Initialize the chart */
+        /** Initialize the chart and create the form to customize the chart */
         this.initializeChart();
+        this.createForm();
     }
 
     /** 
@@ -78,24 +98,23 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
         this.day += 1;
 
         /** Update the labels */
-        this.chart.data.labels.push('Day ' + this.day);
+        this.labels.push('Day ' + this.day);
 
         /** Get current infection numbers */
         const currentlyInfected = this.stats.getInfected();
 
         /** Update both datasets */
-        this.chart.data.datasets.forEach((dataset) => {
-            if (dataset.label == 'Total Cases') {
-                /** Add a new datapoint with the total number of people infected */
-                dataset.data.push(currentlyInfected);
-            } else {
-                /** Calculate the number of infected people today and add a new bar */
-                dataset.data.push(currentlyInfected - this.infected);
-            }
-        });
+        this.dataTotalCases.push(currentlyInfected);
+        this.dataNewCases.push(currentlyInfected - this.infected);
 
         /** Update current infection numbers */
         this.infected = currentlyInfected;
+
+        /** Update the chart with the new data point depending on the timeframe */
+        this.chart.data.labels = this.labels.slice(this.timeframe);
+        this.chart.data.datasets.forEach((dataset) => {
+            dataset.data = (dataset.label == 'Total Cases') ? this.dataTotalCases.slice(this.timeframe) : this.dataNewCases.slice(this.timeframe);
+        });
 
         /** difference between today and yesterday */
         if(this.day > 0) {
@@ -112,6 +131,108 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
         
         /** Render the new chart in index.html */
         this.chart.update();
+    }
+
+        /** Create the form, which allows to customize the chart */
+    createForm(): void {
+        /** Create the form */
+        const form = document.createElement('form');
+        form.setAttribute('id', 'chart-form');
+
+        const textNodeAxis = document.createTextNode('Choose axis:');
+        form.appendChild(textNodeAxis);
+
+        /** Create the dropdown menu and associated options to change between the linear and logarithmic scale */
+        const selectChartAxis = document.createElement('select');
+        selectChartAxis.setAttribute('id', 'chart-axis');
+        form.appendChild(selectChartAxis);
+
+        const optionLinearAxis = document.createElement('option');
+        optionLinearAxis.setAttribute('value', 'linear');
+        optionLinearAxis.appendChild(document.createTextNode('linear'));
+
+        const optionLogarithmicAxis = document.createElement('option');
+        optionLogarithmicAxis.setAttribute('value', 'logarithmic');
+        optionLogarithmicAxis.appendChild(document.createTextNode('logarithmic'));
+
+        selectChartAxis.appendChild(optionLinearAxis);
+        selectChartAxis.appendChild(optionLogarithmicAxis);
+
+        const textNodeTimeframe = document.createTextNode('Select timeframe:');
+        form.appendChild(textNodeTimeframe);
+
+        /** Create the dropdown menu and associated options to select how many days should be displayed on the chart */
+        const selectTimeframe = document.createElement('select');
+        selectTimeframe.setAttribute('id', 'timeframe');
+        form.appendChild(selectTimeframe);
+
+        const option10Days = document.createElement('option');
+        option10Days.setAttribute('value', '-10');
+        option10Days.appendChild(document.createTextNode('10 Days'));
+
+        const option20Days = document.createElement('option');
+        option20Days.setAttribute('value', '-20');
+        option20Days.appendChild(document.createTextNode('20 Days'));
+
+        const option30Days = document.createElement('option');
+        option30Days.setAttribute('value', '-30');
+        option30Days.appendChild(document.createTextNode('30 Days'));
+
+        const optionAll = document.createElement('option');
+        optionAll.setAttribute('selected', 'selected');
+        optionAll.setAttribute('value', '0');
+        optionAll.appendChild(document.createTextNode('Show all'));
+
+        selectTimeframe.appendChild(option10Days);
+        selectTimeframe.appendChild(option20Days);
+        selectTimeframe.appendChild(option30Days);
+        selectTimeframe.appendChild(optionAll);
+        
+        /** Create the button to submit the form */
+        const updateButton = document.createElement('input');
+        updateButton.setAttribute('id', 'update-button');
+        updateButton.setAttribute('type', 'submit');
+        updateButton.setAttribute('value', 'Update Chart');
+        form.appendChild(updateButton);
+
+        /** Change what happens when you submit the form */
+        form.onsubmit = function(event): void {
+            /** Prevent the default behaviour of the button */
+            event.preventDefault();
+
+            /** Change the scale */
+            this.chart.options.scales.yAxes[0].type = selectChartAxis.options[selectChartAxis.selectedIndex].value;
+
+            /** Change the timeframe */
+            if (this.timeframe != selectTimeframe.options[selectTimeframe.selectedIndex].value) {
+                this.timeframe = selectTimeframe.options[selectTimeframe.selectedIndex].value;
+
+                /** Update the chart based on the new timeframe */
+                this.chart.data.labels = this.labels.slice(this.timeframe);
+                this.chart.data.datasets.forEach((dataset) => {
+                    dataset.data = (dataset.label == 'Total Cases') ? this.dataTotalCases.slice(this.timeframe) : this.dataNewCases.slice(this.timeframe);
+                });
+            }
+            
+            /** Update the chart */
+            this.chart.update();
+        }.bind(this);
+
+        /** Change the style of the form */
+        const style = document.createElement('style');
+        style.innerHTML = `
+        #chart-axis, #timeframe {
+            margin-left: 5px;
+            margin-right: 30px;
+        }`;
+        document.head.appendChild(style);
+
+        /** Add the form to the scene */
+        const formDomElement = this.add.dom(10, this.canvas.clientHeight + 5, form);
+        formDomElement.setOrigin(0, 0);
+
+        /** Append the form to the container in index.html, otherwise the form will not be displayed */
+        document.getElementById('form-container').appendChild(form);
     }
 
     /** @see TimeSubscriber */
@@ -146,19 +267,17 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
             type: 'line',
 
             data: {
-                labels: ['Day 0'],
+                labels: this.labels,
                 datasets: [{
                     label: 'Total Cases',
                     backgroundColor: 'transparent',
                     borderColor: '#FF0000',
-                    /** Start with 0 cases */
-                    data: [0],
+                    data: this.dataTotalCases,
                 }, {
                     label: 'New Cases',
                     backgroundColor: '#FF8000',
                     borderColor: '#FF8000',
-                    /** Start with 0 cases */
-                    data: [0],
+                    data: this.dataNewCases,
                     /** Bar chart to show the number of people infected every day */
                     type: 'bar',
                 }]
@@ -169,6 +288,25 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
                 title: {
                     display: true,
                     text: 'Infection Numbers'
+                },
+
+                scales: {
+                    yAxes: [{
+                        /** Default type of the y-axis is linear */
+                        type: 'linear',
+                        display: true,
+                        ticks: {
+                            /** Minimum value of the scale is 0 */
+                            min: 0,
+                            /** The logarithmic scale uses the scientific notation for the labels on the y-axis,
+                             * this callback function converts them to the normal notation */
+                            callback: function (label): number {
+                                return Number(label.toString());
+                            },
+                            /** Show a maximum of 10 labels on the y-axis */
+                            maxTicksLimit: 10
+                        }
+                    }]
                 },
 
                 /** Resize the canvas when the size of chart-container changes */
