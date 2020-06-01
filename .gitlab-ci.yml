@@ -1,7 +1,4 @@
 stages:
-  - compile
-  - test
-  - deploy
 
 
 build:
