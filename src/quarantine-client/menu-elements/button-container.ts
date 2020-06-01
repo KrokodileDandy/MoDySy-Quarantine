@@ -47,7 +47,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
                     fontFamily:'Arial',
                     color:'#000000',
                 });
-                this.scene.add.image(this.x + 325, this.y + 85, '25percent').setScale(0.7);
+                this.scene.add.image(this.x + 325, this.y + 85, 'progress').setScale(0.7);
 
             } else {
                 this.amountText = this.scene.add.text(this.x + 195, this.y + 75, `${this.amount}`, {

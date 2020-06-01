@@ -1,81 +1,197 @@
 {
   "prelaod": {
     "files": [
-        {
-          "type": "image",
-          "key": "bar",
-          "url": "assets/sprites/bar.png"
-        },
-        {
-          "type": "image",
-          "key": "bar-socialdistancing-white",
-          "url": "assets/sprites/bar-socialdistancing-white.png"
-        },
-        {
-          "type": "image",
-          "key": "bar-socialdistancing-black",
-          "url": "assets/sprites/bar-socialdistancing-black.png"
-        }, 
-        {
-          "type": "image",
-          "key": "research",
-          "url": "assets/sprites//main-scene/flask-button.png"
-        },
-        {
-          "type": "image",
-          "key": "lockdown",
-          "url": "assets/sprites/main-scene/lockdown-button.png"
-        },
-        {
-          "type": "image",
-          "key": "police",
-          "url": "assets/sprites/main-scene/police-button.png"
-        },
-        {
-          "type": "image",
-          "key": "healthworkers",
-          "url": "assets/sprites/main-scene/doctor-button.png"
-        },
-        {
-          "type": "image",
-          "key": "25percent",
-          "url": "assets/sprites/main-scene/25percent.png"
-        },
-        {
-          "type": "image",
-          "key": "50percent",
-          "url": "assets/sprites/main-scene/50percent.png"
-        },
-        {
-          "type": "image",
-          "key": "75percent",
-          "url": "assets/sprites/main-scene/75percent.png"
-        },
-        {
-          "type": "image",
-          "key": "90percent",
-          "url": "assets/sprites/main-scene/90percent.png"
-        },
-        {
-          "type": "image",
-          "key": "money",
-          "url": "assets/sprites/main-scene/money.png"
-        },
-        {
-          "type": "image",
-          "key": "man",
-          "url": "assets/sprites/main-scene/man.png"
-        },
-        {
-          "type": "image",
-          "key": "plus",
-          "url": "assets/sprites/main-scene/plus.png"
-        },
-        {
-          "type": "image",
-          "key": "minus",
-          "url": "assets/sprites/main-scene/minus.png"
-        },
+      {
+        "type": "image",
+        "key": "background",
+        "url": "assets/sprites/main-scene/background.png"
+      },
+      {
+        "type": "image",
+        "key": "calendar",
+        "url": "assets/sprites/main-scene/calendar.png"
+      },
+      {
+        "type": "image",
+        "key": "healthworkers",
+        "url": "assets/sprites/main-scene/doctor-button.png"
+      },
+      {
+        "type": "image",
+        "key": "research",
+        "url": "assets/sprites/main-scene/flask-button.png"
+      },
+      {
+        "type": "image",
+        "key": "gray-background",
+        "url": "assets/sprites/main-scene/gray-background.png"
+      },
+      {
+        "type": "image",
+        "key": "information",
+        "url": "assets/sprites/main-scene/information.png"
+      },
+      {
+        "type": "image",
+        "key": "letter",
+        "url": "assets/sprites/main-scene/letter.png"
+      },
+      {
+        "type": "image",
+        "key": "lockdown",
+        "url": "assets/sprites/main-scene/lockdown-button.png"
+      },
+      {
+        "type": "image",
+        "key": "log",
+        "url": "assets/sprites/main-scene/log.png"
+      },
+      {
+        "type": "image",
+        "key": "man",
+        "url": "assets/sprites/main-scene/man.png"
+      },
+      {
+        "type": "image",
+        "key": "minus",
+        "url": "assets/sprites/main-scene/minus.png"
+      },
+      {
+        "type": "image",
+        "key": "money",
+        "url": "assets/sprites/main-scene/money.png"
+      },
+      {
+        "type": "image",
+        "key": "music_off",
+        "url": "assets/sprites/main-scene/music_off.png"
+      },
+      {
+        "type": "image",
+        "key": "music_on",
+        "url": "assets/sprites/main-scene/music_on.png"
+      },
+      {
+        "type": "image",
+        "key": "news",
+        "url": "assets/sprites/main-scene/news.png"
+      },
+      {
+        "type": "image",
+        "key": "note-pink",
+        "url": "assets/sprites/main-scene/note-pink.png"
+      },
+      {
+        "type": "image",
+        "key": "note",
+        "url": "assets/sprites/main-scene/note.png"
+      },
+      {
+        "type": "image",
+        "key": "notebook",
+        "url": "assets/sprites/main-scene/notebook.png"
+      },
+      {
+        "type": "image",
+        "key": "pause",
+        "url": "assets/sprites/main-scene/pause.png"
+      },
+      {
+        "type": "image",
+        "key": "plus",
+        "url": "assets/sprites/main-scene/plus.png"
+      },
+      {
+        "type": "image",
+        "key": "police",
+        "url": "assets/sprites/main-scene/police-button.png"
+      },
+      {
+        "type": "image",
+        "key": "red-circle",
+        "url": "assets/sprites/main-scene/red-circle.png"
+      },
+      {
+        "type": "image",
+        "key": "restart",
+        "url": "assets/sprites/main-scene/restart.png"
+      },
+      {
+        "type": "image",
+        "key": "resume-button",
+        "url": "assets/sprites/main-scene/resume-button.png"
+      },
+      {
+        "type": "image",
+        "key": "rules",
+        "url": "assets/sprites/main-scene/rules.png"
+      },
+      {
+        "type": "image",
+        "key": "sound_off",
+        "url": "assets/sprites/main-scene/soun_off.png"
+      },
+      {
+        "type": "image",
+        "key": "sound_on",
+        "url": "assets/sprites/main-scene/sound_on.png"
+      },
+      {
+        "type": "image",
+        "key": "speed1x",
+        "url": "assets/sprites/main-scene/speed1x.png"
+      },
+      {
+        "type": "image",
+        "key": "progress",
+        "url": "assets/sprites/main-scene/progress.png"
+      },
+      {
+        "type": "image",
+        "key": "vitamines",
+        "url": "assets/sprites/skill tree/vitamines.png"
+      },
+      {
+        "type": "image",
+        "key": "medicine",
+        "url": "assets/sprites/skill tree/medicine.png"
+      },
+      {
+        "type": "image",
+        "key": "physician",
+        "url": "assets/sprites/skill tree/physician.png"
+      },
+      {
+        "type": "image",
+        "key": "speed2x",
+        "url": "assets/sprites/main-scene/speed2x.png"
+      },
+      {
+        "type": "image",
+        "key": "speed3x",
+        "url": "assets/sprites/main-scene/speed3x.png"
+      },
+      {
+        "type": "image",
+        "key": "tablet",
+        "url": "assets/sprites/main-scene/tablet.png"
+      },
+      {
+        "type": "image",
+        "key": "your_skills",
+        "url": "assets/sprites/main-scene/your_skills.png"
+      },
+
+
+
+
+
+
+
+
+
+
+
         {
           "type": "image",
           "key": "menu-white",
