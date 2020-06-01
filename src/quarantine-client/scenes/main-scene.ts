@@ -20,11 +20,6 @@ export class MainScene extends Phaser.Scene {
 
     preload(): void {
       this.load.image('background', 'assets/sprites/main-scene/background.png');
-        /*this.load.pack(
-            'preload',
-            'assets/pack.json',
-            'preload'
-        );*/
     }
 
     init(): void {
