@@ -37,13 +37,13 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         this.income = this.upgradeContr.getIncome();
 
         // Add menu bar
-        this.add(this.scene.add.image(this.x + 400 , 0, 'bar').setOrigin(0, 0)).setAlpha(0.5);
+        this.add(this.scene.add.image(this.x + 600 , 0, 'bar').setOrigin(0, 0)).setAlpha(0.5);
 
         // Add button container
-        new ButtonContainer(this.scene, 200, 850, 'research', this.measures['research']['prices'][0], this.buildClosure(this.upgradeContr.buyResearchLevel));
-        new ButtonContainer(this.scene, 200, 950, 'lockdown', this.measures['lockdown']['price'], this.buildClosure(this.upgradeContr.activateLockdown));
-        new ButtonContainer(this.scene, 200, 1050, 'police', this.measures['police']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
-        new ButtonContainer(this.scene, 200, 1150, 'healthworkers', this.measures['healthworkers']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
+        new ButtonContainer(this.scene, 250, 850, 'research', this.measures['research']['prices'][0], this.buildClosure(this.upgradeContr.buyResearchLevel));
+        new ButtonContainer(this.scene, 250, 1025, 'lockdown', this.measures['lockdown']['price'], this.buildClosure(this.upgradeContr.activateLockdown));
+        new ButtonContainer(this.scene, 250, 1200, 'police', this.measures['police']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
+        new ButtonContainer(this.scene, 250, 1375, 'healthworkers', this.measures['healthworkers']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
 
         this.scene.add.existing(this);
 
@@ -52,7 +52,7 @@ export class ItemMenu extends Phaser.GameObjects.Container {
 
     /** Creates the "profile". That means item menu relevant stats are visualized on the menu. */
     private addStatistics(): void {
-        this.add(this.scene.add.text(this.x + 450, 30,`Budget: ${this.budget}\nIncome: ${this.income}`,{ // \n for line break and then setLineSpacing
+        this.add(this.scene.add.text(this.x + 650, 30,`Budget: ${this.budget}\nIncome: ${this.income}`,{ // \n for line break and then setLineSpacing
             fontFamily:'Arial',
             color:'#000000',
           }).setFontSize(12).setScale(1, 3).setLineSpacing(10));

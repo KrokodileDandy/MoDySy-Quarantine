@@ -22,11 +22,11 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
         this.dailyCost = this.measures[this.key]['daily_cost'];
         this.amount = this.measures[this.key]['amount'];
 
-        this.buttonImage = this.scene.add.image(this.x + 150, this.y + 100, this.key).setScale(0.5);
-        this.priceText = this.scene.add.text(this.x + 125, this.y + 140, `${price} €`, {
+        this.buttonImage = this.scene.add.image(this.x + 150, this.y + 100, this.key);  //.setScale(1.25);
+        this.priceText = this.scene.add.text(this.x + 105, this.y + 165, `${price} €`, {
             fontFamily:'Arial',
             color:'#000000',
-        });
+        }).setScale(1.5);
         
         this.addEssentialItems(this.key);
         
@@ -37,51 +37,51 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
     private addEssentialItems(title: string): void {
 
         if(title == 'research') {
-            this.scene.add.text(this.x + 195, this.y + 75, 'Progress: ', {
+            this.scene.add.text(this.x + 210, this.y + 50, 'Progress: ', {
                 fontFamily:'Arial',
                 color:'#000000',
-            });
+            }).setScale(1.5);
         }
 
         if(title == 'police' || title == 'healthworkers') {
-            this.amountText = this.scene.add.text(this.x + 195, this.y + 75, `${this.amount}`, {
+            this.amountText = this.scene.add.text(this.x +215, this.y + 50, `${this.amount}`, {
                 fontFamily:'Arial',
                 color:'#000000',
-            });
-            this.dailyCostText = this.scene.add.text(this.x + 195, this.y + 115, `${this.dailyCost} €/Day`, {
+            }).setScale(1.5);
+            this.dailyCostText = this.scene.add.text(this.x + 215, this.y + 100, `${this.dailyCost} €/Day`, {
                 fontFamily:'Arial',
                 color:'#000000',
-            });
-            this.scene.add.image(this.x + 325, this.y + 75, 'plus').setInteractive()
+            }).setScale(1.5);
+            this.scene.add.image(this.x + 475, this.y + 25, 'plus').setInteractive()
             .on('pointerup', () => {
                 this.amount += 1000;
                 this.dailyCost += 4000;
                 this.setAmount();
-             });
-            this.scene.add.image(this.x + 325, this.y + 95, 'minus').setInteractive()
+             }).setScale(1.25);
+            this.scene.add.image(this.x + 475, this.y + 65, 'minus').setInteractive()
             .on('pointerup', () => {
                 if(this.amount > 0 && this.dailyCost > 0) {
                     this.amount -= 1000;
                     this.dailyCost -= 4000;
                     this.setAmount();
                 }
-            });
+            }).setScale(1.25);
         }
     }
 
     private buttonAnimations(image: Phaser.GameObjects.Image): void {
         image.setInteractive()
         .on('pointerover', () => { // increase scale on hover
-            image.setScale(0.55);
+            image.setScale(1.1);
         })
         .on('pointerout', () => { // decrease scale 
-            image.setScale(0.5);
+            image.setScale(1.0);
         })
         .on('pointerdown', () => { // decrease scale on click
-            image.setScale(0.5);
+            image.setScale(1.0);
         })
         .on('pointerup', () => { // "try to buy this item"
-            image.setScale(0.55);
+            image.setScale(1.1);
             this.eventListener();
             if(this.key == 'research') {
                 this.updateText();
