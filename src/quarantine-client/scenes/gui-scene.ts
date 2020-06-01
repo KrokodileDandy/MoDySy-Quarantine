@@ -98,29 +98,18 @@ export class GuiScene extends Phaser.Scene {
     const notebook = this.add.sprite(750, 1400, 'notebook').setInteractive();
     const tablet = this.add.sprite(750, 350, 'tablet').setInteractive();
 
-    const researchButton = this.add.sprite(400, 925, 'flask-button').setInteractive();
-    const lockdownButton = this.add.sprite(400, 1105, 'lockdown-button').setInteractive();
-    const policeButton = this.add.sprite(400, 1280, 'police-button').setInteractive();
-    const doctorButton = this.add.sprite(400, 1460, 'doctor-button').setInteractive();
-
     const pinkNote = this.add.sprite(1000, 1400, 'note-pink').setInteractive();
     const noteOrange = this.add.sprite(1020, 1020, 'note').setInteractive();
 
-    const per = this.add.sprite(700, 880, 'progress').setInteractive();
-    const money = this.add.sprite(700, 970, 'money').setInteractive();
+    const per = this.add.sprite(700, 880, 'progress');
+    const money = this.add.sprite(700, 970, 'money');
 
     const calendar = this.add.sprite(700, 1100, 'calendar').setInteractive();
-    const person = this.add.sprite(700, 1240, 'man').setInteractive();
-    const plusButton = this.add.sprite(780, 1215, 'plus').setInteractive();
-    const minusButton = this.add.sprite(780, 1265, 'minus').setInteractive();
-    const money1 = this.add.sprite(700, 1320, 'money').setInteractive();
-
-    const person1 = this.add.sprite(700, 1400, 'man').setInteractive();
-    const plusButton1 = this.add.sprite(780, 1375, 'plus').setInteractive();
-    const minusButton1 = this.add.sprite(780, 1425, 'minus').setInteractive();
-    const money2 = this.add.sprite(700, 1480, 'money').setInteractive();
-
-    const money3 = this.add.sprite(1100, 1280, 'money').setInteractive();
+    const person = this.add.sprite(700, 1240, 'man');
+    const person1 = this.add.sprite(700, 1400, 'man');
+    const money1 = this.add.sprite(700, 1320, 'money');    
+    const money2 = this.add.sprite(700, 1480, 'money');
+    const money3 = this.add.sprite(1100, 1280, 'money');
 
     const news = this.add.sprite(2300, 1250, 'news').setInteractive();
     const logBook = this.add.sprite(1950, 400, 'log').setInteractive();
