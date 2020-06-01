@@ -384,7 +384,7 @@
         },
         {
           "type": "image",
-          "key": "note",
+          "key": "event-note",
           "url": "assets/sprites/messages/note.png"
         },
         {
