@@ -1,0 +1,36 @@
+stages:
+  - compile
+  - test
+  - deploy
+
+
+build:
+  stage: compile
+  script:
+    - "npm install"
+    - "npm prune"
+    - "npm run build"
+  cache:
+    key: "quarantine"
+    paths:
+      - node_modules/
+  artifacts:
+    paths:
+      - dist
+    expire_in: 2 days
+
+test:
+  cache:
+    key: "quarantine"
+    policy: pull
+    paths:
+      - node_modules/
+  stage: test
+  script:
+    - "npm run lint"
+    - "npm run test"
+
+deploy:
+  stage: deploy
+  script:
+  - "~/copy_files.sh"
