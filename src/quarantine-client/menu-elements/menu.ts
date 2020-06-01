@@ -22,7 +22,7 @@ export class ItemMenu extends Phaser.GameObjects.Container {
 
     
     
-    public measures = require("../objects/controller/measures.json");
+    public measures = require("./../../../res/json/measures.json");
 
     /**
      * 

@@ -34,5 +34,5 @@ export class Game extends Phaser.Game {
 window.addEventListener("load", () => {
     const game = new Game(config);
     const scaleManager = game.scale;
-    scaleManager.setGameSize(3200,1600);
+    scaleManager.setGameSize(1920,1080);
 });

@@ -16,11 +16,27 @@ export class Event {
      * @param executeEventFunction Should Encapsulates game logic which is executed when the event is triggered. E.g. increment the death counter (removal) of a citizen.
      */
     public constructor(executeEventFunction: Function, title: string, description: string, imagePath = "letter") {
-        const ppTitle = new Phaser.GameObjects.Text(GuiScene.instance, 550, 130, title, {});
-        const ppDescription = new Phaser.GameObjects.Text(GuiScene.instance, 550, 130, description, {});
-        const popup = new PopupWindow(GuiScene.instance, 0, 0, 'log-background', 800, 600, true, [ppTitle, ppDescription], true);
+        const img = new Phaser.GameObjects.Image(GuiScene.instance, 1400, 700, imagePath).setOrigin(0).setDepth(1);
+        const styleDesc = {
+            color: 'Black',
+            fontSize: '55px',
+            fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'
+        };
+        const styleTitle = {
+            color: 'Black',
+            align: 'center',
+            fontSize: '80px',
+            fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'
+        };
+        const ppTitle = new Phaser.GameObjects.Text(GuiScene.instance, 0, 90, title, styleTitle);
+        ppTitle.setWordWrapWidth(1400);
+        ppTitle.setX((1920 / 2) - ppTitle.width / 2);
+        const ppDescription = new Phaser.GameObjects.Text(GuiScene.instance, 300, 350, description, styleDesc);
+        ppDescription.setWordWrapWidth(1400);
+        const popup = new PopupWindow(GuiScene.instance, 0, 0, 'event-note', 1600, 80, true, [img, ppTitle, ppDescription], true);
 
         executeEventFunction();
+        popup.createModal();
     }
 
 }

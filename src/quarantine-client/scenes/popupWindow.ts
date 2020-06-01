@@ -35,6 +35,7 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         //add close btn
         this.addCloseBtn(closeBtnX, closeBtnY);
         //add object
+        data.forEach(x => scene.add.existing(x));
         this.addGameObjects(data);
     }
 
