@@ -1,6 +1,8 @@
 import { TimeSubscriber } from "../../util/timeSubscriber";
 import { TimeController } from "./timeController";
 import { EventRarity } from "../../util/enums/eventRarity";
+import { Event } from "../entities/event";
+import { Stats } from "./stats";
 
 /**
  * Singleton controller which implements application logic for events.
@@ -11,6 +13,18 @@ export class EventController implements TimeSubscriber {
 
     /** The only existing instance of this controller */
     private static instance: EventController;
+
+    /** List of the event categories which hold a list of events each */
+    private eventList = require("./../../../../res/json/random-events.json");
+
+    /** List of callback functions for events */
+    private eventFunctionList = {
+        "common": [
+            () => {
+                Stats.getInstance()
+            }
+        ]
+    }
 
     private timeSpanCommon: number;
     private timeSpanRare: number;
@@ -24,21 +38,42 @@ export class EventController implements TimeSubscriber {
 
     }
 
-    /** @see TimeSubscriber */
+    /**
+     * When one of the time counters reaches zero a random event
+     * of this rarity level gets called. Then this counters, an all
+     * others which also reached 0 in this round get recalculated.
+     * @see TimeSubscriber
+     * @see #callRandomEvent
+     */
     notify(): void {
         this.decreaseEventCounters();
         if (!this.timeSpanLegendary) {
-            //
+            this.callRandomEvent(EventRarity.LEGENDARY);
         } else if (!this.timeSpanEpic) {
-            //
+            this.callRandomEvent(EventRarity.EPIC);
         } else if (!this.timeSpanVeryRare) {
-            //
+            this.callRandomEvent(EventRarity.VERY_RARE);
         } else if (!this.timeSpanRare) {
-            //
+            this.callRandomEvent(EventRarity.RARE);
         } else if (!this.timeSpanCommon) {
-            //
+            this.callRandomEvent(EventRarity.COMMON);
         }
         this.resetTriggeredEventCounters();
+    }
+
+    /**
+     * Opens a randomly selected event popup for the given rarity level.
+     * @param eventRarity Rarity level to select an event from
+     */
+    private callRandomEvent(eventRarity: string): void {
+        const idx = this.getRandomIntInclusive(0, this.eventList[eventRarity].length);
+        const eventInfo = this.eventList[eventRarity][idx];
+        new Event(
+            this.eventFunctionList[eventRarity][idx],
+            eventInfo["title"],
+            eventInfo["description"],
+            eventInfo["image-path"]
+        );
     }
 
     /**

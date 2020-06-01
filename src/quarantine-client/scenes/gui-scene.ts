@@ -7,6 +7,7 @@ import { PopupWindow } from "./popupWindow";
 import { Controller } from "../objects/controller/controller";
 import { State } from "../util/enums/healthStates";
 import { Rule } from "../objects/entities/rule";
+import { TimeController } from "../objects/controller/timeController";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -94,6 +95,7 @@ export class GuiScene extends Phaser.Scene {
   }
 
   poseSprites(): void {
+    /*
     const notebook = this.add.sprite(750, 1400, 'notebook').setInteractive();
     const tablet = this.add.sprite(750, 350, 'tablet').setInteractive();
 
@@ -139,6 +141,7 @@ export class GuiScene extends Phaser.Scene {
     const speed1x = this.add.sprite(1800, 50, 'speed1x').setInteractive();
     const speed2x = this.add.sprite(1900, 50, 'speed2x').setInteractive();
     const speed3x = this.add.sprite(2000, 50, 'speed3x').setInteractive();
+    */
   }
   
   // Creates menu buttons

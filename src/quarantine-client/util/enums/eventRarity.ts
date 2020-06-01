@@ -1,8 +1,8 @@
 /** Enumeration of event level rarities */
 export enum EventRarity {
-    COMMON,
-    RARE,
-    VERY_RARE,
-    EPIC,
-    LEGENDARY
+    COMMON = "COMMON",
+    RARE = "RARE",
+    VERY_RARE = "VERY_RARE",
+    EPIC = "EPIC",
+    LEGENDARY = "LEGENDARY"
 }

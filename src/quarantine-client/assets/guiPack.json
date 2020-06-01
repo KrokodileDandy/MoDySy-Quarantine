@@ -429,11 +429,6 @@
         },
         {
           "type": "image",
-          "key": "background",
-          "url": "assets/sprites/main-scene/background.png"
-        },
-        {
-          "type": "image",
           "key": "close-button",
           "url": "assets/sprites/messages/close-button.png"
         },

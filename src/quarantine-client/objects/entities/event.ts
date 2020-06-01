@@ -15,7 +15,8 @@ export class Event {
     /**
      * @param executeEventFunction Should Encapsulates game logic which is executed when the event is triggered. E.g. increment the death counter (removal) of a citizen.
      */
-    public constructor(executeEventFunction: Function, title: string, description: string, imagePath = "letter") {
+    public constructor(executeEventFunction: Function, title: string, description: string, imagePath: string) {
+        if (!imagePath) imagePath = "letter";
         const img = new Phaser.GameObjects.Image(GuiScene.instance, 1400, 700, imagePath).setOrigin(0).setDepth(1);
         const styleDesc = {
             color: 'Black',
