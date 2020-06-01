@@ -7,7 +7,6 @@ import { PopupWindow } from "./popupWindow";
 import { Controller } from "../objects/controller/controller";
 import { State } from "../util/enums/healthStates";
 import { Rule } from "../objects/entities/rule";
-import { Event } from "../objects/entities/event";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
