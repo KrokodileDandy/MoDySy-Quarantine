@@ -8,36 +8,6 @@
         },
         {
           "type": "image",
-          "key": "bar-without-window",
-          "url": "assets/sprites/bar2.png"
-        },
-        {
-          "type": "image",
-          "key": "bar-lockdown-white",
-          "url": "assets/sprites/bar-lockdown-white.png"
-        },
-        {
-          "type": "image",
-          "key": "bar-lockdown-black",
-          "url": "assets/sprites/bar-lockdown-black.png"
-        },
-        {
-          "type": "image",
-          "key": "bar-police-white",
-          "url": "assets/sprites/bar-police-white.png"
-        },
-        {
-          "type": "image",
-          "key": "bar-police-black",
-          "url": "assets/sprites/bar-police-black.png"
-        },
-        {
-          "type": "image",
-          "key": "bar-research-white",
-          "url": "assets/sprites/main-scene/flask-button.png"
-        },
-        {
-          "type": "image",
           "key": "bar-socialdistancing-white",
           "url": "assets/sprites/bar-socialdistancing-white.png"
         },
@@ -46,6 +16,66 @@
           "key": "bar-socialdistancing-black",
           "url": "assets/sprites/bar-socialdistancing-black.png"
         }, 
+        {
+          "type": "image",
+          "key": "research",
+          "url": "assets/sprites//main-scene/flask-button.png"
+        },
+        {
+          "type": "image",
+          "key": "lockdown",
+          "url": "assets/sprites/main-scene/lockdown-button.png"
+        },
+        {
+          "type": "image",
+          "key": "police",
+          "url": "assets/sprites/main-scene/police-button.png"
+        },
+        {
+          "type": "image",
+          "key": "healthworkers",
+          "url": "assets/sprites/main-scene/doctor-button.png"
+        },
+        {
+          "type": "image",
+          "key": "25percent",
+          "url": "assets/sprites/main-scene/25percent.png"
+        },
+        {
+          "type": "image",
+          "key": "50percent",
+          "url": "assets/sprites/main-scene/50percent.png"
+        },
+        {
+          "type": "image",
+          "key": "75percent",
+          "url": "assets/sprites/main-scene/75percent.png"
+        },
+        {
+          "type": "image",
+          "key": "90percent",
+          "url": "assets/sprites/main-scene/90percent.png"
+        },
+        {
+          "type": "image",
+          "key": "money",
+          "url": "assets/sprites/main-scene/money.png"
+        },
+        {
+          "type": "image",
+          "key": "man",
+          "url": "assets/sprites/main-scene/man.png"
+        },
+        {
+          "type": "image",
+          "key": "plus",
+          "url": "assets/sprites/main-scene/plus.png"
+        },
+        {
+          "type": "image",
+          "key": "minus",
+          "url": "assets/sprites/main-scene/minus.png"
+        },
         {
           "type": "image",
           "key": "menu-white",
@@ -295,31 +325,6 @@
           "type": "image",
           "key": "restart-hover",
           "url": "assets/sprites/main-scene/restart-hover.png"
-        },
-        {
-          "type": "image",
-          "key": "25percent",
-          "url": "assets/sprites/main-scene/25percent.png"
-        },
-        {
-          "type": "image",
-          "key": "50percent",
-          "url": "assets/sprites/main-scene/50percent.png"
-        },
-        {
-          "type": "image",
-          "key": "75percent",
-          "url": "assets/sprites/main-scene/75percent.png"
-        },
-        {
-          "type": "image",
-          "key": "90percent",
-          "url": "assets/sprites/main-scene/90percent.png"
-        },
-        {
-          "type": "image",
-          "key": "money",
-          "url": "assets/sprites/main-scene/money.png"
         },
         {
           "type": "image",

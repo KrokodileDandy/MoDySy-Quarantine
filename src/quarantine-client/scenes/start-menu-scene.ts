@@ -44,7 +44,7 @@ export class StartMenuScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.add.image(960, 470, 'Logo')   // TODO: has to be centered all time 
+        this.add.image(innerWidth/2, innerHeight/2, 'Logo')   // TODO: has to be centered all time 
         this.createMenuButtons();
     }
 
