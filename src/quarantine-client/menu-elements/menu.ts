@@ -15,8 +15,9 @@ export class ItemMenu extends Phaser.GameObjects.Container {
 
     private budget: number;
     private income: number;
-    private researchLv: number;
-    private researchPrice: number;
+
+    private currLv: number;
+    private currPrice: number;
     public researchText: Phaser.GameObjects.Text;
     public upgradeContr: UpgradeController;
     
@@ -35,17 +36,14 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         this.budget = this.upgradeContr.getBudget();
         this.income = this.upgradeContr.getIncome();
 
-        this.researchLv = this.measures['research']['current_level'];
-        this.researchPrice = this.measures['research']['prices'][this.researchLv];
-
         // Add menu bar
         this.add(this.scene.add.image(this.x + 400 , 0, 'bar').setOrigin(0, 0)).setAlpha(0.5);
 
         // Add button container
-        new ButtonContainer(this.scene, 0, 450, 'research', this.researchPrice, this.buildClosure(this.upgradeContr.buyResearchLevel));
-        new ButtonContainer(this.scene, 0, 550, 'lockdown', 10000, this.buildClosure(this.upgradeContr.activateLockdown));
-        new ButtonContainer(this.scene, 0, 650, 'police', 10000, this.buildClosure(this.upgradeContr.buyPoliceOfficers));
-        new ButtonContainer(this.scene, 0, 750, 'healthworkers', 10000, this.buildClosure(this.upgradeContr.buyPoliceOfficers));
+        new ButtonContainer(this.scene, 200, 850, 'research', this.measures['research']['prices'][0], this.buildClosure(this.upgradeContr.buyResearchLevel));
+        new ButtonContainer(this.scene, 200, 950, 'lockdown', this.measures['lockdown']['price'], this.buildClosure(this.upgradeContr.activateLockdown));
+        new ButtonContainer(this.scene, 200, 1050, 'police', this.measures['police']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
+        new ButtonContainer(this.scene, 200, 1150, 'healthworkers', this.measures['healthworkers']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
 
         this.scene.add.existing(this);
 
@@ -62,13 +60,9 @@ export class ItemMenu extends Phaser.GameObjects.Container {
 
     /** Updates all menu statistics i.e. budget and income. */
     public updateItemMenu(): void {
-        const currLv = this.measures['research']['current_level'];
-        const price = this.measures['research']['prices'][currLv];
-
         this.budget = this.upgradeContr.getBudget();
         this.income = this.upgradeContr.getIncome();
         (this.getAt(1) as GameObjects.Text).setText(`Budget: ${this.budget}\nIncome: ${this.income}`);
-        //this.researchText.setText(`${price} €`);
     }
 
     //-------------------------------------------------------------------------------------------------

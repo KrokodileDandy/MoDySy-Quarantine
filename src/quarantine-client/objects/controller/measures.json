@@ -10,6 +10,8 @@
     },
     "lockdown": {
         "name": "Lock Down",
+        "current_level": 0,
+        "price": [10000],
         "active": false,
         "description": "LD description",
         "daily_cost": 10000000,
@@ -26,15 +28,17 @@
     },
     "police": {
         "name": "Police",
+        "current_level": 0,
         "description": "",
-        "price": 10000,
+        "price": [10000],
         "daily_cost": 4000,
         "amount": 1000
     },
     "healthworkers": {
         "name": "Health Workers",
+        "current_level": 0,
         "description": "",
-        "price": 10000,
+        "price": [10000],
         "daily_cost": 4000,
         "amount": 3000
     }

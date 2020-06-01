@@ -23,6 +23,11 @@
       },
       {
         "type": "image",
+        "key": "research-gray",
+        "url": "assets/sprites/main-scene/flask-button-gray.png"
+      },
+      {
+        "type": "image",
         "key": "gray-background",
         "url": "assets/sprites/main-scene/gray-background.png"
       },
