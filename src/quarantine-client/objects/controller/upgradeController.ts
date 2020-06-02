@@ -15,7 +15,7 @@ import { TimeController } from "./timeController";
  */
 export class UpgradeController implements TimeSubscriber {
 
-    /** Anonymous class to encapsulate game variables. */
+    /** Singleton instance which holds game variables */
     private stats: Stats;
 
     /** The only existing instance of UpgradeController */
