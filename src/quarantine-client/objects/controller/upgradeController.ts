@@ -179,12 +179,12 @@ export class UpgradeController implements TimeSubscriber {
         const currLv = uC.measures["research"]["current_level"];
         const price = uC.measures["research"]["prices"][currLv];
 
-        if (!uC.isSolvent(price) || currLv == 9) return false;
+        if (!uC.isSolvent(price) || currLv == 10) return false;
         uC.buyItem(price);
         
         uC.measures["research"]["current_level"] += 1;
 
-        if (currLv + 1 == 9) uC.introduceCure();
+        if (currLv + 1 == 10) uC.introduceCure();
         return true;
     }
 

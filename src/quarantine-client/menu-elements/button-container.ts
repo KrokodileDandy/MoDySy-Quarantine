@@ -79,15 +79,15 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
                 color:'#000000',
             }).setScale(1.5);
             // Plus sign to increase amount and daily costs linear
-            this.scene.add.image(this.x + 475, this.y + 25, 'plus').setInteractive()
+            this.scene.add.image(this.x + 450, this.y + 25, 'plus').setInteractive()
             .on('pointerup', () => {
                 this.amount += 1000;        // TODO: should be integrated with the const amt in the upgradecontroller
                 this.dailyCost += 4000;
                 this.setAmount();           // updates the text
                 this.upgradeContr.buyPoliceOfficers(this.upgradeContr, this.amount, this.dailyCost);
-             }).setScale(1.25);
+             }).setScale(0.75);
              // Minus sign to decrease amount and daily costs linear
-            this.scene.add.image(this.x + 475, this.y + 65, 'minus').setInteractive()
+            this.scene.add.image(this.x + 450, this.y + 65, 'minus').setInteractive()
             .on('pointerup', () => {
                 if(this.amount > 0 && this.dailyCost > 0) {
                     this.amount -= 1000;
@@ -95,7 +95,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
                     this.setAmount();       // updates the text
                     this.upgradeContr.buyPoliceOfficers(this.upgradeContr, this.amount, this.dailyCost);
                 }
-            }).setScale(1.25);
+            }).setScale(0.75);
         }
     }
 
@@ -123,7 +123,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
             if(this.key == 'research') {
                 this.updateText();
                 // Grayscales the button if ten levels has been bought
-                if(this.measures[this.key]['current_level'] == 9) {     // maybe should change in upgrade controller to 10
+                if(this.measures[this.key]['current_level'] == 10) {     // maybe should change in upgrade controller to 10
                     image.setTexture('research-gray');
                     image.setScale(1.0);
                     image.removeInteractive();
