@@ -1,4 +1,5 @@
 import 'phaser';
+import { UpgradeController } from '../objects/controller/upgradeController';
 
 /**
  * Represents a container which inherit all necessary items
@@ -24,6 +25,8 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
     private buttonImage: Phaser.GameObjects.Image;
     // Loading data of menu items
     public measures = require("../objects/controller/measures.json");
+
+    public upgradeContr: UpgradeController;
 
     private eventListener: Function;
 
@@ -81,6 +84,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
                 this.amount += 1000;        // TODO: should be integrated with the const amt in the upgradecontroller
                 this.dailyCost += 4000;
                 this.setAmount();           // updates the text
+                this.upgradeContr.buyPoliceOfficers(this.upgradeContr, this.amount, this.dailyCost);
              }).setScale(1.25);
              // Minus sign to decrease amount and daily costs linear
             this.scene.add.image(this.x + 475, this.y + 65, 'minus').setInteractive()
@@ -89,6 +93,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
                     this.amount -= 1000;
                     this.dailyCost -= 4000;
                     this.setAmount();       // updates the text
+                    this.upgradeContr.buyPoliceOfficers(this.upgradeContr, this.amount, this.dailyCost);
                 }
             }).setScale(1.25);
         }
@@ -113,17 +118,17 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
         })
         .on('pointerup', () => { // "try to buy this item"
             image.setScale(1.1);
+            this.eventListener();       // initiate the buy process of reasearch in the upgrade controller
             // Updates the text of research price, since it has different prices for each level
             if(this.key == 'research') {
                 this.updateText();
                 // Grayscales the button if ten levels has been bought
-                if(this.measures[this.key]['current_level'] == 9) {
+                if(this.measures[this.key]['current_level'] == 9) {     // maybe should change in upgrade controller to 10
                     image.setTexture('research-gray');
                     image.setScale(1.0);
                     image.removeInteractive();
                 }
             }
-            this.eventListener();       // initiate the buy process of reasearch in the upgrade controller
         });
     }
     

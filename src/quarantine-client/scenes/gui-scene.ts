@@ -148,12 +148,12 @@ export class GuiScene extends Phaser.Scene {
 
     const socialdistancingWhite = this.add.sprite(750, 620, 'socialdistancing-white').setInteractive();
     const socialdistancingBlack = this.add.sprite(750, 620, 'socialdistancing-black').setInteractive().on('pointerdown', () => {
-      this.uC.buyHealthWorkers(this.uC);
+      //this.uC.buyHealthWorkers(this.uC);
     });
 
     const policeWhite = this.add.sprite(875, 670, 'police-white').setInteractive();
     const policeBlack = this.add.sprite(875, 670, 'police-black').setInteractive().on('pointerdown', () => {
-      this.uC.buyPoliceOfficers(this.uC);
+      //this.uC.buyPoliceOfficers(this.uC);
     });
 
     const researchWhite = this.add.sprite(750, 670, 'research-white').setInteractive();

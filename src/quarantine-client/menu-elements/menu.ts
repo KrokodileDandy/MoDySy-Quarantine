@@ -1,8 +1,6 @@
 import 'phaser';
 import { GameObjects } from 'phaser';
-import { ArrowButton } from './arrow-button';
 import { UpgradeController } from '../objects/controller/upgradeController';
-import { Stats } from '../objects/controller/stats';
 import { ButtonContainer } from './button-container';
 
 /**
@@ -43,7 +41,7 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         new ButtonContainer(this.scene, 250, 850, 'research', this.measures['research']['prices'][0], this.buildClosure(this.upgradeContr.buyResearchLevel));
         new ButtonContainer(this.scene, 250, 1025, 'lockdown', this.measures['lockdown']['price'], this.buildClosure(this.upgradeContr.activateLockdown));
         new ButtonContainer(this.scene, 250, 1200, 'police', this.measures['police']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
-        new ButtonContainer(this.scene, 250, 1375, 'healthworkers', this.measures['healthworkers']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
+        new ButtonContainer(this.scene, 250, 1375, 'healthworkers', this.measures['healthworkers']['price'], this.buildClosure(this.upgradeContr.buyHealthWorkers));
 
         this.scene.add.existing(this);
 
