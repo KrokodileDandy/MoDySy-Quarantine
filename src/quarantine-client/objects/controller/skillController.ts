@@ -62,7 +62,7 @@ export class SkillController {
     }
 
     /**
-     * Checks whether the prerequsites for activating the skill are met and, in this case
+     * Checks whether the prerequsites for activating the skill are met and, in this case,
      * it invokes the passed skill function
      * @param requiredSkillPoints Number of skill points which is required to activate the skill
      * @param requiredSkills Abilities which have to be skilled previously
@@ -74,6 +74,7 @@ export class SkillController {
         if( (requiredSkillPoints < this.availableSkillPoints) || (requiredSkills.filter(x => !x).length > 0) ) return false;    //MAYBE NULL Pointer exception beause of this
 
         skill();
+        this.availableSkillPoints -= requiredSkillPoints;
         return true;
     }
 
@@ -90,18 +91,36 @@ export class SkillController {
      */
     private additionalMedicalSuppliesI = false;
 
+    public activateAdditionalMedicalSuppliesI(sC: SkillController): boolean {
+        return sC.activateSkill(1, [], () => {
+            sC.additionalMedicalSuppliesI = true;
+        })
+    }
+
     /**
      * The government declares state of emergency. Large amounts 
      * of money will be spent on additional medical supplies.  
      * Medical staff will be provided with upgraded face masks (FFP3-masks).
      */
-    private additionalMedcialSuppliesII = false;
+    private additionalMedicalSuppliesII = false;
+
+    public activateAdditionalMedicalSuppliesII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.additionalMedicalSuppliesI], () => {
+            sC.additionalMedicalSuppliesII = true;
+        })
+    }
 
     /**
      * Increase of hygiene standards and additional medical staff 
      * in hospitals and other medical facilities.
      */
     private upgradeMedicalFacilitiesI = false;
+
+    public activateUpgradeMedicalFacilitiesI(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.additionalMedicalSuppliesI], () => {
+            sC.upgradeMedicalFacilitiesI = true;
+        })
+    }
 
     /**
      * Hospitals will be upgraded with modern medical equipment. 
@@ -110,6 +129,12 @@ export class SkillController {
      */
     private upgradeMedicalFacilitiesII = false;
 
+    public activateUpgradeMedicalFacilitiesII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.upgradeMedicalFacilitiesI], () => {
+            sC.upgradeMedicalFacilitiesII = true;
+        })
+    }
+
     /**
      * Large investments in all medical facilities. New hospitals built out of nothing. 
      * Large research institutes working together. Medical staff are getting protective 
@@ -117,11 +142,23 @@ export class SkillController {
      */
     private upgradeMedicalFacilitiesIII = false;
 
+    public activateUpgradeMedicalFacilitiesIII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.upgradeMedicalFacilitiesII], () => {
+            sC.upgradeMedicalFacilitiesIII = true;
+        })
+    }
+
     /**
      * A research Institute discovered the effectiveness of a 
      * medicine which can reduce symptoms.
      */
     private medicineI = false;
+
+    public activateMedicineI(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.upgradeMedicalFacilitiesI], () => {
+            sC.medicineI = true;
+        })
+    }
 
     /**
      * A new medicine developed to slow down the speed of 
@@ -131,12 +168,24 @@ export class SkillController {
      */
     private medicineII = false;
 
+    public activateMedicineII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.medicineI, sC.dnaRnaCodeSequence], () => {
+            sC.medicineII = true;
+        })
+    }
+
     /**
      * A highly effective medicine got developed, which can stop the 
      * virus from spreading in the human body. If taken early enough 
      * there is a high chance the human will survive
      */
     private medicineIII = false;
+
+    public activateMedicineIII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.medicineII], () => {
+            sC.medicineIII = true;
+        })
+    }
 
     // ----------------------------------------------------------------- POLICE
 
@@ -147,6 +196,12 @@ export class SkillController {
      */
     private learnExpertise = false;
 
+    public activateLearnExpertise(sC: SkillController): boolean {
+        return sC.activateSkill(1, [], () => {
+            sC.learnExpertise = true;
+        })
+    }
+
     /**
      * Police forces will be provided extra safety equipment in which 
      * they feel safer. This increases the effectiveness of the police. 
@@ -155,11 +210,23 @@ export class SkillController {
      */
     private policeEquipment = false;
 
+    public activatePoliceEquipment(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.learnExpertise, sC.additionalMedicalSuppliesI], () => {
+            sC.policeEquipment = true;
+        })
+    }
+
     /**
      * Police forces will be provided with test-kits and can test citizen, 
      * which they suspect of illness. 
      */
     private testing = false;
+
+    public activateTesting(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.learnExpertise], () => {
+            sC.testing = true;
+        })
+    }
 
     /**
      * The police are now able to track the people, which might have encountered 
@@ -169,12 +236,24 @@ export class SkillController {
      */
     private trackingEncounters = false;
 
+    public activateTrackingEncounters(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.testing, sC.nationwideTesting], () => {
+            sC.trackingEncounters = true;
+        })
+    }
+
     /**
      * The government deploy military troops in the major cities to provide 
      * security and maintain control. This reduces the chance that citizen 
      * will violate the law and break out of lockdown.
      */
     private militaryI = false;
+
+    public activateMilitaryI(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.learnExpertise], () => {
+            sC.militaryI = true;
+        })
+    }
 
     /**
      * All military forces are deployed around the whole country to provide 
@@ -184,12 +263,24 @@ export class SkillController {
      */
     private militaryII = false;
 
+    public activateMilitaryII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.militaryI], () => {
+            sC.militaryII = true;
+        })
+    }
+
     /**
      * All cities are under entry and exit ban. Major roads are blocked by 
      * military forces. The military has the instruction to shoot down any 
      * citizen, who attempts to break out from a lockdown.
      */
     private militaryIII = false;
+
+    public activateMilitaryIII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.militaryII], () => {
+            sC.militaryIII = true;
+        })
+    }
 
     // ----------------------------------------------------------------- TESTING
 
@@ -199,16 +290,34 @@ export class SkillController {
      */
     private additionalTestKits = false;
 
+    public activateAdditionalTestKits(sC: SkillController): boolean {
+        return sC.activateSkill(1, [], () => {
+            sC.additionalTestKits = true;
+        })
+    }
+
     /**
      * A research institute developed a new method of testing which is more 
      * reliable than the old tests. 
      */
     private upgradeTestKitI = false;
 
+    public activateUpgradeTestKitI(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.additionalTestKits], () => {
+            sC.upgradeTestKitI = true;
+        })
+    }
+
     /**
      * Testing is now faster and even more reliable.
      */
     private upgradeTestKitII = false;
+
+    public activateUpgradeTestKitII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.upgradeTestKitI], () => {
+            sC.upgradeTestKitII = true;
+        })
+    }
 
     /**
      * The government declares to not only test the people with symptoms and 
@@ -216,17 +325,35 @@ export class SkillController {
      */
     private nationwideTesting = false;
 
+    public activateNationwideTesting(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.additionalTestKits], () => {
+            sC.nationwideTesting = true;
+        })
+    }
+
     /**
      * A research institute analysed a code-sequence of the (virus). The new 
      * discovery will speed up the research for a cure
      */
     private dnaRnaCodeSequence = false;
 
+    public activatednaRnaCodeSequence(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.nationwideTesting], () => {
+            sC.dnaRnaCodeSequence = true;
+        })
+    }
+
     /**
      * A new antibody test now allows fully reliable tests which 
      * can be done in under 2 hours.
      */
     private immunityTests = false;
+
+    public activateImmunityTests(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.dnaRnaCodeSequence], () => {
+            sC.immunityTests = true;
+        })
+    }
     
     // ----------------------------------------------------------------- LOCKDOWN
 
@@ -237,6 +364,12 @@ export class SkillController {
      */
     private lockdownStageI = false;
 
+    public activateLockdownStageI(sC: SkillController): boolean {
+        return sC.activateSkill(1, [], () => {
+            sC.lockdownStageI = true;
+        })
+    }
+
     /** Events and Groups with more than 100 people are forbidden. 
      * Infected people are treated isolated if possible. Citizens are 
      * recommended to stay home and work from home if possible and only 
@@ -245,6 +378,12 @@ export class SkillController {
      * contact to others when going out. 
      */
     private lockdownStageII = false;
+
+    public activateLockdownStageII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.lockdownStageI], () => {
+            sC.lockdownStageII = true;
+        })
+    }
 
     /**
      * All public facilities (schools, churches, universities, etc.) are 
@@ -255,6 +394,12 @@ export class SkillController {
      */
     private lockdownStageIII = false;
 
+    public activateLockdownStageIII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.lockdownStageII], () => {
+            sC.lockdownStageIII = true;
+        })
+    }
+
     /**
      * Full lockdown. No one is supposed to be outside of their houses. 
      * Military provide food and water.
@@ -262,6 +407,12 @@ export class SkillController {
      * (requires “Military II” from [Police])
      */
     private lockdownStageIV = false;
+
+    public activateLockdownStageIV(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.lockdownStageIII, sC.militaryII], () => {
+            sC.lockdownStageIV = true;
+        })
+    }
 
 
     /**
@@ -271,12 +422,24 @@ export class SkillController {
      */
     private publicTransport = false;
 
+    public activatePublicTransport(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.lockdownStageI], () => {
+            sC.publicTransport = true;
+        })
+    }
+
     /**
      * No public transportation. Roadblocks prevent citizens from using their own car 
      * to drive around. Airports and docks are closed. Only vehicles allowed are those 
      * from the police, the military and high officials.
      */
     private restrictedTraffic = false;
+
+    public activateRestrictedTraffic(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.publicTransport], () => {
+            sC.restrictedTraffic = true;
+        })
+    }
 
     /**
      * The government honors the work of important jobs (health workers, doctors and 
@@ -286,12 +449,24 @@ export class SkillController {
      */
     private financialSupportI = false;
 
+    public activateFinancialSupportI(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.publicTransport], () => {
+            sC.financialSupportI = true;
+        })
+    }
+
     /**
      * To assure citizens will stay home and to prevent people from going bankrupt the 
      * generous government will provide a monthly financial support packet to those who 
      * are directly affected by the lockdown.
      */
     private financialSupportII = false;
+
+    public activateFinancialSupportII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.financialSupportI], () => {
+            sC.financialSupportII = true;
+        })
+    }
 
     // ----------------------------------------------------------------- CITIZENS
 
@@ -303,6 +478,12 @@ export class SkillController {
      */
     private expertiseI = false;
 
+    public activateExpertiseI(sC: SkillController): boolean {
+        return sC.activateSkill(1, [], () => {
+            sC.expertiseI = true;
+        })
+    }
+
     /**
      * Officials working together with experts and influencers to help provide positive 
      * messages and helpful behaviour. This will reduce the spread of made up fake news.
@@ -310,6 +491,12 @@ export class SkillController {
      * coughing into elbow, not touching faces, distance from other people, etc.)
      */
     private expertiseII = false;
+
+    public activateExpertiseII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.expertiseI], () => {
+            sC.expertiseII = true;
+        })
+    }
 
     /**
      * Everyone strictly follows recommended behaviours. (excessive hand washing, very high 
@@ -320,8 +507,20 @@ export class SkillController {
      */
     private expertiseIII = false;
 
+    public activateExpertiseIII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.expertiseII, sC.additionalMedicalSuppliesI], () => {
+            sC.expertiseIII = true;
+        })
+    }
+
     /** The use of a tracking app based on voluntary basis is now available for citizens to use. */
     private trackingAppI = false;
+
+    public activateTrackingAppI(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.expertiseI], () => {
+            sC.trackingAppI = true;
+        })
+    }
 
     /**
      * The government overtake the Tracking app. Every citizen must use the tracking app to enable 
@@ -330,6 +529,12 @@ export class SkillController {
      * (requires “ Tracking Encounters” from [Police])
      */
     private trackingAppII = false;
+
+    public activateTrackingAppII(sC: SkillController): boolean {
+        return sC.activateSkill(1, [sC.trackingAppI, sC.trackingEncounters], () => {
+            sC.trackingAppII = true;
+        })
+    }
 
     // ========================================================================================================================= GETTER-METHODS
 
