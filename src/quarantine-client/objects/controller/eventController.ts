@@ -20,7 +20,7 @@ export class EventController implements TimeSubscriber {
     /** List of callback functions for events */
     private eventFunctionList = {
         "common": [
-            () => {
+            (): void => {
                 Stats.getInstance()
             }
         ]
