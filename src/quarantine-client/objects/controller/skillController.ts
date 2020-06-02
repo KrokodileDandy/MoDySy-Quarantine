@@ -15,7 +15,7 @@ export class SkillController {
     private stats: Stats;
 
     /** Singleton instance of Controller */
-    private controller: Controller;                           //TODO Replace with budgetController
+    private controller: Controller;                           //TODO Implement budgetController
 
     /** Number of currently available skill points */
     private availableSkillPoints: number; 
@@ -61,9 +61,25 @@ export class SkillController {
         if(this.nextSkillPointPrice >= this.maximumSkillPointPrice) this.nextSkillPointPrice = this.maximumSkillPointPrice;
     }
 
+    /**
+     * Checks whether the prerequsites for activating the skill are met and, in this case
+     * it invokes the passed skill function
+     * @param requiredSkillPoints Number of skill points which is required to activate the skill
+     * @param requiredSkills Abilities which have to be skilled previously
+     * @param skill Anonymous function which contains the actual skill logic
+     * @returns if the activation was successful
+     */
+    private activateSkill(requiredSkillPoints: number, requiredSkills: boolean[], skill: Function): boolean {
+        //Checks if player has enough available skill points and if all required abilities are skilled
+        if( (requiredSkillPoints < this.availableSkillPoints) || (requiredSkills.filter(x => !x).length > 0) ) return false;    //MAYBE NULL Pointer exception beause of this
+
+        skill();
+        return true;
+    }
+
     // ========================================================================================================================= SKILL TREE
 
-    
+
     // ----------------------------------------------------------------- MEDICAL TREATMENT
 
     /**
