@@ -2,11 +2,11 @@ import 'phaser';
 import { StartMenuScene } from './scenes/start-menu-scene';
 
 const config: Phaser.Types.Core.GameConfig = {
-    width: 1600,
-    height: 800,
+    width: 1920,
+    height: 1080,
     backgroundColor: Phaser.Display.Color.GetColor(255, 255, 255),
     scale: {
-        mode: Phaser.Scale.FIT,
+        mode: Phaser.Scale.RESIZE,
         autoCenter: Phaser.Scale.CENTER_BOTH
     },
 
@@ -32,7 +32,5 @@ export class Game extends Phaser.Game {
 }
 
 window.addEventListener("load", () => {
-    const game = new Game(config);
-    const scaleManager = game.scale;
-    scaleManager.setGameSize(3200,1600);
+    new Game(config);
 });

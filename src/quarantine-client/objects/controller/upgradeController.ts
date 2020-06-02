@@ -1,7 +1,7 @@
 import { Controller } from "./controller";
-import { State } from "../../util/healthStates";
-import { Rule } from "./rule";
-import { Role } from "../../util/roles";
+import { State } from "../../util/enums/healthStates";
+import { Rule } from "../entities/rule";
+import { Role } from "../../util/enums/roles";
 import { Stats } from "./stats";
 import { TimeSubscriber } from "../../util/timeSubscriber";
 import { TimeController } from "./timeController";
@@ -30,7 +30,7 @@ export class UpgradeController implements TimeSubscriber {
      * * Social Distancing [sc]
      * * Lock Down [ld]
      */
-    public measures = require("./measures.json");
+    public measures = require("./../../../../res/json/measures.json");
 
     private constructor() {
         this.stats = Stats.getInstance();
@@ -59,14 +59,14 @@ export class UpgradeController implements TimeSubscriber {
 
         this.contr.getRules().push(new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
             if (this.isSolvent(this.stats.currentPriceVaccination)) {
-                this.stats.vaccineUsed();
+                this.stats.cureInfected();
                 return true;
             } else return false;
         }));
 
         this.contr.getRules().push(new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
             if (this.isSolvent(this.stats.currentPriceVaccination)) {
-                this.stats.vaccineUsed();
+                this.stats.cureUnknowinglyInfected();
                 return true;
             } else return false;
         }));

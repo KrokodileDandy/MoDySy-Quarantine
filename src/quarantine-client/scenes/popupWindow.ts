@@ -35,6 +35,7 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         //add close btn
         this.addCloseBtn(closeBtnX, closeBtnY);
         //add object
+        data.forEach(x => scene.add.existing(x));
         this.addGameObjects(data);
     }
 
@@ -70,6 +71,11 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         cancelBtn.on("pointerup", () => {
             this.closeModal();
         });
+
+        // hover effect
+        cancelBtn.on("pointerover", () => {cancelBtn.scale = 1.1});
+        cancelBtn.on("pointedown", () => {cancelBtn.scale = 1});
+
         this.add(cancelBtn);
     }
 

@@ -1,14 +1,21 @@
 import { Agent } from '../agents/agent';
 import { Police } from '../agents/police';
 import { Citizen } from '../agents/citizen';
-import { Role} from '../../util/roles';
-import { State } from '../../util/healthStates';
-import { Rule } from './rule';
+import { Role} from '../../util/enums/roles';
+import { State } from '../../util/enums/healthStates';
+import { Rule } from '../entities/rule';
 import { HealthWorker } from '../agents/healthWorker';
 import { TimeSubscriber } from '../../util/timeSubscriber';
 import { TimeController } from './timeController';
 import { Stats } from './stats';
 import { UpgradeController } from './upgradeController';
+import { Event } from "../entities/event";
+import { GuiScene } from '../../scenes/gui-scene';
+import { PopupWindow } from '../../scenes/popupWindow';
+import { ChartScene } from '../../scenes/chart-scene';
+import { MapScene } from '../../scenes/map-scene';
+import { MainScene } from '../../scenes/main-scene';
+import { StartMenuScene } from '../../scenes/start-menu-scene';
 
 /**
  * Singleton controller which should only simulates the population protocol.
@@ -38,13 +45,17 @@ export class Controller implements TimeSubscriber {
         TimeController.getInstance().subscribe(this);
 
         this.distributeRandomlyInfected(1_000);
+        this.stats.unknowinglyInfected = 1_000;
     }
 
     /** Initiate basic transition rules at gamestart. */
     private initiateRules(): void {
         this.rules = [
             new Rule(State.HEALTHY, State.INFECTED, State.UNKNOWINGLY_INFECTED, State.INFECTED),
-            new Rule(State.HEALTHY, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED),
+            new Rule(State.HEALTHY, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED, State.UNKNOWINGLY_INFECTED, () => {
+                Stats.getInstance().addUnknowinglyInfected();
+                return true;
+            }),
             new Rule(State.INFECTED, State.INFECTED, State.INFECTED, State.DECEASED, () => {
                 Stats.getInstance().deceasedCitizen();
                 return true;
@@ -54,6 +65,7 @@ export class Controller implements TimeSubscriber {
                     const stats = Stats.getInstance();
                     stats.foundInfected();
                     stats.testKitUsed();
+                    stats.firstCaseFound = true;
                     return true;
                 } else return false;
             })
@@ -178,6 +190,67 @@ export class Controller implements TimeSubscriber {
         });
     }
 
+    /**
+     * Checks wether some win or loss condition is matched. Opens a
+     * popup message if this is the case.
+     */
+    private checkWinLoss(): void {
+        if (this.stats.infected == 0 && this.stats.firstCaseFound) { // false WIN
+            this.openWinLossWindow(
+                "Congratulations!",
+                "There are no active cases left! Let's hope you got all of it, who knows what goes unnoticed..."
+            );
+        } else if (this.stats.unknowinglyInfected == 0 && this.stats.infected == 0) { // true WIN
+            this.openWinLossWindow(
+                "Congratulations!",
+                "You eradicated the virus! Your thoroughness really saved this country from disaster."
+            );
+        } else if (this.stats.population - this.stats.nbrHW == 0) { // LOOSE
+            this.openWinLossWindow(
+                "Loss!",
+                "As the last survivors fade away, it is time to face it. This is the end."
+            );
+        } else if (this.stats.budget < this.stats.lowerBoundBankruptcy) { // LOOSE - bancruptcy
+            this.openWinLossWindow(
+                "You are Bankrupt!",
+                "You have no money left."
+            );
+        }
+    }
+
+    public openWinLossWindow(title: string, description: string): void {
+        const popup = new PopupWindow(GuiScene.instance, 0, 0, 'event-note', 1600, 80, true, [], true);
+        const closeGameBtn = new Phaser.GameObjects.Image(GuiScene.instance, 1920 / 2, 800, 'NewGame').setOrigin(0).setDepth(1);
+        closeGameBtn.setX(1920 / 2 - closeGameBtn.width / 2);
+        closeGameBtn.setInteractive();
+        
+        closeGameBtn.on("pointerup", () => {location.reload();});
+
+        // hover effect
+        closeGameBtn.on("pointerover", () => {closeGameBtn.scale = 1.1});
+        closeGameBtn.on("pointedown", () => {closeGameBtn.scale = 1});
+
+        const styleDesc = {
+            color: 'Black',
+            fontSize: '55px',
+            fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'
+        };
+        const styleTitle = {
+            color: 'Black',
+            align: 'center',
+            fontSize: '80px',
+            fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'
+        };
+
+        const ppTitle = new Phaser.GameObjects.Text(GuiScene.instance, 0, 90, title, styleTitle);
+        ppTitle.setWordWrapWidth(1400);
+        ppTitle.setX((1920 / 2) - ppTitle.width / 2);
+        const ppDescription = new Phaser.GameObjects.Text(GuiScene.instance, 300, 350, description, styleDesc);
+        ppDescription.setWordWrapWidth(1400);
+        popup.addGameObjects([closeGameBtn, ppTitle, ppDescription]);
+        popup.createModal();
+    }
+
     /** Implements the game logic. Select random pairs of agents to apply transition rules. */
     public update(): void {
         // number of interactions between agent pairs in the current tic
@@ -201,6 +274,7 @@ export class Controller implements TimeSubscriber {
                 this.agents.splice(idxAgent2, 1);
             }
         }
+        this.checkWinLoss();
     }
 
     /** @see TimeSubscriber */
