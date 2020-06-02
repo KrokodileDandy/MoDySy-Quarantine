@@ -1,7 +1,7 @@
 import { VisualAgent } from "../objects/agents/visualAgent";
 import { Citizen } from "../objects/agents/citizen";
 import { Police } from "../objects/agents/police";
-import { State } from "../util/healthStates";
+import { State } from "../util/enums/healthStates";
 
 /**
  * Scene to visualize the agents behaviour in the populations protocol.
