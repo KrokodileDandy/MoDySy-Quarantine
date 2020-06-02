@@ -1,6 +1,6 @@
 import { TimeController } from "./timeController";
-import { DifficultyLevel} from "../../util/difficultyLevels";
 import { UpgradeController } from "./upgradeController";
+import { DifficultyLevel} from "../../util/enums/difficultyLevels";
 
 /**
  * Singleton controller which contains game variables (e.g. budget, population size)
@@ -19,9 +19,9 @@ export class Stats {
      */
     private constructor(difficulty: DifficultyLevel) {
         let values;
-        if(difficulty == DifficultyLevel.EASY) values = require("./difficulty-levels/easy.json");
-        else if (difficulty == DifficultyLevel.NORMAL) values = require("./difficulty-levels/normal.json");
-        else values = require("./difficulty-levels/hard.json");
+        if(difficulty == DifficultyLevel.EASY) values = require("./../../../../res/json//difficulty-levels/easy.json");
+        else if (difficulty == DifficultyLevel.NORMAL) values = require("./../../../../res/json//difficulty-levels/normal.json");
+        else values = require("./../../../../res/json/difficulty-levels/hard.json");
         // STATE VARIABLES
         this.population = values["population"]; //83_149_300: german population in september 2019 (wikipedia)
         this.nbrPolice = this.population * values["portion_of_police"];
@@ -50,6 +50,7 @@ export class Stats {
         this.budget = values["budget"]; // allows to buy 2 upgrades immediately 
         this.maxIncome = values["maxIncome"]; // allows to buy 1 upgrade every 5 days
         this.income = values["income"];
+        this.lowerBoundBankruptcy = -200_000;
     }
 
     /** 
@@ -187,6 +188,12 @@ export class Stats {
      * a specific number of agents have the status UNKNOWINGLY_INFECTED.
      */
     public infected = 0;
+    /**
+     * Number of currently, unknowingly infected citizens.
+     */
+    public unknowinglyInfected = 0;
+    /** Wether the first infected citizen was detected (with a test kit) or not */
+    public firstCaseFound = false;
 
     /** Number of police officers */
     public nbrPolice: number;
@@ -240,6 +247,7 @@ export class Stats {
     public maxIncome: number;
     /** Current income per tic */
     public income: number;
+
     /** Income statement of the current week */
     private incomeStatements = [{
         "inc": {
@@ -286,6 +294,8 @@ export class Stats {
     private weeklyTestKits = [0];
     /** Number of used vaccines each week */
     private weeklyVaccines = [0];
+    /** When this lower bound is reached, the game should be lost */
+    public lowerBoundBankruptcy: number;
 
 
     // -------------------------------------------------------------------- GETTER-METHODS
@@ -367,6 +377,24 @@ export class Stats {
     public foundInfected(): void {
         this.weeklyInfected[TimeController.getInstance().getWeeksSinceGameStart()]++;
         this.infected++;
+        this.unknowinglyInfected--;
+    }
+
+    /** Decrease infected counter by one and consume one vaccine */
+    public cureInfected(): void {
+        this.infected--;
+        this.vaccineUsed();
+    }
+
+    /** Increase unknowingly infected counter by one */
+    public addUnknowinglyInfected(): void {
+        this.unknowinglyInfected++;
+    }
+
+    /** Decrease unknowingly infected counter by one and consume one vaccine */
+    public cureUnknowinglyInfected(): void {
+        this.unknowinglyInfected--;
+        this.vaccineUsed();
     }
 
     /** Increases the Stats variable nbrPolice

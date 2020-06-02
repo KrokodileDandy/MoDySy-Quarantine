@@ -1,10 +1,9 @@
 import { MainScene } from "./main-scene";
 import { GuiScene } from "./gui-scene";
 import { ChartScene } from "./chart-scene";
-import { AgentScene } from "./agent-scene";
 import { MapScene } from "./map-scene";
 import { Stats } from "../objects/controller/stats";
-import { DifficultyLevel } from "../util/difficultyLevels";
+import { DifficultyLevel } from "../util/enums/difficultyLevels";
 
 /**
  * Menu scene at the start of the game.
@@ -12,8 +11,13 @@ import { DifficultyLevel } from "../util/difficultyLevels";
  * @author Shao
  */
 export class StartMenuScene extends Phaser.Scene {
-    constructor(config: Phaser.Types.Core.GameConfig) {
-        super(config);
+
+    constructor() {
+        super({
+            key: "StartMenuScene",
+            active: true
+        });
+
     }
 
     preload(): void {
@@ -182,7 +186,7 @@ export class StartMenuScene extends Phaser.Scene {
         this.scene.add('MainScene', MainScene, true);
         this.scene.add('GuiScene', GuiScene, true);
         this.scene.add('ChartScene', ChartScene, true);
-        this.scene.add('AgentScene', AgentScene, false);
+        //this.scene.add('AgentScene', AgentScene, false);
         this.scene.add('MapScene', MapScene, true);
     }
 }
