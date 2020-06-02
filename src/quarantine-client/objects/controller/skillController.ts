@@ -5,8 +5,9 @@ import { UpgradeController } from "./upgradeController";
 
 /**
  * Singleton controller which implements all skills of the skill tree.
+ * Each skill has an activation flag and an affiliated function! 
+ * (beginning with activate...)
  * @author Marvin Kruber
- * @author Sebastian Führ
  */
 export class SkillController {
 
@@ -35,8 +36,6 @@ export class SkillController {
         this.stats = Stats.getInstance();
         this.controller = Controller.getInstance();
         this.uC = UpgradeController.getInstance();
-
-        console.log("Skill master!");
 
         this.availableSkillPoints = 3; //could be outsourced to stats => see difficulty level
         this.nextSkillPointPrice = 100_000;
