@@ -1,9 +1,7 @@
 import 'phaser';
 import { Item } from './item';
 import { GameObjects } from 'phaser';
-import { ArrowButton } from './arrow-button';
 import { UpgradeController } from '../objects/controller/upgradeController';
-import { Stats } from '../objects/controller/stats';
 
 /**
  * Extends Phaser.GameObjects.Container and represents the ingame item menu.
@@ -51,7 +49,7 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         this.addStatistics();
 
         //Add navigation buttons
-        const nbrOfItems = itemBar.length; //1 has to be subracted if there is a background img for itemBar
+        //const nbrOfItems = itemBar.length; //1 has to be subracted if there is a background img for itemBar
         //this.add(new ArrowButton(this.scene, 325, 75, 'arrow-button-left', -1, nbrOfItems));
         //this.add(new ArrowButton(this.scene, 1000, 75, 'arrow-button-right', 1, nbrOfItems));
         
