@@ -7,6 +7,7 @@ import { PopupWindow } from "./popupWindow";
 import { Controller } from "../objects/controller/controller";
 import { State } from "../util/enums/healthStates";
 import { Rule } from "../objects/entities/rule";
+import { TimeController } from "../objects/controller/timeController";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -21,6 +22,10 @@ export class GuiScene extends Phaser.Scene {
 
   private menu: ItemMenu;
   private mainSceneIsPaused = false;
+  private gameSpeed = 1;
+  private soundON = true;
+  private musicON = true;
+
   /** Only existing instance of UpgradeController */
   private uC: UpgradeController;
   /** Whether the upgrade introduceCure was already bought */
@@ -53,11 +58,20 @@ export class GuiScene extends Phaser.Scene {
     // Creates Itemmenu and it to this scene
     this.menu = new ItemMenu(this, 0, 750);
 
+    // Creates Skill Tree Button
+    this.createSkillTreeBtn();
+
     // Creates Rules button
     this.createRulesBtn();
 
-    // Creates Reset button
+    // Creates Reset button for test, delete this function later
     this.createResetBtn();
+
+    // Creates Speed button for test, delete this function later
+    this.createSpeedButton();
+
+    // Creates Sound button for test, delete this function later
+    this.createSoundButton();
   }
 
   // -------------------------------------------------------------------------- GAME MENU
@@ -94,7 +108,7 @@ export class GuiScene extends Phaser.Scene {
   }
 
   poseSprites(): void {
-    /*
+    /* 
     const notebook = this.add.sprite(750, 1400, 'notebook').setInteractive();
     const tablet = this.add.sprite(750, 350, 'tablet').setInteractive();
 
@@ -127,19 +141,244 @@ export class GuiScene extends Phaser.Scene {
     const grayBackground = this.add.sprite(2650, 400, 'gray-background').setInteractive();
 
     const letter = this.add.sprite(3100, 850, 'letter').setInteractive();
-    const yourSkills = this.add.sprite(3100, 1075, 'your_skills').setInteractive();
     const rules = this.add.sprite(3100, 1300, 'rules').setInteractive();
+
+    const popupRules = new PopupWindow(this, 0, 0, '', 1300, 130, true, [],false);
+    const title = this.add.text(550, 130, 'The Rules',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'}).setDepth(1);
+    const blankNode = this.add.sprite(this.game.renderer.width /2 + 50, this.game.renderer.height /2, 'blank-note').setDisplaySize(1200, 970); 
+    popupRules.addGameObjects([blankNode, title]);
+
+    const allRules = Controller.getInstance().getRules();
+    let ruleIndex = 0;
+  
+    allRules.forEach(r => {
+      this.addRuleToContainer(popupRules, r, ruleIndex);
+      ruleIndex++;
+    });
+  
+    // popup info as a seconde popup
+    const infoModal = new Phaser.GameObjects.Image(this, 800, 150, 'information').setScale(0.4);
+    infoModal.setInteractive();
+  
+    infoModal.on('pointerup', () => {
+      const popupTitle = 'The Information';
+      const popupStr = 'The Agents exchange their state when they are close together';
+  
+      const popupInfo = new PopupWindow(this, 0, 0, '', 1300, 130, true, [],true);
+      const blankNode = this.add.sprite(this.game.renderer.width /2 + 50, this.game.renderer.height /2, 'blank-note').setDisplaySize(1200, 970); 
+      popupInfo.add(blankNode);
+      popupInfo.add(new Phaser.GameObjects.Text(this, 550, 130, popupTitle,{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'}));
+      popupInfo.add(new Phaser.GameObjects.Text(this,550, 220 , popupStr, {color:'Black', fontSize: '30px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'} ));
+  
+      popupInfo.createModal();
+    });
+      //add popup Info into popup Rules.
+      popupRules.add(infoModal);
+  
+      rules.setInteractive();
+  
+      // Change the button textures on hover, press, etc.
+      rules.on('pointerover', () => {
+        rules.setScale(0.7);
+      });
+      rules.on('pointerout', () => {
+        rules.setScale(1);
+      });
+      rules.on('pointerdown', () => {
+        rules.setScale(1);
+      });
+      rules.on('pointerup', () => {
+        rules.setScale(0.8);
+        popupRules.createModal();
+      });
 
     const info = this.add.sprite(3100, 70, 'information').setInteractive();
     const restart = this.add.sprite(3100, 190, 'restart').setInteractive();
+
+        // hover, click event etc.
+        restart.on('pointerover', () => {
+          restart.setScale(0.7);
+        });
+    
+        restart.on('pointerout', () => {
+          restart.setScale(1);
+        });
+    
+        restart.on('pointerup', () => {
+          //creates popup messages
+          const popupMss = new PopupWindow(this, 0, 0, 'note', this.game.renderer.width / 2 + 60, this.game.renderer.height / 2 - 70, true, [new Phaser.GameObjects.Text(this, this.game.renderer.width / 2 - 100, this.game.renderer.height / 2, 'Do you want to restart this game ?',{color:'Black', fontSize: '14px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
+          //creates confirm button
+          const restartOKBtn = new Phaser.GameObjects.Image(this,this.game.renderer.width / 2, this.game.renderer.height / 2 + 50, 'restart-popup');
+          
+          //confirm button interactive events
+          restartOKBtn.setInteractive();
+          //hover, click event etc
+          restartOKBtn.on('pointerover', () => {
+            restartOKBtn.setTexture('restart-popup-hover');
+          });
+      
+          restartOKBtn.on('pointerout', () => {
+            restartOKBtn.setTexture('restart-popup');
+          });
+    
+          //do restart the game when btn were clicked
+          restartOKBtn.on('pointerup', () => {
+            const main = this.scene.get('MainScene') as MainScene;
+            const chart = this.scene.get('ChartScene') as ChartScene;
+            const map = this.scene.get('MapScene') as MapScene;
+          
+            main.scene.restart();
+            chart.scene.restart();
+            map.scene.restart();
+    
+            //close modal
+            popupMss.closeModal();
+          });
+    
+          //add confirm to object container and show the popup
+          popupMss.addGameObjects([restartOKBtn]);
+          popupMss.createModal();
+    
+        });
+
     const musicOn = this.add.sprite(3100, 310, 'music_on').setInteractive();
     const soundOn = this.add.sprite(3100, 430, 'sound_on').setInteractive();
+
+    musicOn.on('pointerover', () => {
+      musicOn.setScale(0.7);
+    });
+
+    musicOn.on('pointerout', () => {
+      musicOn.setScale(1);
+    });
+
+    soundOn.on('pointerover', () => {
+      soundOn.setScale(0.7);
+    });
+
+    soundOn.on('pointerout', () => {
+      soundOn.setScale(1);
+    });
+
+    musicOn.on('pointerup',() => {
+      if(this.musicON){
+        // method to turn off music should be here
+
+        // changes img and reset musicON atribute
+        musicOn.setTexture('music_off');
+        this.musicON = false;
+      }else{
+        // method to turn on music should be here
+
+        // changes img and reset musicON atribute
+        musicOn.setTexture('music_on');
+        this.musicON = true;
+      }
+    });
+
+    soundOn.on('pointerup',() => {
+      if(this.soundON){
+        // method to turn off sound should be here
+
+        // changes img and reset soundON atribute
+        soundOn.setTexture('sound_off');
+        this.soundON = false;
+      }else{
+        // method to turn on sound should be here
+
+        // changes img and reset soundON atribute
+        soundOn.setTexture('sound_on');
+        this.soundON = true;
+      }
+    });
 
     const pause = this.add.sprite(1600, 50, 'pause').setInteractive();
     const resume = this.add.sprite(1700, 50, 'resume-button').setInteractive();
     const speed1x = this.add.sprite(1800, 50, 'speed1x').setInteractive();
     const speed2x = this.add.sprite(1900, 50, 'speed2x').setInteractive();
     const speed3x = this.add.sprite(2000, 50, 'speed3x').setInteractive();
+
+    //pause btn 
+    pause.on('pointerover', () => {
+      pause.setScale(0.7);
+    });
+
+    pause.on('pointerout', () => {
+      pause.setScale(1);
+    });
+
+    pause.on('pointerup', () => {
+      if(!this.mainSceneIsPaused){
+        const main = this.scene.get('MainScene') as MainScene;
+        const chart = this.scene.get('ChartScene') as ChartScene;
+        const map = this.scene.get('MapScene') as MapScene;
+        main.scene.pause();
+        chart.scene.pause();
+        map.scene.pause();
+        this.mainSceneIsPaused = true;
+      }
+    });
+
+    //resume btn
+    resume.on('pointerover', () => {
+      resume.setScale(0.7);
+    });
+
+    resume.on('pointerout', () => {
+      resume.setScale(1);
+    });
+
+    resume.on('pointerup',() => {
+      if (this.mainSceneIsPaused) {
+        const main = this.scene.get('MainScene') as MainScene;
+        const chart = this.scene.get('ChartScene') as ChartScene;
+        const map = this.scene.get('MapScene') as MapScene;
+        main.scene.resume();
+        chart.scene.resume();
+        map.scene.resume();
+        this.mainSceneIsPaused = false;
+      }
+    });
+
+    // speed btns
+    speed1x.on('pointerover', () => {
+      speed1x.setScale(0.7);
+    });
+
+    speed1x.on('pointerout', () => {
+      speed1x.setScale(1);
+    });
+
+    speed1x.on('pointerup',() => {     
+      this.gameSpeed = 1;
+      this.uC.getTimeController().setGameSpeed(this.gameSpeed);
+    });
+
+    speed2x.on('pointerover', () => {
+      speed2x.setScale(0.7);
+    });
+
+    speed2x.on('pointerout', () => {
+      speed2x.setScale(1);
+    });
+
+    speed2x.on('pointerup',() => {
+      this.gameSpeed = 1.5;
+      this.uC.getTimeController().setGameSpeed(this.gameSpeed);
+    });
+
+    speed3x.on('pointerover', () => {
+      speed3x.setScale(0.7);
+    });
+
+    speed3x.on('pointerout', () => {
+      speed3x.setScale(1);
+    });
+
+    speed3x.on('pointerup',() => {
+      this.gameSpeed = 2;
+      this.uC.getTimeController().setGameSpeed(this.gameSpeed);
+    });
     */
   }
   
@@ -383,6 +622,24 @@ export class GuiScene extends Phaser.Scene {
       this.popUpSprite.destroy();
     }
   }
+    
+  /*---------START: Skill-Tree button ---------- */
+  createSkillTreeBtn(): void {
+    const yourSkills = this.add.sprite(1850, 550, 'your_skills').setInteractive()
+    .on('pointerover', () => {
+      yourSkills.setScale(0.6);
+    })
+    .on('pointerout', () => { 
+      yourSkills.setScale(0.5);
+    })
+    .on('pointerdown', () => {
+      yourSkills.setScale(0.5);
+    })
+    .on('pointerup', () => {
+      yourSkills.setScale(0.6);
+      this.openSkillTree()
+    }).setScale(0.5);
+  }
 
   openSkillTree(): void {
     const popupSkillTree = new PopupWindow(this, 0, 0, 'open-notebook', 1300, 130, true, this.addSkills(), false);
@@ -395,14 +652,15 @@ export class GuiScene extends Phaser.Scene {
     return [
       /*const icons = new Phaser.GameObjects.Image(this, x + iconCount * 100, y + iconCount * 100, 'skill-button');*/
     ]
-    
   }
 
   /*---------START: Rules button ---------- */
   createRulesBtn(): void {
-    const rulesBtn = this.add.image(this.game.renderer.width - 100, this.game.renderer.height -250, 'rules').setDepth(1);
-    const popupRules = new PopupWindow(this, 0, 0, 'background', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, 'The Rules',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
-
+    const rulesBtn = this.add.image(this.game.renderer.width - 100, this.game.renderer.height -250, 'rules');
+    const popupRules = new PopupWindow(this, 0, 0, '', 1300, 130, true, [],false);
+    const title = this.add.text(550, 130, 'The Rules',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'}).setDepth(1);
+    const blankNode = this.add.sprite(this.game.renderer.width /2 + 50, this.game.renderer.height /2, 'blank-note').setDisplaySize(1200, 970); 
+    popupRules.addGameObjects([blankNode, title]);
     /*---------START: add Rules ---------- */
     const allRules = Controller.getInstance().getRules();
     let ruleIndex = 0;
@@ -414,14 +672,17 @@ export class GuiScene extends Phaser.Scene {
     /*---------END: add Rules ---------- */
 
     // popup info as a seconde popup
-    const info = new Phaser.GameObjects.Image(this, 800, 150, 'information');
+    const info = new Phaser.GameObjects.Image(this, 800, 150, 'information').setScale(0.4);
     info.setInteractive();
 
     info.on('pointerup', () => {
       const popupTitle = 'The Information';
       const popupStr = 'The Agents exchange their state when they are close together';
-      const popupInfo = new PopupWindow(this, 0, 0, 'background', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, popupTitle,{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],true);
 
+      const popupInfo = new PopupWindow(this, 0, 0, '', 1300, 130, true, [],true);
+      const blankNode = this.add.sprite(this.game.renderer.width /2 + 50, this.game.renderer.height /2, 'blank-note').setDisplaySize(1200, 970); 
+      popupInfo.add(blankNode);
+      popupInfo.add(new Phaser.GameObjects.Text(this, 550, 130, popupTitle,{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'}));
       popupInfo.add(new Phaser.GameObjects.Text(this,550, 220 , popupStr, {color:'Black', fontSize: '30px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'} ));
 
       popupInfo.createModal();
@@ -433,38 +694,39 @@ export class GuiScene extends Phaser.Scene {
 
     // Change the button textures on hover, press, etc.
     rulesBtn.on('pointerover', () => {
-      rulesBtn.setTexture('rules-hover');
+      rulesBtn.setScale(0.7);
     });
     rulesBtn.on('pointerout', () => {
-      rulesBtn.setTexture('rules');
+      rulesBtn.setScale(1);
     });
     rulesBtn.on('pointerdown', () => {
-      rulesBtn.setTexture('rules');
+      rulesBtn.setScale(1);
     });
     rulesBtn.on('pointerup', () => {
-      rulesBtn.setTexture('rules_on_click');
+      rulesBtn.setScale(0.8);
       popupRules.createModal();
     });
   }
 
   addRuleToContainer(container: Phaser.GameObjects.Container, rule: Rule, ruleIndex: number): void {
-    const x = 550;
-    const y = 200 + ruleIndex * 170;
+    // The following x and y for test. 
+    // To rescale for the 3200x1600 pixel version (if needed) changes x and y as following x = this.game.redereer.width /2 +- number; y = this.game.redereer.height /2 +- number;
+    const x = this.game.renderer.width / 2 - 450;
+    const y = this.game.renderer.height / 2 - 250 + ruleIndex * 170;
     const pos1 = new Phaser.GameObjects.Image(this, x, y, this.getTextures(rule.inputState1)).setOrigin(0);
     container.add(pos1);
 
     const pos2 = new Phaser.GameObjects.Image(this, x + 200, y, this.getTextures(rule.inputState2)).setOrigin(0);
     container.add(pos2);
 
-    const pos3 = new Phaser.GameObjects.Image(this, x + 420, y, this.getTextures(rule.outputState1)).setOrigin(0);
+    const pos3 = new Phaser.GameObjects.Image(this, x + 480, y, this.getTextures(rule.outputState1)).setOrigin(0);
     container.add(pos3);
 
-    const pos4 = new Phaser.GameObjects.Image(this, x + 620, y, this.getTextures(rule.outputState2)).setOrigin(0);
+    const pos4 = new Phaser.GameObjects.Image(this, x + 680, y, this.getTextures(rule.outputState2)).setOrigin(0);
     container.add(pos4);
 
-    const arrow = new Phaser.GameObjects.Image(this, x + 340, y + 30, 'pprules-arrow').setOrigin(0);
+    const arrow = new Phaser.GameObjects.Image(this, x + 400, y + 20, 'pprules-arrow').setOrigin(0);
     container.add(arrow);
-
   }
 
   getTextures(str: string): string {
@@ -496,16 +758,16 @@ export class GuiScene extends Phaser.Scene {
 
   /*---------START: Reset button  ---------- */
   createResetBtn(): void {
-    const resetBtn = this.add.image(this.game.renderer.width - 100, 60, 'restart').setOrigin(0);
+    const resetBtn = this.add.image(this.game.renderer.width - 100, 150, 'restart');
     resetBtn.setInteractive();
 
     // hover, click event etc.
     resetBtn.on('pointerover', () => {
-      resetBtn.setTexture('restart-hover');
+      resetBtn.setScale(0.7);
     });
 
     resetBtn.on('pointerout', () => {
-      resetBtn.setTexture('restart');
+      resetBtn.setScale(1);
     });
 
     resetBtn.on('pointerup', () => {
@@ -546,6 +808,153 @@ export class GuiScene extends Phaser.Scene {
     });
   }
   /*---------END: Reset button  ---------- */
+
+  /*---------START: Speed button  ---------- */
+  createSpeedButton(): void {
+    const pause = this.add.sprite(this.game.renderer.width / 2 - 200, 50, 'pause').setInteractive();
+    const resume = this.add.sprite(this.game.renderer.width / 2 - 100, 50, 'resume-button').setInteractive();
+    const speed1x = this.add.sprite(this.game.renderer.width / 2, 50, 'speed1x').setInteractive();
+    const speed2x = this.add.sprite(this.game.renderer.width / 2 + 100, 50, 'speed2x').setInteractive();
+    const speed3x = this.add.sprite(this.game.renderer.width / 2 + 200, 50, 'speed3x').setInteractive();
+
+    //pause btn 
+    pause.on('pointerover', () => {
+      pause.setScale(0.7);
+    });
+
+    pause.on('pointerout', () => {
+      pause.setScale(1);
+    });
+
+    pause.on('pointerup', () => {
+      if(!this.mainSceneIsPaused){
+        const main = this.scene.get('MainScene') as MainScene;
+        const chart = this.scene.get('ChartScene') as ChartScene;
+        const map = this.scene.get('MapScene') as MapScene;
+        main.scene.pause();
+        chart.scene.pause();
+        map.scene.pause();
+        this.mainSceneIsPaused = true;
+      }
+    });
+
+    //resume btn
+    resume.on('pointerover', () => {
+      resume.setScale(0.7);
+    });
+
+    resume.on('pointerout', () => {
+      resume.setScale(1);
+    });
+
+    resume.on('pointerup',() => {
+      if (this.mainSceneIsPaused) {
+        const main = this.scene.get('MainScene') as MainScene;
+        const chart = this.scene.get('ChartScene') as ChartScene;
+        const map = this.scene.get('MapScene') as MapScene;
+        main.scene.resume();
+        chart.scene.resume();
+        map.scene.resume();
+        this.mainSceneIsPaused = false;
+      }
+    });
+
+    // speed btns
+    speed1x.on('pointerover', () => {
+      speed1x.setScale(0.7);
+    });
+
+    speed1x.on('pointerout', () => {
+      speed1x.setScale(1);
+    });
+
+    speed1x.on('pointerup',() => {     
+      this.gameSpeed = 1;
+      TimeController.getInstance().setGameSpeed(this.gameSpeed);
+    });
+
+    speed2x.on('pointerover', () => {
+      speed2x.setScale(0.7);
+    });
+
+    speed2x.on('pointerout', () => {
+      speed2x.setScale(1);
+    });
+
+    speed2x.on('pointerup',() => {
+      this.gameSpeed = 1.5;
+      TimeController.getInstance().setGameSpeed(this.gameSpeed);
+    });
+
+    speed3x.on('pointerover', () => {
+      speed3x.setScale(0.7);
+    });
+
+    speed3x.on('pointerout', () => {
+      speed3x.setScale(1);
+    });
+
+    speed3x.on('pointerup',() => {
+      this.gameSpeed = 2;
+      TimeController.getInstance().setGameSpeed(this.gameSpeed);
+    });
+  }
+  /*---------END: Speed button  ---------- */
+
+  /*---------START: Sound button  ---------- */
+  createSoundButton(): void {
+    const musicOn = this.add.sprite(this.game.renderer.width - 100, 250, 'music_on').setInteractive();
+    const soundOn = this.add.sprite(this.game.renderer.width - 100, 350, 'sound_on').setInteractive();
+
+    musicOn.on('pointerover', () => {
+      musicOn.setScale(0.7);
+    });
+
+    musicOn.on('pointerout', () => {
+      musicOn.setScale(1);
+    });
+
+    soundOn.on('pointerover', () => {
+      soundOn.setScale(0.7);
+    });
+
+    soundOn.on('pointerout', () => {
+      soundOn.setScale(1);
+    });
+
+    musicOn.on('pointerup',() => {
+      if(this.musicON){
+        // method to turn off music should be here
+
+        // changes img and reset musicON atribute
+        musicOn.setTexture('music_off');
+        this.musicON = false;
+      }else{
+        // method to turn on music should be here
+
+        // changes img and reset musicON atribute
+        musicOn.setTexture('music_on');
+        this.musicON = true;
+      }
+    });
+
+    soundOn.on('pointerup',() => {
+      if(this.soundON){
+        // method to turn off sound should be here
+
+        // changes img and reset soundON atribute
+        soundOn.setTexture('sound_off');
+        this.soundON = false;
+      }else{
+        // method to turn on sound should be here
+
+        // changes img and reset soundON atribute
+        soundOn.setTexture('sound_on');
+        this.soundON = true;
+      }
+    });
+  }
+  /*---------END: Sound button  ---------- */
 
   update(): void {
     if (!this.mainSceneIsPaused) this.menu.updateItemMenu(); // has to be invoked each tic/ ingame hour TODO
