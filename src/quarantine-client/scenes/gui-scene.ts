@@ -53,6 +53,9 @@ export class GuiScene extends Phaser.Scene {
     // Creates Itemmenu and it to this scene
     this.menu = new ItemMenu(this, 0, 750);
 
+    // Creates Skill Tree Button
+    this.createSkillTreeBtn();
+
     // Creates Rules button
     this.createRulesBtn();
 
@@ -127,7 +130,6 @@ export class GuiScene extends Phaser.Scene {
     const grayBackground = this.add.sprite(2650, 400, 'gray-background').setInteractive();
 
     const letter = this.add.sprite(3100, 850, 'letter').setInteractive();
-    const yourSkills = this.add.sprite(3100, 1075, 'your_skills').setInteractive();
     const rules = this.add.sprite(3100, 1300, 'rules').setInteractive();
 
     const info = this.add.sprite(3100, 70, 'information').setInteractive();
@@ -382,6 +384,24 @@ export class GuiScene extends Phaser.Scene {
       this.day.destroy();
       this.popUpSprite.destroy();
     }
+  }
+
+  /*---------START: Skill-Tree button ---------- */
+  createSkillTreeBtn(): void {
+    const yourSkills = this.add.sprite(1850, 550, 'your_skills').setInteractive()
+    .on('pointerover', () => {
+      yourSkills.setScale(0.6);
+    })
+    .on('pointerout', () => { 
+      yourSkills.setScale(0.5);
+    })
+    .on('pointerdown', () => {
+      yourSkills.setScale(0.5);
+    })
+    .on('pointerup', () => {
+      yourSkills.setScale(0.6);
+      // openSkillTree()
+    }).setScale(0.5);
   }
 
   /*---------START: Rules button ---------- */
