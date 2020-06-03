@@ -24,7 +24,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
     // The Texture of the button
     private buttonImage: Phaser.GameObjects.Image;
     // Loading data of menu items
-    public measures = require("../objects/controller/measures.json");
+    public measures = require("./../../../res/json/measures.json");
 
     public upgradeContr: UpgradeController;
 

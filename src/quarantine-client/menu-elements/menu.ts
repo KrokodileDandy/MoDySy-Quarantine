@@ -1,10 +1,7 @@
 import 'phaser';
 import { GameObjects } from 'phaser';
 import { UpgradeController } from '../objects/controller/upgradeController';
-<<<<<<< HEAD
 import { ButtonContainer } from './button-container';
-=======
->>>>>>> 9a63befd7d573cee9a32fff5bb79b86e28dd6dc5
 
 /**
  * Extends Phaser.GameObjects.Container and represents the ingame item menu.
@@ -40,22 +37,11 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         // Add menu bar
         this.add(this.scene.add.image(this.x + 600 , 0, 'bar').setOrigin(0, 0)).setAlpha(0.5);
 
-<<<<<<< HEAD
         // Add button container
         new ButtonContainer(this.scene, 250, 850, 'research', this.measures['research']['prices'][0], this.buildClosure(this.upgradeContr.buyResearchLevel));
         new ButtonContainer(this.scene, 250, 1025, 'lockdown', this.measures['lockdown']['price'], this.buildClosure(this.upgradeContr.activateLockdown));
         new ButtonContainer(this.scene, 250, 1200, 'police', this.measures['police']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
         new ButtonContainer(this.scene, 250, 1375, 'healthworkers', this.measures['healthworkers']['price'], this.buildClosure(this.upgradeContr.buyHealthWorkers));
-=======
-        //Add navigation buttons
-        //const nbrOfItems = itemBar.length; //1 has to be subracted if there is a background img for itemBar
-        //this.add(new ArrowButton(this.scene, 325, 75, 'arrow-button-left', -1, nbrOfItems));
-        //this.add(new ArrowButton(this.scene, 1000, 75, 'arrow-button-right', 1, nbrOfItems));
-        
-        //Add itembar
-        this.add(itemBar);
-    }
->>>>>>> 9a63befd7d573cee9a32fff5bb79b86e28dd6dc5
 
         this.scene.add.existing(this);
 
