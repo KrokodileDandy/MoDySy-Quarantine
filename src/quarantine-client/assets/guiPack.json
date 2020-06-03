@@ -3,11 +3,6 @@
     "files": [
       {
         "type": "image",
-        "key": "background",
-        "url": "assets/sprites/main-scene/background.png"
-      },
-      {
-        "type": "image",
         "key": "calendar",
         "url": "assets/sprites/main-scene/calendar.png"
       },
