@@ -32,7 +32,9 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         //set child
         this.isChild = isChild;
         //add background
-        this.addBackground(backgroundKey);
+        if(backgroundKey !== ''){
+            this.addBackground(backgroundKey);
+        }
         //add close btn
         this.closeBtnX = closeBtnX;
         this.closeBtnY = closeBtnY;
