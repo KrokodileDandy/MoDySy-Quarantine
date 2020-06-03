@@ -93,6 +93,11 @@
       },
       {
         "type": "image",
+        "key": "open-notebook",
+        "url": "assets/sprites/skill-tree/open-notebook.png"
+      },
+      {
+        "type": "image",
         "key": "pause",
         "url": "assets/sprites/main-scene/pause.png"
       },

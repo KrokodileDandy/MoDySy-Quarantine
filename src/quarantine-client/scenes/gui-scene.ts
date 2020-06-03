@@ -384,6 +384,21 @@ export class GuiScene extends Phaser.Scene {
     }
   }
 
+  openSkillTree(): void {
+    const popupSkillTree = new PopupWindow(this, 0, 0, 'open-notebook', 1300, 130, true, this.addSkills(), false);
+    this.addSkills(popupSkillTree);
+  }
+
+  addSkills(): Phaser.GameObjects.GameObject[] {
+    
+    const x = 100;
+    const y = 300;
+    return [
+      const icons = new Phaser.GameObjects.Image(this, x + iconCount * 100, y + iconCount * 100, 'skill-button');
+    ]
+    
+  }
+
   /*---------START: Rules button ---------- */
   createRulesBtn(): void {
     const rulesBtn = this.add.image(this.game.renderer.width - 100, this.game.renderer.height -250, 'rules').setDepth(1);
