@@ -388,20 +388,20 @@ export class GuiScene extends Phaser.Scene {
 
   /*---------START: Skill-Tree button ---------- */
   createSkillTreeBtn(): void {
-    const yourSkills = this.add.sprite(3100, 1075, 'your_skills').setInteractive()
+    const yourSkills = this.add.sprite(1850, 550, 'your_skills').setInteractive()
     .on('pointerover', () => {
-      yourSkills.setScale(1.1);
+      yourSkills.setScale(0.6);
     })
     .on('pointerout', () => { 
-      yourSkills.setScale(1.0);
+      yourSkills.setScale(0.5);
     })
     .on('pointerdown', () => {
-      yourSkills.setScale(1.0);
+      yourSkills.setScale(0.5);
     })
     .on('pointerup', () => {
-      yourSkills.setScale(1.1);
+      yourSkills.setScale(0.6);
       // openSkillTree()
-    });
+    }).setScale(0.5);
   }
 
   /*---------START: Rules button ---------- */
