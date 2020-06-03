@@ -7,6 +7,7 @@ import { PopupWindow } from "./popupWindow";
 import { Controller } from "../objects/controller/controller";
 import { State } from "../util/enums/healthStates";
 import { Rule } from "../objects/entities/rule";
+import { TimeController } from "../objects/controller/timeController";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -836,7 +837,7 @@ export class GuiScene extends Phaser.Scene {
 
     speed1x.on('pointerup',() => {     
       this.gameSpeed = 1;
-      this.uC.getTimeController().setGameSpeed(this.gameSpeed);
+      TimeController.getInstance().setGameSpeed(this.gameSpeed);
     });
 
     speed2x.on('pointerover', () => {
@@ -849,7 +850,7 @@ export class GuiScene extends Phaser.Scene {
 
     speed2x.on('pointerup',() => {
       this.gameSpeed = 1.5;
-      this.uC.getTimeController().setGameSpeed(this.gameSpeed);
+      TimeController.getInstance().setGameSpeed(this.gameSpeed);
     });
 
     speed3x.on('pointerover', () => {
@@ -862,7 +863,7 @@ export class GuiScene extends Phaser.Scene {
 
     speed3x.on('pointerup',() => {
       this.gameSpeed = 2;
-      this.uC.getTimeController().setGameSpeed(this.gameSpeed);
+      TimeController.getInstance().setGameSpeed(this.gameSpeed);
     });
   }
   /*---------END: Speed button  ---------- */
