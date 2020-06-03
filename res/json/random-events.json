@@ -1,22 +1,67 @@
 {
     "common": [
         {
-            "name": "Social Distancing COMMON",
-            "description": "SD description",
+            "name": "Donations of Test Kits",
+            "description": "A neighboring country is donating test kits. They should be enough for a whole week of testing without any expenses.",
+            "image-path": ""
+        },
+        {
+            "name": "Test Kit Shortages",
+            "description": "Our ordered test-kits didn't arrive on time, to still keep up with testing, test kits will cost us double the amount for the next week.",
+            "image-path": ""
+        },
+        {
+            "name": "Medical personnel is volunteering",
+            "description": "Non-governmental organisations are sending trained force to support our health workers for a week.",
+            "image-path": ""
+        },
+        {
+            "name": "An anonymous donation was made to our cause",
+            "description": "An anonymous donation of 100.000 € was made to our cause.",
+            "image-path": ""
+        },
+        {
+            "name": "Bad news are dominating the media",
+            "description": "Lately, a lot of bad news have been popping up. The population seems affected by this.",
             "image-path": ""
         }
     ],
     "rare": [
         {
-            "name": "Social Distancing RARE",
-            "description": "SD description",
+            "name": "An anonymous donation was made to our cause.",
+            "description": "An anonymous donation of 1.000.000 € was made to our cause.",
+            "image-path": ""
+        },
+        {
+            "name": "State workers demand a bonus",
+            "description": "Given the risks of their dangerous new working conditions, police and health workers demand a bonus.  For two weeks their salary increases by 10 € / day.",
+            "image-path": ""
+        },
+        {
+            "name": "Finally some good news",
+            "description": "Lately, we have been seeing a lot more good news than usual. This eases unhappy minds.",
+            "image-path": ""
+        },
+        {
+            "name": "People going out due to heat wave",
+            "description": "Amid the hot weather, people are drawn to parks, lakes and the sea. Virologists are predicting a small surge in new infections.",
             "image-path": ""
         }
     ],
     "very-rare": [
         {
-            "name": "Social Distancing VERY RARE",
-            "description": "SD description",
+            "name": "Police are sending trainees to work",
+            "description": "o support the strained force, police decided to put their trainees to work early. For us, this means more force for the same price.",
+            "image-path": ""
+        },
+        {
+            "name": "An anonymous donation was made to our cause.",
+            "description": "An anonymous donation of 100.000.000 € was made to our cause.",
+            "image-path": ""
+        },
+        {
+            "name": "People staying in due to storms",
+            "description": "The bad weather lately has people leave their houses less. Virologists are predicting a small dip in new infections.",
             "image-path": ""
         }
     ],
@@ -25,12 +70,37 @@
             "name": "Social Distancing EPIC",
             "description": "SD description",
             "image-path": ""
+        },
+        {
+            "name": "An anonymous donation was made to our cause.",
+            "description": "An anonymous donation of 1.000.000.000 € was made to our cause.",
+            "image-path": ""
+        },
+        {
+            "name": "State workers demand a bonus",
+            "description": "Given the risks of their dangerous new working conditions, police and health workers demand a bonus. For six weeks their salary increases by 5 € / day.",
+            "image-path": ""
+        },
+        {
+            "name": "Flu season",
+            "description": "As flu season is beginning, experts are anticipating higher-than-usual death rates as the diseases overlap.",
+            "image-path": ""
         }
     ],
     "legendary": [
         {
-            "name": "Social Distancing LEGENDARY",
-            "description": "SD description",
+            "name": "Generous NGO supporting police and health workers",
+            "description": "An NGO is supplying volunteers and 1 Mio. € in donations in a large-scale effort to help police and healthcare.",
+            "image-path": ""
+        },
+        {
+            "name": "An anonymous donation was made to our cause.",
+            "description": "An anonymous donation of 5.000.000.000 € was made to our cause. Sponsored by M.K. and S.F.",
+            "image-path": ""
+        },
+        {
+            "name": "Some f*cking good news!",
+            "description": "A neighbouring country has no more active cases. Your population gains hope that the pandemic can be stopped!",
             "image-path": ""
         }
     ]
