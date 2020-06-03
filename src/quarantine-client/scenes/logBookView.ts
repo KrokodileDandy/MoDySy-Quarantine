@@ -8,7 +8,7 @@ export class LogBookView extends PopupWindow {
 
     private currWeek: number;
 
-    constructor(scene: Phaser.Scene, week: number) {
+    constructor(scene: Phaser.Scene, week: number, isChild = false) {
         super(
             scene, 
             0, 
@@ -26,7 +26,7 @@ export class LogBookView extends PopupWindow {
                     { color: 'Black', fontSize: '70px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
                 )
             ],
-            false
+            isChild
         );
 
         this.currWeek = week;

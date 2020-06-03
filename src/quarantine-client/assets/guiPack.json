@@ -511,6 +511,16 @@
           "type": "image",
           "key": "chemistry",
           "url": "assets/sprites/log-book/chemistry.png"
+        },
+        {
+          "type": "image",
+          "key": "vaccine",
+          "url": "assets/sprites/skill-tree/vaccine.png"
+        },
+        {
+          "type": "image",
+          "key": "medicine",
+          "url": "assets/sprites/skill-tree/medicine.png"
         }
       ]
   }

@@ -34,7 +34,7 @@ export class Event {
         ppTitle.setX((1920 / 2) - ppTitle.width / 2);
         const ppDescription = new Phaser.GameObjects.Text(GuiScene.instance, 300, 350, description, styleDesc);
         ppDescription.setWordWrapWidth(1400);
-        const popup = new PopupWindow(GuiScene.instance, 0, 0, 'event-note', 1600, 80, true, [img, ppTitle, ppDescription], true);
+        const popup = new PopupWindow(GuiScene.instance, 0, 0, 'event-note', 1600, 80, true, [img, ppTitle, ppDescription], false);
 
         executeEventFunction();
         popup.createModal();

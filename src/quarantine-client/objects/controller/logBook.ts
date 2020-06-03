@@ -45,9 +45,9 @@ export class LogBook {
             400, 
             this.textStatPosY, 
             name + ": " + value, 
-            { color: 'Black', fontSize: '18px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
+            { color: 'Black', fontSize: '28px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
         );
-        this.textStatPosY += 32;
+        this.textStatPosY += 64;
         return temp;
     }
 
@@ -79,7 +79,7 @@ export class LogBook {
      * @param info 
      */
     private generateLogBookStats(lbView: LogBookView, info: (number | {[id: string]: {[id: string]: number}})[]): void {
-        this.textStatPosY = 160;
+        this.textStatPosY = 155;
         const arr = [];
         arr.push(this.getStatTextEl("Infected", Number(info[0])));
         arr.push(this.getStatTextEl("Cured", Number(info[1])));
@@ -97,23 +97,59 @@ export class LogBook {
     private getStatImg(imgKey: string): Phaser.GameObjects.Sprite {
         const el = new Phaser.GameObjects.Sprite(
             this.scene,
-            400,
+            350,
             this.imgStatPosY,
             imgKey
         );
-        this.imgStatPosY += 50;
+        this.imgStatPosY += 64;
         return el;
     }
 
     private generateLogBookStatsImages(lbView: LogBookView): void {
         this.imgStatPosY = 160;
         const arr = [];
-        arr.push(this.getStatImg('virus'));
-        arr.push(this.getStatImg('boy'));
-        arr.push(this.getStatImg('girl'));
-        arr.push(this.getStatImg('tomb-stone'));
-        arr.push(this.getStatImg('chemistry'));
-        arr.push(this.getStatImg('physician'));
+
+        const imgVirus = this.getStatImg('virus')
+        imgVirus.scale = 0.3;
+        arr.push(imgVirus);
+
+        const imgGirl = new Phaser.GameObjects.Sprite(
+            this.scene,
+            310,
+            this.imgStatPosY,
+            'girl'
+        );
+        imgGirl.scale = 0.7;
+        arr.push(imgGirl);
+
+        const imgBoy = this.getStatImg('boy')
+        imgBoy.scale = 0.7;
+        arr.push(imgBoy);
+
+        const imgTombStone = this.getStatImg('tomb-stone');
+        imgTombStone.scale = 0.5;
+        arr.push(imgTombStone);
+
+        const imgPhysician = this.getStatImg('physician');
+        imgPhysician.scale = 0.3;
+        arr.push(imgPhysician);
+
+        const imgPolice = this.getStatImg('chemistry'); // TODO search sprite?
+        imgPolice.scale = 0.5;
+        imgPolice.visible = false;
+        arr.push(imgPolice);
+
+        const imgChemistry = this.getStatImg('chemistry');
+        imgChemistry.scale = 0.5;
+        arr.push(imgChemistry);
+
+        const imgTestKit = this.getStatImg('medicine');
+        imgTestKit.scale = 0.4;
+        arr.push(imgTestKit);
+
+        const imgVaccine = this.getStatImg('vaccine');
+        imgVaccine.scale = 0.8;
+        arr.push(imgVaccine);
 
         lbView.addGameObjects(arr);
     }
@@ -151,7 +187,7 @@ export class LogBook {
         arr.push(this.getFinanceTextEl("Costs for Measures", Number(info[6]["exp"]["ms"]), offset));
 
         // total
-        let tempY;
+        let tempY: number;
         if (this.textFinanceIncPosY > this.textFinanceExpPosY) tempY = this.textFinanceIncPosY;
         else tempY = this.textFinanceExpPosY;
         arr.push(new Phaser.GameObjects.Text(
@@ -176,8 +212,8 @@ export class LogBook {
      * Creates a popup with information regarding the specified week.
      * @param week The current in-game time week.
      */
-    private createLogBookView(week: number): LogBookView {
-        const lbView = new LogBookView(this.scene, week);
+    private createLogBookView(week: number, isChild = false): LogBookView {
+        const lbView = new LogBookView(this.scene, week, isChild);
         const info = Stats.getInstance().getWeeklyStats(week);
 
         this.generateLogBookStats(lbView, info);
@@ -202,7 +238,7 @@ export class LogBook {
      */
     public showNextWeek(currWeek: number): boolean {
         if (TimeController.getInstance().getWeeksSinceGameStart() == currWeek) return false;
-        this.createLogBookView(currWeek + 1).createModal();
+        this.createLogBookView(currWeek + 1, true).createModal();
         return true;
     }
 
@@ -212,7 +248,7 @@ export class LogBook {
      */
     public showPrevWeek(currWeek: number): boolean {
         if (currWeek == 0) return false;
-        this.createLogBookView(currWeek - 1).createModal();
+        this.createLogBookView(currWeek - 1, true).createModal();
         return true;
     }
 

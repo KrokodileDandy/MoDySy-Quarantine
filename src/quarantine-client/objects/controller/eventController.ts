@@ -183,7 +183,7 @@ export class EventController implements TimeSubscriber {
      * @param eventRarity Rarity level to select an event from
      */
     private callRandomEvent(eventRarity: string): void {
-        const idx = this.getRandomIntInclusive(0, this.eventList[eventRarity].length);
+        const idx = this.getRandomIntInclusive(0, this.eventList[eventRarity].length - 1);
         const eventInfo = this.eventList[eventRarity][idx];
         new Event(
             EventController.eventFunctionList[eventRarity][idx],
@@ -193,9 +193,7 @@ export class EventController implements TimeSubscriber {
         );
     }
 
-    /**
-     * Reduces all event counters by one.
-     */
+    /** Reduces all event counters by one. */
     private decreaseEventCounters(): void {
         this.timeSpanLegendary--;
         this.timeSpanEpic--;
