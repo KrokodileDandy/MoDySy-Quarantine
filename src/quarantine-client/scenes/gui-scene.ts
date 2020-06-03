@@ -386,7 +386,6 @@ export class GuiScene extends Phaser.Scene {
 
   openSkillTree(): void {
     const popupSkillTree = new PopupWindow(this, 0, 0, 'open-notebook', 1300, 130, true, this.addSkills(), false);
-    this.addSkills(popupSkillTree);
   }
 
   addSkills(): Phaser.GameObjects.GameObject[] {
@@ -394,7 +393,7 @@ export class GuiScene extends Phaser.Scene {
     const x = 100;
     const y = 300;
     return [
-      const icons = new Phaser.GameObjects.Image(this, x + iconCount * 100, y + iconCount * 100, 'skill-button');
+      /*const icons = new Phaser.GameObjects.Image(this, x + iconCount * 100, y + iconCount * 100, 'skill-button');*/
     ]
     
   }
