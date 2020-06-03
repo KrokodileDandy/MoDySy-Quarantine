@@ -1,4 +1,6 @@
 import * as Chart from "chart.js";
+import "chartjs-plugin-zoom";
+import "hammerjs";
 import { GuiScene } from "./gui-scene";
 import { TimeSubscriber } from "../util/timeSubscriber";
 import { TimeController } from "../objects/controller/timeController";
@@ -218,12 +220,27 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
             this.chart.update();
         }.bind(this);
 
+        /** Create the button to reset the zoom */
+        const resetZoomButton = document.createElement('input');
+        resetZoomButton.setAttribute('id', 'reset-zoom-button');
+        resetZoomButton.setAttribute('type', 'button');
+        resetZoomButton.setAttribute('value', 'Reset Zoom');
+        form.appendChild(resetZoomButton);
+
+        resetZoomButton.onclick = function(): void {
+            this.chart.resetZoom();
+        }.bind(this);
+
         /** Change the style of the form */
         const style = document.createElement('style');
         style.innerHTML = `
         #chart-axis, #timeframe {
             margin-left: 5px;
             margin-right: 30px;
+        }
+        
+        #reset-zoom-button {
+            margin-left: 50px;
         }`;
         document.head.appendChild(style);
 
@@ -313,7 +330,40 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
                 responsive: true,
 
                 /** Do not maintain the aspect ratio when resizing */
-                maintainApsectRatio: false
+                maintainApsectRatio: false,
+
+                /** Configure plugins */
+                plugins: {
+                    /** 
+                     * Zoom and pan plugin for Chart.js
+                     * source: https://github.com/chartjs/chartjs-plugin-zoom
+                     */
+                    zoom: {
+                        /** Pan options */
+                        pan: {
+                            /** Enable panning */
+                            enabled: true,
+                            /** Only allow panning in x-direction */
+                            mode: 'x',
+                            /** Pan velocity */
+                            speed: 1,
+                            /** Minimal distance before applying pan */
+                            threshold: 1
+                        },
+
+                        /** Zoom options */
+                        zoom: {
+                            /** Enable zoom */
+                            enabled: true,
+                            /** Disable drag-to-zoom */
+                            drag: false,
+                            /** Only allow zooming in x-direction */
+                            mode: 'x',
+                            /** Minimal level before applying zoom */
+                            sensitivity: 0.5
+                        }
+                    }
+                }
             }
         });
     }
