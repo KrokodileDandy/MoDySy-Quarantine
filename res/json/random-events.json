@@ -1,0 +1,37 @@
+{
+    "common": [
+        {
+            "name": "Social Distancing COMMON",
+            "description": "SD description",
+            "image-path": ""
+        }
+    ],
+    "rare": [
+        {
+            "name": "Social Distancing RARE",
+            "description": "SD description",
+            "image-path": ""
+        }
+    ],
+    "very-rare": [
+        {
+            "name": "Social Distancing VERY RARE",
+            "description": "SD description",
+            "image-path": ""
+        }
+    ],
+    "epic": [
+        {
+            "name": "Social Distancing EPIC",
+            "description": "SD description",
+            "image-path": ""
+        }
+    ],
+    "legendary": [
+        {
+            "name": "Social Distancing LEGENDARY",
+            "description": "SD description",
+            "image-path": ""
+        }
+    ]
+}

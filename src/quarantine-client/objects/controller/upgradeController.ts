@@ -1,7 +1,7 @@
 import { Controller } from "./controller";
-import { State } from "../../util/healthStates";
-import { Rule } from "./rule";
-import { Role } from "../../util/roles";
+import { State } from "../../util/enums/healthStates";
+import { Rule } from "../entities/rule";
+import { Role } from "../../util/enums/roles";
 import { Stats } from "./stats";
 import { TimeSubscriber } from "../../util/timeSubscriber";
 import { TimeController } from "./timeController";
@@ -15,7 +15,7 @@ import { TimeController } from "./timeController";
  */
 export class UpgradeController implements TimeSubscriber {
 
-    /** Anonymous class to encapsulate game variables. */
+    /** Singleton instance which holds game variables */
     private stats: Stats;
 
     /** The only existing instance of UpgradeController */
@@ -30,7 +30,7 @@ export class UpgradeController implements TimeSubscriber {
      * * Social Distancing [sc]
      * * Lock Down [ld]
      */
-    public measures = require("./measures.json");
+    public measures = require("./../../../../res/json/measures.json");
 
     private constructor() {
         this.stats = Stats.getInstance();
@@ -59,14 +59,14 @@ export class UpgradeController implements TimeSubscriber {
 
         this.contr.getRules().push(new Rule(State.INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
             if (this.isSolvent(this.stats.currentPriceVaccination)) {
-                this.stats.vaccineUsed();
+                this.stats.cureInfected();
                 return true;
             } else return false;
         }));
 
         this.contr.getRules().push(new Rule(State.UNKNOWINGLY_INFECTED, State.CURE, State.IMMUNE, State.CURE, () => {
             if (this.isSolvent(this.stats.currentPriceVaccination)) {
-                this.stats.vaccineUsed();
+                this.stats.cureUnknowinglyInfected();
                 return true;
             } else return false;
         }));
@@ -84,7 +84,7 @@ export class UpgradeController implements TimeSubscriber {
         //const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.POLICE)) {
             uC.buyItem(price);
-            this.stats.increasePoliceOfficers(amt);
+            uC.stats.increasePoliceOfficers(amt);
             return true;
         } else return false;
     }
@@ -98,7 +98,7 @@ export class UpgradeController implements TimeSubscriber {
         //const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER)) {
             uC.buyItem(price);
-            this.stats.increaseHealthWorkers(amt);
+            uC.stats.increaseHealthWorkers(amt);
             return true;
         } else return false;
     }
@@ -113,7 +113,7 @@ export class UpgradeController implements TimeSubscriber {
         const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER, true)) {
             uC.buyItem(price);
-            this.stats.increaseHealthWorkers(amt);
+            uC.stats.increaseHealthWorkers(amt);
             return true;
         } else return false;
     }

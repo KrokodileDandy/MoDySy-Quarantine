@@ -3,11 +3,10 @@ import { ItemMenu } from '../menu-elements/menu'
 import { ChartScene } from "./chart-scene";
 import { UpgradeController } from "../objects/controller/upgradeController";
 import { MapScene } from "./map-scene";
-import { TimeController } from "../objects/controller/timeController";
 import { PopupWindow } from "./popupWindow";
 import { Controller } from "../objects/controller/controller";
-import { Rule } from "../objects/controller/rule";
-import { State } from "../util/healthStates";
+import { State } from "../util/enums/healthStates";
+import { Rule } from "../objects/entities/rule";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -16,9 +15,9 @@ export class GuiScene extends Phaser.Scene {
   private popUpSprite: Phaser.GameObjects.Sprite;
   private showMoney: Phaser.GameObjects.Text;
   private showCases: Phaser.GameObjects.Text;
-  private timeController: TimeController;
 
-
+  /** Gui scene instance */
+  public static instance: GuiScene;
 
   private menu: ItemMenu;
   private mainSceneIsPaused = false;
@@ -32,6 +31,7 @@ export class GuiScene extends Phaser.Scene {
       key: "GuiScene",
       active: false
     });
+    GuiScene.instance = this;
   }
 
   preload(): void {
@@ -49,7 +49,6 @@ export class GuiScene extends Phaser.Scene {
     this.poseSprites();
 
     this.uC = UpgradeController.getInstance();
-    this.timeController = TimeController.getInstance()
 
     // Creates Itemmenu and it to this scene
     this.menu = new ItemMenu(this, 0, 750);
@@ -59,7 +58,6 @@ export class GuiScene extends Phaser.Scene {
 
     // Creates Reset button
     this.createResetBtn();
-
   }
 
   // -------------------------------------------------------------------------- GAME MENU
@@ -94,7 +92,9 @@ export class GuiScene extends Phaser.Scene {
       }
     });
   }
+
   poseSprites(): void {
+    /*
     const notebook = this.add.sprite(750, 1400, 'notebook').setInteractive();
     const tablet = this.add.sprite(750, 350, 'tablet').setInteractive();
 
@@ -129,8 +129,9 @@ export class GuiScene extends Phaser.Scene {
     const speed1x = this.add.sprite(1800, 50, 'speed1x').setInteractive();
     const speed2x = this.add.sprite(1900, 50, 'speed2x').setInteractive();
     const speed3x = this.add.sprite(2000, 50, 'speed3x').setInteractive();
-
+    */
   }
+  
   // Creates menu buttons
   createMenuButtons(): void {
     // Create and set the buttons to the right positions
