@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "chart.js": "^2.9.3",
+    "chartjs-plugin-zoom": "^0.7.7",
     "phaser": "3.22"
   },
   "scripts": {

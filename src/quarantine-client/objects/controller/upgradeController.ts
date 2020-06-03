@@ -15,7 +15,7 @@ import { TimeController } from "./timeController";
  */
 export class UpgradeController implements TimeSubscriber {
 
-    /** Anonymous class to encapsulate game variables. */
+    /** Singleton instance which holds game variables */
     private stats: Stats;
 
     /** The only existing instance of UpgradeController */
@@ -84,7 +84,7 @@ export class UpgradeController implements TimeSubscriber {
         const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.POLICE)) {
             uC.buyItem(price);
-            this.stats.increasePoliceOfficers(amt);
+            uC.stats.increasePoliceOfficers(amt);
             return true;
         } else return false;
     }
@@ -98,7 +98,7 @@ export class UpgradeController implements TimeSubscriber {
         const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER)) {
             uC.buyItem(price);
-            this.stats.increaseHealthWorkers(amt);
+            uC.stats.increaseHealthWorkers(amt);
             return true;
         } else return false;
     }
@@ -113,7 +113,7 @@ export class UpgradeController implements TimeSubscriber {
         const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER, true)) {
             uC.buyItem(price);
-            this.stats.increaseHealthWorkers(amt);
+            uC.stats.increaseHealthWorkers(amt);
             return true;
         } else return false;
     }
