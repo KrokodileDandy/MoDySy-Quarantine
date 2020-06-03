@@ -86,7 +86,9 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         //if this popup windows not a child, wake up the chart scene.
         if(!this.isChild){
             const chart = this.scene.scene.get('ChartScene') as ChartScene;
+            const map = this.scene.scene.get('MapScene') as MapScene;
 
+            map.scene.wake();
             chart.scene.wake();
         // resume the game if game was paused.    
         if(this.pause){

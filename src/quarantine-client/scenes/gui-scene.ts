@@ -21,6 +21,10 @@ export class GuiScene extends Phaser.Scene {
 
   private menu: ItemMenu;
   private mainSceneIsPaused = false;
+  private gameSpeed = 1;
+  private soundON = true;
+  private musicON = true;
+
   /** Only existing instance of UpgradeController */
   private uC: UpgradeController;
   /** Whether the upgrade introduceCure was already bought */
@@ -58,6 +62,12 @@ export class GuiScene extends Phaser.Scene {
 
     // Creates Reset button
     this.createResetBtn();
+
+    // Creates Speed button
+    this.createSpeedButton();
+
+    // Creates Sound button
+    this.createSoundButton();
   }
 
   // -------------------------------------------------------------------------- GAME MENU
@@ -387,7 +397,7 @@ export class GuiScene extends Phaser.Scene {
   /*---------START: Rules button ---------- */
   createRulesBtn(): void {
     const rulesBtn = this.add.image(this.game.renderer.width - 100, this.game.renderer.height -250, 'rules').setDepth(1);
-    const popupRules = new PopupWindow(this, 0, 0, 'background', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, 'The Rules',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
+    const popupRules = new PopupWindow(this, 0, 0, 'blank-note', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, 'The Rules',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
 
     /*---------START: add Rules ---------- */
     const allRules = Controller.getInstance().getRules();
@@ -406,7 +416,7 @@ export class GuiScene extends Phaser.Scene {
     info.on('pointerup', () => {
       const popupTitle = 'The Information';
       const popupStr = 'The Agents exchange their state when they are close together';
-      const popupInfo = new PopupWindow(this, 0, 0, 'background', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, popupTitle,{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],true);
+      const popupInfo = new PopupWindow(this, 0, 0, 'blank-note', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, popupTitle,{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],true);
 
       popupInfo.add(new Phaser.GameObjects.Text(this,550, 220 , popupStr, {color:'Black', fontSize: '30px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'} ));
 
@@ -442,13 +452,13 @@ export class GuiScene extends Phaser.Scene {
     const pos2 = new Phaser.GameObjects.Image(this, x + 200, y, this.getTextures(rule.inputState2)).setOrigin(0);
     container.add(pos2);
 
-    const pos3 = new Phaser.GameObjects.Image(this, x + 420, y, this.getTextures(rule.outputState1)).setOrigin(0);
+    const pos3 = new Phaser.GameObjects.Image(this, x + 480, y, this.getTextures(rule.outputState1)).setOrigin(0);
     container.add(pos3);
 
-    const pos4 = new Phaser.GameObjects.Image(this, x + 620, y, this.getTextures(rule.outputState2)).setOrigin(0);
+    const pos4 = new Phaser.GameObjects.Image(this, x + 680, y, this.getTextures(rule.outputState2)).setOrigin(0);
     container.add(pos4);
 
-    const arrow = new Phaser.GameObjects.Image(this, x + 340, y + 30, 'pprules-arrow').setOrigin(0);
+    const arrow = new Phaser.GameObjects.Image(this, x + 400, y + 20, 'pprules-arrow').setOrigin(0);
     container.add(arrow);
 
   }
@@ -482,7 +492,7 @@ export class GuiScene extends Phaser.Scene {
 
   /*---------START: Reset button  ---------- */
   createResetBtn(): void {
-    const resetBtn = this.add.image(this.game.renderer.width - 100, 60, 'restart').setOrigin(0);
+    const resetBtn = this.add.image(this.game.renderer.width - 100, 150, 'restart');
     resetBtn.setInteractive();
 
     // hover, click event etc.
@@ -532,6 +542,98 @@ export class GuiScene extends Phaser.Scene {
     });
   }
   /*---------END: Reset button  ---------- */
+
+  /*---------START: Speed button  ---------- */
+  createSpeedButton(): void {
+    const pause = this.add.sprite(this.game.renderer.width / 2 - 200, 50, 'pause').setInteractive();
+    const resume = this.add.sprite(this.game.renderer.width / 2 - 100, 50, 'resume-button').setInteractive();
+    const speed1x = this.add.sprite(this.game.renderer.width / 2, 50, 'speed1x').setInteractive();
+    const speed2x = this.add.sprite(this.game.renderer.width / 2 + 100, 50, 'speed2x').setInteractive();
+    const speed3x = this.add.sprite(this.game.renderer.width / 2 + 200, 50, 'speed3x').setInteractive();
+
+    //pause btn 
+    pause.on('pointerup', () => {
+      if(!this.mainSceneIsPaused){
+        const main = this.scene.get('MainScene') as MainScene;
+        const chart = this.scene.get('ChartScene') as ChartScene;
+        const map = this.scene.get('MapScene') as MapScene;
+        main.scene.pause();
+        chart.scene.pause();
+        map.scene.pause();
+        this.mainSceneIsPaused = true;
+      }
+    });
+
+    //resume btn
+    resume.on('pointerup',() => {
+      if (this.mainSceneIsPaused) {
+        const main = this.scene.get('MainScene') as MainScene;
+        const chart = this.scene.get('ChartScene') as ChartScene;
+        const map = this.scene.get('MapScene') as MapScene;
+        main.scene.resume();
+        chart.scene.resume();
+        map.scene.resume();
+        this.mainSceneIsPaused = false;
+      }
+    });
+
+    // speed btns
+    speed1x.on('pointerup',() => {     
+      this.gameSpeed = 1;
+      this.uC.getTimeController().setGameSpeed(this.gameSpeed);
+    });
+
+    speed2x.on('pointerup',() => {
+      this.gameSpeed = 1.5;
+      this.uC.getTimeController().setGameSpeed(this.gameSpeed);
+    });
+
+    speed3x.on('pointerup',() => {
+      this.gameSpeed = 2;
+      this.uC.getTimeController().setGameSpeed(this.gameSpeed);
+    });
+  }
+  /*---------END: Speed button  ---------- */
+
+  /*---------START: Sound button  ---------- */
+  createSoundButton(): void {
+    const musicOn = this.add.sprite(this.game.renderer.width - 100, 250, 'music_on').setInteractive();
+    const soundOn = this.add.sprite(this.game.renderer.width - 100, 350, 'sound_on').setInteractive();
+
+    musicOn.on('pointerup',() => {
+      if(this.musicON){
+        // method to turn off music should be here
+
+        // changes img and reset musicON atribute
+        musicOn.setTexture('music_off');
+        this.musicON = false;
+      }else{
+        // method to turn on music should be here
+
+        // changes img and reset musicON atribute
+        musicOn.setTexture('music_on');
+        this.musicON = true;
+      }
+    });
+
+    soundOn.on('pointerup',() => {
+      if(this.soundON){
+        // method to turn off sound should be here
+
+        // changes img and reset soundON atribute
+        soundOn.setTexture('sound_off');
+        this.soundON = false;
+      }else{
+        // method to turn on sound should be here
+
+        // changes img and reset soundON atribute
+        soundOn.setTexture('sound_on');
+        this.soundON = true;
+      }
+    });
+
+  }
+  /*---------END: Sound button  ---------- */
 
   update(): void {
     if (!this.mainSceneIsPaused) this.menu.updateItemMenu(); // has to be invoked each tic/ ingame hour TODO
