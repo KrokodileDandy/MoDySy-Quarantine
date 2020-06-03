@@ -19,10 +19,10 @@ export class EventController implements TimeSubscriber {
     private static instance: EventController;
 
     /** List of the event categories which hold a list of events each */
-    private eventList = require("./../../../../res/json/random-events.json");
+    public eventList = require("./../../../../res/json/random-events.json");
 
     /** List of callback functions for events */
-    private eventFunctionList = {
+    private static eventFunctionList = {
         "COMMON": [
             /** The player gets money to simulate donation of test kits. */
             (): void => {
@@ -148,6 +148,13 @@ export class EventController implements TimeSubscriber {
 
     private constructor() {
         TimeController.getInstance().subscribe(this);
+        this.calcRanTimeSpan(EventRarity.COMMON);
+        this.calcRanTimeSpan(EventRarity.RARE);
+        this.calcRanTimeSpan(EventRarity.VERY_RARE);
+        this.calcRanTimeSpan(EventRarity.EPIC);
+        this.calcRanTimeSpan(EventRarity.LEGENDARY);
+        console.log(this.timeSpanCommon);
+        console.log(this.eventList);
     }
 
     /**
@@ -181,7 +188,7 @@ export class EventController implements TimeSubscriber {
         const idx = this.getRandomIntInclusive(0, this.eventList[eventRarity].length);
         const eventInfo = this.eventList[eventRarity][idx];
         new Event(
-            this.eventFunctionList[eventRarity][idx],
+            EventController.eventFunctionList[eventRarity][idx],
             eventInfo["title"],
             eventInfo["description"],
             eventInfo["image-path"]
@@ -217,7 +224,7 @@ export class EventController implements TimeSubscriber {
      * @param max 
      * https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Math/math.random
      */
-    private getRandomIntInclusive(min: number, max: number): number {
+    public getRandomIntInclusive(min: number, max: number): number {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min; 

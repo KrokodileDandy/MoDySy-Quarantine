@@ -1,5 +1,5 @@
 {
-    "common": [
+    "COMMON": [
         {
             "name": "Donations of Test Kits",
             "description": "A neighboring country is donating test kits. They should be enough for a whole week of testing without any expenses.",
@@ -26,7 +26,7 @@
             "image-path": ""
         }
     ],
-    "rare": [
+    "RARE": [
         {
             "name": "An anonymous donation was made to our cause.",
             "description": "An anonymous donation of 1.000.000 € was made to our cause.",
@@ -48,7 +48,7 @@
             "image-path": ""
         }
     ],
-    "very-rare": [
+    "VERY_RARE": [
         {
             "name": "Police are sending trainees to work",
             "description": "o support the strained force, police decided to put their trainees to work early. For us, this means more force for the same price.",
@@ -65,7 +65,7 @@
             "image-path": ""
         }
     ],
-    "epic": [
+    "EPIC": [
         {
             "name": "Social Distancing EPIC",
             "description": "SD description",
@@ -87,7 +87,7 @@
             "image-path": ""
         }
     ],
-    "legendary": [
+    "LEGENDARY": [
         {
             "name": "Generous NGO supporting police and health workers",
             "description": "An NGO is supplying volunteers and 1 Mio. € in donations in a large-scale effort to help police and healthcare.",

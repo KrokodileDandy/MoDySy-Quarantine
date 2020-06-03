@@ -1,5 +1,6 @@
 import { Controller } from "../objects/controller/controller";
 import { TimeController } from "../objects/controller/timeController";
+import { EventController } from "../objects/controller/eventController";
 
 /**
  * Main phaser scene which manages the other game scene
@@ -32,6 +33,7 @@ export class MainScene extends Phaser.Scene {
 
         this.timeController = TimeController.getInstance();
         this.controller = Controller.getInstance();
+        EventController.getInstance();
     }
 
     update(): void {
