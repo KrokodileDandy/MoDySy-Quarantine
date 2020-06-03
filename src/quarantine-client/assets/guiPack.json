@@ -369,16 +369,6 @@
         },
         {
           "type": "image",
-          "key": "rules-hover",
-          "url": "assets/sprites/main-scene/rules-hover.png"
-        },
-        {
-          "type": "image",
-          "key": "rules_on_click",
-          "url": "assets/sprites/main-scene/rules_on_click.jpg"
-        },
-        {
-          "type": "image",
           "key": "information",
           "url": "assets/sprites/main-scene/information.png"
         },
@@ -436,11 +426,6 @@
           "type": "image",
           "key": "restart",
           "url": "assets/sprites/main-scene/restart.png"
-        },
-        {
-          "type": "image",
-          "key": "restart-hover",
-          "url": "assets/sprites/main-scene/restart-hover.png"
         },
         {
           "type": "image",

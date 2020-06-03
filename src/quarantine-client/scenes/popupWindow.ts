@@ -11,7 +11,8 @@ export class PopupWindow extends Phaser.GameObjects.Container {
 
     private pause: boolean;
     private isChild: boolean;
-
+    private closeBtnX: number;
+    private closeBtnY:  number;
     /**
      * @param scene scene to which this GameObject belongs
      * @param x x-index position of this modal
@@ -33,7 +34,8 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         //add background
         this.addBackground(backgroundKey);
         //add close btn
-        this.addCloseBtn(closeBtnX, closeBtnY);
+        this.closeBtnX = closeBtnX;
+        this.closeBtnY = closeBtnY;
         //add object
         data.forEach(x => scene.add.existing(x));
         this.addGameObjects(data);
@@ -74,7 +76,7 @@ export class PopupWindow extends Phaser.GameObjects.Container {
 
         // hover effect
         cancelBtn.on("pointerover", () => {cancelBtn.scale = 1.1});
-        cancelBtn.on("pointedown", () => {cancelBtn.scale = 1});
+        cancelBtn.on("pointerout", () => {cancelBtn.scale = 1});
 
         this.add(cancelBtn);
     }
@@ -130,6 +132,7 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         }
 
         this.scene.add.existing(this);
+        this.addCloseBtn(this.closeBtnX, this.closeBtnY);
         this.setVisible(true);
     }
 }

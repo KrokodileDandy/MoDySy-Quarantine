@@ -396,9 +396,11 @@ export class GuiScene extends Phaser.Scene {
 
   /*---------START: Rules button ---------- */
   createRulesBtn(): void {
-    const rulesBtn = this.add.image(this.game.renderer.width - 100, this.game.renderer.height -250, 'rules').setDepth(1);
-    const popupRules = new PopupWindow(this, 0, 0, 'blank-note', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, 'The Rules',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],false);
-
+    const rulesBtn = this.add.image(this.game.renderer.width - 100, this.game.renderer.height -250, 'rules');
+    const popupRules = new PopupWindow(this, 0, 0, 'background', 1300, 130, true, [],false);
+    const title = this.add.text(550, 130, 'The Rules',{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'}).setDepth(1);
+    const blankNode = this.add.sprite(this.game.renderer.width /2 + 50, this.game.renderer.height /2, 'blank-note').setDisplaySize(1200, 970); 
+    popupRules.addGameObjects([blankNode, title]);
     /*---------START: add Rules ---------- */
     const allRules = Controller.getInstance().getRules();
     let ruleIndex = 0;
@@ -416,8 +418,11 @@ export class GuiScene extends Phaser.Scene {
     info.on('pointerup', () => {
       const popupTitle = 'The Information';
       const popupStr = 'The Agents exchange their state when they are close together';
-      const popupInfo = new PopupWindow(this, 0, 0, 'blank-note', 1300, 130, true, [new Phaser.GameObjects.Text(this, 550, 130, popupTitle,{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'})],true);
 
+      const popupInfo = new PopupWindow(this, 0, 0, 'background', 1300, 130, true, [],true);
+      const blankNode = this.add.sprite(this.game.renderer.width /2 + 50, this.game.renderer.height /2, 'blank-note').setDisplaySize(1200, 970); 
+      popupInfo.add(blankNode);
+      popupInfo.add(new Phaser.GameObjects.Text(this, 550, 130, popupTitle,{color:'Black', fontSize: '50px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'}));
       popupInfo.add(new Phaser.GameObjects.Text(this,550, 220 , popupStr, {color:'Black', fontSize: '30px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'} ));
 
       popupInfo.createModal();
@@ -429,16 +434,16 @@ export class GuiScene extends Phaser.Scene {
 
     // Change the button textures on hover, press, etc.
     rulesBtn.on('pointerover', () => {
-      rulesBtn.setTexture('rules-hover');
+      rulesBtn.setScale(0.7);
     });
     rulesBtn.on('pointerout', () => {
-      rulesBtn.setTexture('rules');
+      rulesBtn.setScale(1);
     });
     rulesBtn.on('pointerdown', () => {
-      rulesBtn.setTexture('rules');
+      rulesBtn.setScale(1);
     });
     rulesBtn.on('pointerup', () => {
-      rulesBtn.setTexture('rules_on_click');
+      rulesBtn.setScale(0.8);
       popupRules.createModal();
     });
   }
@@ -497,11 +502,11 @@ export class GuiScene extends Phaser.Scene {
 
     // hover, click event etc.
     resetBtn.on('pointerover', () => {
-      resetBtn.setTexture('restart-hover');
+      resetBtn.setScale(0.7);
     });
 
     resetBtn.on('pointerout', () => {
-      resetBtn.setTexture('restart');
+      resetBtn.setScale(1);
     });
 
     resetBtn.on('pointerup', () => {
@@ -552,6 +557,14 @@ export class GuiScene extends Phaser.Scene {
     const speed3x = this.add.sprite(this.game.renderer.width / 2 + 200, 50, 'speed3x').setInteractive();
 
     //pause btn 
+    pause.on('pointerover', () => {
+      pause.setScale(0.7);
+    });
+
+    pause.on('pointerout', () => {
+      pause.setScale(1);
+    });
+
     pause.on('pointerup', () => {
       if(!this.mainSceneIsPaused){
         const main = this.scene.get('MainScene') as MainScene;
@@ -565,6 +578,14 @@ export class GuiScene extends Phaser.Scene {
     });
 
     //resume btn
+    resume.on('pointerover', () => {
+      resume.setScale(0.7);
+    });
+
+    resume.on('pointerout', () => {
+      resume.setScale(1);
+    });
+
     resume.on('pointerup',() => {
       if (this.mainSceneIsPaused) {
         const main = this.scene.get('MainScene') as MainScene;
@@ -578,14 +599,38 @@ export class GuiScene extends Phaser.Scene {
     });
 
     // speed btns
+    speed1x.on('pointerover', () => {
+      speed1x.setScale(0.7);
+    });
+
+    speed1x.on('pointerout', () => {
+      speed1x.setScale(1);
+    });
+
     speed1x.on('pointerup',() => {     
       this.gameSpeed = 1;
       this.uC.getTimeController().setGameSpeed(this.gameSpeed);
     });
 
+    speed2x.on('pointerover', () => {
+      speed2x.setScale(0.7);
+    });
+
+    speed2x.on('pointerout', () => {
+      speed2x.setScale(1);
+    });
+
     speed2x.on('pointerup',() => {
       this.gameSpeed = 1.5;
       this.uC.getTimeController().setGameSpeed(this.gameSpeed);
+    });
+
+    speed3x.on('pointerover', () => {
+      speed3x.setScale(0.7);
+    });
+
+    speed3x.on('pointerout', () => {
+      speed3x.setScale(1);
     });
 
     speed3x.on('pointerup',() => {
@@ -599,6 +644,22 @@ export class GuiScene extends Phaser.Scene {
   createSoundButton(): void {
     const musicOn = this.add.sprite(this.game.renderer.width - 100, 250, 'music_on').setInteractive();
     const soundOn = this.add.sprite(this.game.renderer.width - 100, 350, 'sound_on').setInteractive();
+
+    musicOn.on('pointerover', () => {
+      musicOn.setScale(0.7);
+    });
+
+    musicOn.on('pointerout', () => {
+      musicOn.setScale(1);
+    });
+
+    soundOn.on('pointerover', () => {
+      soundOn.setScale(0.7);
+    });
+
+    soundOn.on('pointerout', () => {
+      soundOn.setScale(1);
+    });
 
     musicOn.on('pointerup',() => {
       if(this.musicON){
@@ -631,7 +692,6 @@ export class GuiScene extends Phaser.Scene {
         this.soundON = true;
       }
     });
-
   }
   /*---------END: Sound button  ---------- */
 
