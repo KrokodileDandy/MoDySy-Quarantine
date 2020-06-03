@@ -40,11 +40,11 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
         this.dailyCost = this.measures[this.key]['daily_cost'];
         this.amount = this.measures[this.key]['amount'];
         // Load 'key' as image and price as text to fixed position in the container
-        this.buttonImage = this.scene.add.image(this.x + 150, this.y + 100, this.key);  //.setScale(1.25);
-        this.priceText = this.scene.add.text(this.x + 105, this.y + 165, `${price} €`, {
+        this.buttonImage = this.scene.add.image(this.x + 100, this.y + 100, this.key).setScale(0.5);
+        this.priceText = this.scene.add.text(this.x + 75, this.y + 138.5, `${price} €`, {
             fontFamily:'Arial',
             color:'#000000',
-        }).setScale(1.5);
+        });
         // Adding items depending on type of the button
         this.addEssentialItems(this.key);
         // Adding button animations
@@ -59,44 +59,58 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
      * @param title name of the button as string
      */
     private addEssentialItems(title: string): void {
-        // The research button includes the static text 'Progress:' -> it is static
-        if(title == 'research') {
-            this.scene.add.text(this.x + 210, this.y + 50, 'Progress: ', {
-                fontFamily:'Arial',
-                color:'#000000',
-            }).setScale(1.5);
-        }
-        // Police and healthworkers buttons includes the amount, the daily costs and a plus/minus button
-        if(title == 'police' || title == 'healthworkers') {
-            // Text of amount
-            this.amountText = this.scene.add.text(this.x +215, this.y + 50, `${this.amount}`, {
-                fontFamily:'Arial',
-                color:'#000000',
-            }).setScale(1.5);
-            // Text of daily costs
-            this.dailyCostText = this.scene.add.text(this.x + 215, this.y + 100, `${this.dailyCost} €/Day`, {
-                fontFamily:'Arial',
-                color:'#000000',
-            }).setScale(1.5);
-            // Plus sign to increase amount and daily costs linear
-            this.scene.add.image(this.x + 450, this.y + 25, 'plus').setInteractive()
-            .on('pointerup', () => {
-                this.amount += 1000;        // TODO: should be integrated with the const amt in the upgradecontroller
-                this.dailyCost += 4000;
-                this.setAmount();           // updates the text
-                this.upgradeContr.buyPoliceOfficers(this.upgradeContr, this.amount, this.dailyCost);
-             }).setScale(0.75);
-             // Minus sign to decrease amount and daily costs linear
-            this.scene.add.image(this.x + 450, this.y + 65, 'minus').setInteractive()
-            .on('pointerup', () => {
-                if(this.amount > 0 && this.dailyCost > 0) {
-                    this.amount -= 1000;
-                    this.dailyCost -= 4000;
-                    this.setAmount();       // updates the text
+        
+        if(title == 'research' || title == 'police' || title == 'healthworkers') {
+            this.scene.add.image(this.x + 325, this.y + 130, 'money').setScale(0.5);
+            // The research button includes the static text 'Progress:' -> it is static
+            if (title == 'research') {
+                this.scene.add.text(this.x + 140, this.y + 70, 'Progress: ', {
+                    fontFamily: 'Arial',
+                    color: '#000000',
+                });
+                this.scene.add.image(this.x + 325, this.y + 85, 'progress').setScale(0.45);
+            }
+            // Police and healthworkers buttons includes the amount, the daily costs and a plus/minus button
+            if (title == 'police' || title == 'healthworkers') {
+                // Text of amount
+                this.amountText = this.scene.add.text(this.x + 160, this.y + 80, `${this.amount}`, {
+                    fontFamily: 'Arial',
+                    color: '#000000',
+                });
+                // Text of daily costs
+                this.dailyCostText = this.scene.add.text(this.x + 160, this.y + 115, `${this.dailyCost} €/Day`, {
+                    fontFamily: 'Arial',
+                    color: '#000000',
+                });
+                // Plus sign to increase amount and daily costs linear
+                this.scene.add.image(this.x + 325, this.y + 80, 'plus').setInteractive()
+                .on('pointerup', () => {
+                    this.amount += 1000;        // TODO: should be integrated with the const amt in the upgradecontroller
+                    this.dailyCost += 4000;
+                    this.setAmount();           // updates the text
                     this.upgradeContr.buyPoliceOfficers(this.upgradeContr, this.amount, this.dailyCost);
-                }
-            }).setScale(0.75);
+                }).setScale(0.4);
+                // Minus sign to decrease amount and daily costs linear
+                this.scene.add.image(this.x + 325, this.y + 100, 'minus').setInteractive()
+                .on('pointerup', () => {
+                    if (this.amount > 0 && this.dailyCost > 0) {
+                        this.amount -= 1000;
+                        this.dailyCost -= 4000;
+                        this.setAmount();       // updates the text
+                        this.upgradeContr.buyPoliceOfficers(this.upgradeContr, this.amount, this.dailyCost);
+                    }
+                }).setScale(0.4);
+                this.scene.add.image(this.x + 275, this.y + 90, 'man').setScale(0.5);
+            }
         }
+        if(title == 'lockdown') {
+            this.scene.add.text(this.x + 140, this.y + 70, 'Day: 1', {
+                fontFamily: 'Arial',
+                color: '#000000',
+            });
+            this.scene.add.image(this.x + 225, this.y + 90, 'calendar').setScale(0.5);
+        }
+        
     }
 
     /**
@@ -108,16 +122,16 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
     private buttonAnimations(image: Phaser.GameObjects.Image): void {
         image.setInteractive()
         .on('pointerover', () => { // increase scale on hover
-            image.setScale(1.1);
+            image.setScale(0.6);
         })
         .on('pointerout', () => { // decrease scale 
-            image.setScale(1.0);
+            image.setScale(0.5);
         })
         .on('pointerdown', () => { // decrease scale on click
-            image.setScale(1.0);
+            image.setScale(0.5);
         })
         .on('pointerup', () => { // "try to buy this item"
-            image.setScale(1.1);
+            image.setScale(0.6);
             this.eventListener();       // initiate the buy process of reasearch in the upgrade controller
             // Updates the text of research price, since it has different prices for each level
             if(this.key == 'research') {
@@ -125,7 +139,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
                 // Grayscales the button if ten levels has been bought
                 if(this.measures[this.key]['current_level'] == 10) {     // maybe should change in upgrade controller to 10
                     image.setTexture('research-gray');
-                    image.setScale(1.0);
+                    image.setScale(0.5);
                     image.removeInteractive();
                 }
             }

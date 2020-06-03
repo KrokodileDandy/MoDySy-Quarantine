@@ -33,15 +33,15 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         this.upgradeContr = UpgradeController.getInstance();
         this.budget = this.upgradeContr.getBudget();
         this.income = this.upgradeContr.getIncome();
-
+        // Add background
+        //this.add(this.scene.add.image(this.x + 100 , 0, 'notebook').setScale(0.5)).setAlpha(0.5); dont work
         // Add menu bar
-        this.add(this.scene.add.image(this.x + 600 , 0, 'bar').setOrigin(0, 0)).setAlpha(0.5);
-
+        this.add(this.scene.add.image(this.x + 500 , 50, 'note-pink').setScale(0.6));
         // Add button container
-        new ButtonContainer(this.scene, 250, 850, 'research', this.measures['research']['prices'][0], this.buildClosure(this.upgradeContr.buyResearchLevel));
-        new ButtonContainer(this.scene, 250, 1025, 'lockdown', this.measures['lockdown']['price'], this.buildClosure(this.upgradeContr.activateLockdown));
-        new ButtonContainer(this.scene, 250, 1200, 'police', this.measures['police']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
-        new ButtonContainer(this.scene, 250, 1375, 'healthworkers', this.measures['healthworkers']['price'], this.buildClosure(this.upgradeContr.buyHealthWorkers));
+        new ButtonContainer(this.scene, 0, 450, 'research', this.measures['research']['prices'][0], this.buildClosure(this.upgradeContr.buyResearchLevel));
+        new ButtonContainer(this.scene, 0, 550, 'lockdown', this.measures['lockdown']['price'], this.buildClosure(this.upgradeContr.activateLockdown));
+        new ButtonContainer(this.scene, 0, 650, 'police', this.measures['police']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
+        new ButtonContainer(this.scene, 0, 750, 'healthworkers', this.measures['healthworkers']['price'], this.buildClosure(this.upgradeContr.buyHealthWorkers));
 
         this.scene.add.existing(this);
 
@@ -50,10 +50,10 @@ export class ItemMenu extends Phaser.GameObjects.Container {
 
     /** Creates the "profile". That means item menu relevant stats are visualized on the menu. */
     private addStatistics(): void {
-        this.add(this.scene.add.text(this.x + 650, 30,`Budget: ${this.budget}\nIncome: ${this.income}`,{ // \n for line break and then setLineSpacing
+        this.add(this.scene.add.text(this.x + 425, 0,`Budget: ${this.budget}\nIncome: ${this.income}`,{ // \n for line break and then setLineSpacing
             fontFamily:'Arial',
             color:'#000000',
-          }).setFontSize(12).setScale(1, 3).setLineSpacing(10));
+        }))
     }
 
     /** Updates all menu statistics i.e. budget and income. */
