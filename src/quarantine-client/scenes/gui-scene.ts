@@ -412,7 +412,7 @@ export class GuiScene extends Phaser.Scene {
     /*---------END: add Rules ---------- */
 
     // popup info as a seconde popup
-    const info = new Phaser.GameObjects.Image(this, 800, 150, 'information');
+    const info = new Phaser.GameObjects.Image(this, 800, 150, 'information').setScale(0.4);
     info.setInteractive();
 
     info.on('pointerup', () => {
