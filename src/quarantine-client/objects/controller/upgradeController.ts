@@ -347,6 +347,8 @@ export class UpgradeController implements TimeSubscriber {
     /** @returns Current research level */
     public getCurrentResearchLevel(): number {return this.measures["research"]["current_level"];}
 
+    /** @returns Time Controller instance */
+    public getTimeController(): TimeController {return this.tC;}
     // ------------------------------------------------------------------ SETTER-METHODS
     // allows encapsulation of application logic
     // private setIncome(amt: number) {}
