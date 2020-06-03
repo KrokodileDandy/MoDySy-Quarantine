@@ -14,6 +14,7 @@ export class LogBook {
     private static instance: LogBook;
 
     private textStatPosY;
+    private imgStatPosY;
     private textFinanceIncPosY;
     private textFinanceExpPosY;
 
@@ -93,6 +94,30 @@ export class LogBook {
         lbView.addGameObjects(arr);
     }
 
+    private getStatImg(imgKey: string): Phaser.GameObjects.Sprite {
+        const el = new Phaser.GameObjects.Sprite(
+            this.scene,
+            400,
+            this.imgStatPosY,
+            imgKey
+        );
+        this.imgStatPosY += 50;
+        return el;
+    }
+
+    private generateLogBookStatsImages(lbView: LogBookView): void {
+        this.imgStatPosY = 160;
+        const arr = [];
+        arr.push(this.getStatImg('virus'));
+        arr.push(this.getStatImg('boy'));
+        arr.push(this.getStatImg('girl'));
+        arr.push(this.getStatImg('tomb-stone'));
+        arr.push(this.getStatImg('chemistry'));
+        arr.push(this.getStatImg('physician'));
+
+        lbView.addGameObjects(arr);
+    }
+
     private generateLogBookIncomeStatement(lbView: LogBookView, info: (number | {[id: string]: {[id: string]: number}})[]): void {
         // Reset y position counters
         this.textFinanceExpPosY = 160;
@@ -133,14 +158,14 @@ export class LogBook {
             this.scene,
             1050, 
             tempY, 
-            info[6]["inc"]["tax"], 
+            info[6]["inc"]["tax"] + " €", 
             { color: 'Black', fontSize: '22px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
         ));
         arr.push(new Phaser.GameObjects.Text(
             this.scene,
             1300, 
             tempY, 
-            info[6]["exp"]["spo"] + info[6]["exp"]["shw"] + info[6]["exp"]["tk"] + info[6]["exp"]["v"] + info[6]["exp"]["ms"], 
+            info[6]["exp"]["spo"] + info[6]["exp"]["shw"] + info[6]["exp"]["tk"] + info[6]["exp"]["v"] + info[6]["exp"]["ms"] + " €", 
             { color: 'Black', fontSize: '22px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
         ));
 
@@ -156,6 +181,7 @@ export class LogBook {
         const info = Stats.getInstance().getWeeklyStats(week);
 
         this.generateLogBookStats(lbView, info);
+        this.generateLogBookStatsImages(lbView);
         this.generateLogBookIncomeStatement(lbView, info);
         
         return lbView;

@@ -491,6 +491,31 @@
           "type": "image",
           "key": "arrow-next",
           "url": "assets/sprites/log-book/arrow.png"
+        },
+        {
+          "type": "image",
+          "key": "virus",
+          "url": "assets/sprites/log-book/virus.png"
+        },
+        {
+          "type": "image",
+          "key": "boy",
+          "url": "assets/sprites/log-book/boy.png"
+        },
+        {
+          "type": "image",
+          "key": "girl",
+          "url": "assets/sprites/log-book/girl.png"
+        },
+        {
+          "type": "image",
+          "key": "tomb-stone",
+          "url": "assets/sprites/log-book/rip.png"
+        },
+        {
+          "type": "image",
+          "key": "chemistry",
+          "url": "assets/sprites/log-book/chemistry.png"
         }
       ]
   }
