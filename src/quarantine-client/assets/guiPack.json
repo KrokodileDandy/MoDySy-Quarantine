@@ -3,11 +3,6 @@
     "files": [
       {
         "type": "image",
-        "key": "background",
-        "url": "assets/sprites/main-scene/background.png"
-      },
-      {
-        "type": "image",
         "key": "calendar",
         "url": "assets/sprites/main-scene/calendar.png"
       },
@@ -129,7 +124,7 @@
       {
         "type": "image",
         "key": "sound_off",
-        "url": "assets/sprites/main-scene/soun_off.png"
+        "url": "assets/sprites/main-scene/sound_off.png"
       },
       {
         "type": "image",
