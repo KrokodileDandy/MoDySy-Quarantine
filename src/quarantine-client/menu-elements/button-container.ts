@@ -19,6 +19,10 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
     private amount: number;
     // Visual text representation of amount
     private amountText: Phaser.GameObjects.Text;
+    // How much percentage the research currently has
+    private percent: number;
+    // Visual text of percentage
+    private percentText: Phaser.GameObjects.Text;
     // Visual text of price
     private priceText: Phaser.GameObjects.Text;
     // The Texture of the button
@@ -35,6 +39,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
 
         this.eventListener = callback;
 
+        this.percent = 0;
         this.key = texture;
         // Loading daily cost and amount from measures.json
         this.dailyCost = this.measures[this.key]['daily_cost'];
@@ -64,11 +69,15 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
             this.scene.add.image(this.x + 325, this.y + 130, 'money').setScale(0.5);
             // The research button includes the static text 'Progress:' -> it is static
             if (title == 'research') {
+                this.scene.add.image(this.x + 325, this.y + 85, 'progress').setScale(0.45);
                 this.scene.add.text(this.x + 140, this.y + 70, 'Progress: ', {
                     fontFamily: 'Arial',
                     color: '#000000',
                 });
-                this.scene.add.image(this.x + 325, this.y + 85, 'progress').setScale(0.45);
+                this.percentText = this.scene.add.text(this.x + 312, this.y + 78, `${this.percent}%`, {
+                    fontFamily: 'Arial',
+                    color: '#000000',
+                }).setScale(0.85);
             }
             // Police and healthworkers buttons includes the amount, the daily costs and a plus/minus button
             if (title == 'police' || title == 'healthworkers') {
@@ -132,6 +141,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
         })
         .on('pointerup', () => { // "try to buy this item"
             image.setScale(0.6);
+            this.percent += 10;
             this.eventListener();       // initiate the buy process of reasearch in the upgrade controller
             // Updates the text of research price, since it has different prices for each level
             if(this.key == 'research') {
@@ -153,6 +163,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
         const currLv = this.measures['research']['current_level'];
         const currPrice = this.measures['research']['prices'][currLv];
         this.priceText.setText(`${currPrice} €`);
+        this.percentText.setText(`${this.percent}%`);
     }
 
     /**

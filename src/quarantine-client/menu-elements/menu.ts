@@ -34,7 +34,7 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         this.budget = this.upgradeContr.getBudget();
         this.income = this.upgradeContr.getIncome();
         // Add background
-        //this.add(this.scene.add.image(this.x + 100 , 0, 'notebook').setScale(0.5)).setAlpha(0.5); dont work
+        this.scene.add.image(this.x + 350 , 700, 'notebook').setScale(0.6);  //.setAlpha(0.5); //dont work
         // Add menu bar
         this.add(this.scene.add.image(this.x + 500 , 50, 'note-pink').setScale(0.6));
         // Add button container
