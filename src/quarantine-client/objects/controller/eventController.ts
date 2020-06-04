@@ -3,6 +3,10 @@ import { TimeController } from "./timeController";
 import { EventRarity } from "../../util/enums/eventRarity";
 import { Event } from "../entities/event";
 import { Stats } from "./stats";
+import { UpgradeController } from "./upgradeController";
+import { TimedEvent } from "../entities/timedEvent";
+import { Controller } from "./controller";
+import { Role } from "../../util/enums/roles";
 
 /**
  * Singleton controller which implements application logic for events.
@@ -15,27 +19,140 @@ export class EventController implements TimeSubscriber {
     private static instance: EventController;
 
     /** List of the event categories which hold a list of events each */
-    private eventList = require("./../../../../res/json/random-events.json");
+    public eventList = require("./../../../../res/json/random-events.json");
 
     /** List of callback functions for events */
-    private eventFunctionList = {
-        "common": [
+    private static eventFunctionList = {
+        "COMMON": [
+            /** The player gets money to simulate donation of test kits. */
             (): void => {
-                Stats.getInstance()
+                Stats.getInstance().budget += 10_000 * Stats.getInstance().currentPriceTestKit;
+            },
+            /** The price of test kits is doubled for seven days */
+            (): void => {
+                Stats.getInstance().currentPriceTestKit *= 2;
+                new TimedEvent(7, (): void => {
+                    Stats.getInstance().currentPriceTestKit /= 2;
+                });
+            },
+            /** The salary of health workers is sponsored for a week */
+            (): void => {
+                Stats.getInstance().budget += 10_000 * 7 * Stats.getInstance().currentSalaryHW
+            },
+            /** Anonymous donation */
+            (): void => {
+                Stats.getInstance().budget += 100_000;
+            },
+            /** Bad news are dominating the media (happiness down) */
+            (): void => {
+                Stats.getInstance().happiness -= 15;
+            }
+        ],
+        "RARE": [
+            /** Anonymous donation */
+            (): void => {
+                Stats.getInstance().budget += 1_000_000;
+            },
+            /** State workers demand a bonus (wages higher for a while) */
+            (): void => {
+                Stats.getInstance().currentSalaryHW += 10;
+                Stats.getInstance().currentSalaryPO += 10;
+                new TimedEvent(14, (): void => {
+                    Stats.getInstance().currentSalaryHW -= 10;
+                    Stats.getInstance().currentSalaryPO -= 10;
+                });
+            },
+            /** Finally some good news (happiness up) */
+            (): void => {
+                Stats.getInstance().happiness += 20;
+            },
+            /** People going out due to heat wave (infection up for a week) */
+            (): void => {
+                Stats.getInstance().basicInteractionRate *= 1.2;
+                Stats.getInstance().maxInteractionVariance *= 1.2;
+                new TimedEvent(3, (): void => {
+                    Stats.getInstance().basicInteractionRate /= 1.2;
+                    Stats.getInstance().maxInteractionVariance /= 1.2;
+                });
+            }
+        ],
+        "VERY_RARE": [
+            /** The salary of police officers is sponsored for a week */
+            (): void => {
+                Stats.getInstance().budget += 10_000 * 7 * Stats.getInstance().currentSalaryPO;
+            },
+            /** Anonymous donation */
+            (): void => {
+                Stats.getInstance().budget += 100_000_000;
+            },
+            /** People staying in due to storms (infection down for a week) */
+            (): void => {
+                Stats.getInstance().basicInteractionRate *= 0.9;
+                Stats.getInstance().maxInteractionVariance *= 0.9;
+                new TimedEvent(3, (): void => {
+                    Stats.getInstance().basicInteractionRate /= 0.9;
+                    Stats.getInstance().maxInteractionVariance /= 0.9;
+                });
+            }
+        ],
+        "EPIC": [
+            /** Anonymous donation */
+            (): void => {
+                Stats.getInstance().budget += 1_000_000_000;
+            },
+            /** State workers demand a bonus (wages higher for a while) */
+            (): void => {
+                Stats.getInstance().currentSalaryHW += 5;
+                Stats.getInstance().currentSalaryPO += 5;
+                new TimedEvent(42, (): void => {
+                    Stats.getInstance().currentSalaryHW -= 5;
+                    Stats.getInstance().currentSalaryPO -= 5;
+                });
+            },
+            (): void => {
+                //
+            }
+        ],
+        "LEGENDARY": [
+            /** An NGO is supplying volunteers and 1 Mio. € in donations in a large-scale effort to help police and healthcare. */
+            (): void => {
+                Stats.getInstance().currentSalaryHW -= 5;
+                Stats.getInstance().currentSalaryPO -= 5;
+                Controller.getInstance().distributeNewRoles(5_000, Role.POLICE);
+                if (UpgradeController.getInstance().researchExists()) { // cure exists
+                    Controller.getInstance().distributeNewRoles(2_500, Role.HEALTH_WORKER);
+                    Controller.getInstance().distributeNewRoles(2_500, Role.HEALTH_WORKER, true);
+                } else Controller.getInstance().distributeNewRoles(5_000, Role.HEALTH_WORKER);
+            },
+            /** Anonymous donation */
+            (): void => {
+                Stats.getInstance().budget += 5_000_000_000;
+            },
+            /** Finally some good news (happiness up) */
+            (): void => {
+                Stats.getInstance().happiness == 100;
             }
         ]
     }
 
+    /** Time span until the next event with a common rarity should happen */
     private timeSpanCommon: number;
+    /** Time span until the next event with a rare rarity should happen */
     private timeSpanRare: number;
+    /** Time span until the next event with a very rare rarity should happen */
     private timeSpanVeryRare: number;
+    /** Time span until the next event with an epic rarity should happen */
     private timeSpanEpic: number;
+    /** Time span until the next event with an legendary rarity should happen */
     private timeSpanLegendary: number;
 
     private constructor() {
         TimeController.getInstance().subscribe(this);
-
-
+        this.calcRanTimeSpan(EventRarity.COMMON);
+        this.calcRanTimeSpan(EventRarity.RARE);
+        this.calcRanTimeSpan(EventRarity.VERY_RARE);
+        this.calcRanTimeSpan(EventRarity.EPIC);
+        this.calcRanTimeSpan(EventRarity.LEGENDARY);
     }
 
     /**
@@ -66,19 +183,17 @@ export class EventController implements TimeSubscriber {
      * @param eventRarity Rarity level to select an event from
      */
     private callRandomEvent(eventRarity: string): void {
-        const idx = this.getRandomIntInclusive(0, this.eventList[eventRarity].length);
+        const idx = this.getRandomIntInclusive(0, this.eventList[eventRarity].length - 1);
         const eventInfo = this.eventList[eventRarity][idx];
         new Event(
-            this.eventFunctionList[eventRarity][idx],
-            eventInfo["title"],
+            EventController.eventFunctionList[eventRarity][idx],
+            eventInfo["name"],
             eventInfo["description"],
             eventInfo["image-path"]
         );
     }
 
-    /**
-     * Reduces all event counters by one.
-     */
+    /** Reduces all event counters by one. */
     private decreaseEventCounters(): void {
         this.timeSpanLegendary--;
         this.timeSpanEpic--;
@@ -105,7 +220,7 @@ export class EventController implements TimeSubscriber {
      * @param max 
      * https://developer.mozilla.org/de/docs/Web/JavaScript/Reference/Global_Objects/Math/math.random
      */
-    private getRandomIntInclusive(min: number, max: number): number {
+    public getRandomIntInclusive(min: number, max: number): number {
         min = Math.ceil(min);
         max = Math.floor(max);
         return Math.floor(Math.random() * (max - min + 1)) + min; 

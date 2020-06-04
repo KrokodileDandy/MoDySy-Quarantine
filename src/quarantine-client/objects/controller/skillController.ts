@@ -12,7 +12,7 @@ import { UpgradeController } from "./upgradeController";
 export class SkillController {
 
     /** Singleton instance of SkillController */
-    private static instance;
+    private static instance: SkillController;
 
     /** Singleton instance which holds game variables */
     private stats: Stats;
@@ -38,8 +38,8 @@ export class SkillController {
         this.uC = UpgradeController.getInstance();
 
         this.availableSkillPoints = 3; //could be outsourced to stats => see difficulty level
-        this.nextSkillPointPrice = 100_000;
-        this.maximumSkillPointPrice = 2_000_000;
+        this.nextSkillPointPrice = 500_000_000;
+        this.maximumSkillPointPrice = 5_000_000_000;
     }
 
     // ----------------------------------------------------------------- GENERAL METHODS

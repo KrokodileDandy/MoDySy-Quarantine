@@ -99,4 +99,7 @@ export class TimeController {
 
     /** @returns Days passed since game start */
     public getDaysSinceGameStart(): number {return Math.floor(this.hoursSinceGameStart / 24);}
+
+    /** @returns Weeks passed since game start */
+    public getWeeksSinceGameStart(): number {return Math.floor(this.getDaysSinceGameStart() / 7);}
 }

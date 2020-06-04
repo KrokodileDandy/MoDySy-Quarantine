@@ -136,11 +136,13 @@ export class Controller implements TimeSubscriber {
                 case Role.HEALTH_WORKER: {
                     if (testKit) this.agents[idx] = new HealthWorker(State.TEST_KIT);
                     else this.agents[idx] = new HealthWorker(State.CURE);
+                    this.stats.nbrHW++;
                     break;
                 }
                 case Role.POLICE: {
                     const tmp = this.agents[idx].getHealthState(); // infected agents can become police officers
                     this.agents[idx] = new Police(tmp);
+                    this.stats.nbrPolice++;
                     break;
                 }
                 default: {
@@ -151,6 +153,12 @@ export class Controller implements TimeSubscriber {
             i++;
         }
         return true;
+    }
+
+    /** Adds a specific amount of new citizens into the population array */
+    public addNewPopulation(amt: number): void {
+        for (let i = 0; i < amt; i++) this.agents.splice(this.getRandomIndex(), 0, new Citizen(State.HEALTHY));
+        this.stats.population += amt;
     }
 
     /** Returns a random integer value between 0 and the current population number. */

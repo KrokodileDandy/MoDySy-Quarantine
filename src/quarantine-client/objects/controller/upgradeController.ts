@@ -5,6 +5,7 @@ import { Role } from "../../util/enums/roles";
 import { Stats } from "./stats";
 import { TimeSubscriber } from "../../util/timeSubscriber";
 import { TimeController } from "./timeController";
+import { IncomeStatement } from "../entities/incomeStatement";
 
 
 /**
@@ -188,75 +189,43 @@ export class UpgradeController implements TimeSubscriber {
         return true;
     }
 
+    /** @returns Wether the research is maxed out */
+    public researchExists(): boolean {
+        return this.measures["research"]["current_level"] == 9;
+    }
+
     /** @see TimeSubscriber */
     public notify(): void {
         this.updateHappiness();
         this.updateCompliance();
         this.updateBudget(this.calculateIncome(), this.calculateExpenses());
 
-        // this.printDailyIncomeStatement();
-        console.log(`Happiness: ${this.stats.happiness} \nCompliance:${this.stats.compliance} \nInteraction Rate: ${this.stats.basicInteractionRate} \nIncome: ${this.stats.income}`);
-
-        this.stats.resetConsumptionCounters();
+        this.stats.updateWeek(this.getIncomeStatementToday());
     }
 
-    /**
-     * Returns the income statement of the current day as a dictionary consisting of two dictionaries.
-     * 
-     * ---
-     * __Key-value pairs:__  
-     * * inc: <income dictionary>
-     *   * tax: <taxes>
-     * * exp: <expenses dictionary>
-     *   * spo: <salary police officer>
-     *   * shw: <salary health workers>
-     *   * tk: <bought test kits>
-     *   * v: <bought vaccines>
-     *   * ms: <costs of all active measures>
-     * 
+    /** 
      * ---
      * __Example usage:__  
      * Acces to the money spend for the salary of police officers through 
-     * `getIncomeStatement()["exp"]["spo"];`
+     * `getIncomeStatement().expenses.salaries.police;`
      * 
      * ---
-     * @returns Dictionary of two dictionaries "Earnings" and "Expenses"
+     * @returns an income statement for the current day
      * @see #calculateMeasureExpenses()
      */
-    public getIncomeStatement(): {[id: string]: {[id: string]: number}} { // .toLocaleString("es-ES") + " €"
-        return {
-            "inc": {
-                "tax": this.stats.income
-            },
-            "exp": {
-                "spo": this.stats.getPOSalary(),
-                "shw": this.stats.getHWSalary(),
-                "tk": this.stats.getDailyTestKitsExpense(),
-                "v": this.stats.getDailyVaccinesExpense(),
-                "ms": this.calculateMeasureExpenses()
-            }
-        };
+    public getIncomeStatementToday(): IncomeStatement {
+        return new IncomeStatement(
+            this.stats.income,
+            this.stats.getPOSalary(),
+            this.stats.getHWSalary(),
+            this.stats.getDailyTestKitsExpense(),
+            this.stats.getDailyVaccinesExpense(),
+            this.calculateMeasureExpenses()
+        );
     }
 
-    /**
-     * Print the income statement of the current day onto the console.
-     */
-    public printDailyIncomeStatement(): void {
-        console.log("Day: " + TimeController.getInstance().getDaysSinceGameStart());
-        const dict = this.getIncomeStatement();
 
-        for (const key in dict) {
-            const value = dict[key];
-            console.log(`${key}----------------------------------`);
-            for (const k2 in value) {
-                const v2 = value[k2];
-                console.log(`    ${k2}: ${v2.toLocaleString("es-ES")} €`);
-            }
-        }
-        console.log("Total: " + (this.calculateIncome() - this.calculateExpenses()).toLocaleString("es-ES") + " €");
-    }
-
-     // ----------------------------------------------------------------- UPGRADE - PRIVATE
+    // ----------------------------------------------------------------- UPGRADE - PRIVATE
     /**
      * Calculate the compliance depending on the populations happiness
      * 
@@ -355,6 +324,12 @@ export class UpgradeController implements TimeSubscriber {
 
     /** @returns Current income per tic */
     public getIncome(): number {return this.stats.income;}
+
+    /** @returns Current research level */
+    public getCurrentResearchLevel(): number {return this.measures["research"]["current_level"];}
+
+    /** @returns Time Controller instance */
+    public getTimeController(): TimeController {return this.tC;}
     // ------------------------------------------------------------------ SETTER-METHODS
     // allows encapsulation of application logic
     // private setIncome(amt: number) {}
