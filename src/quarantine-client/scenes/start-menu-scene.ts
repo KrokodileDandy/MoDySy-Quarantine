@@ -11,6 +11,9 @@ import { DifficultyLevel } from "../util/enums/difficultyLevels";
  * @author Shao
  */
 export class StartMenuScene extends Phaser.Scene {
+    //** variables to save sound in */
+    mainThemeMusic: any;
+    buttonClickMusic: any;
 
     constructor() {
         super({
@@ -45,11 +48,29 @@ export class StartMenuScene extends Phaser.Scene {
         this.load.image('StartP', 'assets/sprites/start-menu/start-button-pressed.png');
         // Temporary skip button to allow faster development by skipping to choose the difficulty (delete later).
         this.load.image('Skip', 'assets/sprites/arrow-button-right.png');
+        //** load audio files */
+        this.load.audio("main_menu_audio_theme", ["assets/sounds/Main_Menu_Music.mp3", "assets/sounds/Main_Menu_Music.ogg"]);
+        this.load.audio("button_click", ["assets/sounds/click-sound.mp3", "assets/sounds/click-sound.ogg"]);
+
     }
 
     create(): void {
         this.add.image(innerWidth/2, innerHeight/2, 'Logo')   // TODO: has to be centered all time 
         this.createMenuButtons();
+        //** create sound objects */
+        this.mainThemeMusic = this.sound.add("main_menu_audio_theme");
+        this.buttonClickMusic = this.sound.add("button_click");
+        
+        const musicConfig = {
+            mute: false,
+            volume: 0.3,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: true,
+            delay:0
+        }
+        this.mainThemeMusic.play(musicConfig);
     }
 
     createMenuButtons(): void {
@@ -74,6 +95,7 @@ export class StartMenuScene extends Phaser.Scene {
         newGameButton.on('pointerup', () => {
             newGameButton.setTexture('NewGameH');
             newGameButton.visible = false;
+            this.buttonClickMusic.play();
             this.createDifficultyButtons();
         });
         // Delete later
@@ -116,6 +138,8 @@ export class StartMenuScene extends Phaser.Scene {
             easyButton.visible = false;
             normalButton.visible = false;
             hardButton.visible = false;
+            this.buttonClickMusic.play();
+
 
             //loads the "EASY" game stats @see{res/json/difficulty-levels/easy.json}
             Stats.getInstance(DifficultyLevel.EASY);
@@ -136,6 +160,8 @@ export class StartMenuScene extends Phaser.Scene {
             easyButton.visible = false;
             normalButton.visible = false;
             hardButton.visible = false;
+            this.buttonClickMusic.play();
+
 
             //loads the "NORMAL" game stats @see{res/json/difficulty-levels/normal.json}
             Stats.getInstance(DifficultyLevel.NORMAL); 
@@ -156,6 +182,8 @@ export class StartMenuScene extends Phaser.Scene {
             easyButton.visible = false;
             normalButton.visible = false;
             hardButton.visible = false;
+            this.buttonClickMusic.play();
+
 
             //loads the "HARD" game stats @see{res/json/difficulty-levels/hard.json}
             Stats.getInstance(DifficultyLevel.HARD);
@@ -179,12 +207,14 @@ export class StartMenuScene extends Phaser.Scene {
         startButton.on('pointerup', () => {
             startButton.setTexture('StartH');
             this.scene.setVisible(false);
+            this.buttonClickMusic.play();
             this.loadScenes();
         });
     }
 
     loadScenes(): void {
         // Load all scenes for the main game
+        this.mainThemeMusic.stop();
         this.scene.add('MainScene', MainScene, true);
         this.scene.add('GuiScene', GuiScene, true);
         this.scene.add('ChartScene', ChartScene, true);
