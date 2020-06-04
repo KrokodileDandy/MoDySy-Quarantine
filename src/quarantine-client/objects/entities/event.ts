@@ -30,10 +30,10 @@ export class Event {
             fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'
         };
         const ppTitle = new Phaser.GameObjects.Text(GuiScene.instance, 0, 90, title, styleTitle);
-        ppTitle.setWordWrapWidth(1400);
+        ppTitle.setWordWrapWidth(1300);
         ppTitle.setX((1920 / 2) - ppTitle.width / 2);
         const ppDescription = new Phaser.GameObjects.Text(GuiScene.instance, 300, 350, description, styleDesc);
-        ppDescription.setWordWrapWidth(1400);
+        ppDescription.setWordWrapWidth(1300);
         const popup = new PopupWindow(GuiScene.instance, 0, 0, 'event-note', 1600, 80, true, [img, ppTitle, ppDescription], false);
 
         executeEventFunction();

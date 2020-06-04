@@ -117,19 +117,6 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
         this.chart.data.datasets.forEach((dataset) => {
             dataset.data = (dataset.label == 'Total Cases') ? this.dataTotalCases.slice(this.timeframe) : this.dataNewCases.slice(this.timeframe);
         });
-
-        /** difference between today and yesterday */
-        if(this.day > 0) {
-            const chngesInCases = this.infected - this.initialInfected;
-            this.initialInfected = this.infected;
-
-            const changesInBudget = this.upgradeController.getBudget() - this.initialMoney;
-            this.initialMoney = this.upgradeController.getBudget();
-
-            /** Call of function that creates daily report of cases and all money  */
-            const guiScene = this.scene.get('GuiScene') as GuiScene;
-            guiScene.createPopUp(this.day, changesInBudget, chngesInCases);
-        }
         
         /** Render the new chart in index.html */
         this.chart.update();
