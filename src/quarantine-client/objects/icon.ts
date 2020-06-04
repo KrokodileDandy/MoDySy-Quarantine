@@ -1,6 +1,9 @@
 import { SkillController } from "./controller/skillController";
+import { SkillTreeView } from "../scenes/skillTreeView";
 
 export class Icon extends Phaser.GameObjects.Image {
+
+    //private skillTree: SkillTreeView;
     
     /** Number of currently available skill points */
     private availableSkillPoints: number; 
@@ -10,38 +13,35 @@ export class Icon extends Phaser.GameObjects.Image {
 
     private skillIsActive: boolean;
 
-    private icon: string;
-
     private button: Phaser.GameObjects.Image;
 
-    constructor(scene: Phaser.Scene, x: number, y: number, texture: string, key: string, active: boolean) {
+    constructor(scene: Phaser.Scene, x: number, y: number, texture: string, skillTree: SkillTreeView, active: boolean) {
         super(scene, x, y, texture);
 
         this.availableSkillPoints = SkillController.getInstance().getAvailableSkillPoints();
         this.nextSkillPointPrice = SkillController.getInstance().getNextSkillPointPrice();
         this.skillIsActive = active;
-        this.icon = key;
 
-        this.button = this.scene.add.image(x, y, texture).setScale(0.85);
-        this.addButtonAnimations(this.button);
+        this.addButtonAnimations(texture, skillTree);
 
         //this.scene.add.existing(this);
     }
 
-    private addButtonAnimations(image: Phaser.GameObjects.Image): void {
-        image.setInteractive()
+    private addButtonAnimations(key: string, skillTree: SkillTreeView): void {
+        this.setInteractive()
         .on('pointerover', () => {
-            image.setScale(0.85);
+            this.setScale(0.85);
         })
         .on('pointerout', () => {
-            image.setScale(0.75);
+            this.setScale(0.75);
         })
         .on('pointerdown', () => {
-            image.setScale(0.75);
+            this.setScale(0.75);
         })
         .on('pointerup', () => {
-            image.setScale(0.85);
-
+            this.setScale(0.85);
+            //this.destroy();
+            skillTree.openSubtree(key);
         });
     }
 }

@@ -8,11 +8,11 @@ import { Icon } from "../objects/icon";
  */
 export class SkillTreeView extends PopupWindow {
 
-     /** Number of currently available skill points */
-     private availableSkillPoints: number; 
+    /** Number of currently available skill points */
+    private availableSkillPoints: number; 
 
-     /** Purchase price of the next skill point */
-     private nextSkillPointPrice: number;
+    /** Purchase price of the next skill point */
+    private nextSkillPointPrice: number;
 
     constructor(scene: Phaser.Scene) {
         super(scene, 0, 5, 'open-notebook', 1550, 50, true, [
@@ -27,11 +27,52 @@ export class SkillTreeView extends PopupWindow {
         this.nextSkillPointPrice = SkillController.getInstance().getNextSkillPointPrice();
 
         //this.addSkillTitles();
-        this.addGameObjects(this.addSkillButtons());
-        //this.addGameObjects(this.addRingColor());
+        //this.addGameObjects(this.addSkillButtons());
+        this.addSkillButtons();
         this.scene.add.existing(this);
     }
+    private addSkillButtons(): void {
+        const medicalTreatmentButton = new Icon(this.scene, this.x + 960, this.y + 250, 'medical-treatment', this, true).setScale(0.75);  //.setInteractive();
+        const policeButton = new Icon(this.scene, this.x + 1240, this.y + 400, 'police', this, true).setScale(0.75);  //.setInteractive();
+        const testingButton = new Icon(this.scene, this.x + 1160, this.y + 700, 'testing', this, true).setScale(0.75);    //.setInteractive();
+        const lockdownButton = new Icon(this.scene, this.x + 760, this.y + 700, 'lockdown', this, true).setScale(0.75);   //.setInteractive();
+        const citizensButton = new Icon(this.scene, this.x + 680, this.y + 400, 'citizen', this, true).setScale(0.75);    //.setInteractive();
 
+        this.add(medicalTreatmentButton);
+        this.add(policeButton);
+        this.add(testingButton);
+        this.add(lockdownButton);
+        this.add(citizensButton);
+    }
+
+    public openSubtree(key: string) {
+        this.removeAt(2);
+        this.removeAt(2);
+        this.removeAt(2);
+        this.removeAt(2);
+        this.removeAt(2);
+        if(key == 'medical-treatment') {
+            const additionalMedicalSuppliesI = new Phaser.GameObjects.Image(this.scene, this.x + 960, this.y + 300, 'additional-medical-supplies').setScale(0.5);   //.setInteractive();
+            const additionalMedicalSuppliesII = new Phaser.GameObjects.Image(this.scene, this.x + 760, this.y + 400, 'additional-medical-supplies').setScale(0.5);  //.setInteractive();
+            const upgradeMedicalFacilitiesI = new Phaser.GameObjects.Image(this.scene, this.x + 1160, this.y + 400, 'upgrade-medical-facilities').setScale(0.5);    //.setInteractive();
+            const upgradeMedicalFacilitiesII = new Phaser.GameObjects.Image(this.scene, this.x + 960, this.y + 500, 'upgrade-medical-facilities').setScale(0.5);    //.setInteractive();
+            const upgradeMedicalFacilitiesIII = new Phaser.GameObjects.Image(this.scene, this.x + 760, this.y + 600, 'upgrade-medical-facilities').setScale(0.5);   //.setInteractive();
+            const medicinI = new Phaser.GameObjects.Image(this.scene, this.x + 1360, this.y + 500, 'medicine').setScale(0.5);   //.setInteractive();
+            const medicinII = new Phaser.GameObjects.Image(this.scene, this.x + 1160, this.y + 600, 'medicine').setScale(0.5);  //.setInteractive();
+            const medicinIII = new Phaser.GameObjects.Image(this.scene, this.x + 960, this.y + 700, 'medicine').setScale(0.5);  //.setInteractive();
+
+            this.add(additionalMedicalSuppliesI);
+            this.add(additionalMedicalSuppliesII);
+            this.add(upgradeMedicalFacilitiesI);
+            this.add(upgradeMedicalFacilitiesII);
+            this.add(upgradeMedicalFacilitiesIII);
+            this.add(medicinI);
+            this.add(medicinII);
+            this.add(medicinIII);
+        }
+    }
+
+    /*
     private addSkillButtons(): Phaser.GameObjects.GameObject[] {
         const medicalTreatmentButton = new Icon(this.scene, this.x + 960, this.y + 250, 'medical-treatment', 'medical-treatment', true).setScale(0.75).setInteractive()
         .on('pointerover', () => { medicalTreatmentButton.setScale(0.85) })
@@ -118,7 +159,7 @@ export class SkillTreeView extends PopupWindow {
 
         ]
         
-    }
+    }*/
 
     /*private addRingColor(): Phaser.GameObjects.GameObject[] {
         return [
