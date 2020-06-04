@@ -48,9 +48,20 @@ export class MapScene extends Phaser.Scene {
 
     create(): void {
         /** Add the map to the scene */
-        this.map = this.add.sprite(1300, 0, 'germanyMap');
-        this.map.setScale(0.39, 0.39);
+        this.map = this.add.sprite(1400, 100, 'germanyMap');
+        this.map.setScale(0.32, 0.32);
         this.map.setOrigin(0, 0);
+
+        /** Add a white rectangle as background for the map to the scene */
+        const rectangle = new Phaser.Geom.Rectangle(
+            this.map.getTopLeft().x,
+            this.map.getTopRight().y,
+            this.map.getBottomRight().x - this.map.getTopLeft().x,
+            this.map.getBottomRight().y - this.map.getTopLeft().y);
+        
+        /** Fill the rectangle */
+        this.graphics.fillStyle(0xFFFFFF);
+        this.graphics.fillRectShape(rectangle);
 
         /** Select red color to fill the circles */
         this.graphics.fillStyle(0xFF0000);
@@ -66,18 +77,19 @@ export class MapScene extends Phaser.Scene {
         /** Get current infection numbers */
         const currentlyInfected: number = this.stats.getInfected();
 
-        /** For the first infected person per day and every thousand after that, add a circle */
-        for (this.infected; this.infected < currentlyInfected; this.infected = this.infected + 1000) {
+        /** For every thousandth person infected, add a red circle */
+        while (this.infected + 1000 <= currentlyInfected) {
+            console.log(this.infected);
             /** Place a circle at a random position on the map */
-            const myCircle = new Phaser.Geom.Circle(
+            const circle = new Phaser.Geom.Circle(
                 Phaser.Math.Between(this.map.getTopLeft().x + 5, this.map.getBottomRight().x - 5), 
                 Phaser.Math.Between(this.map.getTopLeft().y + 5, this.map.getBottomRight().y - 5), 1.5);
 
             /** Fill the circle with the selected color */
-            this.graphics.fillCircleShape(myCircle);
-        }
+            this.graphics.fillCircleShape(circle);
 
-        /** Update current infection numbers */
-        this.infected = currentlyInfected;
+            /** Update internal infection numbers */
+            this.infected = this.infected + 1000;
+        }
     }
 }

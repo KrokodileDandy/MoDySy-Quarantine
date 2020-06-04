@@ -1,7 +1,6 @@
 import * as Chart from "chart.js";
 import "chartjs-plugin-zoom";
 import "hammerjs";
-import { GuiScene } from "./gui-scene";
 import { TimeSubscriber } from "../util/timeSubscriber";
 import { TimeController } from "../objects/controller/timeController";
 import { UpgradeController } from "../objects/controller/upgradeController";
@@ -232,7 +231,7 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
         document.head.appendChild(style);
 
         /** Add the form to the scene */
-        const formDomElement = this.add.dom(10, this.canvas.clientHeight + 5, form);
+        const formDomElement = this.add.dom(this.canvasDomElement.x + 10, this.canvasDomElement.y + this.canvas.clientHeight - 2, form);
         formDomElement.setOrigin(0, 0);
 
         /** Append the form to the container in index.html, otherwise the form will not be displayed */
@@ -247,7 +246,7 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
         /** Create the chart container and set the attributes */
         this.chartContainer = document.createElement('div');
         this.chartContainer.setAttribute('id', 'chart-container');
-        this.chartContainer.setAttribute('style', 'width: 50%');
+        this.chartContainer.setAttribute('style', 'width: 38%');
 
         /** Create the canvas and set the attributes */
         this.canvas = document.createElement('canvas');
@@ -262,7 +261,7 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber {
         document.getElementById('parent-chart-container').appendChild(this.chartContainer);
 
         /** Add the canvas to the scene */
-        this.canvasDomElement = this.add.dom(0, 0, this.canvas);
+        this.canvasDomElement = this.add.dom(95, 65, this.canvas);
         this.canvasDomElement.setOrigin(0, 0);
 
         /** Create new chart */
