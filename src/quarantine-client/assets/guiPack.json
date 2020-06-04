@@ -181,347 +181,479 @@
         "key": "your_skills",
         "url": "assets/sprites/main-scene/your_skills.png"
       },
+      {
+        "type": "image",
+        "key": "menu-white",
+        "url": "assets/sprites/menu-white.png"
+      },
+      {
+        "type": "image",
+        "key": "menu-black",
+        "url": "assets/sprites/menu-black.png"
+      },
+      {
+        "type": "image",
+        "key": "investment-white",
+        "url": "assets/sprites/investment-white.png"
+      },
+      {
+        "type": "image",
+        "key": "investment-black",
+        "url": "assets/sprites/investment-black.png"
+      },
+      {
+        "type": "image",
+        "key": "lockdown-white",
+        "url": "assets/sprites/lockdown-white.png"
+      },
+      {
+        "type": "image",
+        "key": "lockdown-black",
+        "url": "assets/sprites/lockdown-black.png"
+      },
+      {
+        "type": "image",
+        "key": "police-white",
+        "url": "assets/sprites/police-white.png"
+      },
+      {
+        "type": "image",
+        "key": "police-black",
+        "url": "assets/sprites/police-black.png"
+      },
+      {
+        "type": "image",
+        "key": "research-white",
+        "url": "assets/sprites/research-white.png"
+      },
+      {
+        "type": "image",
+        "key": "research-black",
+        "url": "assets/sprites/research-black.png"
+      },
+      {
+        "type": "image",
+        "key": "statemeasure-white",
+        "url": "assets/sprites/statemeasure-white.png"
+      },
+      {
+        "type": "image",
+        "key": "statemeasure-black",
+        "url": "assets/sprites/statemeasure-black.png"
+      },
+      {
+        "type": "image",
+        "key": "socialdistancing-white",
+        "url": "assets/sprites/socialdistancing-white.png"
+      },
+      {
+        "type": "image",
+        "key": "socialdistancing-black",
+        "url": "assets/sprites/socialdistancing-black.png"
+      },
+      {
+        "type": "image",
+        "key": "faster-white",
+        "url": "assets/sprites/faster-white.png"
+      },
+      {
+        "type": "image",
+        "key": "faster-black",
+        "url": "assets/sprites/faster-black.png"
+      },
+      {
+        "type": "image",
+        "key": "gamespeed-white",
+        "url": "assets/sprites/gamespeed-white.png"
+      },
+      {
+        "type": "image",
+        "key": "gamespeed-black",
+        "url": "assets/sprites/gamespeed-black.png"
+      },
+      {
+        "type": "image",
+        "key": "pause-white",
+        "url": "assets/sprites/pause-white.png"
+      },
+      {
+        "type": "image",
+        "key": "pause-black",
+        "url": "assets/sprites/pause-black.png"
+      },
+      {
+        "type": "image",
+        "key": "resume-white",
+        "url": "assets/sprites/resume-white.png"
+      },
+      {
+        "type": "image",
+        "key": "resume-black",
+        "url": "assets/sprites/resume-black.png"
+      },
+      {
+        "type": "image",
+        "key": "settings-white",
+        "url": "assets/sprites/settings-white.png"
+      },
+      {
+        "type": "image",
+        "key": "settings-black",
+        "url": "assets/sprites/settings-black.png"
+      },
+      {
+        "type": "image",
+        "key": "reset-white",
+        "url": "assets/sprites/reset-white.png"
+      },
+      {
+        "type": "image",
+        "key": "reset-black",
+        "url": "assets/sprites/reset-black.png"
+      },
+      {
+        "type": "image",
+        "key": "slower-white",
+        "url": "assets/sprites/slower-white.png"
+      },
+      {
+        "type": "image",
+        "key": "slower-black",
+        "url": "assets/sprites/slower-black.png"
+      },
+      {
+        "type": "image",
+        "key": "arrow-button-left",
+        "url": "assets/sprites/arrow-button-left.png"
+      },
+      {
+        "type": "image",
+        "key": "arrow-button-right",
+        "url": "assets/sprites/arrow-button-right.png"
+      },
+      {
+        "type": "image",
+        "key": "blackborder",
+        "url": "assets/sprites/blackborder.png"
+      },
+      {
+        "type": "image",
+        "key": "popup-box",
+        "url": "assets/sprites/popup-box.png"
+      },
+      {
+        "type": "image",
+        "key": "cancelButton",
+        "url": "assets/sprites/close-button.png"
+      },
+      {
+        "type": "image",
+        "key": "letter",
+        "url": "assets/sprites/main-scene/letter.jpg"
+      },
+      {
+        "type": "image",
+        "key": "rules",
+        "url": "assets/sprites/main-scene/rules.png"
+      },
+      {
+        "type": "image",
+        "key": "information",
+        "url": "assets/sprites/main-scene/information.png"
+      },
+      {
+        "type": "image",
+        "key": "event-note",
+        "url": "assets/sprites/messages/note.png"
+      },
+      {
+        "type": "image",
+        "key": "unknowingly-infected",
+        "url": "assets/sprites/rules/infected-unknown.png"
+      },
+      {
+        "type": "image",
+        "key": "test-kit",
+        "url": "assets/sprites/rules/test-kit.png"
+      },
+      {
+        "type": "image",
+        "key": "infected",
+        "url": "assets/sprites/rules/infected.png"
+      },
+      {
+        "type": "image",
+        "key": "immune",
+        "url": "assets/sprites/rules/immune.png"
+      },
+      {
+        "type": "image",
+        "key": "healthy",
+        "url": "assets/sprites/rules/healthy.png"
+      },
+      {
+        "type": "image",
+        "key": "deceased",
+        "url": "assets/sprites/rules/deceased.png"
+      },
+      {
+        "type": "image",
+        "key": "cure",
+        "url": "assets/sprites/rules/cured.png"
+      },
+      {
+        "type": "image",
+        "key": "pprules-arrow",
+        "url": "assets/sprites/main-scene/pprules-arrow.png"
+      },
+      {
+        "type": "image",
+        "key": "close-button",
+        "url": "assets/sprites/messages/close-button.png"
+      },
+      {
+        "type": "image",
+        "key": "restart",
+        "url": "assets/sprites/main-scene/restart.png"
+      },
+      {
+        "type": "image",
+        "key": "25percent",
+        "url": "assets/sprites/main-scene/25percent.png"
+      },
+      {
+        "type": "image",
+        "key": "50percent",
+        "url": "assets/sprites/main-scene/50percent.png"
+      },
+      {
+        "type": "image",
+        "key": "75percent",
+        "url": "assets/sprites/main-scene/75percent.png"
+      },
+      {
+        "type": "image",
+        "key": "90percent",
+        "url": "assets/sprites/main-scene/90percent.png"
+      },
+      {
+        "type": "image",
+        "key": "money",
+        "url": "assets/sprites/main-scene/money.png"
+      },
+      {
+        "type": "image",
+        "key": "restart-popup",
+        "url": "assets/sprites/messages/restart.png"
+      },
+      {
+        "type": "image",
+        "key": "restart-popup-hover",
+        "url": "assets/sprites/messages/restart-hover.png"
+      },
+      {
+        "type": "image",
+        "key": "log",
+        "url": "assets/sprites/main-scene/log.png"
+      },
+      {
+        "type": "image",
+        "key": "open-notebook",
+        "url": "assets/sprites/skill-tree/open-notebook.png"
+      },
+      {
+        "type": "image",
+        "key": "arrow-next",
+        "url": "assets/sprites/log-book/arrow.png"
+      },
+      {
+        "type": "image",
+        "key": "virus",
+        "url": "assets/sprites/log-book/virus.png"
+      },
+      {
+        "type": "image",
+        "key": "boy",
+        "url": "assets/sprites/log-book/boy.png"
+      },
+      {
+        "type": "image",
+        "key": "girl",
+        "url": "assets/sprites/log-book/girl.png"
+      },
+      {
+        "type": "image",
+        "key": "tomb-stone",
+        "url": "assets/sprites/log-book/rip.png"
+      },
+      {
+        "type": "image",
+        "key": "chemistry",
+        "url": "assets/sprites/log-book/chemistry.png"
+      },
+      {
+        "type": "image",
+        "key": "vaccine",
+        "url": "assets/sprites/skill-tree/vaccine.png"
+      },
+      {
+        "type": "image",
+        "key": "medicine",
+        "url": "assets/sprites/skill-tree/medicine.png"
+      },
+      {
+        "type": "image",
+        "key": "blank-note",
+        "url": "assets/sprites/rules/blank-note.png"
+      },
+      {
+        "type": "image",
+        "key": "politician",
+        "url": "assets/sprites/messages/polititian.png"
+      },
 
 
-
-
-
-
-
-
-
-
-
-        {
-          "type": "image",
-          "key": "menu-white",
-          "url": "assets/sprites/menu-white.png"
-        },
-        {
-          "type": "image",
-          "key": "menu-black",
-          "url": "assets/sprites/menu-black.png"
-        },
-        {
-          "type": "image",
-          "key": "investment-white",
-          "url": "assets/sprites/investment-white.png"
-        },
-        {
-          "type": "image",
-          "key": "investment-black",
-          "url": "assets/sprites/investment-black.png"
-        },
-        {
-          "type": "image",
-          "key": "lockdown-white",
-          "url": "assets/sprites/lockdown-white.png"
-        },
-        {
-          "type": "image",
-          "key": "lockdown-black",
-          "url": "assets/sprites/lockdown-black.png"
-        },
-        {
-          "type": "image",
-          "key": "police-white",
-          "url": "assets/sprites/police-white.png"
-        },
-        {
-          "type": "image",
-          "key": "police-black",
-          "url": "assets/sprites/police-black.png"
-        },
-        {
-          "type": "image",
-          "key": "research-white",
-          "url": "assets/sprites/research-white.png"
-        },
-        {
-          "type": "image",
-          "key": "research-black",
-          "url": "assets/sprites/research-black.png"
-        },
-        {
-          "type": "image",
-          "key": "statemeasure-white",
-          "url": "assets/sprites/statemeasure-white.png"
-        },
-        {
-          "type": "image",
-          "key": "statemeasure-black",
-          "url": "assets/sprites/statemeasure-black.png"
-        },
-        {
-          "type": "image",
-          "key": "socialdistancing-white",
-          "url": "assets/sprites/socialdistancing-white.png"
-        },
-        {
-          "type": "image",
-          "key": "socialdistancing-black",
-          "url": "assets/sprites/socialdistancing-black.png"
-        },
-        {
-          "type": "image",
-          "key": "faster-white",
-          "url": "assets/sprites/faster-white.png"
-        },
-        {
-          "type": "image",
-          "key": "faster-black",
-          "url": "assets/sprites/faster-black.png"
-        },
-        {
-          "type": "image",
-          "key": "gamespeed-white",
-          "url": "assets/sprites/gamespeed-white.png"
-        },
-        {
-          "type": "image",
-          "key": "gamespeed-black",
-          "url": "assets/sprites/gamespeed-black.png"
-        },
-        {
-          "type": "image",
-          "key": "pause-white",
-          "url": "assets/sprites/pause-white.png"
-        },
-        {
-          "type": "image",
-          "key": "pause-black",
-          "url": "assets/sprites/pause-black.png"
-        },
-        {
-          "type": "image",
-          "key": "resume-white",
-          "url": "assets/sprites/resume-white.png"
-        },
-        {
-          "type": "image",
-          "key": "resume-black",
-          "url": "assets/sprites/resume-black.png"
-        },
-        {
-          "type": "image",
-          "key": "settings-white",
-          "url": "assets/sprites/settings-white.png"
-        },
-        {
-          "type": "image",
-          "key": "settings-black",
-          "url": "assets/sprites/settings-black.png"
-        },
-        {
-          "type": "image",
-          "key": "reset-white",
-          "url": "assets/sprites/reset-white.png"
-        },
-        {
-          "type": "image",
-          "key": "reset-black",
-          "url": "assets/sprites/reset-black.png"
-        },
-        {
-          "type": "image",
-          "key": "slower-white",
-          "url": "assets/sprites/slower-white.png"
-        },
-        {
-          "type": "image",
-          "key": "slower-black",
-          "url": "assets/sprites/slower-black.png"
-        },
-        {
-          "type": "image",
-          "key": "arrow-button-left",
-          "url": "assets/sprites/arrow-button-left.png"
-        },
-        {
-          "type": "image",
-          "key": "arrow-button-right",
-          "url": "assets/sprites/arrow-button-right.png"
-        },
-        {
-          "type": "image",
-          "key": "blackborder",
-          "url": "assets/sprites/blackborder.png"
-        },
-        {
-          "type": "image",
-          "key": "popup-box",
-          "url": "assets/sprites/popup-box.png"
-        },
-        {
-          "type": "image",
-          "key": "cancelButton",
-          "url": "assets/sprites/close-button.png"
-        },
-        {
-          "type": "image",
-          "key": "letter",
-          "url": "assets/sprites/main-scene/letter.jpg"
-        },
-        {
-          "type": "image",
-          "key": "rules",
-          "url": "assets/sprites/main-scene/rules.png"
-        },
-        {
-          "type": "image",
-          "key": "information",
-          "url": "assets/sprites/main-scene/information.png"
-        },
-        {
-          "type": "image",
-          "key": "event-note",
-          "url": "assets/sprites/messages/note.png"
-        },
-        {
-          "type": "image",
-          "key": "unknowingly-infected",
-          "url": "assets/sprites/rules/infected-unknown.png"
-        },
-        {
-          "type": "image",
-          "key": "test-kit",
-          "url": "assets/sprites/rules/test-kit.png"
-        },
-        {
-          "type": "image",
-          "key": "infected",
-          "url": "assets/sprites/rules/infected.png"
-        },
-        {
-          "type": "image",
-          "key": "immune",
-          "url": "assets/sprites/rules/immune.png"
-        },
-        {
-          "type": "image",
-          "key": "healthy",
-          "url": "assets/sprites/rules/healthy.png"
-        },
-        {
-          "type": "image",
-          "key": "deceased",
-          "url": "assets/sprites/rules/deceased.png"
-        },
-        {
-          "type": "image",
-          "key": "cure",
-          "url": "assets/sprites/rules/cured.png"
-        },
-        {
-          "type": "image",
-          "key": "pprules-arrow",
-          "url": "assets/sprites/main-scene/pprules-arrow.png"
-        },
-        {
-          "type": "image",
-          "key": "close-button",
-          "url": "assets/sprites/messages/close-button.png"
-        },
-        {
-          "type": "image",
-          "key": "restart",
-          "url": "assets/sprites/main-scene/restart.png"
-        },
-        {
-          "type": "image",
-          "key": "25percent",
-          "url": "assets/sprites/main-scene/25percent.png"
-        },
-        {
-          "type": "image",
-          "key": "50percent",
-          "url": "assets/sprites/main-scene/50percent.png"
-        },
-        {
-          "type": "image",
-          "key": "75percent",
-          "url": "assets/sprites/main-scene/75percent.png"
-        },
-        {
-          "type": "image",
-          "key": "90percent",
-          "url": "assets/sprites/main-scene/90percent.png"
-        },
-        {
-          "type": "image",
-          "key": "money",
-          "url": "assets/sprites/main-scene/money.png"
-        },
-        {
-          "type": "image",
-          "key": "restart-popup",
-          "url": "assets/sprites/messages/restart.png"
-        },
-        {
-          "type": "image",
-          "key": "restart-popup-hover",
-          "url": "assets/sprites/messages/restart-hover.png"
-        },
-        {
-          "type": "image",
-          "key": "log",
-          "url": "assets/sprites/main-scene/log.png"
-        },
-        {
-          "type": "image",
-          "key": "open-notebook",
-          "url": "assets/sprites/skill-tree/open-notebook.png"
-        },
-        {
-          "type": "image",
-          "key": "arrow-next",
-          "url": "assets/sprites/log-book/arrow.png"
-        },
-        {
-          "type": "image",
-          "key": "virus",
-          "url": "assets/sprites/log-book/virus.png"
-        },
-        {
-          "type": "image",
-          "key": "boy",
-          "url": "assets/sprites/log-book/boy.png"
-        },
-        {
-          "type": "image",
-          "key": "girl",
-          "url": "assets/sprites/log-book/girl.png"
-        },
-        {
-          "type": "image",
-          "key": "tomb-stone",
-          "url": "assets/sprites/log-book/rip.png"
-        },
-        {
-          "type": "image",
-          "key": "chemistry",
-          "url": "assets/sprites/log-book/chemistry.png"
-        },
-        {
-          "type": "image",
-          "key": "vaccine",
-          "url": "assets/sprites/skill-tree/vaccine.png"
-        },
-        {
-          "type": "image",
-          "key": "medicine",
-          "url": "assets/sprites/skill-tree/medicine.png"
-        },
-        {
-          "type": "image",
-          "key": "blank-note",
-          "url": "assets/sprites/rules/blank-note.png"
-        },
-        {
-          "type": "image",
-          "key": "politician",
-          "url": "assets/sprites/messages/polititian.png"
-        }
-      ]
+      
+      {
+        "type": "image",
+        "key": "additional-medical-supplies",
+        "url": "assets/sprites/skill-tree/additional-medical-supplies.png"
+      },
+      {
+        "type": "image",
+        "key": "additional-test-kits",
+        "url": "assets/sprites/skill-tree/additional-test-kits.png"
+      },
+      {
+        "type": "image",
+        "key": "circle-green",
+        "url": "assets/sprites/skill-tree/circle-green.png"
+      },
+      {
+        "type": "image",
+        "key": "circle-orange",
+        "url": "assets/sprites/skill-tree/circle-orange.png"
+      },
+      {
+        "type": "image",
+        "key": "circle-red",
+        "url": "assets/sprites/skill-tree/circle-red.png"
+      },
+      {
+        "type": "image",
+        "key": "citizen",
+        "url": "assets/sprites/skill-tree/citizen.png"
+      },
+      {
+        "type": "image",
+        "key": "dna",
+        "url": "assets/sprites/skill-tree/dna.png"
+      },
+      {
+        "type": "image",
+        "key": "expertise",
+        "url": "assets/sprites/skill-tree/expertise.png"
+      },
+      {
+        "type": "image",
+        "key": "financial-support",
+        "url": "assets/sprites/skill-tree/financial-support.png"
+      },
+      {
+        "type": "image",
+        "key": "immunity-tests",
+        "url": "assets/sprites/skill-tree/immunity-tests.png"
+      },
+      {
+        "type": "image",
+        "key": "lockdown-stage",
+        "url": "assets/sprites/skill-tree/lockdown-stage.png"
+      },
+      {
+        "type": "image",
+        "key": "lockdown",
+        "url": "assets/sprites/skill-tree/lockdown.png"
+      },
+      {
+        "type": "image",
+        "key": "medical-treatment",
+        "url": "assets/sprites/skill-tree/medical-treatment.png"
+      },
+      {
+        "type": "image",
+        "key": "medicine",
+        "url": "assets/sprites/skill-tree/medicine.png"
+      },
+      {
+        "type": "image",
+        "key": "military",
+        "url": "assets/sprites/skill-tree/military.png"
+      },
+      {
+        "type": "image",
+        "key": "nationwide-testing",
+        "url": "assets/sprites/skill-tree/nationwide-testing.png"
+      },
+      {
+        "type": "image",
+        "key": "police-equipment",
+        "url": "assets/sprites/skill-tree/police-equipment.png"
+      },
+      {
+        "type": "image",
+        "key": "police",
+        "url": "assets/sprites/skill-tree/police.png"
+      },
+      {
+        "type": "image",
+        "key": "public-transport",
+        "url": "assets/sprites/skill-tree/public-transport.png"
+      },
+      {
+        "type": "image",
+        "key": "restricted-traffic",
+        "url": "assets/sprites/skill-tree/restricted-traffic.png"
+      },
+      {
+        "type": "image",
+        "key": "skill-1",
+        "url": "assets/sprites/skill-tree/skill-1.png"
+      },
+      {
+        "type": "image",
+        "key": "skill-2",
+        "url": "assets/sprites/skill-tree/skill-2.png"
+      },
+      {
+        "type": "image",
+        "key": "skill-3",
+        "url": "assets/sprites/skill-tree/skill-3.png"
+      },
+      {
+        "type": "image",
+        "key": "skill-button",
+        "url": "assets/sprites/skill-tree/skill-button.png"
+      },
+      {
+        "type": "image",
+        "key": "testing",
+        "url": "assets/sprites/skill-tree/testing.png"
+      },
+      {
+        "type": "image",
+        "key": "tracking",
+        "url": "assets/sprites/skill-tree/tracking.png"
+      },
+      {
+        "type": "image",
+        "key": "upgrade-medical-facilities",
+        "url": "assets/sprites/skill-tree/upgrade-medical-facilities.png"
+      },
+      {
+        "type": "image",
+        "key": "upgrade-test-kit",
+        "url": "assets/sprites/skill-tree/upgrade-test-kit.png"
+      }
+    ]
   }
 }

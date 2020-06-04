@@ -10,6 +10,7 @@ import { Rule } from "../objects/entities/rule";
 import { LogBook } from "../objects/controller/logBook";
 import { TimeController } from "../objects/controller/timeController";
 import { Tutorial } from "../objects/controller/tutorial";
+import { SkillTreeView } from "./skillTreeView";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -46,7 +47,7 @@ export class GuiScene extends Phaser.Scene {
       'preload',
       'assets/guiPack.json',
       'preload'
-    );
+    )
   }
 
 
@@ -642,21 +643,9 @@ export class GuiScene extends Phaser.Scene {
     })
     .on('pointerup', () => {
       yourSkills.setScale(0.6);
-      this.openSkillTree()
+      const skillTree = new SkillTreeView(this);
+      skillTree.createModal();
     }).setScale(0.5);
-  }
-
-  openSkillTree(): void {
-    const popupSkillTree = new PopupWindow(this, 0, 0, 'open-notebook', 1300, 130, true, this.addSkills(), false);
-  }
-
-  addSkills(): Phaser.GameObjects.GameObject[] {
-    
-    const x = 100;
-    const y = 300;
-    return [
-      /*const icons = new Phaser.GameObjects.Image(this, x + iconCount * 100, y + iconCount * 100, 'skill-button');*/
-    ]
   }
 
   /*---------START: Rules button ---------- */
