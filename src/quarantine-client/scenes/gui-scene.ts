@@ -114,9 +114,14 @@ export class GuiScene extends Phaser.Scene {
   }
 
   poseSprites(): void {
-    /* 
+    /** Position tablet */
+    const tablet = this.add.sprite(35, 20, 'tablet').setInteractive();
+    tablet.setOrigin(0, 0);
+    tablet.scaleX = 0.57;
+    tablet.scaleY = 0.7;
+    
+    /*
     const notebook = this.add.sprite(750, 1400, 'notebook').setInteractive();
-    const tablet = this.add.sprite(750, 350, 'tablet').setInteractive();
 
     const researchButton = this.add.sprite(400, 925, 'flask-button').setInteractive();
     const lockdownButton = this.add.sprite(400, 1105, 'lockdown-button').setInteractive();
@@ -144,7 +149,6 @@ export class GuiScene extends Phaser.Scene {
 
     const news = this.add.sprite(2300, 1250, 'news').setInteractive();
     const logBook = this.add.sprite(1950, 400, 'log').setInteractive();
-    const grayBackground = this.add.sprite(2650, 400, 'gray-background').setInteractive();
 
     const letter = this.add.sprite(3100, 850, 'letter').setInteractive();
     const rules = this.add.sprite(3100, 1300, 'rules').setInteractive();
@@ -808,7 +812,7 @@ export class GuiScene extends Phaser.Scene {
 	 * sub menu opens.
 	 */
 	private createLogBookBtn(): void {
-    const lbBtn = this.add.image(900, 90, 'log').setOrigin(0);
+    const lbBtn = this.add.image(1000, 90, 'log').setOrigin(0);
     lbBtn.scale = 0.6;
 		lbBtn.angle = 1;
 		lbBtn.setInteractive();
@@ -824,11 +828,11 @@ export class GuiScene extends Phaser.Scene {
   
   /*---------START: Speed button  ---------- */
   createSpeedButton(): void {
-    const pause = this.add.sprite(this.game.renderer.width / 2 - 200, 50, 'pause').setInteractive();
-    const resume = this.add.sprite(this.game.renderer.width / 2 - 100, 50, 'resume-button').setInteractive();
-    const speed1x = this.add.sprite(this.game.renderer.width / 2, 50, 'speed1x').setInteractive();
-    const speed2x = this.add.sprite(this.game.renderer.width / 2 + 100, 50, 'speed2x').setInteractive();
-    const speed3x = this.add.sprite(this.game.renderer.width / 2 + 200, 50, 'speed3x').setInteractive();
+    const pause = this.add.sprite(this.game.renderer.width / 2 + 150, 50, 'pause').setInteractive();
+    const resume = this.add.sprite(this.game.renderer.width / 2 + 250, 50, 'resume-button').setInteractive();
+    const speed1x = this.add.sprite(this.game.renderer.width / 2 + 350, 50, 'speed1x').setInteractive();
+    const speed2x = this.add.sprite(this.game.renderer.width / 2 + 450, 50, 'speed2x').setInteractive();
+    const speed3x = this.add.sprite(this.game.renderer.width / 2 + 550, 50, 'speed3x').setInteractive();
 
     //pause btn 
     pause.on('pointerover', () => {
