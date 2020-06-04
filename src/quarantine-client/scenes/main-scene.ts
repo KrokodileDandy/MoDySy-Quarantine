@@ -28,7 +28,6 @@ export class MainScene extends Phaser.Scene {
     }
 
     create(): void {
-        //
         this.add.image(960, 470, 'background');
 
         this.timeController = TimeController.getInstance();
