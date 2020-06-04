@@ -60,7 +60,7 @@ export class GuiScene extends Phaser.Scene {
 
 
   create(): void {
-    //this.createMenuButtons();
+    this.createMenuButtons();
     //this.createSettingsButtons();
     this.poseSprites();
 

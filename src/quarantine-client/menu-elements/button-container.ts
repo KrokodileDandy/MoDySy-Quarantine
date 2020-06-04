@@ -29,10 +29,12 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
     private daysInLockdown: number
     // Text of how many days passed since lockdown
     private daysInLockdownText: Phaser.GameObjects.Text;
+
+    private countDays: number;
     // Remembers the starting time
     private startTime: number;
     // Whether lockdown is activated or not
-    private lockdown: boolean;
+    private lockdownActive: boolean;
     // Visual text of price
     private priceText: Phaser.GameObjects.Text;
     // The Texture of the button
@@ -49,8 +51,9 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
 
         this.eventListener = callback;
 
+        this.lockdownActive = false;
         this.daysInLockdown = 0;
-        this.lockdown = false;
+        this.countDays = 0;
         this.percent = 0;
         this.key = texture;
         // Loading daily cost and amount from measures.json
@@ -109,28 +112,26 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
                 this.scene.add.image(this.x + 325, this.y + 80, 'plus').setInteractive()
                 .on('pointerup', () => {
                     this.amount += 1000;        // TODO: should be integrated with the const amt in the upgradecontroller
-                    this.dailyCost += 4000;
+                    this.dailyCost += 40000;
                     this.setAmount();           // updates the text
-                    this.upgradeContr.buyPoliceOfficers(this.upgradeContr, this.amount, this.dailyCost);
                 }).setScale(0.4);
                 // Minus sign to decrease amount and daily costs linear
                 this.scene.add.image(this.x + 325, this.y + 100, 'minus').setInteractive()
                 .on('pointerup', () => {
                     if (this.amount > 0 && this.dailyCost > 0) {
                         this.amount -= 1000;
-                        this.dailyCost -= 4000;
+                        this.dailyCost -= 40000;
                         this.setAmount();       // updates the text
-                        this.upgradeContr.buyPoliceOfficers(this.upgradeContr, this.amount, this.dailyCost);
                     }
                 }).setScale(0.4);
                 this.scene.add.image(this.x + 275, this.y + 90, 'man').setScale(0.5);
             }
         }
         if(title == 'lockdown') {
-            this.scene.add.text(this.x + 140, this.y + 70, `Days: ${this.daysInLockdown}`, {
+            this.daysInLockdownText = this.scene.add.text(this.x + 140, this.y + 70, `Days: ${this.daysInLockdown}`, {
                 fontFamily: 'Arial',
                 color: '#000000',
-            });
+            }).setAlpha(0);
             this.scene.add.image(this.x + 250, this.y + 90, 'calendar').setScale(0.5);
         }
     }
@@ -167,22 +168,33 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
                 }
             }
             if(this.key == 'lockdown') {
-                if(this.lockdown == false) {
-                    this.lockdown = true;
-                    this.startTime = TimeController.getInstance().getDaysSinceGameStart();
-                    this.daysInLockdownText.setVisible(true);
+                if(this.lockdownActive == false) {
+                    this.lockdownActive = true;     //this.measures[this.key]['active'] = true;
+                    this.startTime = TimeController.getInstance().getDaysSinceGameStart();  //this.measures[this.key]['activated_on_day'];
+                    this.daysInLockdownText.setAlpha(1);
                 } else {
-                    this.lockdown = false;
-                    this.daysInLockdownText.setVisible(false);
+                    this.lockdownActive = false;    //this.measures[this.key]['active'] = false;
+                    this.countDays += this.daysInLockdown;
+                    this.daysInLockdownText.setAlpha(0);
                 }
+            }
+            if(this.key == 'police') {
+                UpgradeController.getInstance().buyPoliceOfficers(UpgradeController.getInstance(), this.amount, this.dailyCost);
+            } else {
+                UpgradeController.getInstance().buyHealthWorkers(UpgradeController.getInstance(), this.amount, this.dailyCost);
+            }
+            if(this.key == 'police') {
+                UpgradeController.getInstance().buyPoliceOfficers(UpgradeController.getInstance(), this.amount, this.dailyCost);
+            } else {
+                UpgradeController.getInstance().buyHealthWorkers(UpgradeController.getInstance(), this.amount, this.dailyCost);
             }
         });
     }
 
     public notify(): void {
-        if(this.lockdown == true) {
-            this.daysInLockdown = TimeController.getInstance().getDaysSinceGameStart() - this.startTime;
-            this.daysInLockdownText.setText(`Days: ${this.daysInLockdown}`);
+        if(this.lockdownActive == true) {
+            this.daysInLockdown = TimeController.getInstance().getDaysSinceGameStart() - this.startTime;   //this.measures[this.key]['activated_on_day'];
+            this.daysInLockdownText.setText(`Days: ${this.daysInLockdown + this.countDays}`);
         }
     }
     

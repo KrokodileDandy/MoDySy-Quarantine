@@ -125,7 +125,7 @@ export class UpgradeController implements TimeSubscriber {
      * @returns if "lockdown" was activated/deactivated successfully
      */
     public activateLockdown(uC: UpgradeController): boolean { 
-        return uC.activateMeasure("ld");
+        return uC.activateMeasure("lockdown");
     }
 
     /**

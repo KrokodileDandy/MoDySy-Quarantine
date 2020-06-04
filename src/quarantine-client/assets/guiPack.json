@@ -429,10 +429,11 @@
         },
         {
           "type": "image",
-<<<<<<< HEAD
           "key": "restart-hover",
           "url": "assets/sprites/main-scene/restart-hover.png"
-=======
+        },
+        {
+          "type": "image",
           "key": "25percent",
           "url": "assets/sprites/main-scene/25percent.png"
         },
@@ -455,7 +456,6 @@
           "type": "image",
           "key": "money",
           "url": "assets/sprites/main-scene/money.png"
->>>>>>> 8fc33478b02eb08ef9fcee61e87e9ed5c8613e33
         },
         {
           "type": "image",
