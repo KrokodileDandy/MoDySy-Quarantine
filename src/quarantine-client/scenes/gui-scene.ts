@@ -18,6 +18,11 @@ export class GuiScene extends Phaser.Scene {
   private popUpSprite: Phaser.GameObjects.Sprite;
   private showMoney: Phaser.GameObjects.Text;
   private showCases: Phaser.GameObjects.Text;
+  private timeController: TimeController;
+  //** variables to save sound in */
+  inGameMusic: any;
+  buttonClickMusic: any;
+
 
   /** Gui scene instance */
   public static instance: GuiScene;
@@ -47,6 +52,10 @@ export class GuiScene extends Phaser.Scene {
       'assets/guiPack.json',
       'preload'
     );
+    //** load audio files */
+    this.load.audio("game_theme_music", ["assets/sounds/In_Game_Music.mp3", "assets/sounds/In_Game_Music.ogg"]);
+    this.load.audio("button_click", ["assets/sounds/click-sound.mp3", "assets/sounds/click-sound.ogg"]);
+
   }
 
 
@@ -66,6 +75,20 @@ export class GuiScene extends Phaser.Scene {
     // Creates Rules button
     this.createRulesBtn();
 
+    //** create sound objects */
+    this.inGameMusic = this.sound.add("game_theme_music");
+    this.buttonClickMusic = this.sound.add("button_click");
+
+    const musicConfig = {
+      mute: false,
+      volume: 0.5,
+      rate: 1,
+      detune: 0,
+      seek: 0,
+      loop: true,
+      delay: 0
+    }
+    this.inGameMusic.play(musicConfig);
     this.createLogBookBtn();
 
     this.createSpeedButton();
@@ -98,6 +121,7 @@ export class GuiScene extends Phaser.Scene {
         chart.scene.restart();
         map.scene.restart();
         this.mainSceneIsPaused = false;
+        this.buttonClickMusic.play();
       }
     });
 
@@ -108,6 +132,7 @@ export class GuiScene extends Phaser.Scene {
         chart.scene.resume();
         map.scene.resume();
         this.mainSceneIsPaused = false;
+        this.buttonClickMusic.play();
       }
     });
   }
@@ -458,6 +483,7 @@ export class GuiScene extends Phaser.Scene {
         // Set value to 'pressed'
         menuIsPressed = true;
       }
+      this.buttonClickMusic.play();
     });
 
     // Handle the visibility of the subbuttons
@@ -536,11 +562,13 @@ export class GuiScene extends Phaser.Scene {
         // Set 'settings' to pressed
         settingsIsPressed = true;
       }
+      this.buttonClickMusic.play();
     });
 
     // Pause the game when 'pause' was clicked
     pauseBlack.on('pointerup', () => {
       this.createPauseButton(resetBlack, resumeBlack);
+      this.buttonClickMusic.play();
     });
 
     // Handle the visibility of the subbuttons
@@ -563,7 +591,8 @@ export class GuiScene extends Phaser.Scene {
       buttonsToHide.forEach(element => {
         element.visible = false;
       });
-    })
+      this.buttonClickMusic.play();
+    });
   }
 
   // Sets to the default value (only menu button is to be seen)
@@ -588,6 +617,7 @@ export class GuiScene extends Phaser.Scene {
   addOnListenerSubButton(button): void {
     button.on('pointerup', () => {
       //console.log("Clicked");
+      this.buttonClickMusic.play();
     })
   }
 
@@ -632,6 +662,41 @@ export class GuiScene extends Phaser.Scene {
     }
   }
 
+  // muteMusic(): void {
+  //   const musicOff = this.add.text(100, 550, 'music off', {fill: '#000000', font: '20px Arial'});
+  //   this.inGameMusic.setMute(true);
+  //   musicOff.setInteractive().on('pointerup', () => {
+  //     musicOff.destroy();
+  //     this.unmuteMusic();
+  //   });
+  // }
+
+  // unmuteMusic(): void {
+  //   const musicOn = this.add.text(100, 550, 'music on', {fill: '#000000', font: '20px Arial'});
+  //   this.inGameMusic.setMute(false);
+  //   musicOn.setInteractive().on('pointerup', () => {
+  //     musicOn.destroy();
+  //     this.muteMusic();
+  //   });
+  // }
+
+  // muteSound(): void {
+  //   const soundOff = this.add.text(100, 600, 'sound off', {fill: '#000000', font: '20px Arial'});
+  //   this.buttonClickMusic.setMute(true);
+  //   soundOff.setInteractive().on('pointerup', () => {
+  //     soundOff.destroy();
+  //     this.unmuteSound();
+  //   });
+  // }
+
+  // unmuteSound(): void {
+  //   const soundOn = this.add.text(100, 600, 'sound on', {fill: '#000000', font: '20px Arial'});
+  //   this.buttonClickMusic.setMute(false);
+  //   soundOn.setInteractive().on('pointerup', () => {
+  //     soundOn.destroy();
+  //     this.muteSound();
+  //   });
+  // }
   /*---------START: Skill-Tree button ---------- */
   createSkillTreeBtn(): void {
     const yourSkills = this.add.sprite(1850, 550, 'your_skills').setInteractive()
@@ -646,6 +711,7 @@ export class GuiScene extends Phaser.Scene {
     })
     .on('pointerup', () => {
       yourSkills.setScale(0.6);
+      this.buttonClickMusic.play();
       // openSkillTree()
     }).setScale(0.5);
   }
@@ -682,6 +748,7 @@ export class GuiScene extends Phaser.Scene {
       popupInfo.add(new Phaser.GameObjects.Text(this,550, 220 , popupStr, {color:'Black', fontSize: '30px',fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'} ));
 
       popupInfo.createModal();
+      this.buttonClickMusic.play();
     });
     //add popup Info into popup Rules.
     popupRules.add(info);
@@ -701,6 +768,7 @@ export class GuiScene extends Phaser.Scene {
     rulesBtn.on('pointerup', () => {
       rulesBtn.setScale(0.8);
       popupRules.createModal();
+      this.buttonClickMusic.play();
     });
   }
 
@@ -795,11 +863,13 @@ export class GuiScene extends Phaser.Scene {
 
         //close modal
         popupMss.closeModal();
+        this.buttonClickMusic.play();
       });
 
       //add confirm to object container and show the popup
       popupMss.addGameObjects([restartOKBtn]);
       popupMss.createModal();
+      this.buttonClickMusic.play();
 
     });
   }
@@ -820,7 +890,8 @@ export class GuiScene extends Phaser.Scene {
 		lbBtn.on('pointerout', () => {lbBtn.scale = 0.6;});
 
 		lbBtn.on('pointerup', () => {
-			LogBook.getInstance().open(this); // open log book sub scene
+      LogBook.getInstance().open(this); // open log book sub scene
+      this.buttonClickMusic.play();
 		});
   }
   
@@ -850,6 +921,7 @@ export class GuiScene extends Phaser.Scene {
         chart.scene.pause();
         map.scene.pause();
         this.mainSceneIsPaused = true;
+        this.buttonClickMusic.play();
       }
     });
 
@@ -871,6 +943,7 @@ export class GuiScene extends Phaser.Scene {
         chart.scene.resume();
         map.scene.resume();
         this.mainSceneIsPaused = false;
+        this.buttonClickMusic.play();
       }
     });
 
@@ -886,6 +959,7 @@ export class GuiScene extends Phaser.Scene {
     speed1x.on('pointerup',() => {     
       this.gameSpeed = 1;
       TimeController.getInstance().setGameSpeed(this.gameSpeed);
+      this.buttonClickMusic.play();
     });
 
     speed2x.on('pointerover', () => {
@@ -899,6 +973,7 @@ export class GuiScene extends Phaser.Scene {
     speed2x.on('pointerup',() => {
       this.gameSpeed = 1.5;
       TimeController.getInstance().setGameSpeed(this.gameSpeed);
+      this.buttonClickMusic.play();
     });
 
     speed3x.on('pointerover', () => {
@@ -912,6 +987,7 @@ export class GuiScene extends Phaser.Scene {
     speed3x.on('pointerup',() => {
       this.gameSpeed = 2;
       TimeController.getInstance().setGameSpeed(this.gameSpeed);
+      this.buttonClickMusic.play();
     });
   }
   /*---------END: Speed button  ---------- */
@@ -940,13 +1016,13 @@ export class GuiScene extends Phaser.Scene {
     musicOn.on('pointerup',() => {
       if(this.musicON){
         // method to turn off music should be here
-
+        this.inGameMusic.setMute(true);
         // changes img and reset musicON atribute
         musicOn.setTexture('music_off');
         this.musicON = false;
       }else{
         // method to turn on music should be here
-
+        this.inGameMusic.setMute(false);
         // changes img and reset musicON atribute
         musicOn.setTexture('music_on');
         this.musicON = true;
@@ -956,13 +1032,13 @@ export class GuiScene extends Phaser.Scene {
     soundOn.on('pointerup',() => {
       if(this.soundON){
         // method to turn off sound should be here
-
+        this.buttonClickMusic.setMute(true);
         // changes img and reset soundON atribute
         soundOn.setTexture('sound_off');
         this.soundON = false;
       }else{
         // method to turn on sound should be here
-
+        this.buttonClickMusic.setMute(false);
         // changes img and reset soundON atribute
         soundOn.setTexture('sound_on');
         this.soundON = true;
