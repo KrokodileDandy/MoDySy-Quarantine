@@ -22,27 +22,25 @@ export class Icon extends Phaser.GameObjects.Image {
         this.skillIsActive = active;
         this.icon = key;
 
-        this.button = this.scene.add.image(x, y, texture);
-        //this.ringColor = this.setColor(SkillController.getInstance());
-        //this.iconImage =  this.setIcon(key);
-        this.addButtonAnimations();
+        this.button = this.scene.add.image(x, y, texture).setScale(0.85);
+        this.addButtonAnimations(this.button);
 
         //this.scene.add.existing(this);
     }
 
-    private addButtonAnimations(): void {
-        this.setInteractive()
+    private addButtonAnimations(image: Phaser.GameObjects.Image): void {
+        image.setInteractive()
         .on('pointerover', () => {
-            this.button.setScale(0.85);
+            image.setScale(0.85);
         })
         .on('pointerout', () => {
-            this.button.setScale(0.75);
+            image.setScale(0.75);
         })
         .on('pointerdown', () => {
-            this.button.setScale(0.75);
+            image.setScale(0.75);
         })
         .on('pointerup', () => {
-            this.button.setScale(0.85);
+            image.setScale(0.85);
 
         });
     }

@@ -52,15 +52,11 @@ export class GuiScene extends Phaser.Scene {
       'preload',
       'assets/guiPack.json',
       'preload'
-<<<<<<< HEAD
-    )
-=======
     );
     //** load audio files */
     this.load.audio("game_theme_music", ["assets/sounds/In_Game_Music.mp3", "assets/sounds/In_Game_Music.ogg"]);
     this.load.audio("button_click", ["assets/sounds/click-sound.mp3", "assets/sounds/click-sound.ogg"]);
 
->>>>>>> c668a9198ee0d302221d4d3c49dba52215207931
   }
 
 
@@ -95,6 +91,8 @@ export class GuiScene extends Phaser.Scene {
     }
     this.inGameMusic.play(musicConfig);
     this.createLogBookBtn();
+
+    this.createSkillTreeBtn();
 
     this.createSpeedButton();
 
@@ -666,9 +664,6 @@ export class GuiScene extends Phaser.Scene {
       this.popUpSprite.destroy();
     }
   }
-<<<<<<< HEAD
-    
-=======
 
   // muteMusic(): void {
   //   const musicOff = this.add.text(100, 550, 'music off', {fill: '#000000', font: '20px Arial'});
@@ -705,7 +700,6 @@ export class GuiScene extends Phaser.Scene {
   //     this.muteSound();
   //   });
   // }
->>>>>>> c668a9198ee0d302221d4d3c49dba52215207931
   /*---------START: Skill-Tree button ---------- */
   createSkillTreeBtn(): void {
     const yourSkills = this.add.sprite(1850, 550, 'your_skills').setInteractive()
@@ -720,13 +714,8 @@ export class GuiScene extends Phaser.Scene {
     })
     .on('pointerup', () => {
       yourSkills.setScale(0.6);
-<<<<<<< HEAD
       const skillTree = new SkillTreeView(this);
       skillTree.createModal();
-=======
-      this.buttonClickMusic.play();
-      // openSkillTree()
->>>>>>> c668a9198ee0d302221d4d3c49dba52215207931
     }).setScale(0.5);
   }
 

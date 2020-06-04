@@ -28,25 +28,102 @@ export class SkillTreeView extends PopupWindow {
 
         //this.addSkillTitles();
         this.addGameObjects(this.addSkillButtons());
-        this.addGameObjects(this.addRingColor());
+        //this.addGameObjects(this.addRingColor());
         this.scene.add.existing(this);
     }
 
     private addSkillButtons(): Phaser.GameObjects.GameObject[] {
-        const medicalTreatmentButton = new Icon(this.scene, this.x + 960, this.y + 250, 'skill-button', 'medical-treatment', true);
-        const policeButton = new Icon(this.scene, this.x + 1240, this.y + 400, 'skill-button', 'police', true);
-        const testingButton = new Icon(this.scene, this.x + 1160, this.y + 700, 'skill-button', 'testing', true);
-        const lockdownButton = new Icon(this.scene, this.x + 760, this.y + 700, 'skill-button', 'lockdown', true);
-        const citizensButton = new Icon(this.scene, this.x + 680, this.y + 400, 'skill-button', 'citizen', true);
+        const medicalTreatmentButton = new Icon(this.scene, this.x + 960, this.y + 250, 'medical-treatment', 'medical-treatment', true).setScale(0.75).setInteractive()
+        .on('pointerover', () => { medicalTreatmentButton.setScale(0.85) })
+        .on('pointerout', () => { medicalTreatmentButton.setScale(0.75) })
+        .on('pointerdown', () => { medicalTreatmentButton.setScale(0.75) })
+        .on('pointerup', () => { medicalTreatmentButton.setScale(0.85); this.openMedicalTreatmentsSkillTree('medical-treatment') });
+        const policeButton = new Icon(this.scene, this.x + 1240, this.y + 400, 'police', 'police', true).setScale(0.75).setInteractive()
+        .on('pointerover', () => { policeButton.setScale(0.85) })
+        .on('pointerout', () => { policeButton.setScale(0.75) })
+        .on('pointerdown', () => { policeButton.setScale(0.75) })
+        .on('pointerup', () => { policeButton.setScale(0.85); });
+        const testingButton = new Icon(this.scene, this.x + 1160, this.y + 700, 'testing', 'testing', true).setScale(0.75).setInteractive()
+        .on('pointerover', () => { testingButton.setScale(0.85) })
+        .on('pointerout', () => { testingButton.setScale(0.75) })
+        .on('pointerdown', () => { testingButton.setScale(0.75) })
+        .on('pointerup', () => { testingButton.setScale(0.85); });
+        const lockdownButton = new Icon(this.scene, this.x + 760, this.y + 700, 'lockdown', 'lockdown', true).setScale(0.75).setInteractive()
+        .on('pointerover', () => { lockdownButton.setScale(0.85) })
+        .on('pointerout', () => { lockdownButton.setScale(0.75) })
+        .on('pointerdown', () => { lockdownButton.setScale(0.75) })
+        .on('pointerup', () => { lockdownButton.setScale(0.85); });
+        const citizensButton = new Icon(this.scene, this.x + 680, this.y + 400, 'citizen', 'citizen', true).setScale(0.75).setInteractive()
+        .on('pointerover', () => { citizensButton.setScale(0.85) })
+        .on('pointerout', () => { citizensButton.setScale(0.75) })
+        .on('pointerdown', () => { citizensButton.setScale(0.75) })
+        .on('pointerup', () => { citizensButton.setScale(0.85); });
 
         return [
             medicalTreatmentButton, policeButton, testingButton, lockdownButton, citizensButton
         ];
     }
 
-    private addRingColor(): Phaser.GameObjects.GameObject[] {
+    private openMedicalTreatmentsSkillTree(key: string): void {
+        const medicalTreatmentSubTree = new Phaser.GameObjects.Container(this.scene, 0, 0, this.addSkills(key));
+        this.scene.add.existing(medicalTreatmentSubTree);
+
+    }
+
+    private addSkills(key: string): Phaser.GameObjects.GameObject[] {
+        if(key == 'medical-treatment') {
+            const additionalMedicalSuppliesI = new Phaser.GameObjects.Image(this.scene, this.x + 960, this.y + 300, 'additional-medical-supplies').setScale(0.5).setInteractive()
+            .on('pointerover', () => { additionalMedicalSuppliesI.setScale(0.6) })
+            .on('pointerout', () => { additionalMedicalSuppliesI.setScale(0.5) })
+            .on('pointerdown', () => { additionalMedicalSuppliesI.setScale(0.5) })
+            .on('pointerup', () => { additionalMedicalSuppliesI.setScale(0.6); });
+            const additionalMedicalSuppliesII = new Phaser.GameObjects.Image(this.scene, this.x + 760, this.y + 400, 'additional-medical-supplies').setScale(0.5).setInteractive()
+            .on('pointerover', () => { additionalMedicalSuppliesII.setScale(0.6) })
+            .on('pointerout', () => { additionalMedicalSuppliesII.setScale(0.5) })
+            .on('pointerdown', () => { additionalMedicalSuppliesII.setScale(0.5) })
+            .on('pointerup', () => { additionalMedicalSuppliesII.setScale(0.6); });
+            const upgradeMedicalFacilitiesI = new Phaser.GameObjects.Image(this.scene, this.x + 1160, this.y + 400, 'upgrade-medical-facilities').setScale(0.5).setInteractive()
+            .on('pointerover', () => { additionalMedicalSuppliesII.setScale(0.6) })
+            .on('pointerout', () => { additionalMedicalSuppliesII.setScale(0.5) })
+            .on('pointerdown', () => { additionalMedicalSuppliesII.setScale(0.5) })
+            .on('pointerup', () => { additionalMedicalSuppliesII.setScale(0.6); });
+            const upgradeMedicalFacilitiesII = new Phaser.GameObjects.Image(this.scene, this.x + 960, this.y + 500, 'upgrade-medical-facilities').setScale(0.5).setInteractive()
+            .on('pointerover', () => { upgradeMedicalFacilitiesII.setScale(0.6) })
+            .on('pointerout', () => { upgradeMedicalFacilitiesII.setScale(0.5) })
+            .on('pointerdown', () => { upgradeMedicalFacilitiesII.setScale(0.5) })
+            .on('pointerup', () => { upgradeMedicalFacilitiesII.setScale(0.6); });
+            const upgradeMedicalFacilitiesIII = new Phaser.GameObjects.Image(this.scene, this.x + 760, this.y + 600, 'upgrade-medical-facilities').setScale(0.5).setInteractive()
+            .on('pointerover', () => { upgradeMedicalFacilitiesIII.setScale(0.6) })
+            .on('pointerout', () => { upgradeMedicalFacilitiesIII.setScale(0.5) })
+            .on('pointerdown', () => { upgradeMedicalFacilitiesIII.setScale(0.5) })
+            .on('pointerup', () => { upgradeMedicalFacilitiesIII.setScale(0.6); });
+            const medicinI = new Phaser.GameObjects.Image(this.scene, this.x + 1360, this.y + 500, 'medicine').setScale(0.5).setInteractive()
+            .on('pointerover', () => { medicinI.setScale(0.6) })
+            .on('pointerout', () => { medicinI.setScale(0.5) })
+            .on('pointerdown', () => { medicinI.setScale(0.5) })
+            .on('pointerup', () => { medicinI.setScale(0.6); });
+            const medicinII = new Phaser.GameObjects.Image(this.scene, this.x + 1160, this.y + 600, 'medicine').setScale(0.5).setInteractive()
+            .on('pointerover', () => { medicinII.setScale(0.6) })
+            .on('pointerout', () => { medicinII.setScale(0.5) })
+            .on('pointerdown', () => { medicinII.setScale(0.5) })
+            .on('pointerup', () => { medicinII.setScale(0.6); });
+            const medicinIII = new Phaser.GameObjects.Image(this.scene, this.x + 960, this.y + 700, 'medicine').setScale(0.5).setInteractive()
+            .on('pointerover', () => { medicinIII.setScale(0.6) })
+            .on('pointerout', () => { medicinIII.setScale(0.5) })
+            .on('pointerdown', () => { medicinIII.setScale(0.5) })
+            .on('pointerup', () => { medicinIII.setScale(0.6); });
+        }
+
         return [
-            this.setColor(SkillController.getInstance(), this.x + 960, this.y + 250),
+
+        ]
+        
+    }
+
+    /*private addRingColor(): Phaser.GameObjects.GameObject[] {
+        return [
+            this.scene.add.image(this.x + 960, this.y + 250, 'circle-green')
+            /*this.setColor(SkillController.getInstance(), this.x + 960, this.y + 250),
             this.setColor(SkillController.getInstance(), this.x + 1240, this.y + 400),
             this.setColor(SkillController.getInstance(), this.x + 1160, this.y + 700),
             this.setColor(SkillController.getInstance(), this.x + 760, this.y + 700),
@@ -58,9 +135,9 @@ export class SkillTreeView extends PopupWindow {
             this.setIcon(this.x + 680, this.y + 400, 'citizen'),
         ]
         
-    }
+    }*/
 
-    private setColor(sC: SkillController, x: number, y: number, skill?: Function): Phaser.GameObjects.Image {
+    /*private setColor(sC: SkillController, x: number, y: number, skill?: Function): Phaser.GameObjects.Image {
         let color = '';
        
         if(skill() == true) {
@@ -80,7 +157,7 @@ export class SkillTreeView extends PopupWindow {
     private setIcon(x: number, y: number, texture: string): Phaser.GameObjects.Image {
         const icon = this.scene.add.image(x, y, texture).setScale(0.75);
         return icon;
-    }
+    }*/
 
     /*private addSkillTitles(): void {
         this.scene.add.text(960, 200, 'Medical Treatment', {
