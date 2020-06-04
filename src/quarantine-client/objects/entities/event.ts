@@ -18,12 +18,12 @@ export class Event {
     public constructor(executeEventFunction: Function, title: string, description: string, imagePath: string) {
         if (!imagePath) imagePath = "letter";
         const img = new Phaser.GameObjects.Image(GuiScene.instance, 1400, 700, imagePath).setOrigin(0).setDepth(1);
-        const styleDesc = {
+        const styleDesc = { // description style
             color: 'Black',
             fontSize: '55px',
             fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'
         };
-        const styleTitle = {
+        const styleTitle = { // title style
             color: 'Black',
             align: 'center',
             fontSize: '80px',

@@ -511,6 +511,11 @@
           "type": "image",
           "key": "blank-note",
           "url": "assets/sprites/rules/blank-note.png"
+        },
+        {
+          "type": "image",
+          "key": "politician",
+          "url": "assets/sprites/messages/polititian.png"
         }
       ]
   }

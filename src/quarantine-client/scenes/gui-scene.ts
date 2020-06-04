@@ -9,6 +9,7 @@ import { State } from "../util/enums/healthStates";
 import { Rule } from "../objects/entities/rule";
 import { LogBook } from "../objects/controller/logBook";
 import { TimeController } from "../objects/controller/timeController";
+import { Tutorial } from "../objects/controller/tutorial";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -72,6 +73,8 @@ export class GuiScene extends Phaser.Scene {
 
     // Creates Sound button for test, delete this function later
     this.createSoundButton();
+
+    Tutorial.getInstance().open(this);
   }
 
   // -------------------------------------------------------------------------- GAME MENU

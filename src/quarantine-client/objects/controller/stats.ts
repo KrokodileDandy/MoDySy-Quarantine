@@ -209,6 +209,8 @@ export class Stats {
     public basicInteractionRate: number;
     /** Upper bound of the randomly generated interaction variance. */
     public maxInteractionVariance: number;
+    /** The virus name, chosen by the player */
+    public virusName = "the virus"
 
     // -------------------------------------------------------------------------- SALARIES
     /** Average salary of a police officer per day in EURO (rounded) (month = 31 days) */
