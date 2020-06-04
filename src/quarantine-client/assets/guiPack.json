@@ -464,8 +464,63 @@
         },
         {
           "type": "image",
+          "key": "log",
+          "url": "assets/sprites/main-scene/log.png"
+        },
+        {
+          "type": "image",
+          "key": "open-notebook",
+          "url": "assets/sprites/skill-tree/open-notebook.png"
+        },
+        {
+          "type": "image",
+          "key": "arrow-next",
+          "url": "assets/sprites/log-book/arrow.png"
+        },
+        {
+          "type": "image",
+          "key": "virus",
+          "url": "assets/sprites/log-book/virus.png"
+        },
+        {
+          "type": "image",
+          "key": "boy",
+          "url": "assets/sprites/log-book/boy.png"
+        },
+        {
+          "type": "image",
+          "key": "girl",
+          "url": "assets/sprites/log-book/girl.png"
+        },
+        {
+          "type": "image",
+          "key": "tomb-stone",
+          "url": "assets/sprites/log-book/rip.png"
+        },
+        {
+          "type": "image",
+          "key": "chemistry",
+          "url": "assets/sprites/log-book/chemistry.png"
+        },
+        {
+          "type": "image",
+          "key": "vaccine",
+          "url": "assets/sprites/skill-tree/vaccine.png"
+        },
+        {
+          "type": "image",
+          "key": "medicine",
+          "url": "assets/sprites/skill-tree/medicine.png"
+        },
+        {
+          "type": "image",
           "key": "blank-note",
           "url": "assets/sprites/rules/blank-note.png"
+        },
+        {
+          "type": "image",
+          "key": "politician",
+          "url": "assets/sprites/messages/polititian.png"
         }
       ]
   }

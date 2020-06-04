@@ -7,7 +7,9 @@ import { PopupWindow } from "./popupWindow";
 import { Controller } from "../objects/controller/controller";
 import { State } from "../util/enums/healthStates";
 import { Rule } from "../objects/entities/rule";
+import { LogBook } from "../objects/controller/logBook";
 import { TimeController } from "../objects/controller/timeController";
+import { Tutorial } from "../objects/controller/tutorial";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -64,14 +66,17 @@ export class GuiScene extends Phaser.Scene {
     // Creates Rules button
     this.createRulesBtn();
 
-    // Creates Reset button for test, delete this function later
-    this.createResetBtn();
+    this.createLogBookBtn();
 
-    // Creates Speed button for test, delete this function later
     this.createSpeedButton();
+
+    // Creates Reset button
+    this.createResetBtn();
 
     // Creates Sound button for test, delete this function later
     this.createSoundButton();
+
+    Tutorial.getInstance().open(this);
   }
 
   // -------------------------------------------------------------------------- GAME MENU
@@ -809,6 +814,25 @@ export class GuiScene extends Phaser.Scene {
   }
   /*---------END: Reset button  ---------- */
 
+  /**
+	 * Insert a log book into the gui scene. When clicked, a specific
+	 * sub menu opens.
+	 */
+	private createLogBookBtn(): void {
+    const lbBtn = this.add.image(900, 90, 'log').setOrigin(0);
+    lbBtn.scale = 0.6;
+		lbBtn.angle = 1;
+		lbBtn.setInteractive();
+
+		// hover effect
+		lbBtn.on('pointerover', () => {lbBtn.scale = 0.65;});
+		lbBtn.on('pointerout', () => {lbBtn.scale = 0.6;});
+
+		lbBtn.on('pointerup', () => {
+			LogBook.getInstance().open(this); // open log book sub scene
+		});
+  }
+  
   /*---------START: Speed button  ---------- */
   createSpeedButton(): void {
     const pause = this.add.sprite(this.game.renderer.width / 2 - 200, 50, 'pause').setInteractive();

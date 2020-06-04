@@ -24,11 +24,10 @@ export class MainScene extends Phaser.Scene {
     }
 
     init(): void {
-        console.log('Init');
+        //
     }
 
     create(): void {
-        console.log('Create');
         this.add.image(960, 470, 'background');
 
         this.timeController = TimeController.getInstance();

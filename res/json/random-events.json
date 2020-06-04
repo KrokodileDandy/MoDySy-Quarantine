@@ -67,11 +67,6 @@
     ],
     "EPIC": [
         {
-            "name": "Social Distancing EPIC",
-            "description": "SD description",
-            "image-path": ""
-        },
-        {
             "name": "An anonymous donation was made to our cause.",
             "description": "An anonymous donation of 1.000.000.000 € was made to our cause.",
             "image-path": ""
