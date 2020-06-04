@@ -1,6 +1,7 @@
 import { LogBookView } from "../../scenes/logBookView";
 import { TimeController } from "./timeController";
 import { Stats } from "./stats";
+import { IncomeStatement } from "../entities/incomeStatement";
 
 /**
  * The log book which stores statistical information about all passed
@@ -65,7 +66,7 @@ export class LogBook {
             this.scene,
             1070 + offset, 
             posY, 
-            name + ": " + value + " €", 
+            name + ": " + value.toLocaleString("de-DE") + " €", 
             { color: 'Black', fontSize: '18px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
         );
         if (offset == 0) this.textFinanceIncPosY += 32;
@@ -78,7 +79,7 @@ export class LogBook {
      * @param lbView 
      * @param info 
      */
-    private generateLogBookStats(lbView: LogBookView, info: (number | {[id: string]: {[id: string]: number}})[]): void {
+    private generateLogBookStats(lbView: LogBookView, info: number[]): void {
         this.textStatPosY = 155;
         const arr = [];
         arr.push(this.getStatTextEl("Infected", Number(info[0])));
@@ -87,9 +88,8 @@ export class LogBook {
         arr.push(this.getStatTextEl("Health Workers", Number(info[3])));
         arr.push(this.getStatTextEl("Police Officers", Number(info[4])));
         arr.push(this.getStatTextEl("Research Level", Number(info[5])));
-
-        arr.push(this.getStatTextEl("Used Test Kits", Number(info[7])));
-        arr.push(this.getStatTextEl("Used Vaccines", Number(info[8])));
+        arr.push(this.getStatTextEl("Used Test Kits", Number(info[6])));
+        arr.push(this.getStatTextEl("Used Vaccines", Number(info[7])));
         
         lbView.addGameObjects(arr);
     }
@@ -154,7 +154,7 @@ export class LogBook {
         lbView.addGameObjects(arr);
     }
 
-    private generateLogBookIncomeStatement(lbView: LogBookView, info: (number | {[id: string]: {[id: string]: number}})[]): void {
+    private generateLogBookIncomeStatement(lbView: LogBookView, incomeStatement: IncomeStatement): void {
         // Reset y position counters
         this.textFinanceExpPosY = 160;
         this.textFinanceIncPosY = 160;
@@ -179,12 +179,12 @@ export class LogBook {
         ));
 
         // income statement
-        arr.push(this.getFinanceTextEl("Taxes", Number(info[6]["inc"]["tax"])));
-        arr.push(this.getFinanceTextEl("Salary Police Officers", Number(info[6]["exp"]["spo"]), offset));
-        arr.push(this.getFinanceTextEl("Salary Health Workers", Number(info[6]["exp"]["shw"]), offset));
-        arr.push(this.getFinanceTextEl("Test Kits Total", Number(info[6]["exp"]["tk"]), offset));
-        arr.push(this.getFinanceTextEl("Vaccines Total", Number(info[6]["exp"]["v"]), offset));
-        arr.push(this.getFinanceTextEl("Costs for Measures", Number(info[6]["exp"]["ms"]), offset));
+        arr.push(this.getFinanceTextEl("Taxes", incomeStatement.income.taxes));
+        arr.push(this.getFinanceTextEl("Salary Police Officers", incomeStatement.expenses.salaries.police, offset));
+        arr.push(this.getFinanceTextEl("Salary Health Workers", incomeStatement.expenses.salaries.healthWorker, offset));
+        arr.push(this.getFinanceTextEl("Test Kits Total", incomeStatement.expenses.consumption.testKits, offset));
+        arr.push(this.getFinanceTextEl("Vaccines Total", incomeStatement.expenses.consumption.vaccines, offset));
+        arr.push(this.getFinanceTextEl("Costs for Measures", incomeStatement.expenses.measures, offset));
 
         // total
         let tempY: number;
@@ -194,14 +194,14 @@ export class LogBook {
             this.scene,
             1050, 
             tempY, 
-            info[6]["inc"]["tax"] + " €", 
+            incomeStatement.getIncome().toLocaleString("de-DE") + " €", 
             { color: 'Black', fontSize: '22px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
         ));
         arr.push(new Phaser.GameObjects.Text(
             this.scene,
             1300, 
             tempY, 
-            info[6]["exp"]["spo"] + info[6]["exp"]["shw"] + info[6]["exp"]["tk"] + info[6]["exp"]["v"] + info[6]["exp"]["ms"] + " €", 
+            incomeStatement.getExpenses().toLocaleString("de-DE") + " €", 
             { color: 'Black', fontSize: '22px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
         ));
 
@@ -215,10 +215,11 @@ export class LogBook {
     private createLogBookView(week: number): LogBookView {
         const lbView = new LogBookView(this.scene, week);
         const info = Stats.getInstance().getWeeklyStats(week);
+        const is = Stats.getInstance().getIncomeStatement(week);
 
         this.generateLogBookStats(lbView, info);
         this.generateLogBookStatsImages(lbView);
-        this.generateLogBookIncomeStatement(lbView, info);
+        this.generateLogBookIncomeStatement(lbView, is);
         
         return lbView;
     }

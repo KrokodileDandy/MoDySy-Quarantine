@@ -1,6 +1,7 @@
 import { TimeController } from "./timeController";
 import { UpgradeController } from "./upgradeController";
 import { DifficultyLevel} from "../../util/enums/difficultyLevels";
+import { IncomeStatement } from "./../entities/incomeStatement";
 
 /**
  * Singleton controller which contains game variables (e.g. budget, population size)
@@ -75,14 +76,13 @@ export class Stats {
      * * current level of research
      * * income / expenses at the end of the week
      */
-    public updateWeek(incomeStatement: {[id: string]: {[id: string]: number}}): void {
+    public updateWeek(incomeStatement: IncomeStatement): void {
         const currWeek = TimeController.getInstance().getWeeksSinceGameStart();
-        this.weeklyVaccines[currWeek] += this.usedVaccinesThisDay;
-        this.weeklyTestKits[currWeek] += this.usedTestKitsThisDay;
+        this.weeklyResearch[currWeek] = UpgradeController.getInstance().getCurrentResearchLevel();
+        this.weeklyPolice[currWeek] = this.nbrPolice;
+        this.weeklyHW[currWeek] = this.nbrPolice;
         
-        if (TimeController.getInstance().getDaysSinceGameStart() % 7 == 0) { // one week has passed
-            this.weeklyResearch[currWeek] = UpgradeController.getInstance().getCurrentResearchLevel();
-
+        if (TimeController.getInstance().getDaysSinceGameStart() % 7 == 1) { // one week has passed
             this.weeklyDead.push(0);
             this.weeklyInfected.push(0);
             this.weeklyCured.push(0);
@@ -92,70 +92,17 @@ export class Stats {
             this.weeklyTestKits.push(0);
             this.weeklyVaccines.push(0);
 
-            this.weeklyIncomeStatement.push({
-                "inc": {
-                    "tax": 0
-                },
-                "exp": {
-                    "spo": 0,
-                    "shw": 0,
-                    "tk": 0,
-                    "v": 0,
-                    "ms": 0
-                }
-            });
+            this.weeklyIncomeStatements.push(new IncomeStatement(0,0,0,0,0,0));
         }
         
         this.resetConsumptionCounters();
-        this.addIncomeStatement(incomeStatement);
+        this.addIncomeStatementToArray(incomeStatement);
     }
 
     /** Add the given income statement to the current week of the weekly income statement array */
-    private addIncomeStatement(incomeStatement: {[id: string]: {[id: string]: number}}): void {
+    private addIncomeStatementToArray(incomeStatement: IncomeStatement): void {
         const week = TimeController.getInstance().getWeeksSinceGameStart();
-        console.log("Week " + week)
-        this.weeklyIncomeStatement[week]["inc"]["tax"] += incomeStatement["inc"]["tax"];
-        this.weeklyIncomeStatement[week]["exp"]["spo"] += incomeStatement["exp"]["spo"];
-        this.weeklyIncomeStatement[week]["exp"]["shw"] += incomeStatement["exp"]["shw"];
-        this.weeklyIncomeStatement[week]["exp"]["tk"] += incomeStatement["exp"]["tk"];
-        this.weeklyIncomeStatement[week]["exp"]["v"] += incomeStatement["exp"]["v"];
-        this.weeklyIncomeStatement[week]["exp"]["ms"] += incomeStatement["exp"]["ms"];
-    }
-
-    /**
-     * Accumulate the posts of all given income statements and return a new
-     * income statement with the accumulated values.
-     * @param incomeStatements 
-     */
-    private accumlateIncomeStatements(incomeStatements: {[id: string]: {[id: string]: number}}[]): void {
-        let taxes = 0;
-        let poSalary = 0;
-        let hwSalary = 0;
-        let tks = 0;
-        let vs = 0;
-        let ms = 0;
-
-        for (let i = 0; i < 7; i++) {
-            taxes += incomeStatements[i]["inc"]["tax"];
-            poSalary += incomeStatements[i]["exp"]["spo"];
-            hwSalary += incomeStatements[i]["exp"]["shw"];
-            tks += incomeStatements[i]["exp"]["tk"];
-            vs += incomeStatements[i]["exp"]["v"];
-            ms += incomeStatements[i]["exp"]["ms"];
-        }
-
-        this.weeklyIncomeStatement.push({
-            "inc": {
-                "tax": taxes
-            },
-            "exp": {
-                "spo": poSalary,
-                "shw": hwSalary,
-                "tk": tks,
-                "v": vs,
-                "ms": ms
-            }
-        });
+        this.weeklyIncomeStatements[week].add(incomeStatement);
     }
 
     /**
@@ -244,20 +191,6 @@ export class Stats {
     /** Current income per tic */
     public income: number;
 
-    /** Income statement of the current week */
-    private incomeStatements = [{
-        "inc": {
-            "tax": 0
-        },
-        "exp": {
-            "spo": 0,
-            "shw": 0,
-            "tk": 0,
-            "v": 0,
-            "ms": 0
-        }
-    }];
-
     // ----------------------------------------------------------------------- WEEKLY LOGS
     /** Number of infected people each week */
     private weeklyInfected = [0];
@@ -272,18 +205,7 @@ export class Stats {
     /** The level of research at the end of the week */
     private weeklyResearch = [0];
     /** The income statement each week */
-    private weeklyIncomeStatement = [{
-        "inc": {
-            "tax": 0
-        },
-        "exp": {
-            "spo": 0,
-            "shw": 0,
-            "tk": 0,
-            "v": 0,
-            "ms": 0
-        }
-    }];
+    private weeklyIncomeStatements = [new IncomeStatement(0,0,0,0,0,0)];
     /** Number of used test kits each week */
     private weeklyTestKits = [0];
     /** Number of used vaccines each week */
@@ -337,13 +259,12 @@ export class Stats {
      * 4. Hired health workers
      * 5. Hired police officers
      * 6. Research level
-     * 7. Income statement
-     * 8. Used test kits
-     * 9. Used vaccines
+     * 7. Used test kits
+     * 8. Used vaccines
      * @param week The week for which to return the information
      * @returns Array of numbers
      */
-    public getWeeklyStats(week: number): (number | {[id: string]: {[id: string]: number}})[] {
+    public getWeeklyStats(week: number): number[] {
         return [
             this.weeklyInfected[week] * this.populationFactor,
             this.weeklyCured[week] * this.populationFactor,
@@ -351,10 +272,17 @@ export class Stats {
             this.weeklyHW[week] * this.populationFactor,
             this.weeklyPolice[week] * this.populationFactor,
             this.weeklyResearch[week],
-            this.weeklyIncomeStatement[week], // ATTENTION! this is a dictionary, not a number!
             this.weeklyTestKits[week],
             this.weeklyVaccines[week]
         ];
+    }
+
+    /**
+     * Returns the income statement for the specific week.
+     * @param week 
+     */
+    public getIncomeStatement(week: number): IncomeStatement {
+        return this.weeklyIncomeStatements[week];
     }
 
 

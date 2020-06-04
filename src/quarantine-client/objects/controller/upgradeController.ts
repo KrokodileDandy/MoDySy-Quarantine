@@ -5,6 +5,7 @@ import { Role } from "../../util/enums/roles";
 import { Stats } from "./stats";
 import { TimeSubscriber } from "../../util/timeSubscriber";
 import { TimeController } from "./timeController";
+import { IncomeStatement } from "../entities/incomeStatement";
 
 
 /**
@@ -199,45 +200,28 @@ export class UpgradeController implements TimeSubscriber {
         this.updateCompliance();
         this.updateBudget(this.calculateIncome(), this.calculateExpenses());
 
-        this.stats.updateWeek(this.getIncomeStatement());
+        this.stats.updateWeek(this.getIncomeStatementToday());
     }
 
-    /**
-     * Returns the income statement of the current day as a dictionary consisting of two dictionaries.
-     * 
-     * ---
-     * __Key-value pairs:__  
-     * * inc: <income dictionary>
-     *   * tax: <taxes>
-     * * exp: <expenses dictionary>
-     *   * spo: <salary police officer>
-     *   * shw: <salary health workers>
-     *   * tk: <bought test kits>
-     *   * v: <bought vaccines>
-     *   * ms: <costs of all active measures>
-     * 
+    /** 
      * ---
      * __Example usage:__  
      * Acces to the money spend for the salary of police officers through 
-     * `getIncomeStatement()["exp"]["spo"];`
+     * `getIncomeStatement().expenses.salaries.police;`
      * 
      * ---
-     * @returns Dictionary of two dictionaries "Earnings" and "Expenses"
+     * @returns an income statement for the current day
      * @see #calculateMeasureExpenses()
      */
-    public getIncomeStatement(): {[id: string]: {[id: string]: number}} { // .toLocaleString("es-ES") + " €"
-        return {
-            "inc": {
-                "tax": this.stats.income
-            },
-            "exp": {
-                "spo": this.stats.getPOSalary(),
-                "shw": this.stats.getHWSalary(),
-                "tk": this.stats.getDailyTestKitsExpense(),
-                "v": this.stats.getDailyVaccinesExpense(),
-                "ms": this.calculateMeasureExpenses()
-            }
-        };
+    public getIncomeStatementToday(): IncomeStatement {
+        return new IncomeStatement(
+            this.stats.income,
+            this.stats.getPOSalary(),
+            this.stats.getHWSalary(),
+            this.stats.getDailyTestKitsExpense(),
+            this.stats.getDailyVaccinesExpense(),
+            this.calculateMeasureExpenses()
+        );
     }
 
 
