@@ -1,5 +1,7 @@
 import 'phaser';
 import { UpgradeController } from '../objects/controller/upgradeController';
+import { TimeController } from '../objects/controller/timeController';
+import { TimeSubscriber } from '../util/timeSubscriber';
 
 /**
  * Represents a container which inherit all necessary items
@@ -7,7 +9,7 @@ import { UpgradeController } from '../objects/controller/upgradeController';
  * 
  * @author Shao
  */
-export class ButtonContainer extends Phaser.GameObjects.Container {
+export class ButtonContainer extends Phaser.GameObjects.Container implements TimeSubscriber {
 
     // Key to determine which button is used
     private key: string;
@@ -23,6 +25,14 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
     private percent: number;
     // Visual text of percentage
     private percentText: Phaser.GameObjects.Text;
+    // Time in days since lockdown has been activated
+    private daysInLockdown: number
+    // Text of how many days passed since lockdown
+    private daysInLockdownText: Phaser.GameObjects.Text;
+    // Remembers the starting time
+    private startTime: number;
+    // Whether lockdown is activated or not
+    private lockdown: boolean;
     // Visual text of price
     private priceText: Phaser.GameObjects.Text;
     // The Texture of the button
@@ -39,6 +49,8 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
 
         this.eventListener = callback;
 
+        this.daysInLockdown = 0;
+        this.lockdown = false;
         this.percent = 0;
         this.key = texture;
         // Loading daily cost and amount from measures.json
@@ -54,6 +66,8 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
         this.addEssentialItems(this.key);
         // Adding button animations
         this.buttonAnimations(this.buttonImage);
+
+        TimeController.getInstance().subscribe(this);
 
         this.scene.add.existing(this);
     }
@@ -113,13 +127,12 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
             }
         }
         if(title == 'lockdown') {
-            this.scene.add.text(this.x + 140, this.y + 70, 'Day: 1', {
+            this.scene.add.text(this.x + 140, this.y + 70, `Days: ${this.daysInLockdown}`, {
                 fontFamily: 'Arial',
                 color: '#000000',
             });
-            this.scene.add.image(this.x + 225, this.y + 90, 'calendar').setScale(0.5);
+            this.scene.add.image(this.x + 250, this.y + 90, 'calendar').setScale(0.5);
         }
-        
     }
 
     /**
@@ -141,10 +154,10 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
         })
         .on('pointerup', () => { // "try to buy this item"
             image.setScale(0.6);
-            this.percent += 10;
             this.eventListener();       // initiate the buy process of reasearch in the upgrade controller
             // Updates the text of research price, since it has different prices for each level
             if(this.key == 'research') {
+                this.percent += 10;
                 this.updateText();
                 // Grayscales the button if ten levels has been bought
                 if(this.measures[this.key]['current_level'] == 10) {     // maybe should change in upgrade controller to 10
@@ -153,7 +166,24 @@ export class ButtonContainer extends Phaser.GameObjects.Container {
                     image.removeInteractive();
                 }
             }
+            if(this.key == 'lockdown') {
+                if(this.lockdown == false) {
+                    this.lockdown = true;
+                    this.startTime = TimeController.getInstance().getDaysSinceGameStart();
+                    this.daysInLockdownText.setVisible(true);
+                } else {
+                    this.lockdown = false;
+                    this.daysInLockdownText.setVisible(false);
+                }
+            }
         });
+    }
+
+    public notify(): void {
+        if(this.lockdown == true) {
+            this.daysInLockdown = TimeController.getInstance().getDaysSinceGameStart() - this.startTime;
+            this.daysInLockdownText.setText(`Days: ${this.daysInLockdown}`);
+        }
     }
     
     /**
