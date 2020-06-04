@@ -21,7 +21,7 @@ export class PopupWindow extends Phaser.GameObjects.Container {
      * @param closeBtnY y-index position of this close btn
      * @param data list of objects
      * @param backgroundKey : key of background image
-     * @param pause this attribute is true, when the game should be paused when popup windows actives
+     * @param pause true to not pause and false to pause the game
      * @param isChild this attribute is true, when the popup windows will be opened by another popup windows 
      */
     public constructor(scene: Phaser.Scene, x: number, y: number, backgroundKey: string,
@@ -87,6 +87,7 @@ export class PopupWindow extends Phaser.GameObjects.Container {
     public closeModal(): void {
         //stop this modal scene
         this.setVisible(false);
+
         //if this popup windows not a child, wake up the chart scene.
         if(!this.isChild){
             const chart = this.scene.scene.get('ChartScene') as ChartScene;
@@ -94,15 +95,15 @@ export class PopupWindow extends Phaser.GameObjects.Container {
 
             map.scene.wake();
             chart.scene.wake();
-        // resume the game if game was paused.    
-        if(this.pause){
-            const main = this.scene.scene.get('MainScene') as MainScene;
-            const map = this.scene.scene.get('MapScene') as MapScene;
+            // resume the game if game was paused.    
+            if(this.pause){
+                const main = this.scene.scene.get('MainScene') as MainScene;
+                const map = this.scene.scene.get('MapScene') as MapScene;
 
-            main.scene.resume();
-            chart.scene.resume();
-            map.scene.resume();
-        }
+                main.scene.resume();
+                chart.scene.resume();
+                map.scene.resume();
+            }
         }
     }
     

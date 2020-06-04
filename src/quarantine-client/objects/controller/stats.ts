@@ -1,5 +1,7 @@
 import { TimeController } from "./timeController";
+import { UpgradeController } from "./upgradeController";
 import { DifficultyLevel} from "../../util/enums/difficultyLevels";
+import { IncomeStatement } from "./../entities/incomeStatement";
 
 /**
  * Singleton controller which contains game variables (e.g. budget, population size)
@@ -63,19 +65,53 @@ export class Stats {
     }
 
     /**
+     * Expands all arrays which store weekly information:  
+     * * used vaccines
+     * * used test kits
+     * * people who died
+     * * people who got cured
+     * * people who got infected
+     * * hired health workers
+     * * hired police officers
+     * * current level of research
+     * * income / expenses at the end of the week
+     */
+    public updateWeek(incomeStatement: IncomeStatement): void {
+        const currWeek = TimeController.getInstance().getWeeksSinceGameStart();
+        this.weeklyResearch[currWeek] = UpgradeController.getInstance().getCurrentResearchLevel();
+        this.weeklyPolice[currWeek] = this.nbrPolice;
+        this.weeklyHW[currWeek] = this.nbrPolice;
+        
+        if (TimeController.getInstance().getDaysSinceGameStart() % 7 == 1) { // one week has passed
+            this.weeklyDead.push(0);
+            this.weeklyInfected.push(0);
+            this.weeklyCured.push(0);
+            this.weeklyHW.push(0);
+            this.weeklyPolice.push(0);
+            this.weeklyResearch.push(0);
+            this.weeklyTestKits.push(0);
+            this.weeklyVaccines.push(0);
+
+            this.weeklyIncomeStatements.push(new IncomeStatement(0,0,0,0,0,0));
+        }
+        
+        this.resetConsumptionCounters();
+        this.addIncomeStatementToArray(incomeStatement);
+    }
+
+    /** Add the given income statement to the current week of the weekly income statement array */
+    private addIncomeStatementToArray(incomeStatement: IncomeStatement): void {
+        const week = TimeController.getInstance().getWeeksSinceGameStart();
+        this.weeklyIncomeStatements[week].add(incomeStatement);
+    }
+
+    /**
      * Store the numbers of used test kits and vaccines of the day into the respective
      * arrays and reset the counters. If a week has passed, a new field is generated in
      * each array.
      */
-    public resetConsumptionCounters(): void {
-        if (TimeController.getInstance().getDaysSinceGameStart() % 7 == 0) { // one week has passed
-            this.usedTestKits.push(0);
-            this.usedVaccines.push(0);
-        }
-
-        this.usedVaccines[this.usedVaccines.length - 1] += this.usedVaccinesThisDay;
+    private resetConsumptionCounters(): void {
         this.usedVaccinesThisDay = 0;
-        this.usedTestKits[this.usedTestKits.length - 1] += this.usedTestKitsThisDay;
         this.usedTestKitsThisDay = 0;
     }
 
@@ -120,6 +156,8 @@ export class Stats {
     public basicInteractionRate: number;
     /** Upper bound of the randomly generated interaction variance. */
     public maxInteractionVariance: number;
+    /** The virus name, chosen by the player */
+    public virusName = "the virus"
 
     // -------------------------------------------------------------------------- SALARIES
     /** Average salary of a police officer per day in EURO (rounded) (month = 31 days) */
@@ -138,14 +176,10 @@ export class Stats {
     public currentPriceTestKit: number;
     /** Used test kits since the stat of the day */
     private usedTestKitsThisDay = 0;
-    /** Used test kits per week */
-    public usedTestKits = [0];
     /** Average price of a virus vaccination in EURO (rounded) */
     public readonly avgPriceVaccination: number;
     /** Current price of a virus vacination in EURO (rounded) */
     public currentPriceVaccination: number;
-    /** Used vaccines per week */
-    public usedVaccines = [0];
     /** Used vaccines since the start of the day */
     private usedVaccinesThisDay = 0;
 
@@ -156,6 +190,26 @@ export class Stats {
     public maxIncome: number;
     /** Current income per tic */
     public income: number;
+
+    // ----------------------------------------------------------------------- WEEKLY LOGS
+    /** Number of infected people each week */
+    private weeklyInfected = [0];
+    /** Number of cured people each week */
+    private weeklyCured = [0];
+    /** Number of people who died each week */
+    private weeklyDead = [0];
+    /** Number of hired health workers each week */
+    private weeklyHW = [0];
+    /** Number of hired police officers each week */
+    private weeklyPolice = [0];
+    /** The level of research at the end of the week */
+    private weeklyResearch = [0];
+    /** The income statement each week */
+    private weeklyIncomeStatements = [new IncomeStatement(0,0,0,0,0,0)];
+    /** Number of used test kits each week */
+    private weeklyTestKits = [0];
+    /** Number of used vaccines each week */
+    private weeklyVaccines = [0];
     /** When this lower bound is reached, the game should be lost */
     public lowerBoundBankruptcy: number;
 
@@ -192,14 +246,50 @@ export class Stats {
     public getDailyVaccinesExpense(): number {return this.usedVaccinesThisDay * this.currentPriceVaccination;}
 
     /** @returns prices for all bought test kits of the current week */
-    public getWeeklyTestKitsExpense(): number {return this.usedTestKits[this.usedTestKits.length - 1] * this.currentPriceTestKit;}
+    public getWeeklyTestKitsExpense(): number {return this.weeklyTestKits[this.weeklyTestKits.length - 1] * this.currentPriceTestKit;}
 
     /** @returns prices for all bought vaccines of the current week */
-    public getWeeklyVaccinesExpense(): number {return this.usedVaccines[this.usedVaccines.length - 1] * this.currentPriceVaccination;}
+    public getWeeklyVaccinesExpense(): number {return this.weeklyVaccines[this.weeklyVaccines.length - 1] * this.currentPriceVaccination;}
+
+    /**
+     * Returns an array of all weekly stats for the given week in the following order:  
+     * 1. Infected
+     * 2. Cured  
+     * 3. Dead  
+     * 4. Hired health workers
+     * 5. Hired police officers
+     * 6. Research level
+     * 7. Used test kits
+     * 8. Used vaccines
+     * @param week The week for which to return the information
+     * @returns Array of numbers
+     */
+    public getWeeklyStats(week: number): number[] {
+        return [
+            this.weeklyInfected[week] * this.populationFactor,
+            this.weeklyCured[week] * this.populationFactor,
+            this.weeklyDead[week] * this.populationFactor,
+            this.weeklyHW[week] * this.populationFactor,
+            this.weeklyPolice[week] * this.populationFactor,
+            this.weeklyResearch[week],
+            this.weeklyTestKits[week],
+            this.weeklyVaccines[week]
+        ];
+    }
+
+    /**
+     * Returns the income statement for the specific week.
+     * @param week 
+     */
+    public getIncomeStatement(week: number): IncomeStatement {
+        return this.weeklyIncomeStatements[week];
+    }
+
 
     // ------------------------------------------------------------------ SETTER-METHODS
     /** Increase deceased counter by one and decrease infected and population counter by one */
     public deceasedCitizen(): void {
+        this.weeklyDead[TimeController.getInstance().getWeeksSinceGameStart()]++;
         this.deceased++;
         this.population--;
         this.infected--;
@@ -207,6 +297,7 @@ export class Stats {
 
     /** Increase infected counter by one */
     public foundInfected(): void {
+        this.weeklyInfected[TimeController.getInstance().getWeeksSinceGameStart()]++;
         this.infected++;
         this.unknowinglyInfected--;
     }
@@ -231,17 +322,29 @@ export class Stats {
     /** Increases the Stats variable nbrPolice
      * @param amt Number of new police officers
      */
-    public increasePoliceOfficers(amt: number): void {this.nbrPolice += amt;}
+    public increasePoliceOfficers(amt: number): void {
+        this.weeklyPolice[TimeController.getInstance().getWeeksSinceGameStart()] += amt;
+        this.nbrPolice += amt;
+    }
 
     /** Increases the Stats variable nbrHW
      * @param amt Number of new health workers
      */
-    public increaseHealthWorkers(amt: number): void {this.nbrHW += amt;}
+    public increaseHealthWorkers(amt: number): void {
+        this.weeklyHW[TimeController.getInstance().getWeeksSinceGameStart()] += amt;
+        this.nbrHW += amt;
+    }
 
     /** Increse the test kit counter for the current day by one */
-    public testKitUsed(): void {this.usedTestKitsThisDay++;}
+    public testKitUsed(): void {
+        this.weeklyTestKits[TimeController.getInstance().getWeeksSinceGameStart()] += this.populationFactor;
+        this.usedTestKitsThisDay += this.populationFactor;
+    }
 
     /** Increse the vaccine counter for the current day by one */
-    public vaccineUsed(): void {this.usedVaccinesThisDay++;}
+    public vaccineUsed(): void {
+        this.weeklyVaccines[TimeController.getInstance().getWeeksSinceGameStart()] += this.populationFactor;
+        this.usedVaccinesThisDay += this.populationFactor;
+    }
     
 }
