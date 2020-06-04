@@ -68,6 +68,8 @@ export class GuiScene extends Phaser.Scene {
 
     this.createLogBookBtn();
 
+    this.createSpeedButton();
+
     // Creates Reset button
     this.createResetBtn();
 
@@ -804,13 +806,14 @@ export class GuiScene extends Phaser.Scene {
 	 * sub menu opens.
 	 */
 	private createLogBookBtn(): void {
-		const lbBtn = this.add.image(800, 30, 'log').setOrigin(0);
-		lbBtn.angle = 5;
+    const lbBtn = this.add.image(900, 90, 'log').setOrigin(0);
+    lbBtn.scale = 0.6;
+		lbBtn.angle = 1;
 		lbBtn.setInteractive();
 
 		// hover effect
-		lbBtn.on('pointerover', () => {lbBtn.scale = 1.05;});
-		lbBtn.on('pointerout', () => {lbBtn.scale = 1;});
+		lbBtn.on('pointerover', () => {lbBtn.scale = 0.65;});
+		lbBtn.on('pointerout', () => {lbBtn.scale = 0.6;});
 
 		lbBtn.on('pointerup', () => {
 			LogBook.getInstance().open(this); // open log book sub scene
