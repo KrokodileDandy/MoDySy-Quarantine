@@ -8,7 +8,7 @@ export class LogBookView extends PopupWindow {
 
     private currWeek: number;
 
-    constructor(scene: Phaser.Scene, week: number, isChild = false) {
+    constructor(scene: Phaser.Scene, week: number) {
         super(
             scene, 
             0, 
@@ -26,7 +26,7 @@ export class LogBookView extends PopupWindow {
                     { color: 'Black', fontSize: '70px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
                 )
             ],
-            isChild
+            false
         );
 
         this.currWeek = week;
@@ -48,7 +48,7 @@ export class LogBookView extends PopupWindow {
         nextBtn.on('pointerout', () => {nextBtn.scale = 1;});
 
         nextBtn.on('pointerup', () => {
-            if (LogBook.getInstance().showNextWeek(this.currWeek)) this.closeModal();
+            if (LogBook.getInstance().showNextWeek(this.currWeek)) this.setVisible(false);
         });
 
         const prevBtn = new Phaser.GameObjects.Image(this.scene, 320, 870, 'arrow-next');
@@ -62,7 +62,7 @@ export class LogBookView extends PopupWindow {
         prevBtn.on('pointerout', () => {prevBtn.scale = 1;});
 
         prevBtn.on('pointerup', () => {
-            if (LogBook.getInstance().showPrevWeek(this.currWeek)) this.closeModal();
+            if (LogBook.getInstance().showPrevWeek(this.currWeek)) this.setVisible(false);
         });
 
         return [nextBtn, prevBtn];

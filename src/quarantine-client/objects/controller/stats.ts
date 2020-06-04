@@ -76,9 +76,13 @@ export class Stats {
      * * income / expenses at the end of the week
      */
     public updateWeek(incomeStatement: {[id: string]: {[id: string]: number}}): void {
-        this.addIncomeStatement(incomeStatement);
-
+        const currWeek = TimeController.getInstance().getWeeksSinceGameStart();
+        this.weeklyVaccines[currWeek] += this.usedVaccinesThisDay;
+        this.weeklyTestKits[currWeek] += this.usedTestKitsThisDay;
+        
         if (TimeController.getInstance().getDaysSinceGameStart() % 7 == 0) { // one week has passed
+            this.weeklyResearch[currWeek] = UpgradeController.getInstance().getCurrentResearchLevel();
+
             this.weeklyDead.push(0);
             this.weeklyInfected.push(0);
             this.weeklyCured.push(0);
@@ -86,15 +90,9 @@ export class Stats {
             this.weeklyPolice.push(0);
             this.weeklyResearch.push(0);
             this.weeklyTestKits.push(0);
-            this.weeklyTestKits.push(0);
-            this.accumlateIncomeStatements(this.incomeStatements);
+            this.weeklyVaccines.push(0);
 
-            const currWeek = TimeController.getInstance().getWeeksSinceGameStart();
-            this.weeklyResearch[currWeek] = UpgradeController.getInstance().getCurrentResearchLevel();
-            this.weeklyVaccines[this.weeklyVaccines.length - 1] += this.usedVaccinesThisDay;
-            this.weeklyTestKits[this.weeklyTestKits.length - 1] += this.usedTestKitsThisDay;
-
-            this.incomeStatements = [{
+            this.weeklyIncomeStatement.push({
                 "inc": {
                     "tax": 0
                 },
@@ -105,27 +103,23 @@ export class Stats {
                     "v": 0,
                     "ms": 0
                 }
-            }];
+            });
         }
+        
         this.resetConsumptionCounters();
+        this.addIncomeStatement(incomeStatement);
     }
 
-    /** Add the given income statement to the income statement array of the current week */
+    /** Add the given income statement to the current week of the weekly income statement array */
     private addIncomeStatement(incomeStatement: {[id: string]: {[id: string]: number}}): void {
-        this.incomeStatements.push(
-            {
-                "inc": {
-                    "tax": incomeStatement["inc"]["tax"]
-                },
-                "exp": {
-                    "spo": incomeStatement["exp"]["spo"],
-                    "shw": incomeStatement["exp"]["shw"],
-                    "tk": incomeStatement["exp"]["tk"],
-                    "v": incomeStatement["exp"]["v"],
-                    "ms": incomeStatement["exp"]["ms"],
-                }
-            }
-        );
+        const week = TimeController.getInstance().getWeeksSinceGameStart();
+        console.log("Week " + week)
+        this.weeklyIncomeStatement[week]["inc"]["tax"] += incomeStatement["inc"]["tax"];
+        this.weeklyIncomeStatement[week]["exp"]["spo"] += incomeStatement["exp"]["spo"];
+        this.weeklyIncomeStatement[week]["exp"]["shw"] += incomeStatement["exp"]["shw"];
+        this.weeklyIncomeStatement[week]["exp"]["tk"] += incomeStatement["exp"]["tk"];
+        this.weeklyIncomeStatement[week]["exp"]["v"] += incomeStatement["exp"]["v"];
+        this.weeklyIncomeStatement[week]["exp"]["ms"] += incomeStatement["exp"]["ms"];
     }
 
     /**
@@ -269,8 +263,6 @@ export class Stats {
     private weeklyCured = [0];
     /** Number of people who died each week */
     private weeklyDead = [0];
-    /** Income / Expense at the end of the week */
-    private weeklyResult = [0];
     /** Number of hired health workers each week */
     private weeklyHW = [0];
     /** Number of hired police officers each week */
@@ -409,20 +401,20 @@ export class Stats {
      * @param amt Number of new health workers
      */
     public increaseHealthWorkers(amt: number): void {
-        this.weeklyHW[TimeController.getInstance().getWeeksSinceGameStart()]++;
+        this.weeklyHW[TimeController.getInstance().getWeeksSinceGameStart()] += amt;
         this.nbrHW += amt;
     }
 
     /** Increse the test kit counter for the current day by one */
     public testKitUsed(): void {
-        this.weeklyTestKits[TimeController.getInstance().getWeeksSinceGameStart()]++;
-        this.usedTestKitsThisDay++;
+        this.weeklyTestKits[TimeController.getInstance().getWeeksSinceGameStart()] += this.populationFactor;
+        this.usedTestKitsThisDay += this.populationFactor;
     }
 
     /** Increse the vaccine counter for the current day by one */
     public vaccineUsed(): void {
-        this.weeklyVaccines[TimeController.getInstance().getWeeksSinceGameStart()]++;
-        this.usedVaccinesThisDay++;
+        this.weeklyVaccines[TimeController.getInstance().getWeeksSinceGameStart()] += this.populationFactor;
+        this.usedVaccinesThisDay += this.populationFactor;
     }
     
 }

@@ -87,6 +87,7 @@ export class PopupWindow extends Phaser.GameObjects.Container {
     public closeModal(): void {
         //stop this modal scene
         this.setVisible(false);
+
         //if this popup windows not a child, wake up the chart scene.
         if(!this.isChild){
             const chart = this.scene.scene.get('ChartScene') as ChartScene;

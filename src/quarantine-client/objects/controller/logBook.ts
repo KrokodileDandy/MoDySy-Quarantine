@@ -13,10 +13,10 @@ export class LogBook {
     /** The only existing instance of this singleton */
     private static instance: LogBook;
 
-    private textStatPosY;
-    private imgStatPosY;
-    private textFinanceIncPosY;
-    private textFinanceExpPosY;
+    private textStatPosY: number;
+    private imgStatPosY: number;
+    private textFinanceIncPosY: number;
+    private textFinanceExpPosY: number;
 
     private scene: Phaser.Scene;
 
@@ -212,8 +212,8 @@ export class LogBook {
      * Creates a popup with information regarding the specified week.
      * @param week The current in-game time week.
      */
-    private createLogBookView(week: number, isChild = false): LogBookView {
-        const lbView = new LogBookView(this.scene, week, isChild);
+    private createLogBookView(week: number): LogBookView {
+        const lbView = new LogBookView(this.scene, week);
         const info = Stats.getInstance().getWeeklyStats(week);
 
         this.generateLogBookStats(lbView, info);
@@ -238,7 +238,7 @@ export class LogBook {
      */
     public showNextWeek(currWeek: number): boolean {
         if (TimeController.getInstance().getWeeksSinceGameStart() == currWeek) return false;
-        this.createLogBookView(currWeek + 1, true).createModal();
+        this.createLogBookView(currWeek + 1).createModal();
         return true;
     }
 
@@ -248,7 +248,7 @@ export class LogBook {
      */
     public showPrevWeek(currWeek: number): boolean {
         if (currWeek == 0) return false;
-        this.createLogBookView(currWeek - 1, true).createModal();
+        this.createLogBookView(currWeek - 1).createModal();
         return true;
     }
 
