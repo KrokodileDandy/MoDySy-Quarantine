@@ -51,12 +51,20 @@ export class SkillController {
      * @returns false, if the player is not solvent
      */
     public buySkillPoint(sC: SkillController): boolean {
-        if(! (sC.stats.budget < sC.nextSkillPointPrice)) return false; //tests if player is solvent
+        if (this.skillBuyable(sC) == false) return false;
 
         sC.stats.budget -= sC.nextSkillPointPrice; //buy skill point
         sC.availableSkillPoints++;
 
         sC.updateNextSkillPointPrice();
+    }
+
+    /**
+     * test if player is solvent (edit: Shao)
+     */
+    public skillBuyable(sC: SkillController): boolean {
+        if(! (sC.stats.budget < sC.nextSkillPointPrice)) return false; //tests if player is solvent
+        else return true;
     }
 
     /** Calculates the purchase price for the next skill point. 

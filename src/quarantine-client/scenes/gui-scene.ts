@@ -10,6 +10,7 @@ import { Rule } from "../objects/entities/rule";
 import { LogBook } from "../objects/controller/logBook";
 import { TimeController } from "../objects/controller/timeController";
 import { Tutorial } from "../objects/controller/tutorial";
+import { SkillTreeView } from "./skillTreeView";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -90,6 +91,8 @@ export class GuiScene extends Phaser.Scene {
     }
     this.inGameMusic.play(musicConfig);
     this.createLogBookBtn();
+
+    this.createSkillTreeBtn();
 
     this.createSpeedButton();
 
@@ -700,8 +703,8 @@ export class GuiScene extends Phaser.Scene {
     })
     .on('pointerup', () => {
       yourSkills.setScale(0.6);
-      this.buttonClickMusic.play();
-      // openSkillTree()
+      const skillTree = new SkillTreeView(this);
+      skillTree.createModal();
     }).setScale(0.5);
   }
 

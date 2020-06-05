@@ -93,6 +93,11 @@
       },
       {
         "type": "image",
+        "key": "open-notebook",
+        "url": "assets/sprites/skill-tree/open-notebook.png"
+      },
+      {
+        "type": "image",
         "key": "pause",
         "url": "assets/sprites/main-scene/pause.png"
       },
@@ -181,17 +186,6 @@
         "key": "your_skills",
         "url": "assets/sprites/main-scene/your_skills.png"
       },
-
-
-
-
-
-
-
-
-
-
-
         {
           "type": "image",
           "key": "menu-white",
@@ -528,5 +522,233 @@
           "url": "assets/sprites/messages/polititian.png"
         }
       ]
+=======
+      
+      {
+        "type": "image",
+        "key": "additional-medical-supplies-1",
+        "url": "assets/sprites/skill-tree/additional-medical-supplies-1.png"
+      },
+      {
+        "type": "image",
+        "key": "additional-medical-supplies-2",
+        "url": "assets/sprites/skill-tree/additional-medical-supplies-2.png"
+      },
+      {
+        "type": "image",
+        "key": "additional-test-kits",
+        "url": "assets/sprites/skill-tree/additional-test-kits.png"
+      },
+      {
+        "type": "image",
+        "key": "circle-green",
+        "url": "assets/sprites/skill-tree/circle-green.png"
+      },
+      {
+        "type": "image",
+        "key": "circle-orange",
+        "url": "assets/sprites/skill-tree/circle-orange.png"
+      },
+      {
+        "type": "image",
+        "key": "circle-red",
+        "url": "assets/sprites/skill-tree/circle-red.png"
+      },
+      {
+        "type": "image",
+        "key": "citizen",
+        "url": "assets/sprites/skill-tree/citizen.png"
+      },
+      {
+        "type": "image",
+        "key": "dna",
+        "url": "assets/sprites/skill-tree/dna.png"
+      },
+      {
+        "type": "image",
+        "key": "expertise",
+        "url": "assets/sprites/skill-tree/expertise.png"
+      },
+      {
+        "type": "image",
+        "key": "expertise-1",
+        "url": "assets/sprites/skill-tree/expertise-1.png"
+      },
+      {
+        "type": "image",
+        "key": "expertise-2",
+        "url": "assets/sprites/skill-tree/expertise-2.png"
+      },
+      {
+        "type": "image",
+        "key": "expertise-3",
+        "url": "assets/sprites/skill-tree/expertise-3.png"
+      },
+      {
+        "type": "image",
+        "key": "financial-support-1",
+        "url": "assets/sprites/skill-tree/financial-support-1.png"
+      },
+      {
+        "type": "image",
+        "key": "financial-support-2",
+        "url": "assets/sprites/skill-tree/financial-support-2.png"
+      },
+      {
+        "type": "image",
+        "key": "immunity-tests",
+        "url": "assets/sprites/skill-tree/immunity-tests.png"
+      },
+      {
+        "type": "image",
+        "key": "lockdown-stage-1",
+        "url": "assets/sprites/skill-tree/lockdown-stage-1.png"
+      },
+      {
+        "type": "image",
+        "key": "lockdown-stage-2",
+        "url": "assets/sprites/skill-tree/lockdown-stage-2.png"
+      },
+      {
+        "type": "image",
+        "key": "lockdown-stage-3",
+        "url": "assets/sprites/skill-tree/lockdown-stage-3.png"
+      },
+      {
+        "type": "image",
+        "key": "lockdown-stage-4",
+        "url": "assets/sprites/skill-tree/lockdown-stage-4.png"
+      },
+      {
+        "type": "image",
+        "key": "lockdown",
+        "url": "assets/sprites/skill-tree/lockdown.png"
+      },
+      {
+        "type": "image",
+        "key": "medical-treatment",
+        "url": "assets/sprites/skill-tree/medical-treatment.png"
+      },
+      {
+        "type": "image",
+        "key": "medicine-1",
+        "url": "assets/sprites/skill-tree/medicine-1.png"
+      },
+      {
+        "type": "image",
+        "key": "medicine-2",
+        "url": "assets/sprites/skill-tree/medicine-2.png"
+      },
+      {
+        "type": "image",
+        "key": "medicine-3",
+        "url": "assets/sprites/skill-tree/medicine-3.png"
+      },
+      {
+        "type": "image",
+        "key": "military-1",
+        "url": "assets/sprites/skill-tree/military-1.png"
+      },
+      {
+        "type": "image",
+        "key": "military-2",
+        "url": "assets/sprites/skill-tree/military-2.png"
+      },
+      {
+        "type": "image",
+        "key": "military-3",
+        "url": "assets/sprites/skill-tree/military-3.png"
+      },
+      {
+        "type": "image",
+        "key": "nationwide-testing",
+        "url": "assets/sprites/skill-tree/nationwide-testing.png"
+      },
+      {
+        "type": "image",
+        "key": "police-equipment",
+        "url": "assets/sprites/skill-tree/police-equipment.png"
+      },
+      {
+        "type": "image",
+        "key": "police",
+        "url": "assets/sprites/skill-tree/police.png"
+      },
+      {
+        "type": "image",
+        "key": "public-transport",
+        "url": "assets/sprites/skill-tree/public-transport.png"
+      },
+      {
+        "type": "image",
+        "key": "restricted-traffic",
+        "url": "assets/sprites/skill-tree/restricted-traffic.png"
+      },
+      {
+        "type": "image",
+        "key": "skill-1",
+        "url": "assets/sprites/skill-tree/skill-1.png"
+      },
+      {
+        "type": "image",
+        "key": "skill-2",
+        "url": "assets/sprites/skill-tree/skill-2.png"
+      },
+      {
+        "type": "image",
+        "key": "skill-3",
+        "url": "assets/sprites/skill-tree/skill-3.png"
+      },
+      {
+        "type": "image",
+        "key": "skill-button",
+        "url": "assets/sprites/skill-tree/skill-button.png"
+      },
+      {
+        "type": "image",
+        "key": "testing",
+        "url": "assets/sprites/skill-tree/testing.png"
+      },
+      {
+        "type": "image",
+        "key": "tracking",
+        "url": "assets/sprites/skill-tree/tracking.png"
+      },
+      {
+        "type": "image",
+        "key": "tracking-1",
+        "url": "assets/sprites/skill-tree/tracking-1.png"
+      },
+      {
+        "type": "image",
+        "key": "tracking-2",
+        "url": "assets/sprites/skill-tree/tracking-2.png"
+      },
+      {
+        "type": "image",
+        "key": "upgrade-medical-facilities-1",
+        "url": "assets/sprites/skill-tree/upgrade-medical-facilities-1.png"
+      },
+      {
+        "type": "image",
+        "key": "upgrade-medical-facilities-2",
+        "url": "assets/sprites/skill-tree/upgrade-medical-facilities-2.png"
+      },
+      {
+        "type": "image",
+        "key": "upgrade-medical-facilities-3",
+        "url": "assets/sprites/skill-tree/upgrade-medical-facilities-3.png"
+      },
+      {
+        "type": "image",
+        "key": "upgrade-test-kit-1",
+        "url": "assets/sprites/skill-tree/upgrade-test-kit-1.png"
+      },
+      {
+        "type": "image",
+        "key": "upgrade-test-kit-2",
+        "url": "assets/sprites/skill-tree/upgrade-test-kit-2.png"
+      }
+    ]
   }
 }
