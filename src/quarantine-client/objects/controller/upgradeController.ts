@@ -80,9 +80,9 @@ export class UpgradeController implements TimeSubscriber {
      * Insert a number of police officers into the agents array
      * @param uC UpgradeController needed for closure {@see menu.ts#buildClosure}
      */
-    public buyPoliceOfficers(uC: UpgradeController): boolean {
-        const amt = 100_000;
-        const price = amt * 5_000; // = 500_000_000
+    public buyPoliceOfficers(uC: UpgradeController, amt: number, price: number): boolean {
+        //const amt = 100_000;
+        //const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.POLICE)) {
             uC.buyItem(price);
             uC.stats.increasePoliceOfficers(amt);
@@ -94,9 +94,9 @@ export class UpgradeController implements TimeSubscriber {
      * Insert a number of health workers into the agents array
      * @param uC UpgradeController needed for closure {@see menu.ts#buildClosure}
      */
-    public buyHealthWorkers(uC: UpgradeController): boolean {
-        const amt = 100_000;
-        const price = amt * 5_000; // = 500_000_000
+    public buyHealthWorkers(uC: UpgradeController, amt: number, price: number): boolean {
+        //const amt = 100_000;
+        //const price = amt * 5_000; // = 500_000_000
         if(uC.isSolvent(price) && uC.contr.distributeNewRoles(amt, Role.HEALTH_WORKER)) {
             uC.buyItem(price);
             uC.stats.increaseHealthWorkers(amt);
@@ -125,7 +125,7 @@ export class UpgradeController implements TimeSubscriber {
      * @returns if "lockdown" was activated/deactivated successfully
      */
     public activateLockdown(uC: UpgradeController): boolean { 
-        return uC.activateMeasure("ld");
+        return uC.activateMeasure("lockdown");
     }
 
     /**
@@ -180,12 +180,12 @@ export class UpgradeController implements TimeSubscriber {
         const currLv = uC.measures["research"]["current_level"];
         const price = uC.measures["research"]["prices"][currLv];
 
-        if (!uC.isSolvent(price) || currLv == 9) return false;
+        if (!uC.isSolvent(price) || currLv == 10) return false;
         uC.buyItem(price);
         
         uC.measures["research"]["current_level"] += 1;
 
-        if (currLv + 1 == 9) uC.introduceCure();
+        if (currLv + 1 == 10) uC.introduceCure();
         return true;
     }
 

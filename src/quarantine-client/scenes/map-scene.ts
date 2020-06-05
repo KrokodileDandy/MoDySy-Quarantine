@@ -79,7 +79,6 @@ export class MapScene extends Phaser.Scene {
 
         /** For every thousandth person infected, add a red circle */
         while (this.infected + 1000 <= currentlyInfected) {
-            console.log(this.infected);
             /** Place a circle at a random position on the map */
             const circle = new Phaser.Geom.Circle(
                 Phaser.Math.Between(this.map.getTopLeft().x + 5, this.map.getBottomRight().x - 5), 

@@ -8,8 +8,10 @@
         "frustration" : 1,
         "isolation_factor" : 2
     },
-    "ld": {
+    "lockdown": {
         "name": "Lock Down",
+        "current_level": 0,
+        "price": [10000],
         "active": false,
         "description": "LD description",
         "daily_cost": 10000000,
@@ -23,5 +25,21 @@
         "description": "1. level buys laboratory; 10. level buys factory for vaccine production",
         "prices": [500000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000, 1000000],
         "number_of_new_health_workers": 100000
+    },
+    "police": {
+        "name": "Police",
+        "current_level": 0,
+        "description": "",
+        "price": [10000],
+        "daily_cost": 4000,
+        "amount": 1000
+    },
+    "healthworkers": {
+        "name": "Health Workers",
+        "current_level": 0,
+        "description": "",
+        "price": [10000],
+        "daily_cost": 4000,
+        "amount": 3000
     }
 }

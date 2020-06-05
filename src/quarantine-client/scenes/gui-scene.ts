@@ -150,34 +150,24 @@ export class GuiScene extends Phaser.Scene {
     /*
     const notebook = this.add.sprite(750, 1400, 'notebook').setInteractive();
 
-    const researchButton = this.add.sprite(400, 925, 'flask-button').setInteractive();
-    const lockdownButton = this.add.sprite(400, 1105, 'lockdown-button').setInteractive();
-    const policeButton = this.add.sprite(400, 1280, 'police-button').setInteractive();
-    const doctorButton = this.add.sprite(400, 1460, 'doctor-button').setInteractive();
-
     const pinkNote = this.add.sprite(1000, 1400, 'note-pink').setInteractive();
     const noteOrange = this.add.sprite(1020, 1020, 'note').setInteractive();
 
-    const per = this.add.sprite(700, 880, 'progress').setInteractive();
-    const money = this.add.sprite(700, 970, 'money').setInteractive();
+    const per = this.add.sprite(700, 880, 'progress');
+    const money = this.add.sprite(700, 970, 'money');
 
     const calendar = this.add.sprite(700, 1100, 'calendar').setInteractive();
-    const person = this.add.sprite(700, 1240, 'man').setInteractive();
-    const plusButton = this.add.sprite(780, 1215, 'plus').setInteractive();
-    const minusButton = this.add.sprite(780, 1265, 'minus').setInteractive();
-    const money1 = this.add.sprite(700, 1320, 'money').setInteractive();
-
-    const person1 = this.add.sprite(700, 1400, 'man').setInteractive();
-    const plusButton1 = this.add.sprite(780, 1375, 'plus').setInteractive();
-    const minusButton1 = this.add.sprite(780, 1425, 'minus').setInteractive();
-    const money2 = this.add.sprite(700, 1480, 'money').setInteractive();
-
-    const money3 = this.add.sprite(1100, 1280, 'money').setInteractive();
+    const person = this.add.sprite(650, 1240, 'man');
+    const person1 = this.add.sprite(650, 1400, 'man');
+    const money1 = this.add.sprite(700, 1320, 'money');    
+    const money2 = this.add.sprite(700, 1480, 'money');
+    const money3 = this.add.sprite(1100, 1280, 'money');
 
     const news = this.add.sprite(2300, 1250, 'news').setInteractive();
     const logBook = this.add.sprite(1950, 400, 'log').setInteractive();
 
     const letter = this.add.sprite(3100, 850, 'letter').setInteractive();
+    */
     const rules = this.add.sprite(3100, 1300, 'rules').setInteractive();
 
     const popupRules = new PopupWindow(this, 0, 0, '', 1300, 130, true, [],false);
@@ -329,6 +319,7 @@ export class GuiScene extends Phaser.Scene {
       }
     });
 
+    /*
     const pause = this.add.sprite(1600, 50, 'pause').setInteractive();
     const resume = this.add.sprite(1700, 50, 'resume-button').setInteractive();
     const speed1x = this.add.sprite(1800, 50, 'speed1x').setInteractive();
@@ -436,12 +427,12 @@ export class GuiScene extends Phaser.Scene {
 
     const socialdistancingWhite = this.add.sprite(750, 620, 'socialdistancing-white').setInteractive();
     const socialdistancingBlack = this.add.sprite(750, 620, 'socialdistancing-black').setInteractive().on('pointerdown', () => {
-      this.uC.buyHealthWorkers(this.uC);
+      //this.uC.buyHealthWorkers(this.uC);
     });
 
     const policeWhite = this.add.sprite(875, 670, 'police-white').setInteractive();
     const policeBlack = this.add.sprite(875, 670, 'police-black').setInteractive().on('pointerdown', () => {
-      this.uC.buyPoliceOfficers(this.uC);
+      //this.uC.buyPoliceOfficers(this.uC);
     });
 
     const researchWhite = this.add.sprite(750, 670, 'research-white').setInteractive();
