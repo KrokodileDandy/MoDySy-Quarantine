@@ -516,8 +516,13 @@
       
       {
         "type": "image",
-        "key": "additional-medical-supplies",
-        "url": "assets/sprites/skill-tree/additional-medical-supplies.png"
+        "key": "additional-medical-supplies-1",
+        "url": "assets/sprites/skill-tree/additional-medical-supplies-1.png"
+      },
+      {
+        "type": "image",
+        "key": "additional-medical-supplies-2",
+        "url": "assets/sprites/skill-tree/additional-medical-supplies-2.png"
       },
       {
         "type": "image",
@@ -556,8 +561,28 @@
       },
       {
         "type": "image",
-        "key": "financial-support",
-        "url": "assets/sprites/skill-tree/financial-support.png"
+        "key": "expertise-1",
+        "url": "assets/sprites/skill-tree/expertise-1.png"
+      },
+      {
+        "type": "image",
+        "key": "expertise-2",
+        "url": "assets/sprites/skill-tree/expertise-2.png"
+      },
+      {
+        "type": "image",
+        "key": "expertise-3",
+        "url": "assets/sprites/skill-tree/expertise-3.png"
+      },
+      {
+        "type": "image",
+        "key": "financial-support-1",
+        "url": "assets/sprites/skill-tree/financial-support-1.png"
+      },
+      {
+        "type": "image",
+        "key": "financial-support-2",
+        "url": "assets/sprites/skill-tree/financial-support-2.png"
       },
       {
         "type": "image",
@@ -566,8 +591,23 @@
       },
       {
         "type": "image",
-        "key": "lockdown-stage",
-        "url": "assets/sprites/skill-tree/lockdown-stage.png"
+        "key": "lockdown-stage-1",
+        "url": "assets/sprites/skill-tree/lockdown-stage-1.png"
+      },
+      {
+        "type": "image",
+        "key": "lockdown-stage-2",
+        "url": "assets/sprites/skill-tree/lockdown-stage-2.png"
+      },
+      {
+        "type": "image",
+        "key": "lockdown-stage-3",
+        "url": "assets/sprites/skill-tree/lockdown-stage-3.png"
+      },
+      {
+        "type": "image",
+        "key": "lockdown-stage-4",
+        "url": "assets/sprites/skill-tree/lockdown-stage-4.png"
       },
       {
         "type": "image",
@@ -581,13 +621,33 @@
       },
       {
         "type": "image",
-        "key": "medicine",
-        "url": "assets/sprites/skill-tree/medicine.png"
+        "key": "medicine-1",
+        "url": "assets/sprites/skill-tree/medicine-1.png"
       },
       {
         "type": "image",
-        "key": "military",
-        "url": "assets/sprites/skill-tree/military.png"
+        "key": "medicine-2",
+        "url": "assets/sprites/skill-tree/medicine-2.png"
+      },
+      {
+        "type": "image",
+        "key": "medicine-3",
+        "url": "assets/sprites/skill-tree/medicine-3.png"
+      },
+      {
+        "type": "image",
+        "key": "military-1",
+        "url": "assets/sprites/skill-tree/military-1.png"
+      },
+      {
+        "type": "image",
+        "key": "military-2",
+        "url": "assets/sprites/skill-tree/military-2.png"
+      },
+      {
+        "type": "image",
+        "key": "military-3",
+        "url": "assets/sprites/skill-tree/military-3.png"
       },
       {
         "type": "image",
@@ -646,13 +706,38 @@
       },
       {
         "type": "image",
-        "key": "upgrade-medical-facilities",
-        "url": "assets/sprites/skill-tree/upgrade-medical-facilities.png"
+        "key": "tracking-1",
+        "url": "assets/sprites/skill-tree/tracking-1.png"
       },
       {
         "type": "image",
-        "key": "upgrade-test-kit",
-        "url": "assets/sprites/skill-tree/upgrade-test-kit.png"
+        "key": "tracking-2",
+        "url": "assets/sprites/skill-tree/tracking-2.png"
+      },
+      {
+        "type": "image",
+        "key": "upgrade-medical-facilities-1",
+        "url": "assets/sprites/skill-tree/upgrade-medical-facilities-1.png"
+      },
+      {
+        "type": "image",
+        "key": "upgrade-medical-facilities-2",
+        "url": "assets/sprites/skill-tree/upgrade-medical-facilities-2.png"
+      },
+      {
+        "type": "image",
+        "key": "upgrade-medical-facilities-3",
+        "url": "assets/sprites/skill-tree/upgrade-medical-facilities-3.png"
+      },
+      {
+        "type": "image",
+        "key": "upgrade-test-kit-1",
+        "url": "assets/sprites/skill-tree/upgrade-test-kit-1.png"
+      },
+      {
+        "type": "image",
+        "key": "upgrade-test-kit-2",
+        "url": "assets/sprites/skill-tree/upgrade-test-kit-2.png"
       }
     ]
   }
