@@ -34,14 +34,14 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         this.budget = this.upgradeContr.getBudget();
         this.income = this.upgradeContr.getIncome();
         // Add background
-        this.scene.add.image(this.x + 350 , 700, 'notebook').setScale(0.6);  //.setAlpha(0.5); //dont work
+        this.scene.add.image(this.x + 350 , this.y + 120, 'notebook').setScale(0.6);  //.setAlpha(0.5); //dont work
         // Add menu bar
-        this.add(this.scene.add.image(this.x + 500 , 50, 'note-pink').setScale(0.6));
+        this.add(this.scene.add.image(this.x + 515 , 70, 'note-pink').setScale(0.6));
         // Add button container
-        new ButtonContainer(this.scene, 0, 450, 'research', this.measures['research']['prices'][0], this.buildClosure(this.upgradeContr.buyResearchLevel));
-        new ButtonContainer(this.scene, 0, 550, 'lockdown', this.measures['lockdown']['price'], this.buildClosure(this.upgradeContr.activateLockdown));
-        new ButtonContainer(this.scene, 0, 650, 'police', this.measures['police']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
-        new ButtonContainer(this.scene, 0, 750, 'healthworkers', this.measures['healthworkers']['price'], this.buildClosure(this.upgradeContr.buyHealthWorkers));
+        new ButtonContainer(this.scene, this.x + 25, 475, 'research', this.measures['research']['prices'][0], this.buildClosure(this.upgradeContr.buyResearchLevel));
+        new ButtonContainer(this.scene, this.x + 25, 575, 'lockdown', this.measures['lockdown']['price'], this.buildClosure(this.upgradeContr.activateLockdown));
+        new ButtonContainer(this.scene, this.x + 25, 675, 'police', this.measures['police']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
+        new ButtonContainer(this.scene, this.x + 25, 775, 'healthworkers', this.measures['healthworkers']['price'], this.buildClosure(this.upgradeContr.buyHealthWorkers));
 
         this.scene.add.existing(this);
 
