@@ -54,7 +54,7 @@ export class GuiScene extends Phaser.Scene {
       'preload'
     );
     //** load audio files */
-    this.load.audio("game_theme_music", ["assets/sounds/In_Game_Music.mp3", "assets/sounds/In_Game_Music.ogg"]);
+    this.load.audio("game_theme_music", "assets/sounds/In_Game_Music.mp3");
     this.load.audio("button_click", ["assets/sounds/click-sound.mp3", "assets/sounds/click-sound.ogg"]);
 
   }
