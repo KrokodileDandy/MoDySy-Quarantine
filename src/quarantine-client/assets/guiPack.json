@@ -520,10 +520,7 @@
           "type": "image",
           "key": "politician",
           "url": "assets/sprites/messages/polititian.png"
-        }
-      ]
-=======
-      
+        },
       {
         "type": "image",
         "key": "additional-medical-supplies-1",

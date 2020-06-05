@@ -61,7 +61,7 @@ export class GuiScene extends Phaser.Scene {
 
 
   create(): void {
-    this.createMenuButtons();
+    //this.createMenuButtons();
     //this.createSettingsButtons();
     this.poseSprites();
 
@@ -167,6 +167,7 @@ export class GuiScene extends Phaser.Scene {
     const logBook = this.add.sprite(1950, 400, 'log').setInteractive();
 
     const letter = this.add.sprite(3100, 850, 'letter').setInteractive();
+    */
     const rules = this.add.sprite(3100, 1300, 'rules').setInteractive();
 
     const popupRules = new PopupWindow(this, 0, 0, '', 1300, 130, true, [],false);
@@ -318,6 +319,7 @@ export class GuiScene extends Phaser.Scene {
       }
     });
 
+    /*
     const pause = this.add.sprite(1600, 50, 'pause').setInteractive();
     const resume = this.add.sprite(1700, 50, 'resume-button').setInteractive();
     const speed1x = this.add.sprite(1800, 50, 'speed1x').setInteractive();
