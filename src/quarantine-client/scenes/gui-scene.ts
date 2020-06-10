@@ -11,6 +11,7 @@ import { LogBook } from "../objects/controller/logBook";
 import { TimeController } from "../objects/controller/timeController";
 import { Tutorial } from "../objects/controller/tutorial";
 import { SkillTreeView } from "./skillTreeView";
+import { GameSpeedButtons } from "./gui-elements/speed-buttons";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -29,8 +30,8 @@ export class GuiScene extends Phaser.Scene {
     public static instance: GuiScene;
 
     private menu: ItemMenu;
-    private mainSceneIsPaused = false;
-    private gameSpeed = 1;
+    public mainSceneIsPaused = false;
+    public gameSpeed = 1;
     private soundON = true;
     private musicON = true;
 
@@ -94,13 +95,14 @@ export class GuiScene extends Phaser.Scene {
 
         this.createSkillTreeBtn();
 
-        this.createSpeedButton();
-
         // Creates Reset button
         this.createResetBtn();
 
         // Creates Sound button for test, delete this function later
         this.createSoundButton();
+
+        // adds pause, slow, normal, quicker and quickest game speed buttons
+        new GameSpeedButtons(this).createGameSpeedButtons();
 
         Tutorial.getInstance().open(this);
     }
@@ -147,27 +149,6 @@ export class GuiScene extends Phaser.Scene {
         tablet.scaleX = 0.57;
         tablet.scaleY = 0.7;
 
-        /*
-        const notebook = this.add.sprite(750, 1400, 'notebook').setInteractive();
-    
-        const pinkNote = this.add.sprite(1000, 1400, 'note-pink').setInteractive();
-        const noteOrange = this.add.sprite(1020, 1020, 'note').setInteractive();
-    
-        const per = this.add.sprite(700, 880, 'progress');
-        const money = this.add.sprite(700, 970, 'money');
-    
-        const calendar = this.add.sprite(700, 1100, 'calendar').setInteractive();
-        const person = this.add.sprite(650, 1240, 'man');
-        const person1 = this.add.sprite(650, 1400, 'man');
-        const money1 = this.add.sprite(700, 1320, 'money');    
-        const money2 = this.add.sprite(700, 1480, 'money');
-        const money3 = this.add.sprite(1100, 1280, 'money');
-    
-        const news = this.add.sprite(2300, 1250, 'news').setInteractive();
-        const logBook = this.add.sprite(1950, 400, 'log').setInteractive();
-    
-        const letter = this.add.sprite(3100, 850, 'letter').setInteractive();
-        */
         const rules = this.add.sprite(3100, 1300, 'rules').setInteractive();
 
         const popupRules = new PopupWindow(this, 0, 0, '', 1300, 130, true, [], false);
@@ -219,7 +200,6 @@ export class GuiScene extends Phaser.Scene {
             popupRules.createModal();
         });
 
-        const info = this.add.sprite(3100, 70, 'information').setInteractive();
         const restart = this.add.sprite(3100, 190, 'restart').setInteractive();
 
         // hover, click event etc.
@@ -401,91 +381,6 @@ export class GuiScene extends Phaser.Scene {
 
     }
 
-    // create settings buttons
-    createSettingsButtons(): void {
-        // Create and set the buttons to the right positions
-        const settingsWhite = this.add.sprite(1125, 570, 'settings-white').setInteractive();
-        const settingsBlack = this.add.sprite(1125, 570, 'settings-black').setInteractive();
-
-        const pauseWhite = this.add.sprite(1125, 620, 'pause-white').setInteractive();
-        const pauseBlack = this.add.sprite(1125, 620, 'pause-black').setInteractive();
-
-        const resetWhite = this.add.sprite(1250, 620, 'reset-white').setInteractive();
-        const resetBlack = this.add.sprite(1250, 620, 'reset-black').setInteractive();
-
-        const resumeWhite = this.add.sprite(1375, 620, 'resume-white').setInteractive();
-        const resumeBlack = this.add.sprite(1375, 620, 'resume-black').setInteractive();
-
-        const gamespeedWhite = this.add.sprite(1125, 670, 'gamespeed-white').setInteractive();
-        const gamespeedBlack = this.add.sprite(1125, 670, 'gamespeed-black').setInteractive();
-
-        const fasterWhite = this.add.sprite(1250, 670, 'faster-white').setInteractive();
-        const fasterBlack = this.add.sprite(1250, 670, 'faster-black').setInteractive();
-
-        const slowerWhite = this.add.sprite(1375, 670, 'slower-white').setInteractive();
-        const slowerBlack = this.add.sprite(1375, 670, 'slower-black').setInteractive();
-
-        // Create a list with all of the settings buttons
-        const sprites = [settingsWhite, settingsBlack, pauseWhite, pauseBlack, resetWhite, resetBlack, resumeWhite, resumeBlack, gamespeedWhite, gamespeedBlack, slowerWhite, slowerBlack, fasterWhite, fasterBlack];
-
-        // Create a list of buttons that are to appear when 'settings' is clicked
-        const defaultButtons = [pauseWhite, gamespeedWhite];
-
-        // Create a list of buttons that are to appear when 'pause' is clicked
-        const pauseButtons = [resetWhite, resumeWhite];
-
-        // Create a list of buttons that are to appear when 'game speed' is clicked
-        const speedButtons = [fasterWhite, slowerWhite];
-
-        // Create a list of buttons that are responsible for changing the speed of the game
-        const speedSubbuttons = [fasterBlack, slowerBlack];
-
-        // Represent sprites on a smaller scale
-        this.setSpriteScale(sprites, .325);
-
-        // Set default visibility (only the menu button can be seen)
-        this.setDefaultVisibility(sprites);
-
-        // Change the color of the button from white to black if it is hovered over
-        for (let i = 0; i < sprites.length; i = i + 2) {
-            this.addOverOutListener(sprites[i], sprites[i + 1]);
-        }
-
-        let settingsIsPressed = false;
-
-        settingsBlack.on('pointerup', () => {
-            // Check whether 'settings' has been already clicked
-            if (settingsIsPressed) {
-                // Hide every button except for 'settings'
-                this.setDefaultVisibility(sprites);
-                // Set 'settings' to not pressed
-                settingsIsPressed = false;
-            } else {
-                // Show available settings
-                this.setToVisible(defaultButtons);
-                // Set 'settings' to pressed
-                settingsIsPressed = true;
-            }
-            this.buttonClickMusic.play();
-        });
-
-        // Pause the game when 'pause' was clicked
-        pauseBlack.on('pointerup', () => {
-            this.createPauseButton(resetBlack, resumeBlack);
-            this.buttonClickMusic.play();
-        });
-
-        // Handle the visibility of the subbuttons
-        this.addOnListenerButton(pauseBlack, pauseButtons, speedButtons);
-        this.addOnListenerButton(gamespeedBlack, speedButtons, pauseButtons);
-
-        // Write 'clicked' if one of the speed buttons was pressed
-        speedSubbuttons.forEach(element => {
-            this.addOnListenerSubButton(element);
-        });
-
-    }
-
     // Handles the visibility of the buttons
     addOnListenerButton(button, buttonsToShow, buttonsToHide): void {
         button.on('pointerup', () => {
@@ -542,28 +437,6 @@ export class GuiScene extends Phaser.Scene {
         sprites.forEach(element => {
             element.visible = true;
         });
-    }
-
-    /** function that creates daily report */
-    createPopUp(day: number, money: number, cases: number): void {
-
-        this.popUpSprite = this.add.sprite(500, 650, 'popup-box');
-        this.popUpSprite.displayWidth = 250;
-        this.popUpSprite.displayHeight = 150;
-        this.day = this.add.text(450, 590, `Day ${day}`, { fill: '#000000', font: '20px Arial' });
-        this.showMoney = this.add.text(400, 640, `money = ${money}`, { fill: '#000000' });
-        this.showCases = this.add.text(400, 690, `cases = ${cases}`, { fill: '#000000' });
-        this.time.addEvent({ delay: 1000, callback: this.destroyPopUp, callbackScope: this });
-    }
-
-    /** TODO please add documentation */
-    destroyPopUp(): void {
-        if (this.showMoney || this.showCases || this.day) {
-            this.showMoney.destroy();
-            this.showCases.destroy();
-            this.day.destroy();
-            this.popUpSprite.destroy();
-        }
     }
 
     /*---------START: Skill-Tree button ---------- */
@@ -763,103 +636,6 @@ export class GuiScene extends Phaser.Scene {
             this.buttonClickMusic.play();
         });
     }
-
-    /*---------START: Speed button  ---------- */
-    createSpeedButton(): void {
-        const pause = this.add.sprite(this.game.renderer.width / 2 + 150, 50, 'pause').setInteractive();
-        const resume = this.add.sprite(this.game.renderer.width / 2 + 250, 50, 'resume-button').setInteractive();
-        const speed1x = this.add.sprite(this.game.renderer.width / 2 + 350, 50, 'speed1x').setInteractive();
-        const speed2x = this.add.sprite(this.game.renderer.width / 2 + 450, 50, 'speed2x').setInteractive();
-        const speed3x = this.add.sprite(this.game.renderer.width / 2 + 550, 50, 'speed3x').setInteractive();
-
-        //pause btn 
-        pause.on('pointerover', () => {
-            pause.setScale(0.7);
-        });
-
-        pause.on('pointerout', () => {
-            pause.setScale(1);
-        });
-
-        pause.on('pointerup', () => {
-            if (!this.mainSceneIsPaused) {
-                const main = this.scene.get('MainScene') as MainScene;
-                const chart = this.scene.get('ChartScene') as ChartScene;
-                const map = this.scene.get('MapScene') as MapScene;
-                main.scene.pause();
-                chart.scene.pause();
-                map.scene.pause();
-                this.mainSceneIsPaused = true;
-                this.buttonClickMusic.play();
-            }
-        });
-
-        //resume btn
-        resume.on('pointerover', () => {
-            resume.setScale(0.7);
-        });
-
-        resume.on('pointerout', () => {
-            resume.setScale(1);
-        });
-
-        resume.on('pointerup', () => {
-            if (this.mainSceneIsPaused) {
-                const main = this.scene.get('MainScene') as MainScene;
-                const chart = this.scene.get('ChartScene') as ChartScene;
-                const map = this.scene.get('MapScene') as MapScene;
-                main.scene.resume();
-                chart.scene.resume();
-                map.scene.resume();
-                this.mainSceneIsPaused = false;
-                this.buttonClickMusic.play();
-            }
-        });
-
-        // speed btns
-        speed1x.on('pointerover', () => {
-            speed1x.setScale(0.7);
-        });
-
-        speed1x.on('pointerout', () => {
-            speed1x.setScale(1);
-        });
-
-        speed1x.on('pointerup', () => {
-            this.gameSpeed = 1;
-            TimeController.getInstance().setGameSpeed(this.gameSpeed);
-            this.buttonClickMusic.play();
-        });
-
-        speed2x.on('pointerover', () => {
-            speed2x.setScale(0.7);
-        });
-
-        speed2x.on('pointerout', () => {
-            speed2x.setScale(1);
-        });
-
-        speed2x.on('pointerup', () => {
-            this.gameSpeed = 1.5;
-            TimeController.getInstance().setGameSpeed(this.gameSpeed);
-            this.buttonClickMusic.play();
-        });
-
-        speed3x.on('pointerover', () => {
-            speed3x.setScale(0.7);
-        });
-
-        speed3x.on('pointerout', () => {
-            speed3x.setScale(1);
-        });
-
-        speed3x.on('pointerup', () => {
-            this.gameSpeed = 2;
-            TimeController.getInstance().setGameSpeed(this.gameSpeed);
-            this.buttonClickMusic.play();
-        });
-    }
-    /*---------END: Speed button  ---------- */
 
     /*---------START: Sound button  ---------- */
     createSoundButton(): void {
