@@ -4,14 +4,12 @@ import { ChartScene } from "./chart-scene";
 import { UpgradeController } from "../objects/controller/upgradeController";
 import { MapScene } from "./map-scene";
 import { PopupWindow } from "./popupWindow";
-import { Controller } from "../objects/controller/controller";
-import { State } from "../util/enums/healthStates";
-import { Rule } from "../objects/entities/rule";
 import { LogBook } from "../objects/controller/logBook";
 import { TimeController } from "../objects/controller/timeController";
 import { Tutorial } from "../objects/controller/tutorial";
 import { SkillTreeView } from "./skillTreeView";
 import { GameSpeedButtons } from "./gui-elements/speed-buttons";
+import { RuleButton } from "./gui-elements/rulesButton";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -74,9 +72,6 @@ export class GuiScene extends Phaser.Scene {
         // Creates Skill Tree Button
         this.createSkillTreeBtn();
 
-        // Creates Rules button
-        this.createRulesBtn();
-
         //** create sound objects */
         this.inGameMusic = this.sound.add("game_theme_music");
         this.buttonClickMusic = this.sound.add("button_click");
@@ -103,44 +98,13 @@ export class GuiScene extends Phaser.Scene {
 
         // adds pause, slow, normal, quicker and quickest game speed buttons
         new GameSpeedButtons(this).createGameSpeedButtons();
+        // adds the rules button which opens the rules sub menu
+        new RuleButton(this).createRulesButton();
 
         Tutorial.getInstance().open(this);
     }
 
     // -------------------------------------------------------------------------- GAME MENU
-    createPauseButton(reset, resume): void {
-        const main = this.scene.get('MainScene') as MainScene;
-        const chart = this.scene.get('ChartScene') as ChartScene;
-        const map = this.scene.get('MapScene') as MapScene;
-        main.scene.pause();
-        chart.scene.pause();
-        map.scene.pause();
-        this.mainSceneIsPaused = true;
-
-
-        //when the button 'reset' is pressed, restart the main scene, the chart scene and reset the gui scene
-        reset.on('pointerup', () => {
-            //only restart the game if it is paused to avoid accidentally clicking on the invisible button
-            if (this.mainSceneIsPaused) {
-                main.scene.restart();
-                chart.scene.restart();
-                map.scene.restart();
-                this.mainSceneIsPaused = false;
-                this.buttonClickMusic.play();
-            }
-        });
-
-        //resume the game only if the scenes are already paused
-        resume.on('pointerup', () => {
-            if (this.mainSceneIsPaused) {
-                main.scene.resume();
-                chart.scene.resume();
-                map.scene.resume();
-                this.mainSceneIsPaused = false;
-                this.buttonClickMusic.play();
-            }
-        });
-    }
 
     poseSprites(): void {
         /** Position tablet */
@@ -149,56 +113,7 @@ export class GuiScene extends Phaser.Scene {
         tablet.scaleX = 0.57;
         tablet.scaleY = 0.7;
 
-        const rules = this.add.sprite(3100, 1300, 'rules').setInteractive();
-
-        const popupRules = new PopupWindow(this, 0, 0, '', 1300, 130, true, [], false);
-        const title = this.add.text(550, 130, 'The Rules', { color: 'Black', fontSize: '50px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setDepth(1);
-        const blankNode = this.add.sprite(this.game.renderer.width / 2 + 50, this.game.renderer.height / 2, 'blank-note').setDisplaySize(1200, 970);
-        popupRules.addGameObjects([blankNode, title]);
-
-        const allRules = Controller.getInstance().getRules();
-        let ruleIndex = 0;
-
-        allRules.forEach(r => {
-            this.addRuleToContainer(popupRules, r, ruleIndex);
-            ruleIndex++;
-        });
-
-        // popup info as a seconde popup
-        const infoModal = new Phaser.GameObjects.Image(this, 800, 150, 'information').setScale(0.4);
-        infoModal.setInteractive();
-
-        infoModal.on('pointerup', () => {
-            const popupTitle = 'The Information';
-            const popupStr = 'The Agents exchange their state when they are close together';
-
-            const popupInfo = new PopupWindow(this, 0, 0, '', 1300, 130, true, [], true);
-            const blankNode = this.add.sprite(this.game.renderer.width / 2 + 50, this.game.renderer.height / 2, 'blank-note').setDisplaySize(1200, 970);
-            popupInfo.add(blankNode);
-            popupInfo.add(new Phaser.GameObjects.Text(this, 550, 130, popupTitle, { color: 'Black', fontSize: '50px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }));
-            popupInfo.add(new Phaser.GameObjects.Text(this, 550, 220, popupStr, { color: 'Black', fontSize: '30px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }));
-
-            popupInfo.createModal();
-        });
-        //add popup Info into popup Rules.
-        popupRules.add(infoModal);
-
-        rules.setInteractive();
-
-        // Change the button textures on hover, press, etc.
-        rules.on('pointerover', () => {
-            rules.setScale(0.7);
-        });
-        rules.on('pointerout', () => {
-            rules.setScale(1);
-        });
-        rules.on('pointerdown', () => {
-            rules.setScale(1);
-        });
-        rules.on('pointerup', () => {
-            rules.setScale(0.8);
-            popupRules.createModal();
-        });
+ 
 
         const restart = this.add.sprite(3100, 190, 'restart').setInteractive();
 
@@ -300,87 +215,6 @@ export class GuiScene extends Phaser.Scene {
         });
     }
 
-    // Creates menu buttons
-    createMenuButtons(): void {
-        // Create and set the buttons to the right positions
-        const menuWhite = this.add.sprite(1000, 570, 'menu-white').setInteractive();
-        const menuBlack = this.add.sprite(1000, 570, 'menu-black').setInteractive();
-
-        const stateWhite = this.add.sprite(1000, 620, 'statemeasure-white').setInteractive();
-        const stateBlack = this.add.sprite(1000, 620, 'statemeasure-black').setInteractive();
-
-        const investmentWhite = this.add.sprite(1000, 670, 'investment-white').setInteractive();
-        const investmentBlack = this.add.sprite(1000, 670, 'investment-black').setInteractive();
-
-        const lockdownWhite = this.add.sprite(875, 620, 'lockdown-white').setInteractive();
-        const lockdownBlack = this.add.sprite(875, 620, 'lockdown-black').setInteractive();
-
-        const socialdistancingWhite = this.add.sprite(750, 620, 'socialdistancing-white').setInteractive();
-        const socialdistancingBlack = this.add.sprite(750, 620, 'socialdistancing-black').setInteractive().on('pointerdown', () => {
-            //this.uC.buyHealthWorkers(this.uC);
-        });
-
-        const policeWhite = this.add.sprite(875, 670, 'police-white').setInteractive();
-        const policeBlack = this.add.sprite(875, 670, 'police-black').setInteractive().on('pointerdown', () => {
-            //this.uC.buyPoliceOfficers(this.uC);
-        });
-
-        const researchWhite = this.add.sprite(750, 670, 'research-white').setInteractive();
-        const researchBlack = this.add.sprite(750, 670, 'research-black').setInteractive().on('pointerdown', () => {
-            // can be left here as a test, because this menu will probably be removed later
-        });
-
-        // Create a list of all measures, taking in consideration both of the colors
-        const sprites = [menuWhite, menuBlack, stateWhite, stateBlack, investmentWhite, investmentBlack, lockdownWhite, lockdownBlack, socialdistancingWhite, socialdistancingBlack, policeWhite, policeBlack, researchWhite, researchBlack];
-        // Create a list of state measures of white (default) color -> subbuttons
-        const stateMeasures = [lockdownWhite, socialdistancingWhite];
-        // Create a list of investment measures of white (default) color -> subbuttons
-        const investmentMeasures = [policeWhite, researchWhite];
-        // Create a list of all of the measures in black (ready to be clicked)
-        const measures = [lockdownBlack, socialdistancingBlack, policeBlack, researchBlack];
-
-        // Represent sprites on a smaller scale
-        this.setSpriteScale(sprites, .4);
-
-        // Set default visibility (only the menu button can be seen)
-        this.setDefaultVisibility(sprites);
-
-        // Change the color of the button from white to black if it is hovered over
-        for (let i = 0; i < sprites.length; i = i + 2) {
-            this.addOverOutListener(sprites[i], sprites[i + 1]);
-        }
-
-        let menuIsPressed = false;
-
-        // Handle the visibility of the measure buttons
-        menuBlack.on('pointerup', () => {
-            // Check, whether menu button is already pressed
-            if (menuIsPressed) {
-                // Return to the default visibility: hide each button except for menu
-                this.setDefaultVisibility(sprites);
-                // Return to the default (false) value
-                menuIsPressed = false;
-            } else {
-                // Show available measures
-                stateWhite.visible = true;
-                investmentWhite.visible = true;
-                // Set value to 'pressed'
-                menuIsPressed = true;
-            }
-            this.buttonClickMusic.play();
-        });
-
-        // Handle the visibility of the subbuttons
-        this.addOnListenerButton(stateBlack, stateMeasures, investmentMeasures);
-        this.addOnListenerButton(investmentBlack, investmentMeasures, stateMeasures);
-
-        // Prove that the subbuton was clicked
-        measures.forEach(element => {
-            this.addOnListenerSubButton(element);
-        });
-
-    }
-
     // Handles the visibility of the buttons
     addOnListenerButton(button, buttonsToShow, buttonsToHide): void {
         button.on('pointerup', () => {
@@ -457,110 +291,6 @@ export class GuiScene extends Phaser.Scene {
                 skillTree.createModal();
             }).setScale(0.5);
     }
-
-    /*---------START: Rules button ---------- */
-    createRulesBtn(): void {
-        const rulesBtn = this.add.image(this.game.renderer.width - 100, this.game.renderer.height - 250, 'rules');
-        const popupRules = new PopupWindow(this, 0, 0, '', 1300, 130, true, [], false);
-        const title = this.add.text(550, 130, 'The Rules', { color: 'Black', fontSize: '50px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setDepth(1);
-        const blankNode = this.add.sprite(this.game.renderer.width / 2 + 50, this.game.renderer.height / 2, 'blank-note').setDisplaySize(1200, 970);
-        popupRules.addGameObjects([blankNode, title]);
-        /*---------START: add Rules ---------- */
-        const allRules = Controller.getInstance().getRules();
-        let ruleIndex = 0;
-
-        allRules.forEach(r => {
-            this.addRuleToContainer(popupRules, r, ruleIndex);
-            ruleIndex++;
-        });
-        /*---------END: add Rules ---------- */
-
-        // popup info as a seconde popup
-        const info = new Phaser.GameObjects.Image(this, 800, 150, 'information').setScale(0.4);
-        info.setInteractive();
-
-        info.on('pointerup', () => {
-            const popupTitle = 'The Information';
-            const popupStr = 'The Agents exchange their state when they are close together';
-
-            const popupInfo = new PopupWindow(this, 0, 0, '', 1300, 130, true, [], true);
-            const blankNode = this.add.sprite(this.game.renderer.width / 2 + 50, this.game.renderer.height / 2, 'blank-note').setDisplaySize(1200, 970);
-            popupInfo.add(blankNode);
-            popupInfo.add(new Phaser.GameObjects.Text(this, 550, 130, popupTitle, { color: 'Black', fontSize: '50px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }));
-            popupInfo.add(new Phaser.GameObjects.Text(this, 550, 220, popupStr, { color: 'Black', fontSize: '30px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }));
-
-            popupInfo.createModal();
-            this.buttonClickMusic.play();
-        });
-        //add popup Info into popup Rules.
-        popupRules.add(info);
-
-        rulesBtn.setInteractive();
-
-        // Change the button textures on hover, press, etc.
-        rulesBtn.on('pointerover', () => {
-            rulesBtn.setScale(0.7);
-        });
-        rulesBtn.on('pointerout', () => {
-            rulesBtn.setScale(1);
-        });
-        rulesBtn.on('pointerdown', () => {
-            rulesBtn.setScale(1);
-        });
-        rulesBtn.on('pointerup', () => {
-            rulesBtn.setScale(0.8);
-            popupRules.createModal();
-            this.buttonClickMusic.play();
-        });
-    }
-
-    addRuleToContainer(container: Phaser.GameObjects.Container, rule: Rule, ruleIndex: number): void {
-        // The following x and y for test. 
-        // To rescale for the 3200x1600 pixel version (if needed) changes x and y as following x = this.game.redereer.width /2 +- number; y = this.game.redereer.height /2 +- number;
-        const x = this.game.renderer.width / 2 - 450;
-        const y = this.game.renderer.height / 2 - 250 + ruleIndex * 170;
-        const pos1 = new Phaser.GameObjects.Image(this, x, y, this.getTextures(rule.inputState1)).setOrigin(0);
-        container.add(pos1);
-
-        const pos2 = new Phaser.GameObjects.Image(this, x + 200, y, this.getTextures(rule.inputState2)).setOrigin(0);
-        container.add(pos2);
-
-        const pos3 = new Phaser.GameObjects.Image(this, x + 480, y, this.getTextures(rule.outputState1)).setOrigin(0);
-        container.add(pos3);
-
-        const pos4 = new Phaser.GameObjects.Image(this, x + 680, y, this.getTextures(rule.outputState2)).setOrigin(0);
-        container.add(pos4);
-
-        const arrow = new Phaser.GameObjects.Image(this, x + 400, y + 20, 'pprules-arrow').setOrigin(0);
-        container.add(arrow);
-    }
-
-    getTextures(str: string): string {
-        switch (str) {
-            case State.HEALTHY:
-                return 'healthy';
-
-            case State.INFECTED:
-                return 'infected';
-
-            case State.UNKNOWINGLY_INFECTED:
-                return 'unknowingly-infected';
-
-            case State.CURE:
-                return 'cure';
-
-            case State.DECEASED:
-                return 'deceased';
-
-            case State.IMMUNE:
-                return 'immune';
-
-            case State.TEST_KIT:
-                return 'test-kit';
-        }
-
-    }
-    /*---------END: Rules button  ---------- */
 
     /*---------START: Reset button  ---------- */
     createResetBtn(): void {
