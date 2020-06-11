@@ -6,6 +6,7 @@ import { RuleButton } from "./gui-elements/rulesButton";
 import { RestartButton } from "./gui-elements/restartButton";
 import { SkillTreeButton } from "./gui-elements/skillTreeButton";
 import { LogBookButton } from './gui-elements/logBookButton';
+import { SoundButtons } from './gui-elements/soundButtons';
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -14,20 +15,14 @@ export class GuiScene extends Phaser.Scene {
     inGameMusic: any;
     buttonClickMusic: any;
 
-
     /** Gui scene instance */
     public static instance: GuiScene;
 
     private menu: ItemMenu;
     public mainSceneIsPaused = false;
     public gameSpeed = 1;
-    private soundON = true;
-    private musicON = true;
-
-    /** Only existing instance of UpgradeController */
-    private uC: UpgradeController;
-    /** Whether the upgrade introduceCure was already bought */
-    private cureFound = false;
+    public soundON = true;
+    public musicON = true;
 
     constructor() {
         super({
@@ -52,8 +47,6 @@ export class GuiScene extends Phaser.Scene {
     create(): void {
         this.poseSprites();
 
-        this.uC = UpgradeController.getInstance();
-
         // Creates Itemmenu and it to this scene
         this.menu = new ItemMenu(this, 0, 750);
 
@@ -72,9 +65,6 @@ export class GuiScene extends Phaser.Scene {
         }
         this.inGameMusic.play(musicConfig);
 
-        // Creates Sound button for test, delete this function later
-        this.createSoundButton();
-
         // ------------------------------------------------------------------- GUI ELEMENTS
         // adds pause, slow, normal, quicker and quickest game speed buttons
         new GameSpeedButtons(this).create();
@@ -86,6 +76,8 @@ export class GuiScene extends Phaser.Scene {
         new SkillTreeButton(this).create();
         // add the log book button
         new LogBookButton(this).create();
+        // add the sound buttons
+        new SoundButtons(this).create();
 
         Tutorial.getInstance().open(this);
     }
@@ -99,61 +91,6 @@ export class GuiScene extends Phaser.Scene {
         tablet.scaleX = 0.57;
         tablet.scaleY = 0.7;
     }
-
-    /*---------START: Sound button  ---------- */
-    createSoundButton(): void {
-        const musicOn = this.add.sprite(this.game.renderer.width - 100, 250, 'music_on').setInteractive();
-        const soundOn = this.add.sprite(this.game.renderer.width - 100, 350, 'sound_on').setInteractive();
-
-        musicOn.on('pointerover', () => {
-            musicOn.setScale(0.7);
-        });
-
-        musicOn.on('pointerout', () => {
-            musicOn.setScale(1);
-        });
-
-        soundOn.on('pointerover', () => {
-            soundOn.setScale(0.7);
-        });
-
-        soundOn.on('pointerout', () => {
-            soundOn.setScale(1);
-        });
-
-        musicOn.on('pointerup', () => {
-            if (this.musicON) {
-                // method to turn off music should be here
-                this.inGameMusic.setMute(true);
-                // changes img and reset musicON atribute
-                musicOn.setTexture('music_off');
-                this.musicON = false;
-            } else {
-                // method to turn on music should be here
-                this.inGameMusic.setMute(false);
-                // changes img and reset musicON atribute
-                musicOn.setTexture('music_on');
-                this.musicON = true;
-            }
-        });
-
-        soundOn.on('pointerup', () => {
-            if (this.soundON) {
-                // method to turn off sound should be here
-                this.buttonClickMusic.setMute(true);
-                // changes img and reset soundON atribute
-                soundOn.setTexture('sound_off');
-                this.soundON = false;
-            } else {
-                // method to turn on sound should be here
-                this.buttonClickMusic.setMute(false);
-                // changes img and reset soundON atribute
-                soundOn.setTexture('sound_on');
-                this.soundON = true;
-            }
-        });
-    }
-    /*---------END: Sound button  ---------- */
 
     update(): void {
         if (!this.mainSceneIsPaused) this.menu.updateItemMenu(); // has to be invoked each tic/ ingame hour TODO
