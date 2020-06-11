@@ -1,4 +1,3 @@
-import { Event } from './event';
 import { TimeSubscriber } from '../../util/timeSubscriber';
 import { TimeController } from '../controller/timeController';
 
