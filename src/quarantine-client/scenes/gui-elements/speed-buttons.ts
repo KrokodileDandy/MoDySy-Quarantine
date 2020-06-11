@@ -1,24 +1,17 @@
-import { GuiScene } from "../gui-scene";
 import { MainScene } from "../main-scene";
 import { ChartScene } from "../chart-scene";
 import { MapScene } from "../map-scene";
 import { TimeController } from "../../objects/controller/timeController";
+import { GuiElement } from "./guiElement";
 
 /**
- * Scene which generates the game speed buttons.
+ * Factory which generates the game speed buttons.
  * @see GuiScene
  * @see TimeController
  * @author Hien
  * @author Sebastian Führ
  */
-export class GameSpeedButtons {
-
-    /** The GuiScene where the buttons should be added to */
-    private scene: GuiScene;
-
-    constructor(scene: GuiScene) {
-        this.scene = scene;
-    }
+export class GameSpeedButtons extends GuiElement {
 
     /**
      * Creates the following buttons and adds them to the GuiScene:  
@@ -28,7 +21,7 @@ export class GameSpeedButtons {
      * * faster speed
      * * the fastest speed
      */
-    public createGameSpeedButtons(): void {
+    public create(): void {
         this.addPauseButton();
         this.addSpeedButtonSlow();
         this.addSpeedButtonNormal();
