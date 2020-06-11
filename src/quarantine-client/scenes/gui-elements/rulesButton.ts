@@ -1,8 +1,8 @@
-import { GuiScene } from "../gui-scene";
 import { State } from "../../util/enums/healthStates";
 import { Controller } from "../../objects/controller/controller";
 import { PopupWindow } from "../popupWindow";
 import { Rule } from "../../objects/entities/rule";
+import { GuiElement } from "./guiElement";
 
 /**
  * Scene which generates the the rules button which opens the
@@ -11,16 +11,10 @@ import { Rule } from "../../objects/entities/rule";
  * @author Hien
  * @author Sebastian Führ
  */
-export class RuleButton {
+export class RuleButton extends GuiElement {
 
-    /** The GuiScene where the buttons should be added to */
-    private scene: GuiScene;
-
-    constructor(scene: GuiScene) {
-        this.scene = scene;
-    }
-
-    public createRulesButton(): void {
+    /** Create and add a rules button to the GuiScene */
+    public create(): void {
         const rulesBtn = this.scene.add.image(this.scene.game.renderer.width - 100, this.scene.game.renderer.height - 250, 'rules');
         const popupRules = new PopupWindow(this.scene, 0, 0, '', 1300, 130, true, [], false);
         const title = this.scene.add.text(550, 130, 'The Rules', { color: 'Black', fontSize: '50px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setDepth(1);
