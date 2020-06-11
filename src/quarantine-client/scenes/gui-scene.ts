@@ -1,15 +1,12 @@
-import { MainScene } from "./main-scene";
 import { ItemMenu } from '../menu-elements/menu'
-import { ChartScene } from "./chart-scene";
 import { UpgradeController } from "../objects/controller/upgradeController";
-import { MapScene } from "./map-scene";
-import { PopupWindow } from "./popupWindow";
 import { LogBook } from "../objects/controller/logBook";
 import { TimeController } from "../objects/controller/timeController";
 import { Tutorial } from "../objects/controller/tutorial";
 import { SkillTreeView } from "./skillTreeView";
 import { GameSpeedButtons } from "./gui-elements/speed-buttons";
 import { RuleButton } from "./gui-elements/rulesButton";
+import { RestartButton } from "./gui-elements/restartButton";
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -90,16 +87,16 @@ export class GuiScene extends Phaser.Scene {
 
         this.createSkillTreeBtn();
 
-        // Creates Reset button
-        this.createResetBtn();
-
         // Creates Sound button for test, delete this function later
         this.createSoundButton();
 
+        // ------------------------------------------------------------------- GUI ELEMENTS
         // adds pause, slow, normal, quicker and quickest game speed buttons
-        new GameSpeedButtons(this).createGameSpeedButtons();
+        new GameSpeedButtons(this).create();
         // adds the rules button which opens the rules sub menu
-        new RuleButton(this).createRulesButton();
+        new RuleButton(this).create();
+        // add the restart button
+        new RestartButton(this).create();
 
         Tutorial.getInstance().open(this);
     }
@@ -112,165 +109,6 @@ export class GuiScene extends Phaser.Scene {
         tablet.setOrigin(0, 0);
         tablet.scaleX = 0.57;
         tablet.scaleY = 0.7;
-
- 
-
-        const restart = this.add.sprite(3100, 190, 'restart').setInteractive();
-
-        // hover, click event etc.
-        restart.on('pointerover', () => {
-            restart.setScale(0.7);
-        });
-
-        restart.on('pointerout', () => {
-            restart.setScale(1);
-        });
-
-        restart.on('pointerup', () => {
-            //creates popup messages
-            const popupMss = new PopupWindow(this, 0, 0, 'note', this.game.renderer.width / 2 + 60, this.game.renderer.height / 2 - 70, true, [new Phaser.GameObjects.Text(this, this.game.renderer.width / 2 - 100, this.game.renderer.height / 2, 'Do you want to restart this game ?', { color: 'Black', fontSize: '14px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' })], false);
-            //creates confirm button
-            const restartOKBtn = new Phaser.GameObjects.Image(this, this.game.renderer.width / 2, this.game.renderer.height / 2 + 50, 'restart-popup');
-
-            //confirm button interactive events
-            restartOKBtn.setInteractive();
-            //hover, click event etc
-            restartOKBtn.on('pointerover', () => {
-                restartOKBtn.setTexture('restart-popup-hover');
-            });
-
-            restartOKBtn.on('pointerout', () => {
-                restartOKBtn.setTexture('restart-popup');
-            });
-
-            //do restart the game when btn were clicked
-            restartOKBtn.on('pointerup', () => {
-                const main = this.scene.get('MainScene') as MainScene;
-                const chart = this.scene.get('ChartScene') as ChartScene;
-                const map = this.scene.get('MapScene') as MapScene;
-
-                main.scene.restart();
-                chart.scene.restart();
-                map.scene.restart();
-
-                //close modal
-                popupMss.closeModal();
-            });
-
-            //add confirm to object container and show the popup
-            popupMss.addGameObjects([restartOKBtn]);
-            popupMss.createModal();
-
-        });
-
-        const musicOn = this.add.sprite(3100, 310, 'music_on').setInteractive();
-        const soundOn = this.add.sprite(3100, 430, 'sound_on').setInteractive();
-
-        musicOn.on('pointerover', () => {
-            musicOn.setScale(0.7);
-        });
-
-        musicOn.on('pointerout', () => {
-            musicOn.setScale(1);
-        });
-
-        soundOn.on('pointerover', () => {
-            soundOn.setScale(0.7);
-        });
-
-        soundOn.on('pointerout', () => {
-            soundOn.setScale(1);
-        });
-
-        musicOn.on('pointerup', () => {
-            if (this.musicON) {
-                // method to turn off music should be here
-
-                // changes img and reset musicON atribute
-                musicOn.setTexture('music_off');
-                this.musicON = false;
-            } else {
-                // method to turn on music should be here
-
-                // changes img and reset musicON atribute
-                musicOn.setTexture('music_on');
-                this.musicON = true;
-            }
-        });
-
-        soundOn.on('pointerup', () => {
-            if (this.soundON) {
-                // method to turn off sound should be here
-
-                // changes img and reset soundON atribute
-                soundOn.setTexture('sound_off');
-                this.soundON = false;
-            } else {
-                // method to turn on sound should be here
-
-                // changes img and reset soundON atribute
-                soundOn.setTexture('sound_on');
-                this.soundON = true;
-            }
-        });
-    }
-
-    // Handles the visibility of the buttons
-    addOnListenerButton(button, buttonsToShow, buttonsToHide): void {
-        button.on('pointerup', () => {
-            buttonsToShow.forEach(element => {
-                element.visible = true;
-            });
-            buttonsToHide.forEach(element => {
-                element.visible = false;
-            });
-            this.buttonClickMusic.play();
-        });
-    }
-
-    // Sets to the default value (only menu button is to be seen)
-    setDefaultVisibility(sprites): void {
-        for (let i = 0; i < sprites.length; i++) {
-            if (i === 0) {
-                sprites[i].visible = true;
-            } else {
-                sprites[i].visible = false;
-            }
-        }
-    }
-
-    // Represents sprites on a smaller scale
-    setSpriteScale(sprites, scale): void {
-        sprites.forEach(element => {
-            element.setScale(scale);
-        });
-    }
-
-    // Writes 'clicked' if the button was clicked
-    addOnListenerSubButton(button): void {
-        button.on('pointerup', () => {
-            //console.log("Clicked");
-            this.buttonClickMusic.play();
-        })
-    }
-
-    // Changes the color of the button from white to black, if the button is hovered over
-    addOverOutListener(defaultButton, inverseButton): void {
-        defaultButton.on('pointerover', () => {
-            defaultButton.visible = false;
-            inverseButton.visible = true;
-        });
-        inverseButton.on('pointerout', () => {
-            defaultButton.visible = true;
-            inverseButton.visible = false;
-        });
-    }
-
-    // Sets the sprites to visible
-    setToVisible(sprites): void {
-        sprites.forEach(element => {
-            element.visible = true;
-        });
     }
 
     /*---------START: Skill-Tree button ---------- */
@@ -291,61 +129,6 @@ export class GuiScene extends Phaser.Scene {
                 skillTree.createModal();
             }).setScale(0.5);
     }
-
-    /*---------START: Reset button  ---------- */
-    createResetBtn(): void {
-        const resetBtn = this.add.image(this.game.renderer.width - 100, 150, 'restart');
-        resetBtn.setInteractive();
-
-        // hover, click event etc.
-        resetBtn.on('pointerover', () => {
-            resetBtn.setScale(0.7);
-        });
-
-        resetBtn.on('pointerout', () => {
-            resetBtn.setScale(1);
-        });
-
-        resetBtn.on('pointerup', () => {
-            //creates popup messages
-            const popupMss = new PopupWindow(this, 0, 0, 'note', this.game.renderer.width / 2 + 60, this.game.renderer.height / 2 - 70, true, [new Phaser.GameObjects.Text(this, this.game.renderer.width / 2 - 100, this.game.renderer.height / 2, 'Do you want to restart this game ?', { color: 'Black', fontSize: '14px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' })], false);
-            //creates confirm button
-            const restartOKBtn = new Phaser.GameObjects.Image(this, this.game.renderer.width / 2, this.game.renderer.height / 2 + 50, 'restart-popup');
-
-            //confirm button interactive events
-            restartOKBtn.setInteractive();
-            //hover, click event etc
-            restartOKBtn.on('pointerover', () => {
-                restartOKBtn.setTexture('restart-popup-hover');
-            });
-
-            restartOKBtn.on('pointerout', () => {
-                restartOKBtn.setTexture('restart-popup');
-            });
-
-            //do restart the game when btn were clicked
-            restartOKBtn.on('pointerup', () => {
-                const main = this.scene.get('MainScene') as MainScene;
-                const chart = this.scene.get('ChartScene') as ChartScene;
-                const map = this.scene.get('MapScene') as MapScene;
-
-                main.scene.restart();
-                chart.scene.restart();
-                map.scene.restart();
-
-                //close modal
-                popupMss.closeModal();
-                this.buttonClickMusic.play();
-            });
-
-            //add confirm to object container and show the popup
-            popupMss.addGameObjects([restartOKBtn]);
-            popupMss.createModal();
-            this.buttonClickMusic.play();
-
-        });
-    }
-    /*---------END: Reset button  ---------- */
 
     /**
        * Insert a log book into the gui scene. When clicked, a specific

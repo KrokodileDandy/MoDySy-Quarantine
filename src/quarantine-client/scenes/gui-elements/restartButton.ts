@@ -15,18 +15,19 @@ export class RestartButton extends GuiElement {
 
     /** Create and add a restart button to the GuiScene */
     public create(): void {
-        const restart = this.scene.add.sprite(3100, 190, 'restart').setInteractive();
+        const resetBtn = this.scene.add.image(this.scene.game.renderer.width - 100, 150, 'restart');
+        resetBtn.setInteractive();
 
         // hover, click event etc.
-        restart.on('pointerover', () => {
-            restart.setScale(0.7);
+        resetBtn.on('pointerover', () => {
+            resetBtn.setScale(0.7);
         });
 
-        restart.on('pointerout', () => {
-            restart.setScale(1);
+        resetBtn.on('pointerout', () => {
+            resetBtn.setScale(1);
         });
 
-        restart.on('pointerup', () => {
+        resetBtn.on('pointerup', () => {
             //creates popup messages
             const popupMss = new PopupWindow(this.scene, 0, 0, 'note', this.scene.game.renderer.width / 2 + 60, this.scene.game.renderer.height / 2 - 70, true, [new Phaser.GameObjects.Text(this.scene, this.scene.game.renderer.width / 2 - 100, this.scene.game.renderer.height / 2, 'Do you want to restart this game ?', { color: 'Black', fontSize: '14px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' })], false);
             //creates confirm button
@@ -55,11 +56,14 @@ export class RestartButton extends GuiElement {
 
                 //close modal
                 popupMss.closeModal();
+                this.scene.buttonClickMusic.play();
             });
 
             //add confirm to object container and show the popup
             popupMss.addGameObjects([restartOKBtn]);
             popupMss.createModal();
+            this.scene.buttonClickMusic.play();
+
         });
     }
 
