@@ -1,7 +1,6 @@
 import { ItemMenu } from '../menu-elements/menu'
-import { UpgradeController } from "../objects/controller/upgradeController";
 import { Tutorial } from "../objects/controller/tutorial";
-import { GameSpeedButtons } from "./gui-elements/speed-buttons";
+import { GameSpeedButtons } from "./gui-elements/speedButtons";
 import { RuleButton } from "./gui-elements/rulesButton";
 import { RestartButton } from "./gui-elements/restartButton";
 import { SkillTreeButton } from "./gui-elements/skillTreeButton";
@@ -41,7 +40,6 @@ export class GuiScene extends Phaser.Scene {
         //** load audio files */
         this.load.audio("game_theme_music", "assets/sounds/In_Game_Music.mp3");
         this.load.audio("button_click", ["assets/sounds/click-sound.mp3", "assets/sounds/click-sound.ogg"]);
-
     }
 
     create(): void {
@@ -83,7 +81,6 @@ export class GuiScene extends Phaser.Scene {
     }
 
     // -------------------------------------------------------------------------- GAME MENU
-
     poseSprites(): void {
         /** Position tablet */
         const tablet = this.add.sprite(35, 20, 'tablet').setInteractive();
