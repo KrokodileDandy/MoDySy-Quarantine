@@ -1,21 +1,15 @@
 import { ItemMenu } from '../menu-elements/menu'
 import { UpgradeController } from "../objects/controller/upgradeController";
-import { LogBook } from "../objects/controller/logBook";
-import { TimeController } from "../objects/controller/timeController";
 import { Tutorial } from "../objects/controller/tutorial";
-import { SkillTreeView } from "./skillTreeView";
 import { GameSpeedButtons } from "./gui-elements/speed-buttons";
 import { RuleButton } from "./gui-elements/rulesButton";
 import { RestartButton } from "./gui-elements/restartButton";
+import { SkillTreeButton } from "./gui-elements/skillTreeButton";
+import { LogBookButton } from './gui-elements/logBookButton';
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
 
-    private day: Phaser.GameObjects.Text;
-    private popUpSprite: Phaser.GameObjects.Sprite;
-    private showMoney: Phaser.GameObjects.Text;
-    private showCases: Phaser.GameObjects.Text;
-    private timeController: TimeController;
     //** variables to save sound in */
     inGameMusic: any;
     buttonClickMusic: any;
@@ -55,19 +49,13 @@ export class GuiScene extends Phaser.Scene {
 
     }
 
-
     create(): void {
-        //this.createMenuButtons();
-        //this.createSettingsButtons();
         this.poseSprites();
 
         this.uC = UpgradeController.getInstance();
 
         // Creates Itemmenu and it to this scene
         this.menu = new ItemMenu(this, 0, 750);
-
-        // Creates Skill Tree Button
-        this.createSkillTreeBtn();
 
         //** create sound objects */
         this.inGameMusic = this.sound.add("game_theme_music");
@@ -83,9 +71,6 @@ export class GuiScene extends Phaser.Scene {
             delay: 0
         }
         this.inGameMusic.play(musicConfig);
-        this.createLogBookBtn();
-
-        this.createSkillTreeBtn();
 
         // Creates Sound button for test, delete this function later
         this.createSoundButton();
@@ -97,6 +82,10 @@ export class GuiScene extends Phaser.Scene {
         new RuleButton(this).create();
         // add the restart button
         new RestartButton(this).create();
+        // add the skill tree button
+        new SkillTreeButton(this).create();
+        // add the log book button
+        new LogBookButton(this).create();
 
         Tutorial.getInstance().open(this);
     }
@@ -109,45 +98,6 @@ export class GuiScene extends Phaser.Scene {
         tablet.setOrigin(0, 0);
         tablet.scaleX = 0.57;
         tablet.scaleY = 0.7;
-    }
-
-    /*---------START: Skill-Tree button ---------- */
-    createSkillTreeBtn(): void {
-        const yourSkills = this.add.sprite(1850, 550, 'your_skills').setInteractive()
-            .on('pointerover', () => {
-                yourSkills.setScale(0.6);
-            })
-            .on('pointerout', () => {
-                yourSkills.setScale(0.5);
-            })
-            .on('pointerdown', () => {
-                yourSkills.setScale(0.5);
-            })
-            .on('pointerup', () => {
-                yourSkills.setScale(0.6);
-                const skillTree = new SkillTreeView(this);
-                skillTree.createModal();
-            }).setScale(0.5);
-    }
-
-    /**
-       * Insert a log book into the gui scene. When clicked, a specific
-       * sub menu opens.
-       */
-    private createLogBookBtn(): void {
-        const lbBtn = this.add.image(1000, 90, 'log').setOrigin(0);
-        lbBtn.scale = 0.6;
-        lbBtn.angle = 1;
-        lbBtn.setInteractive();
-
-        // hover effect
-        lbBtn.on('pointerover', () => { lbBtn.scale = 0.65; });
-        lbBtn.on('pointerout', () => { lbBtn.scale = 0.6; });
-
-        lbBtn.on('pointerup', () => {
-            LogBook.getInstance().open(this); // open log book sub scene
-            this.buttonClickMusic.play();
-        });
     }
 
     /*---------START: Sound button  ---------- */

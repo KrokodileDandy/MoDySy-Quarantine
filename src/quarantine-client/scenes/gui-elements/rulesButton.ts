@@ -5,7 +5,7 @@ import { Rule } from "../../objects/entities/rule";
 import { GuiElement } from "./guiElement";
 
 /**
- * Scene which generates the the rules button which opens the
+ * Factory which generates the the rules button which opens the
  * rules sub scene.
  * @see GuiScene
  * @author Hien
