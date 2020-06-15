@@ -4,6 +4,7 @@ import { ChartScene } from "./chart-scene";
 import { MapScene } from "./map-scene";
 import { Stats } from "../objects/controller/stats";
 import { DifficultyLevel } from "../util/enums/difficultyLevels";
+import { GameObjects } from "phaser";
 
 /**
  * Menu scene at the start of the game.
@@ -15,12 +16,22 @@ export class StartMenuScene extends Phaser.Scene {
     mainThemeMusic: any;
     buttonClickMusic: any;
 
+    private attributesVisible: boolean;
+    private budget: Phaser.GameObjects.Text;
+    private income: Phaser.GameObjects.Text;
+    private interactions: Phaser.GameObjects.Text;
+
+    public easy = require('./../../../res/json/difficulty-levels/easy.json');
+    public normal = require('./../../../res/json/difficulty-levels/normal.json');
+    public hard = require('./../../../res/json/difficulty-levels/hard.json');
+
     constructor() {
         super({
             key: "StartMenuScene",
             active: true
         });
 
+        this.attributesVisible = false;
     }
 
     preload(): void {
@@ -33,14 +44,17 @@ export class StartMenuScene extends Phaser.Scene {
         // Easy button
         this.load.image('Easy', 'assets/sprites/start-menu/easy-button-neutral.png');
         this.load.image('EasyH', 'assets/sprites/start-menu/easy-button-hovered.png');
+        this.load.image('EasyA', 'assets/sprites/start-menu/easy-button-active.png');
         this.load.image('EasyP', 'assets/sprites/start-menu/easy-button-pressed.png');
         // Normal button
         this.load.image('Normal', 'assets/sprites/start-menu/normal-button-neutral.png');
         this.load.image('NormalH', 'assets/sprites/start-menu/normal-button-hovered.png');
+        this.load.image('NormalA', 'assets/sprites/start-menu/normal-button-active.png');
         this.load.image('NormalP', 'assets/sprites/start-menu/normal-button-pressed.png');
         // Hard button
         this.load.image('Hard', 'assets/sprites/start-menu/hard-button-neutral.png');
         this.load.image('HardH', 'assets/sprites/start-menu/hard-button-hovered.png');
+        this.load.image('HardA', 'assets/sprites/start-menu/hard-button-active.png');
         this.load.image('HardP', 'assets/sprites/start-menu/hard-button-pressed.png');
         // Start button
         this.load.image('Start', 'assets/sprites/start-menu/start-button-neutral.png');
@@ -79,20 +93,20 @@ export class StartMenuScene extends Phaser.Scene {
          * At the moment only one button.
          * Eventually add additional buttons(options, exit, etc.).
          */
-        const newGameButton = this.add.sprite(960, 600, 'NewGame');
-        newGameButton.setInteractive();
+        const newGameButton = this.add.sprite(innerWidth/2, innerHeight/1.6, 'NewGame').setScale(0.9);
 
         // Change the button textures on hover, press, etc.
-        newGameButton.on('pointerover', () => {
+        newGameButton.setInteractive()
+        .on('pointerover', () => {
             newGameButton.setTexture('NewGameH');
-        });
-        newGameButton.on('pointerout', () => {
+        })
+        .on('pointerout', () => {
             newGameButton.setTexture('NewGame');
-        });
-        newGameButton.on('pointerdown', () => {
+        })
+        .on('pointerdown', () => {
             newGameButton.setTexture('NewGameP');
-        });
-        newGameButton.on('pointerup', () => {
+        })
+        .on('pointerup', () => {
             newGameButton.setTexture('NewGameH');
             newGameButton.visible = false;
             this.buttonClickMusic.play();
@@ -116,100 +130,135 @@ export class StartMenuScene extends Phaser.Scene {
          * Choose the difficulty of the game.
          * Currently the buttons does nothing else than starting the game.
          */
-        const easyButton = this.add.sprite(960, 500, 'Easy').setScale(0.75);
-        const normalButton = this.add.sprite(960, 650, 'Normal').setScale(0.75);
-        const hardButton = this.add.sprite(960, 800, 'Hard').setScale(0.75);
-        easyButton.setInteractive();
-        normalButton.setInteractive();
-        hardButton.setInteractive();
+        const easyButton = this.add.sprite(innerWidth/2, innerHeight*0.5, 'Easy').setScale(0.75);
+        const normalButton = this.add.sprite(innerWidth/2, innerHeight*0.65, 'Normal').setScale(0.75);
+        const hardButton = this.add.sprite(innerWidth/2, innerHeight*0.8, 'Hard').setScale(0.75);
 
         // Change the button textures on hover, press, etc.
-        easyButton.on('pointerover', () => {
+        easyButton.setInteractive()
+        .on('pointerover', () => {
             easyButton.setTexture('EasyH');
-        });
-        easyButton.on('pointerout', () => {
+        })
+        .on('pointerout', () => {
             easyButton.setTexture('Easy');
-        });
-        easyButton.on('pointerdown', () => {
+        })
+        .on('pointerdown', () => {
             easyButton.setTexture('EasyP');
-        });
-        easyButton.on('pointerup', () => {
-            easyButton.setTexture('EasyH');
-            easyButton.visible = false;
-            normalButton.visible = false;
-            hardButton.visible = false;
+        })
+        .on('pointerup', () => {
+            easyButton.setTexture('EasyA');
+            easyButton.removeInteractive();
+            normalButton.setInteractive().setTexture('Normal');
+            hardButton.setInteractive().setTexture('Hard');
             this.buttonClickMusic.play();
-
 
             //loads the "EASY" game stats @see{res/json/difficulty-levels/easy.json}
             Stats.getInstance(DifficultyLevel.EASY);
+            this.showDifficultyAttributes(this.easy);
+            this.attributesVisible = true;
             this.createStartButton();
         });
         // Change the button textures on hover, press, etc.
-        normalButton.on('pointerover', () => {
+        normalButton.setInteractive()
+        .on('pointerover', () => {
             normalButton.setTexture('NormalH');
-        });
-        normalButton.on('pointerout', () => {
+        })
+        .on('pointerout', () => {
             normalButton.setTexture('Normal');
-        });
-        normalButton.on('pointerdown', () => {
+        })
+        .on('pointerdown', () => {
             normalButton.setTexture('NormalP');
-        });
-        normalButton.on('pointerup', () => {
-            normalButton.setTexture('NormalH');
-            easyButton.visible = false;
-            normalButton.visible = false;
-            hardButton.visible = false;
+        })
+        .on('pointerup', () => {
+            normalButton.setTexture('NormalA');
+            easyButton.setInteractive().setTexture('Easy');
+            normalButton.removeInteractive();
+            hardButton.setInteractive().setTexture('Hard');
             this.buttonClickMusic.play();
-
 
             //loads the "NORMAL" game stats @see{res/json/difficulty-levels/normal.json}
             Stats.getInstance(DifficultyLevel.NORMAL); 
+            this.showDifficultyAttributes(this.normal);
+            this.attributesVisible = true;
             this.createStartButton();
         });
         // Change the button textures on hover, press, etc.
-        hardButton.on('pointerover', () => {
+        hardButton.setInteractive()
+        .on('pointerover', () => {
             hardButton.setTexture('HardH');
-        });
-        hardButton.on('pointerout', () => {
+        })
+        .on('pointerout', () => {
             hardButton.setTexture('Hard');
-        });
-        hardButton.on('pointerdown', () => {
+        })
+        .on('pointerdown', () => {
             hardButton.setTexture('HardP');
-        });
-        hardButton.on('pointerup', () => {
-            hardButton.setTexture('HardH');
-            easyButton.visible = false;
-            normalButton.visible = false;
-            hardButton.visible = false;
+        })
+        .on('pointerup', () => {
+            hardButton.setTexture('HardA');
+            easyButton.setInteractive().setTexture('Easy');
+            normalButton.setInteractive().setTexture('Normal');
+            hardButton.removeInteractive();
             this.buttonClickMusic.play();
-
 
             //loads the "HARD" game stats @see{res/json/difficulty-levels/hard.json}
             Stats.getInstance(DifficultyLevel.HARD);
+            this.showDifficultyAttributes(this.hard);
+            this.attributesVisible = true;
             this.createStartButton();
         });
     }
 
     createStartButton(): void {
-        const startButton = this.add.sprite(960, 600, 'Start');
-        startButton.setInteractive();
+        const startButton = this.add.sprite(innerWidth*0.8, innerHeight*0.8, 'Start').setScale(0.5);
+        
         // Change the button textures on hover, press, etc.
-        startButton.on('pointerover', () => {
+        startButton.setInteractive()
+        .on('pointerover', () => {
             startButton.setTexture('StartH');
-        });
-        startButton.on('pointerout', () => {
+        })
+        .on('pointerout', () => {
             startButton.setTexture('Start');
-        });
-        startButton.on('pointerdown', () => {
+        })
+        .on('pointerdown', () => {
             startButton.setTexture('StartP');
-        });
-        startButton.on('pointerup', () => {
+        })
+        .on('pointerup', () => {
             startButton.setTexture('StartH');
             this.scene.setVisible(false);
             this.buttonClickMusic.play();
             this.loadScenes();
         });
+    }
+
+    showDifficultyAttributes(difficulty: any): void {
+        this.update();
+        //load background
+        //this.scene.add.image(this.x + 325, this.y + 85, 'progress').setScale(0.45);
+        if(this.attributesVisible == false) {
+            this.budget = this.add.text(innerWidth*0.75, innerHeight*0.5, `Start Budget: ${difficulty['budget']}`, {
+                fontFamily: 'Arial',
+                color: '#000000'
+            });
+            this.income = this.add.text(innerWidth*0.75, innerHeight*0.55, `Income: ${difficulty['income']}`, {
+                fontFamily: 'Arial',
+                color: '#000000'
+            });
+            this.interactions = this.add.text(innerWidth*0.75, innerHeight*0.6, `Basic Interaction Rate: ${difficulty['basicInteractionRate']}`, {
+                fontFamily: 'Arial',
+                color: '#000000'
+            });
+        } else {
+            this.budget.setText(`Start Budget: ${difficulty['budget']}`);
+            this.income.setText(`Income: ${difficulty['income']}`);
+            this.interactions.setText(`Basic Interaction Rate: ${difficulty['basicInteractionRate']}`);
+        }
+        
+    }
+
+    update(): void {
+        if(this.attributesVisible == false) {
+            
+        }
     }
 
     loadScenes(): void {
