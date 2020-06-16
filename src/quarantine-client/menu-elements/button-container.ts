@@ -158,32 +158,39 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
             image.setScale(0.6);
             //this.eventListener();       // initiate the buy process of reasearch in the upgrade controller
             // Updates the text of research price, since it has different prices for each level
-            if(this.key === 'research') {
-                this.eventListener();
-                this.percent += 10;
-                this.updateText();
-                // Grayscales the button if ten levels has been bought
-                if(this.measures[this.key]['current_level'] == 10) {     // maybe should change in upgrade controller to 10
-                    image.setTexture('research-gray');
-                    image.setScale(0.5);
-                    image.removeInteractive();
-                    this.priceText.destroy();
-                }
-            } else if(this.key === 'lockdown') {
-                this.eventListener();
-                if(this.lockdownActive == false) {
-                    this.lockdownActive = true;     //this.measures[this.key]['active'] = true;
-                    this.startTime = TimeController.getInstance().getDaysSinceGameStart();  //this.measures[this.key]['activated_on_day'];
-                    this.daysInLockdownText.setAlpha(1);
-                } else {
-                    this.lockdownActive = false;    //this.measures[this.key]['active'] = false;
-                    this.daysInLockdown = 0;
-                    this.daysInLockdownText.setText(`Days: ${this.daysInLockdown}`).setAlpha(0);
-                }
-            } else if(this.key === 'police') {
-                UpgradeController.getInstance().buyPoliceOfficers(UpgradeController.getInstance(), this.amount, this.dailyCost);
-            } else {
-                UpgradeController.getInstance().buyHealthWorkers(UpgradeController.getInstance(), this.amount, this.dailyCost);
+            switch(this.key) {
+                case 'research': 
+                    this.eventListener();
+                    this.percent += 10;
+                    this.updateText();
+                    // Grayscales the button if ten levels has been bought
+                    if(this.measures[this.key]['current_level'] == 10) {     // maybe should change in upgrade controller to 10
+                        image.setTexture('research-gray');
+                        image.setScale(0.5);
+                        image.removeInteractive();
+                        this.priceText.destroy();
+                    }
+                    break;
+                case 'lockdown': 
+                    this.eventListener();
+                    if(this.lockdownActive == false) {
+                        this.lockdownActive = true;     //this.measures[this.key]['active'] = true;
+                        this.startTime = TimeController.getInstance().getDaysSinceGameStart();  //this.measures[this.key]['activated_on_day'];
+                        this.daysInLockdownText.setAlpha(1);
+                    } else {
+                        this.lockdownActive = false;    //this.measures[this.key]['active'] = false;
+                        this.daysInLockdown = 0;
+                        this.daysInLockdownText.setText(`Days: ${this.daysInLockdown}`).setAlpha(0);
+                    }
+                    break;
+                case 'police':
+                    UpgradeController.getInstance().buyPoliceOfficers(UpgradeController.getInstance(), this.amount, this.dailyCost);
+                    break;
+                case 'healthworkers':
+                    UpgradeController.getInstance().buyHealthWorkers(UpgradeController.getInstance(), this.amount, this.dailyCost);
+                    break;
+                default: 
+                    console.error("[WARNING] - Passed key does not exist.");
             }
         });
     }
