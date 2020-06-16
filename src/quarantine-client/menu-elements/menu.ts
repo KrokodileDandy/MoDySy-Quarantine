@@ -7,7 +7,7 @@ import { ButtonContainer } from './button-container';
  * Extends Phaser.GameObjects.Container and represents the ingame item menu.
  * 
  * It contains the single items as well as all relevant layout components like navigation buttons (@see arrow-button) and so on.
- * @author Marvin Kruber
+ * @author Shao, Marvin Kruber
  */
 export class ItemMenu extends Phaser.GameObjects.Container {
 

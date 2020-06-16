@@ -11,35 +11,36 @@ import { TimeSubscriber } from '../util/timeSubscriber';
  */
 export class ButtonContainer extends Phaser.GameObjects.Container implements TimeSubscriber {
 
-    // Key to determine which button is used
+    /** Key to determine which button is used */
     private key: string;
-    // The daily costs of smth
+    /**  The daily costs of smth */
     private dailyCost: number;
-    // Visual text representation of daily costs
+    /** Visual text representation of daily costs */
     private dailyCostText: Phaser.GameObjects.Text;
-    // The Amount of smth
+    /** The Amount of smth */
     private amount: number;
-    // Visual text representation of amount
+    /** Visual text representation of amount */
     private amountText: Phaser.GameObjects.Text;
-    // How much percentage the research currently has
+    /** How much percentage the research currently has */
     private percent: number;
-    // Visual text of percentage
+    /** Visual text of percentage */
     private percentText: Phaser.GameObjects.Text;
-    // Time in days since lockdown has been activated
+    /** Time in days since lockdown has been activated */
     private daysInLockdown: number
-    // Text of how many days passed since lockdown
+    /** Text of how many days passed since lockdown has been activated */
     private daysInLockdownText: Phaser.GameObjects.Text;
 
+    /** Total time spent in lockdowns (in days) */
     private countDays: number;
-    // Remembers the starting time
+    /** Remembers the starting time */
     private startTime: number;
-    // Whether lockdown is activated or not
+    /** Whether lockdown is activated or not */
     private lockdownActive: boolean;
-    // Visual text of price
+    /** Visual text of price */
     private priceText: Phaser.GameObjects.Text;
-    // The Texture of the button
+    /** The Texture of the button */
     private buttonImage: Phaser.GameObjects.Image;
-    // Loading data of menu items
+    /** Loading data of menu items (=> measure attributes)*/
     public measures = require("./../../../res/json/measures.json");
 
     public upgradeContr: UpgradeController;
@@ -155,9 +156,10 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
         })
         .on('pointerup', () => { // "try to buy this item"
             image.setScale(0.6);
-            this.eventListener();       // initiate the buy process of reasearch in the upgrade controller
+            //this.eventListener();       // initiate the buy process of reasearch in the upgrade controller
             // Updates the text of research price, since it has different prices for each level
-            if(this.key == 'research') {
+            if(this.key === 'research') {
+                this.eventListener();
                 this.percent += 10;
                 this.updateText();
                 // Grayscales the button if ten levels has been bought
@@ -165,25 +167,20 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
                     image.setTexture('research-gray');
                     image.setScale(0.5);
                     image.removeInteractive();
+                    this.priceText.destroy();
                 }
-            }
-            if(this.key == 'lockdown') {
+            } else if(this.key === 'lockdown') {
+                this.eventListener();
                 if(this.lockdownActive == false) {
                     this.lockdownActive = true;     //this.measures[this.key]['active'] = true;
                     this.startTime = TimeController.getInstance().getDaysSinceGameStart();  //this.measures[this.key]['activated_on_day'];
                     this.daysInLockdownText.setAlpha(1);
                 } else {
                     this.lockdownActive = false;    //this.measures[this.key]['active'] = false;
-                    this.countDays += this.daysInLockdown;
-                    this.daysInLockdownText.setAlpha(0);
+                    this.daysInLockdown = 0;
+                    this.daysInLockdownText.setText(`Days: ${this.daysInLockdown}`).setAlpha(0);
                 }
-            }
-            if(this.key == 'police') {
-                UpgradeController.getInstance().buyPoliceOfficers(UpgradeController.getInstance(), this.amount, this.dailyCost);
-            } else {
-                UpgradeController.getInstance().buyHealthWorkers(UpgradeController.getInstance(), this.amount, this.dailyCost);
-            }
-            if(this.key == 'police') {
+            } else if(this.key === 'police') {
                 UpgradeController.getInstance().buyPoliceOfficers(UpgradeController.getInstance(), this.amount, this.dailyCost);
             } else {
                 UpgradeController.getInstance().buyHealthWorkers(UpgradeController.getInstance(), this.amount, this.dailyCost);
@@ -193,8 +190,9 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
 
     public notify(): void {
         if(this.lockdownActive == true) {
-            this.daysInLockdown = TimeController.getInstance().getDaysSinceGameStart() - this.startTime;   //this.measures[this.key]['activated_on_day'];
-            this.daysInLockdownText.setText(`Days: ${this.daysInLockdown + this.countDays}`);
+            this.daysInLockdown++;   //this.measures[this.key]['activated_on_day'];
+            this.countDays++;
+            this.daysInLockdownText.setText(`Days: ${this.daysInLockdown}`);
         }
     }
     
