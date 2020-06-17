@@ -292,7 +292,7 @@ export class UpgradeController implements TimeSubscriber {
      * @see #calculateExpenses
      */
     private updateBudget(income: number, expenses: number): void {
-        this.stats.budget += income - expenses;
+        this.stats.budget += (income - expenses);
     }
 
     /**
