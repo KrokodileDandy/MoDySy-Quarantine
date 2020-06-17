@@ -17,6 +17,9 @@ export class StartMenuScene extends Phaser.Scene {
     buttonClickMusic: any;
 
     private attributesVisible: boolean;
+    private sticker1: Phaser.GameObjects.Image;
+    private sticker2: Phaser.GameObjects.Image;
+    private sticker3: Phaser.GameObjects.Image;
     private budget: Phaser.GameObjects.Text;
     private income: Phaser.GameObjects.Text;
     private interactions: Phaser.GameObjects.Text;
@@ -35,8 +38,10 @@ export class StartMenuScene extends Phaser.Scene {
     }
 
     preload(): void {
-        // Main menu foreground     // TODO: background
-        this.load.image('Logo', 'assets/sprites/start-menu/quarantine-logo-14.png');
+        // Main menu foreground
+        this.load.image('Logo', 'assets/sprites/start-menu/quarantine-logo-17.png');
+        this.load.image('Attributes', 'assets/sprites/start-menu/difficulty-attributes.png');
+        this.load.image('Sticker', 'assets/sprites/start-menu/old-virus-sticker.png');
         // New Game button
         this.load.image('NewGame', 'assets/sprites/start-menu/new-game-button-neutral.png');
         this.load.image('NewGameH', 'assets/sprites/start-menu/new-game-button-hovered.png');
@@ -65,11 +70,10 @@ export class StartMenuScene extends Phaser.Scene {
         //** load audio files */
         this.load.audio("main_menu_audio_theme", ["assets/sounds/Main_Menu_Music.mp3", "assets/sounds/Main_Menu_Music.ogg"]);
         this.load.audio("button_click", ["assets/sounds/click-sound.mp3", "assets/sounds/click-sound.ogg"]);
-
     }
 
     create(): void {
-        this.add.image(innerWidth/2, innerHeight/2, 'Logo')   // TODO: has to be centered all time 
+        this.add.image(innerWidth/2, innerHeight/2, 'Logo')
         this.createMenuButtons();
         //** create sound objects */
         this.mainThemeMusic = this.sound.add("main_menu_audio_theme");
@@ -154,6 +158,7 @@ export class StartMenuScene extends Phaser.Scene {
 
             //loads the "EASY" game stats @see{res/json/difficulty-levels/easy.json}
             Stats.getInstance(DifficultyLevel.EASY);
+            this.updatePosition(easyButton, normalButton, hardButton);
             this.showDifficultyAttributes(this.easy);
             this.attributesVisible = true;
             this.createStartButton();
@@ -177,7 +182,8 @@ export class StartMenuScene extends Phaser.Scene {
             this.buttonClickMusic.play();
 
             //loads the "NORMAL" game stats @see{res/json/difficulty-levels/normal.json}
-            Stats.getInstance(DifficultyLevel.NORMAL); 
+            Stats.getInstance(DifficultyLevel.NORMAL);
+            this.updatePosition(easyButton, normalButton, hardButton);
             this.showDifficultyAttributes(this.normal);
             this.attributesVisible = true;
             this.createStartButton();
@@ -202,6 +208,7 @@ export class StartMenuScene extends Phaser.Scene {
 
             //loads the "HARD" game stats @see{res/json/difficulty-levels/hard.json}
             Stats.getInstance(DifficultyLevel.HARD);
+            this.updatePosition(easyButton, normalButton, hardButton);
             this.showDifficultyAttributes(this.hard);
             this.attributesVisible = true;
             this.createStartButton();
@@ -209,7 +216,7 @@ export class StartMenuScene extends Phaser.Scene {
     }
 
     createStartButton(): void {
-        const startButton = this.add.sprite(innerWidth*0.8, innerHeight*0.8, 'Start').setScale(0.5);
+        const startButton = this.add.sprite(innerWidth*0.9, innerHeight*0.85, 'Start').setScale(0.45);
         
         // Change the button textures on hover, press, etc.
         startButton.setInteractive()
@@ -231,33 +238,63 @@ export class StartMenuScene extends Phaser.Scene {
     }
 
     showDifficultyAttributes(difficulty: any): void {
-        this.update();
-        //load background
-        //this.scene.add.image(this.x + 325, this.y + 85, 'progress').setScale(0.45);
         if(this.attributesVisible == false) {
-            this.budget = this.add.text(innerWidth*0.75, innerHeight*0.5, `Start Budget: ${difficulty['budget']}`, {
+            this.add.image(innerWidth*0.7, innerHeight*0.65, 'Attributes');
+            this.add.text(innerWidth*0.52, innerHeight*0.4, `DIFFICULTY:`, {
                 fontFamily: 'Arial',
+                fontSize: '40px', 
                 color: '#000000'
             });
-            this.income = this.add.text(innerWidth*0.75, innerHeight*0.55, `Income: ${difficulty['income']}`, {
+            this.budget = this.add.text(innerWidth*0.5, innerHeight*0.51, `START BUDGET:                    ${difficulty['budget']}`, {
                 fontFamily: 'Arial',
+                fontSize: '40px', 
                 color: '#000000'
             });
-            this.interactions = this.add.text(innerWidth*0.75, innerHeight*0.6, `Basic Interaction Rate: ${difficulty['basicInteractionRate']}`, {
+            this.income = this.add.text(innerWidth*0.5, innerHeight*0.61, `DAILY INCOME:               ${difficulty['income']}`, {
                 fontFamily: 'Arial',
+                fontSize: '40px', 
                 color: '#000000'
             });
+            this.interactions = this.add.text(innerWidth*0.53, innerHeight*0.72, `BASIC INTERACTION RATE: ${difficulty['basicInteractionRate']}`, {
+                fontFamily: 'Arial',
+                fontSize: '40px', 
+                color: '#000000'
+            });
+            this.sticker1 = this.add.image(innerWidth*0.75, innerHeight*0.4, 'Sticker').setScale(0.25).setVisible(false);
+            this.sticker2 = this.add.image(innerWidth*0.80, innerHeight*0.41, 'Sticker').setScale(0.25).setRotation(12).setVisible(false);
+            this.sticker3 = this.add.image(innerWidth*0.86, innerHeight*0.4, 'Sticker').setScale(0.25).setRotation(-6).setVisible(false);
+            this.showDifficultyStickers(difficulty);
         } else {
-            this.budget.setText(`Start Budget: ${difficulty['budget']}`);
-            this.income.setText(`Income: ${difficulty['income']}`);
-            this.interactions.setText(`Basic Interaction Rate: ${difficulty['basicInteractionRate']}`);
+            this.budget.setText(`START BUDGET:               ${difficulty['budget']}`);
+            this.income.setText(`DAILY INCOME:                    ${difficulty['income']}`);
+            this.interactions.setText(`BASIC INTERACTION RATE: ${difficulty['basicInteractionRate']}`);
+            this.showDifficultyStickers(difficulty);
         }
-        
     }
 
-    update(): void {
+    showDifficultyStickers(difficulty: any): void {
+        if(difficulty == this.easy) {
+            this.sticker1.setVisible(true);
+            this.sticker2.setVisible(false);
+            this.sticker3.setVisible(false);
+        }
+        if (difficulty == this.normal) {
+            this.sticker1.setVisible(true);
+            this.sticker2.setVisible(true);
+            this.sticker3.setVisible(false);
+        }
+        if(difficulty == this.hard) {
+            this.sticker1.setVisible(true);
+            this.sticker2.setVisible(true);
+            this.sticker3.setVisible(true);
+        }
+    }
+
+    updatePosition(button1: Phaser.GameObjects.Sprite, button2: Phaser.GameObjects.Sprite, button3: Phaser.GameObjects.Sprite,): void {
         if(this.attributesVisible == false) {
-            
+            button1.x = innerWidth*0.25;
+            button2.x = innerWidth*0.25;
+            button3.x = innerWidth*0.25;
         }
     }
 
