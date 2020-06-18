@@ -1,4 +1,4 @@
-import { ItemMenu } from '../menu-elements/menu'
+import { ItemMenu } from './menu-elements/menu'
 import { Tutorial } from "../objects/controller/tutorial";
 import { GameSpeedButtons } from "./gui-elements/speedButtons";
 import { RuleButton } from "./gui-elements/rulesButton";
@@ -11,8 +11,8 @@ import { SoundButtons } from './gui-elements/soundButtons';
 export class GuiScene extends Phaser.Scene {
 
     //** variables to save sound in */
-    inGameMusic: any;
-    buttonClickMusic: any;
+    public inGameMusic: Phaser.Sound.BaseSound;
+    public buttonClickMusic: Phaser.Sound.BaseSound;
 
     /** Gui scene instance */
     public static instance: GuiScene;

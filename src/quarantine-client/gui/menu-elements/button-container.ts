@@ -1,7 +1,7 @@
 import 'phaser';
-import { UpgradeController } from '../objects/controller/upgradeController';
-import { TimeController } from '../objects/controller/timeController';
-import { TimeSubscriber } from '../util/timeSubscriber';
+import { UpgradeController } from '../../objects/controller/upgradeController';
+import { TimeController } from '../../objects/controller/timeController';
+import { TimeSubscriber } from '../../util/timeSubscriber';
 
 /**
  * Represents a container which inherit all necessary items

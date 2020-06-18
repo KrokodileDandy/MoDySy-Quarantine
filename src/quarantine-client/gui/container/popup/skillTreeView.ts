@@ -1,6 +1,6 @@
 import { PopupWindow } from "./popupWindow";
-import { SkillController } from "../objects/controller/skillController";
-import { Icon } from "../objects/icon";
+import { SkillController } from "../../../objects/controller/skillController";
+import { Icon } from "../../../objects/icon";
 
 /**
  * 
@@ -71,7 +71,7 @@ export class SkillTreeView extends PopupWindow {
         this.add(citizensButton);
     }
 
-    public openSubtree(key: string) {
+    public openSubtree(key: string): void {
         
         this.removeMainSkillButtons();
         this.addBackButton(key);

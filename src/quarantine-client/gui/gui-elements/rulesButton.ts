@@ -1,6 +1,6 @@
 import { State } from "../../util/enums/healthStates";
 import { Controller } from "../../objects/controller/controller";
-import { PopupWindow } from "../popupWindow";
+import { PopupWindow } from "./../container/popup/popupWindow";
 import { Rule } from "../../objects/entities/rule";
 import { GuiElement } from "./guiElement";
 

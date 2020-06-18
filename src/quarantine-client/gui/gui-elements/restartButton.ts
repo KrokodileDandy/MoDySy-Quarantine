@@ -1,7 +1,7 @@
 import { MainScene } from "../main-scene";
 import { ChartScene } from "../chart-scene";
 import { MapScene } from "../map-scene";
-import { PopupWindow } from "../popupWindow";
+import { PopupWindow } from "./../container/popup/popupWindow";
 import { GuiElement } from "./guiElement";
 
 /**

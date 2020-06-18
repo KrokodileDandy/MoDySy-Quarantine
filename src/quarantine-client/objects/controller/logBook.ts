@@ -1,4 +1,4 @@
-import { LogBookView } from "../../scenes/logBookView";
+import { LogBookView } from "../../gui/logBookView";
 import { TimeController } from "./timeController";
 import { Stats } from "./stats";
 import { IncomeStatement } from "../entities/incomeStatement";

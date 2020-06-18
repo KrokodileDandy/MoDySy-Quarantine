@@ -1,5 +1,5 @@
 import { PopupWindow } from "./popupWindow";
-import { LogBook } from "../objects/controller/logBook";
+import { LogBook } from "./../../../objects/controller/logBook";
 
 /**
  * @author Sebastian Führ

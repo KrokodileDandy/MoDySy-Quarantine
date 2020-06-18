@@ -1,5 +1,5 @@
 import { GuiElement } from "./guiElement";
-import { SkillTreeView } from "../skillTreeView";
+import { SkillTreeView } from "../container/popup/skillTreeView";
 
 /**
  * Factory which generates the the skill tree button which opens the

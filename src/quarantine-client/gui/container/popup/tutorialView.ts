@@ -1,5 +1,5 @@
 import { PopupWindow } from "./popupWindow";
-import { Tutorial } from "../objects/controller/tutorial";
+import { Tutorial } from "../../../objects/controller/tutorial";
 
 /**
  * @author Sebastian Führ

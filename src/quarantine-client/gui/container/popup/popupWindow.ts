@@ -1,7 +1,7 @@
 import "phaser";
-import { MainScene } from "./main-scene";
-import { ChartScene } from "./chart-scene";
-import { MapScene } from "./map-scene";
+import { MainScene } from "./../../main-scene";
+import { ChartScene } from "./../../chart-scene";
+import { MapScene } from "./../../map-scene";
 
 /**
  * Creates a popup window on creation which holds multiple phaser game objects.

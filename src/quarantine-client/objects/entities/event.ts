@@ -1,6 +1,6 @@
 import 'phaser';
-import { PopupWindow } from "../../scenes/popupWindow";
-import { GuiScene } from "../../scenes/gui-scene";
+import { PopupWindow } from "../../gui/popupWindow";
+import { GuiScene } from "../../gui/gui-scene";
 
 /**
  * An in-game event and opens a popup window.  

@@ -9,8 +9,8 @@ import { TimeSubscriber } from '../../util/timeSubscriber';
 import { TimeController } from './timeController';
 import { Stats } from './stats';
 import { UpgradeController } from './upgradeController';
-import { GuiScene } from '../../scenes/gui-scene';
-import { PopupWindow } from '../../scenes/popupWindow';
+import { GuiScene } from '../../gui/gui-scene';
+import { PopupWindow } from '../../gui/container/popup/popupWindow';
 
 /**
  * Singleton controller which should only simulates the population protocol.
@@ -120,7 +120,6 @@ export class Controller implements TimeSubscriber {
         // There should be enough people left to be assigned the specific role
         if (this.stats.getPopulation() - this.stats.getNumberOfHealthWorkers() - this.stats.getNumberOfPolice() < amt) {
             amt = this.stats.getPopulation() - this.stats.getNumberOfHealthWorkers() - this.stats.getNumberOfPolice();
-            // TODO Use case where hw's come from other countries to allow maximum amount of cure hw's
         }
 
         let i = 0;
@@ -128,29 +127,37 @@ export class Controller implements TimeSubscriber {
          * Changes agents of the agents array to become health workers if they are not already health
          * workers or police officers.
          */
-        while(i < amt) {
-            const idx = this.getRandomIndex();
-            if((this.agents[idx] instanceof HealthWorker) ||
-                (this.agents[idx] instanceof Police)) continue;
-            switch (role) {
-                case Role.HEALTH_WORKER: {
+        switch (role) {
+            case Role.HEALTH_WORKER: {
+                while (i < amt) {
+                    const idx = this.getRandomIndex();
+                    if((this.agents[idx] instanceof HealthWorker) ||
+                        (this.agents[idx] instanceof Police)) continue;
+
                     if (testKit) this.agents[idx] = new HealthWorker(State.TEST_KIT);
                     else this.agents[idx] = new HealthWorker(State.CURE);
                     this.stats.nbrHW++;
-                    break;
+                    i++;
                 }
-                case Role.POLICE: {
+                break;
+            }
+            case Role.POLICE: {
+                while (i < amt) {
+                    const idx = this.getRandomIndex();
+                    if((this.agents[idx] instanceof HealthWorker) ||
+                        (this.agents[idx] instanceof Police)) continue;
+
                     const tmp = this.agents[idx].getHealthState(); // infected agents can become police officers
                     this.agents[idx] = new Police(tmp);
                     this.stats.nbrPolice++;
-                    break;
+                    i++;
                 }
-                default: {
-                    console.log("[WARNING] distributeNewRoles in controller.ts wasn't invoked with police or health worker role.");
-                    break;
-                }
+                break;
             }
-            i++;
+            default: {
+                console.log("[WARNING] distributeNewRoles in controller.ts wasn't invoked with police or health worker role.");
+                break;
+            }
         }
         return true;
     }
@@ -221,6 +228,11 @@ export class Controller implements TimeSubscriber {
         }
     }
 
+    /**
+     * Opens a new popup to show a message which announces the loss.
+     * @param title Title of the popup window
+     * @param description The loosing message
+     */
     public openWinLossWindow(title: string, description: string): void {
         const popup = new PopupWindow(GuiScene.instance, 0, 0, 'event-note', 1600, 80, true, [], true);
         const closeGameBtn = new Phaser.GameObjects.Image(GuiScene.instance, 1920 / 2, 800, 'NewGame').setOrigin(0).setDepth(1);
