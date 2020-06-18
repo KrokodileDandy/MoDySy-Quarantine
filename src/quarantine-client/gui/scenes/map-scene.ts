@@ -1,5 +1,5 @@
-import { TimeController } from "../objects/controller/timeController";
-import { Stats } from "../objects/controller/stats";
+import { TimeController } from "../../objects/controller/timeController";
+import { Stats } from "../../objects/controller/stats";
 
 /**
  * Scene to show the infected people on a map

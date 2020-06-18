@@ -1,4 +1,4 @@
-import { GuiScene } from "../gui-scene";
+import { GuiScene } from "./scenes/gui-scene";
 
 /**
  * Abstract class of a gui element which is part of the GuiScene.

@@ -9,8 +9,8 @@ import { TimeSubscriber } from '../../util/timeSubscriber';
 import { TimeController } from './timeController';
 import { Stats } from './stats';
 import { UpgradeController } from './upgradeController';
-import { GuiScene } from '../../gui/gui-scene';
-import { PopupWindow } from '../../gui/container/popup/popupWindow';
+import { GuiScene } from '../../gui/scenes/gui-scene';
+import { PopupWindow } from '../../gui/popupWindow';
 
 /**
  * Singleton controller which should only simulates the population protocol.

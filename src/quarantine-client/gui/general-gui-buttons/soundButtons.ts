@@ -1,4 +1,4 @@
-import { GuiElement } from "./guiElement";
+import { GuiElement } from "../guiElement";
 
 /**
  * Factory which generates the the sound buttons to toogle
@@ -33,13 +33,13 @@ export class SoundButtons extends GuiElement {
         musicOn.on('pointerup', () => {
             if (this.scene.musicON) {
                 // method to turn off music should be here
-                this.scene.inGameMusic.setMute(true);
+                this.scene.inGameMusic.pause(); //.setMute(true);
                 // changes img and reset musicON atribute
                 musicOn.setTexture('music_off');
                 this.scene.musicON = false;
             } else {
                 // method to turn on music should be here
-                this.scene.inGameMusic.setMute(false);
+                this.scene.inGameMusic.resume(); //.setMute(false);
                 // changes img and reset musicON atribute
                 musicOn.setTexture('music_on');
                 this.scene.musicON = true;
@@ -48,14 +48,10 @@ export class SoundButtons extends GuiElement {
 
         soundOn.on('pointerup', () => {
             if (this.scene.soundON) {
-                // method to turn off sound should be here
-                this.scene.buttonClickMusic.setMute(true);
                 // changes img and reset soundON atribute
                 soundOn.setTexture('sound_off');
                 this.scene.soundON = false;
             } else {
-                // method to turn on sound should be here
-                this.scene.buttonClickMusic.setMute(false);
                 // changes img and reset soundON atribute
                 soundOn.setTexture('sound_on');
                 this.scene.soundON = true;

@@ -1,8 +1,8 @@
 import { State } from "../../util/enums/healthStates";
 import { Controller } from "../../objects/controller/controller";
-import { PopupWindow } from "./../container/popup/popupWindow";
+import { PopupWindow } from "../popupWindow";
 import { Rule } from "../../objects/entities/rule";
-import { GuiElement } from "./guiElement";
+import { GuiElement } from "../guiElement";
 
 /**
  * Factory which generates the the rules button which opens the
@@ -45,7 +45,7 @@ export class RuleButton extends GuiElement {
             popupInfo.add(new Phaser.GameObjects.Text(this.scene, 550, 220, popupStr, { color: 'Black', fontSize: '30px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }));
 
             popupInfo.createModal();
-            this.scene.buttonClickMusic.play();
+            if (this.scene.soundON) this.scene.buttonClickMusic.play();
         });
         //add popup Info into popup Rules.
         popupRules.add(info);
@@ -65,7 +65,7 @@ export class RuleButton extends GuiElement {
         rulesBtn.on('pointerup', () => {
             rulesBtn.setScale(0.8);
             popupRules.createModal();
-            this.scene.buttonClickMusic.play();
+            if (this.scene.soundON) this.scene.buttonClickMusic.play();
         });
     }
 

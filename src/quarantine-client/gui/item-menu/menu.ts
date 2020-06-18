@@ -19,7 +19,7 @@ export class ItemMenu extends Phaser.GameObjects.Container {
     public researchText: Phaser.GameObjects.Text;
     public upgradeContr: UpgradeController;
     
-    public measures = require("./../../../res/json/measures.json");
+    public measures = require("./../../../../res/json/measures.json");
 
     /**
      * 

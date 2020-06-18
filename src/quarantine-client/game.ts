@@ -1,5 +1,5 @@
 import 'phaser';
-import { StartMenuScene } from './gui/start-menu-scene';
+import { StartMenuScene } from './gui/scenes/start-menu-scene';
 
 const config: Phaser.Types.Core.GameConfig = {
     width: 1920,

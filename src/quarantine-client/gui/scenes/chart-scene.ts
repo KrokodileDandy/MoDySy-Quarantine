@@ -1,10 +1,10 @@
 import * as Chart from "chart.js";
 import "chartjs-plugin-zoom";
 import "hammerjs";
-import { TimeSubscriber } from "../util/timeSubscriber";
-import { TimeController } from "../objects/controller/timeController";
-import { UpgradeController } from "../objects/controller/upgradeController";
-import { Stats } from "../objects/controller/stats";
+import { TimeSubscriber } from "../../util/timeSubscriber";
+import { TimeController } from "../../objects/controller/timeController";
+import { UpgradeController } from "../../objects/controller/upgradeController";
+import { Stats } from "../../objects/controller/stats";
 
 /**
  * Scene for creating and updating the graphical

@@ -1,5 +1,5 @@
 import { Stats } from "./stats";
-import { TutorialView } from "../../gui/container/popup/tutorialView";
+import { TutorialView } from "../../gui/tutorial/tutorialView";
 
 /**
  * The tutorial which shows basic game introductions and

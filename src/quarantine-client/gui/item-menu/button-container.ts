@@ -41,7 +41,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
     /** The Texture of the button */
     private buttonImage: Phaser.GameObjects.Image;
     /** Loading data of menu items (=> measure attributes)*/
-    public measures = require("./../../../res/json/measures.json");
+    public measures = require("./../../../../res/json/measures.json");
 
     public upgradeContr: UpgradeController;
 

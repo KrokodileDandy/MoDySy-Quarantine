@@ -1,8 +1,8 @@
-import { MainScene } from "../main-scene";
-import { ChartScene } from "../chart-scene";
-import { MapScene } from "../map-scene";
+import { MainScene } from "../scenes/main-scene";
+import { ChartScene } from "../scenes/chart-scene";
+import { MapScene } from "../scenes/map-scene";
 import { TimeController } from "../../objects/controller/timeController";
-import { GuiElement } from "./guiElement";
+import { GuiElement } from "../guiElement";
 
 /**
  * Factory which generates the game speed buttons.
@@ -49,7 +49,7 @@ export class GameSpeedButtons extends GuiElement {
                 chart.scene.pause();
                 map.scene.pause();
                 this.scene.mainSceneIsPaused = true;
-                this.scene.buttonClickMusic.play();
+                if (this.scene.soundON) this.scene.buttonClickMusic.play();
             }
         });
     }
@@ -74,7 +74,7 @@ export class GameSpeedButtons extends GuiElement {
                 chart.scene.resume();
                 map.scene.resume();
                 this.scene.mainSceneIsPaused = false;
-                this.scene.buttonClickMusic.play();
+                if (this.scene.soundON) this.scene.buttonClickMusic.play();
             }
         });
     }
@@ -93,7 +93,7 @@ export class GameSpeedButtons extends GuiElement {
         speed1x.on('pointerup', () => {
             this.scene.gameSpeed = 1;
             TimeController.getInstance().setGameSpeed(this.scene.gameSpeed);
-            this.scene.buttonClickMusic.play();
+            if (this.scene.soundON) this.scene.buttonClickMusic.play();
         });
     }
 
@@ -111,7 +111,7 @@ export class GameSpeedButtons extends GuiElement {
         speed2x.on('pointerup', () => {
             this.scene.gameSpeed = 1.5;
             TimeController.getInstance().setGameSpeed(this.scene.gameSpeed);
-            this.scene.buttonClickMusic.play();
+            if (this.scene.soundON) this.scene.buttonClickMusic.play();
         });
     }
 
@@ -129,7 +129,7 @@ export class GameSpeedButtons extends GuiElement {
         speed3x.on('pointerup', () => {
             this.scene.gameSpeed = 2;
             TimeController.getInstance().setGameSpeed(this.scene.gameSpeed);
-            this.scene.buttonClickMusic.play();
+            if (this.scene.soundON) this.scene.buttonClickMusic.play();
         });
     }
 

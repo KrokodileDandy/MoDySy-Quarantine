@@ -2,8 +2,8 @@ import { MainScene } from "./main-scene";
 import { GuiScene } from "./gui-scene";
 import { ChartScene } from "./chart-scene";
 import { MapScene } from "./map-scene";
-import { Stats } from "../objects/controller/stats";
-import { DifficultyLevel } from "../util/enums/difficultyLevels";
+import { Stats } from "../../objects/controller/stats";
+import { DifficultyLevel } from "../../util/enums/difficultyLevels";
 
 /**
  * Menu scene at the start of the game.

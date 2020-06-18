@@ -1,8 +1,8 @@
-import { MainScene } from "../main-scene";
-import { ChartScene } from "../chart-scene";
-import { MapScene } from "../map-scene";
-import { PopupWindow } from "./../container/popup/popupWindow";
-import { GuiElement } from "./guiElement";
+import { MainScene } from "../scenes/main-scene";
+import { ChartScene } from "../scenes/chart-scene";
+import { MapScene } from "../scenes/map-scene";
+import { PopupWindow } from "../popupWindow";
+import { GuiElement } from "../guiElement";
 
 /**
  * Factory which generates the reset game button which opens a popup and
@@ -56,13 +56,13 @@ export class RestartButton extends GuiElement {
 
                 //close modal
                 popupMss.closeModal();
-                this.scene.buttonClickMusic.play();
+                if (this.scene.soundON) this.scene.buttonClickMusic.play();
             });
 
             //add confirm to object container and show the popup
             popupMss.addGameObjects([restartOKBtn]);
             popupMss.createModal();
-            this.scene.buttonClickMusic.play();
+            if (this.scene.soundON) this.scene.buttonClickMusic.play();
 
         });
     }

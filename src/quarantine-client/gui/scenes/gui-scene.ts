@@ -1,11 +1,11 @@
-import { ItemMenu } from './menu-elements/menu'
-import { Tutorial } from "../objects/controller/tutorial";
-import { GameSpeedButtons } from "./gui-elements/speedButtons";
-import { RuleButton } from "./gui-elements/rulesButton";
-import { RestartButton } from "./gui-elements/restartButton";
-import { SkillTreeButton } from "./gui-elements/skillTreeButton";
-import { LogBookButton } from './gui-elements/logBookButton';
-import { SoundButtons } from './gui-elements/soundButtons';
+import { ItemMenu } from '../item-menu/menu'
+import { Tutorial } from "../../objects/controller/tutorial";
+import { GameSpeedButtons } from "../general-gui-buttons/speedButtons";
+import { RuleButton } from "../general-gui-buttons/rulesButton";
+import { RestartButton } from "../general-gui-buttons/restartButton";
+import { SkillTreeButton } from "../skill-tree/skillTreeButton";
+import { LogBookButton } from '../log-book/logBookButton';
+import { SoundButtons } from '../general-gui-buttons/soundButtons';
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {

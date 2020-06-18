@@ -1,4 +1,4 @@
-import { GuiElement } from "./guiElement";
+import { GuiElement } from "../guiElement";
 import { LogBook } from "../../objects/controller/logBook";
 
 /**
@@ -23,7 +23,7 @@ export class LogBookButton extends GuiElement {
 
         lbBtn.on('pointerup', () => {
             LogBook.getInstance().open(this.scene); // open log book sub scene
-            this.scene.buttonClickMusic.play();
+            if (this.scene.soundON) this.scene.buttonClickMusic.play();
         });
     }
 

@@ -1,5 +1,5 @@
 import { SkillController } from "./controller/skillController";
-import { SkillTreeView } from "../gui/container/popup/skillTreeView";
+import { SkillTreeView } from "../gui/skill-tree/skillTreeView";
 
 export class Icon extends Phaser.GameObjects.Image {
     

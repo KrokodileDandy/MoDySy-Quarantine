@@ -1,6 +1,6 @@
-import { PopupWindow } from "./popupWindow";
-import { SkillController } from "../../../objects/controller/skillController";
-import { Icon } from "../../../objects/icon";
+import { PopupWindow } from "./../popupWindow";
+import { SkillController } from "./../../objects/controller/skillController";
+import { Icon } from "./../../objects/icon";
 
 /**
  * 
