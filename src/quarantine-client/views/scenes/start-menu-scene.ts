@@ -36,11 +36,35 @@ export class StartMenuScene extends Phaser.Scene {
 
     preload(): void {
         // Loading Sprites
-        this.load.pack(
-            'preload',
-            'assets/startMenuPack.json',
-            'preload'
-        );
+        this.load.image('Background', 'assets/sprites/start-menu/quarantine-logo-17.png');
+        this.load.image('Attributes', 'assets/sprites/start-menu/difficulty-attributes.png');
+        this.load.image('Sticker', 'assets/sprites/start-menu/old-virus-sticker.png');
+        // New Game button
+        this.load.image('NewGame', 'assets/sprites/start-menu/new-game-button-neutral.png');
+        this.load.image('NewGameH', 'assets/sprites/start-menu/new-game-button-hovered.png');
+        this.load.image('NewGameP', 'assets/sprites/start-menu/new-game-button-pressed.png');
+        // Easy button
+        this.load.image('Easy', 'assets/sprites/start-menu/easy-button-neutral.png');
+        this.load.image('EasyH', 'assets/sprites/start-menu/easy-button-hovered.png');
+        this.load.image('EasyA', 'assets/sprites/start-menu/easy-button-active.png');
+        this.load.image('EasyP', 'assets/sprites/start-menu/easy-button-pressed.png');
+        // Normal button
+        this.load.image('Normal', 'assets/sprites/start-menu/normal-button-neutral.png');
+        this.load.image('NormalH', 'assets/sprites/start-menu/normal-button-hovered.png');
+        this.load.image('NormalA', 'assets/sprites/start-menu/normal-button-active.png');
+        this.load.image('NormalP', 'assets/sprites/start-menu/normal-button-pressed.png');
+        // Hard button
+        this.load.image('Hard', 'assets/sprites/start-menu/hard-button-neutral.png');
+        this.load.image('HardH', 'assets/sprites/start-menu/hard-button-hovered.png');
+        this.load.image('HardA', 'assets/sprites/start-menu/hard-button-active.png');
+        this.load.image('HardP', 'assets/sprites/start-menu/hard-button-pressed.png');
+        // Start button
+        this.load.image('Start', 'assets/sprites/start-menu/start-button-neutral.png');
+        this.load.image('StartH', 'assets/sprites/start-menu/start-button-hovered.png');
+        this.load.image('StartP', 'assets/sprites/start-menu/start-button-pressed.png');
+        // Temporary skip button to allow faster development by skipping to choose the difficulty (delete later).
+        this.load.image('Skip', 'assets/sprites/arrow-button-right.png');
+
         //** load audio files */
         this.load.audio("main_menu_audio_theme", ["assets/sounds/Main_Menu_Music.mp3", "assets/sounds/Main_Menu_Music.ogg"]);
         this.load.audio("button_click", ["assets/sounds/click-sound.mp3", "assets/sounds/click-sound.ogg"]);
