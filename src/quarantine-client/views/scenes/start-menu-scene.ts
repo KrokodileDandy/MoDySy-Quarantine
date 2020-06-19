@@ -23,9 +23,9 @@ export class StartMenuScene extends Phaser.Scene {
     private income: Phaser.GameObjects.Text;
     private interactions: Phaser.GameObjects.Text;
 
-    public easy = require('./../../../res/json/difficulty-levels/easy.json');
-    public normal = require('./../../../res/json/difficulty-levels/normal.json');
-    public hard = require('./../../../res/json/difficulty-levels/hard.json');
+    public easy = require('../../../../res/json/difficulty-levels/easy.json');
+    public normal = require('../../../../res/json/difficulty-levels/normal.json');
+    public hard = require('../../../../res/json/difficulty-levels/hard.json');
 
     constructor() {
         super({
