@@ -82,4 +82,7 @@ export class IncomeStatement {
     /** @returns the sum of all incomes */
     public getIncome(): number {return this.income.taxes;}
 
+    /** @returns the difference between the income and all expenses */
+    public getEarningsTotal(): number {return this.getIncome() - this.getExpenses();}
+
 }

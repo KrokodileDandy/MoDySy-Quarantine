@@ -6,6 +6,7 @@ import { RestartButton } from "../general-gui-buttons/restartButton";
 import { SkillTreeButton } from "../skill-tree/skillTreeButton";
 import { LogBookButton } from '../log-book/logBookButton';
 import { SoundButtons } from '../general-gui-buttons/soundButtons';
+import { StatusBar } from '../status-bar/statusBar';
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -19,6 +20,7 @@ export class GuiScene extends Phaser.Scene {
     public static instance: GuiScene;
 
     private menu: ItemMenu;
+    private statusBar: StatusBar;
     public mainSceneIsPaused = false;
     public gameSpeed = 1;
     public soundON = true;
@@ -80,6 +82,9 @@ export class GuiScene extends Phaser.Scene {
         new LogBookButton(this).create();
         // add the sound buttons
         new SoundButtons(this).create();
+        // add the status bar
+        this.statusBar = new StatusBar(this);
+        this.statusBar.create();
 
         Tutorial.getInstance().open(this);
     }
@@ -95,5 +100,6 @@ export class GuiScene extends Phaser.Scene {
 
     update(): void {
         if (!this.mainSceneIsPaused) this.menu.updateItemMenu(); // has to be invoked each tic/ ingame hour TODO
+        if (!this.mainSceneIsPaused) this.statusBar.update();
     }
 }
