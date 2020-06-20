@@ -2,6 +2,7 @@ import 'phaser';
 import { UpgradeController } from '../../controller/upgradeController';
 import { TimeController } from '../../controller/timeController';
 import { TimeSubscriber } from '../../models/util/timeSubscriber';
+import { GuiScene } from '../scenes/gui-scene';
 
 /**
  * Represents a container which inherit all necessary items
@@ -192,6 +193,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
                 default: 
                     console.error("[WARNING] - Passed key does not exist.");
             }
+            if (GuiScene.instance.soundON) GuiScene.instance.itemBoughtSound.play();
         });
     }
 

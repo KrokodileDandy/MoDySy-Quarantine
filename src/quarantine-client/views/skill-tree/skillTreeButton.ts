@@ -27,6 +27,7 @@ export class SkillTreeButton extends GuiElement {
                 yourSkills.setScale(0.6);
                 const skillTree = new SkillTreeView(this.scene);
                 skillTree.createModal();
+                if (this.scene.soundON) this.scene.buttonClickMusic.play();
             }).setScale(0.5);
     }
 
