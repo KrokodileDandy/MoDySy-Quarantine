@@ -15,17 +15,30 @@ export class StartMenuScene extends Phaser.Scene {
     mainThemeMusic: any;
     buttonClickMusic: any;
 
+    private sticker1: Phaser.GameObjects.Image;
+    private sticker2: Phaser.GameObjects.Image;
+    private sticker3: Phaser.GameObjects.Image;
+
+    private budget: Phaser.GameObjects.Text;
+    private income: Phaser.GameObjects.Text;
+    private interactions: Phaser.GameObjects.Text;
+
+    public easy = require('../../../../res/json/difficulty-levels/easy.json');
+    public normal = require('../../../../res/json/difficulty-levels/normal.json');
+    public hard = require('../../../../res/json/difficulty-levels/hard.json');
+
     constructor() {
         super({
             key: "StartMenuScene",
             active: true
         });
-
     }
 
     preload(): void {
-        // Main menu foreground     // TODO: background
-        this.load.image('Logo', 'assets/sprites/start-menu/quarantine-logo-14.png');
+        // Loading Sprites
+        this.load.image('Background', 'assets/sprites/start-menu/quarantine-logo-17.png');
+        this.load.image('Attributes', 'assets/sprites/start-menu/difficulty-attributes.png');
+        this.load.image('Sticker', 'assets/sprites/start-menu/old-virus-sticker.png');
         // New Game button
         this.load.image('NewGame', 'assets/sprites/start-menu/new-game-button-neutral.png');
         this.load.image('NewGameH', 'assets/sprites/start-menu/new-game-button-hovered.png');
@@ -33,14 +46,17 @@ export class StartMenuScene extends Phaser.Scene {
         // Easy button
         this.load.image('Easy', 'assets/sprites/start-menu/easy-button-neutral.png');
         this.load.image('EasyH', 'assets/sprites/start-menu/easy-button-hovered.png');
+        this.load.image('EasyA', 'assets/sprites/start-menu/easy-button-active.png');
         this.load.image('EasyP', 'assets/sprites/start-menu/easy-button-pressed.png');
         // Normal button
         this.load.image('Normal', 'assets/sprites/start-menu/normal-button-neutral.png');
         this.load.image('NormalH', 'assets/sprites/start-menu/normal-button-hovered.png');
+        this.load.image('NormalA', 'assets/sprites/start-menu/normal-button-active.png');
         this.load.image('NormalP', 'assets/sprites/start-menu/normal-button-pressed.png');
         // Hard button
         this.load.image('Hard', 'assets/sprites/start-menu/hard-button-neutral.png');
         this.load.image('HardH', 'assets/sprites/start-menu/hard-button-hovered.png');
+        this.load.image('HardA', 'assets/sprites/start-menu/hard-button-active.png');
         this.load.image('HardP', 'assets/sprites/start-menu/hard-button-pressed.png');
         // Start button
         this.load.image('Start', 'assets/sprites/start-menu/start-button-neutral.png');
@@ -48,14 +64,14 @@ export class StartMenuScene extends Phaser.Scene {
         this.load.image('StartP', 'assets/sprites/start-menu/start-button-pressed.png');
         // Temporary skip button to allow faster development by skipping to choose the difficulty (delete later).
         this.load.image('Skip', 'assets/sprites/arrow-button-right.png');
+
         //** load audio files */
         this.load.audio("main_menu_audio_theme", ["assets/sounds/Main_Menu_Music.mp3", "assets/sounds/Main_Menu_Music.ogg"]);
         this.load.audio("button_click", ["assets/sounds/click-sound.mp3", "assets/sounds/click-sound.ogg"]);
-
     }
 
     create(): void {
-        this.add.image(innerWidth/2, innerHeight/2, 'Logo')   // TODO: has to be centered all time 
+        this.add.image(innerWidth/2, innerHeight/2, 'Background')
         this.createMenuButtons();
         //** create sound objects */
         this.mainThemeMusic = this.sound.add("main_menu_audio_theme");
@@ -73,26 +89,26 @@ export class StartMenuScene extends Phaser.Scene {
         this.mainThemeMusic.play(musicConfig);
     }
 
+    /**
+     * Main menu buttons goes here.
+     * At the moment only one button. (New Game)
+     * Eventually add additional buttons(options, exit, etc.).
+     */
     createMenuButtons(): void {
-        /**
-         * Main menu buttons goes here.
-         * At the moment only one button.
-         * Eventually add additional buttons(options, exit, etc.).
-         */
-        const newGameButton = this.add.sprite(960, 600, 'NewGame');
-        newGameButton.setInteractive();
+        const newGameButton = this.add.sprite(innerWidth/2, innerHeight/1.6, 'NewGame').setScale(0.9);
 
         // Change the button textures on hover, press, etc.
-        newGameButton.on('pointerover', () => {
+        newGameButton.setInteractive()
+        .on('pointerover', () => {
             newGameButton.setTexture('NewGameH');
-        });
-        newGameButton.on('pointerout', () => {
+        })
+        .on('pointerout', () => {
             newGameButton.setTexture('NewGame');
-        });
-        newGameButton.on('pointerdown', () => {
+        })
+        .on('pointerdown', () => {
             newGameButton.setTexture('NewGameP');
-        });
-        newGameButton.on('pointerup', () => {
+        })
+        .on('pointerup', () => {
             newGameButton.setTexture('NewGameH');
             newGameButton.visible = false;
             this.buttonClickMusic.play();
@@ -111,100 +127,104 @@ export class StartMenuScene extends Phaser.Scene {
         */
     }
 
+    /**
+     * Choose the difficulty of the game.
+     * Shows Attributes on the side.
+     */
     createDifficultyButtons(): void {
-        /**
-         * Choose the difficulty of the game.
-         * Currently the buttons does nothing else than starting the game.
-         */
-        const easyButton = this.add.sprite(960, 500, 'Easy').setScale(0.75);
-        const normalButton = this.add.sprite(960, 650, 'Normal').setScale(0.75);
-        const hardButton = this.add.sprite(960, 800, 'Hard').setScale(0.75);
-        easyButton.setInteractive();
-        normalButton.setInteractive();
-        hardButton.setInteractive();
+        const easyButton = this.add.sprite(innerWidth*0.25, innerHeight*0.5, 'Easy').setScale(0.75);
+        const normalButton = this.add.sprite(innerWidth*0.25, innerHeight*0.65, 'NormalA').setScale(0.75);
+        const hardButton = this.add.sprite(innerWidth*0.25, innerHeight*0.8, 'Hard').setScale(0.75);
+
+        this.showDifficultyAttributes(this.normal);
 
         // Change the button textures on hover, press, etc.
-        easyButton.on('pointerover', () => {
+        easyButton.setInteractive()
+        .on('pointerover', () => {
             easyButton.setTexture('EasyH');
-        });
-        easyButton.on('pointerout', () => {
+        })
+        .on('pointerout', () => {
             easyButton.setTexture('Easy');
-        });
-        easyButton.on('pointerdown', () => {
+        })
+        .on('pointerdown', () => {
             easyButton.setTexture('EasyP');
-        });
-        easyButton.on('pointerup', () => {
-            easyButton.setTexture('EasyH');
-            easyButton.visible = false;
-            normalButton.visible = false;
-            hardButton.visible = false;
+        })
+        .on('pointerup', () => {
+            easyButton.setTexture('EasyA');
+            easyButton.removeInteractive();
+            normalButton.setInteractive().setTexture('Normal');
+            hardButton.setInteractive().setTexture('Hard');
             this.buttonClickMusic.play();
-
 
             //loads the "EASY" game stats @see{res/json/difficulty-levels/easy.json}
             Stats.getInstance(DifficultyLevel.EASY);
-            this.createStartButton();
+            this.updateDifficultyAttributes(this.easy);
         });
         // Change the button textures on hover, press, etc.
-        normalButton.on('pointerover', () => {
+        normalButton.removeInteractive()
+        .on('pointerover', () => {
             normalButton.setTexture('NormalH');
-        });
-        normalButton.on('pointerout', () => {
+        })
+        .on('pointerout', () => {
             normalButton.setTexture('Normal');
-        });
-        normalButton.on('pointerdown', () => {
+        })
+        .on('pointerdown', () => {
             normalButton.setTexture('NormalP');
-        });
-        normalButton.on('pointerup', () => {
-            normalButton.setTexture('NormalH');
-            easyButton.visible = false;
-            normalButton.visible = false;
-            hardButton.visible = false;
+        })
+        .on('pointerup', () => {
+            normalButton.setTexture('NormalA');
+            easyButton.setInteractive().setTexture('Easy');
+            normalButton.removeInteractive();
+            hardButton.setInteractive().setTexture('Hard');
             this.buttonClickMusic.play();
-
 
             //loads the "NORMAL" game stats @see{res/json/difficulty-levels/normal.json}
-            Stats.getInstance(DifficultyLevel.NORMAL); 
-            this.createStartButton();
+            Stats.getInstance(DifficultyLevel.NORMAL);
+            this.updateDifficultyAttributes(this.normal);
         });
         // Change the button textures on hover, press, etc.
-        hardButton.on('pointerover', () => {
+        hardButton.setInteractive()
+        .on('pointerover', () => {
             hardButton.setTexture('HardH');
-        });
-        hardButton.on('pointerout', () => {
+        })
+        .on('pointerout', () => {
             hardButton.setTexture('Hard');
-        });
-        hardButton.on('pointerdown', () => {
+        })
+        .on('pointerdown', () => {
             hardButton.setTexture('HardP');
-        });
-        hardButton.on('pointerup', () => {
-            hardButton.setTexture('HardH');
-            easyButton.visible = false;
-            normalButton.visible = false;
-            hardButton.visible = false;
+        })
+        .on('pointerup', () => {
+            hardButton.setTexture('HardA');
+            easyButton.setInteractive().setTexture('Easy');
+            normalButton.setInteractive().setTexture('Normal');
+            hardButton.removeInteractive();
             this.buttonClickMusic.play();
-
 
             //loads the "HARD" game stats @see{res/json/difficulty-levels/hard.json}
             Stats.getInstance(DifficultyLevel.HARD);
-            this.createStartButton();
+            this.updateDifficultyAttributes(this.hard);
         });
     }
 
+    /**
+     * Button to confirm the selected Difficulty
+     * and starting the game.
+     */
     createStartButton(): void {
-        const startButton = this.add.sprite(960, 600, 'Start');
-        startButton.setInteractive();
+        const startButton = this.add.sprite(innerWidth*0.9, innerHeight*0.85, 'Start').setScale(0.45);
+        
         // Change the button textures on hover, press, etc.
-        startButton.on('pointerover', () => {
+        startButton.setInteractive()
+        .on('pointerover', () => {
             startButton.setTexture('StartH');
-        });
-        startButton.on('pointerout', () => {
+        })
+        .on('pointerout', () => {
             startButton.setTexture('Start');
-        });
-        startButton.on('pointerdown', () => {
+        })
+        .on('pointerdown', () => {
             startButton.setTexture('StartP');
-        });
-        startButton.on('pointerup', () => {
+        })
+        .on('pointerup', () => {
             startButton.setTexture('StartH');
             this.scene.setVisible(false);
             this.buttonClickMusic.play();
@@ -212,8 +232,82 @@ export class StartMenuScene extends Phaser.Scene {
         });
     }
 
+    /**
+     * Showing a warning sign on the side
+     * with some essential attributes
+     * which may be important for the player to know.
+     * @param difficulty the currently selected difficulty is saved here
+     */
+    showDifficultyAttributes(difficulty: any): void {
+        // Adds warning sign which "contains" the attributes.
+        this.add.image(innerWidth*0.7, innerHeight*0.65, 'Attributes');
+        // Difficulty text
+        this.add.text(innerWidth*0.52, innerHeight*0.4, `DIFFICULTY:`, {
+            fontFamily: 'Arial',
+            fontSize: '40px', 
+            color: '#000000'
+        });
+        // Start budget text
+        this.budget = this.add.text(innerWidth*0.5, innerHeight*0.51, 'START BUDGET:             ' + difficulty['budget'].toLocaleString() + '€', {
+            fontFamily: 'Arial',
+            fontSize: '40px', 
+            color: '#000000'
+        });
+        // Daily income text
+        this.income = this.add.text(innerWidth*0.5, innerHeight*0.61, 'DAILY INCOME:                 ' + difficulty['income'].toLocaleString() + '€', {
+            fontFamily: 'Arial',
+            fontSize: '40px', 
+            color: '#000000'
+        });
+        // Basic interaction rate text
+        this.interactions = this.add.text(innerWidth*0.53, innerHeight*0.72, 'BASIC INTERACTION RATE: ' + difficulty['basicInteractionRate'].toLocaleString(), {
+            fontFamily: 'Arial',
+            fontSize: '40px', 
+            color: '#000000'
+        });
+        // Using 3 images to show the current selected difficulty 
+        this.sticker1 = this.add.image(innerWidth*0.75, innerHeight*0.4, 'Sticker').setScale(0.25).setVisible(true);
+        this.sticker2 = this.add.image(innerWidth*0.80, innerHeight*0.41, 'Sticker').setScale(0.25).setRotation(12).setVisible(true);
+        this.sticker3 = this.add.image(innerWidth*0.86, innerHeight*0.4, 'Sticker').setScale(0.25).setRotation(-6).setVisible(false);
+        this.createStartButton();
+    }
+
+    /**
+     * Updates the attributes in the warning sign
+     */
+    updateDifficultyAttributes(difficulty: any): void {
+        this.budget.setText('START BUDGET:             ' + difficulty['budget'].toLocaleString() + '€');
+        this.income.setText('DAILY INCOME:                 ' + difficulty['income'].toLocaleString() + '€');
+        this.interactions.setText('BASIC INTERACTION RATE: ' + difficulty['basicInteractionRate'].toLocaleString());
+        this.showDifficultyStickers(difficulty);
+    }
+
+    /**
+     * Updates the amount of stickers showing, depending on the current difficulty
+     * @param difficulty the current selected difficulty
+     */
+    showDifficultyStickers(difficulty: any): void {
+        if(difficulty == this.easy) {
+            this.sticker1.setVisible(true);
+            this.sticker2.setVisible(false);
+            this.sticker3.setVisible(false);
+        }
+        if (difficulty == this.normal) {
+            this.sticker1.setVisible(true);
+            this.sticker2.setVisible(true);
+            this.sticker3.setVisible(false);
+        }
+        if(difficulty == this.hard) {
+            this.sticker1.setVisible(true);
+            this.sticker2.setVisible(true);
+            this.sticker3.setVisible(true);
+        }
+    }
+
+    /**
+     * Load all scenes for the main game
+     */
     loadScenes(): void {
-        // Load all scenes for the main game
         this.mainThemeMusic.stop();
         this.scene.add('MainScene', MainScene, true);
         this.scene.add('GuiScene', GuiScene, true);
