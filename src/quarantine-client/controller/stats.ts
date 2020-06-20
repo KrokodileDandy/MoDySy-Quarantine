@@ -115,6 +115,45 @@ export class Stats {
         this.usedTestKitsThisDay = 0;
     }
 
+    /**
+     * This method formats a large number into a decimal with a text which
+     * represents the number.
+     * @param value to be formatted
+     */
+    public formatLargerNumber(value: number): string {
+        let invert = false;
+        let result = "";
+
+        if (value < 0) {
+            value = value * -1;
+            invert = true;
+        }
+
+        if (value >= 1_000_000_000) { // trillion
+            if (invert) value = value * -1;
+            result = +(value / 1_000_000_000).toFixed(2) + " Trillion";
+        } else if (value >= 1_000_000_000) { // billion
+            if (invert) value = value * -1;
+            result = +(value / 1_000_000_000).toFixed(2) + " Mrd.";
+        } else if (value >= 1_000_000) { // millions
+            if (invert) value = value * -1;
+            result = +(value / 1_000_000).toFixed(2) + " Mio."; // + before paranthesis clips 0 after the decimal
+        } else {
+            result = value.toLocaleString("de-DE");
+        }
+        return result;
+    }
+
+    /**
+     * This method transforms a number into a string which represents this number
+     * as a currency value.
+     * @param value to be formatted
+     * @see #formatLargeNumber
+     */
+    public formatMoneyString(value: number): string {
+        return this.formatLargerNumber(value) + " " + this.currency;
+    }
+
     
     // ------------------------------------------------------------------- STATE VARIABLES
     /** Scale factor to multiply with population numbers to simulate real population numbers */
@@ -190,6 +229,8 @@ export class Stats {
     public maxIncome: number;
     /** Current income per tic */
     public income: number;
+    /** The in-game currency */
+    public currency = '€';
 
     // ----------------------------------------------------------------------- WEEKLY LOGS
     /** Number of infected people each week */
@@ -283,6 +324,25 @@ export class Stats {
      */
     public getIncomeStatement(week: number): IncomeStatement {
         return this.weeklyIncomeStatements[week];
+    }
+
+    // --------------------- GETTER STRING METHODS -------------------------------- //
+    /** @returns the budget as a formatted string */
+    public getBudgetString(): string {
+        return this.formatMoneyString(this.budget);
+    }
+
+    /** @returns the difference of the income and all epxenses as a formatted string */
+    public getEarningsString(): string {
+        const is = UpgradeController.getInstance().getIncomeStatementToday();
+        return this.formatMoneyString(is.getEarningsTotal());
+    }
+
+    /** @returns the current percentage of infected people, e.g. 45 % */
+    public getInfectedString(): string {
+        if (this.infected * this.populationFactor < 1_000_000) {
+            return this.formatLargerNumber(this.infected * this.populationFactor);
+        } else return ((this.infected / this.population) * this.populationFactor).toFixed(2) + " %";
     }
 
 
