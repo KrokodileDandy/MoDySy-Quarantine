@@ -13,6 +13,7 @@ export class GuiScene extends Phaser.Scene {
     //** variables to save sound in */
     public inGameMusic: Phaser.Sound.BaseSound;
     public buttonClickMusic: Phaser.Sound.BaseSound;
+    public itemBoughtSound: Phaser.Sound.BaseSound;
 
     /** Gui scene instance */
     public static instance: GuiScene;
@@ -40,6 +41,7 @@ export class GuiScene extends Phaser.Scene {
         //** load audio files */
         this.load.audio("game_theme_music", "assets/sounds/In_Game_Music.mp3");
         this.load.audio("button_click", ["assets/sounds/click-sound.mp3", "assets/sounds/click-sound.ogg"]);
+        this.load.audio("buy_sound", "assets/sounds/cash-register.mp3");
     }
 
     create(): void {
@@ -51,6 +53,8 @@ export class GuiScene extends Phaser.Scene {
         //** create sound objects */
         this.inGameMusic = this.sound.add("game_theme_music");
         this.buttonClickMusic = this.sound.add("button_click");
+        this.itemBoughtSound = this.sound.add("buy_sound");
+        
 
         const musicConfig = {
             mute: false,
