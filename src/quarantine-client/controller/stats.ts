@@ -338,6 +338,13 @@ export class Stats {
         return this.formatMoneyString(is.getEarningsTotal());
     }
 
+    /** @returns the current percentage of infected people, e.g. 45 % */
+    public getInfectedString(): string {
+        if (this.infected * this.populationFactor < 1_000_000) {
+            return this.formatLargerNumber(this.infected * this.populationFactor);
+        } else return ((this.infected / this.population) * this.populationFactor).toFixed(2) + " %";
+    }
+
 
     // ------------------------------------------------------------------ SETTER-METHODS
     /** Increase deceased counter by one and decrease infected and population counter by one */
