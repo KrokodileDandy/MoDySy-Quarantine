@@ -18,6 +18,8 @@ export class StatusBar extends GuiElement {
 
     private init(): void {
         this.scene.add.image(480, 0, 'status-bar').setOrigin(0);
+        this.scene.add.image(960, 0, 'cash').setOrigin(0);
+        this.scene.add.image(1200, 1, 'money').setOrigin(0).setScale(0.5);
     }
 
     public create(): void {
@@ -29,14 +31,14 @@ export class StatusBar extends GuiElement {
             fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif'
         };
         this.infected = this.scene.add.text(720, 5, "Infected: " + this.stats.getInfectedString(), style).setOrigin(0);
-        this.dailyIncome = this.scene.add.text(960, 5, "Income: " + this.stats.getEarningsString(), style).setOrigin(0);
-        this.budget = this.scene.add.text(1200, 5, "Budget: " + this.stats.getBudgetString(), style).setOrigin(0);
+        this.dailyIncome = this.scene.add.text(1000, 5, this.stats.getEarningsString(), style).setOrigin(0);
+        this.budget = this.scene.add.text(1240, 5, this.stats.getBudgetString(), style).setOrigin(0);
     }
 
     public update(): void {
         this.infected.setText("Infected: " + this.stats.getInfectedString());
-        this.dailyIncome.setText("Income: " + this.stats.getEarningsString());
-        this.budget.setText("Budget: " + this.stats.getBudgetString());
+        this.dailyIncome.setText(this.stats.getEarningsString());
+        this.budget.setText(this.stats.getBudgetString());
     }
 
 }

@@ -40,6 +40,9 @@ export class GuiScene extends Phaser.Scene {
             'assets/guiPack.json',
             'preload'
         );
+
+        this.load.plugin('tooltipPlugin', 'Phasetips.js');
+
         //** load audio files */
         this.load.audio("game_theme_music", "assets/sounds/In_Game_Music.mp3");
         this.load.audio("button_click", ["assets/sounds/click-sound.mp3", "assets/sounds/click-sound.ogg"]);

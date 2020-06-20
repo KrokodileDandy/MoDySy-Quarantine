@@ -750,6 +750,11 @@
         "type": "image",
         "key": "status-bar",
         "url": "assets/sprites/status-bar/bar.png"
+      },
+      {
+        "type": "image",
+        "key": "cash",
+        "url": "assets/sprites/status-bar/cash.png"
       }
     ]
   }
