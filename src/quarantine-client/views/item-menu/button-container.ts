@@ -1,5 +1,5 @@
 import 'phaser';
-import { UpgradeController } from '../../controller/upgradeController';
+import { UpgradeController } from '../../controller/gui-controller/upgradeController';
 import { TimeController } from '../../controller/timeController';
 import { TimeSubscriber } from '../../models/util/timeSubscriber';
 import { GuiScene } from '../scenes/gui-scene';

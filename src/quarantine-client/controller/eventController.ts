@@ -3,7 +3,7 @@ import { TimeController } from "./timeController";
 import { EventRarity } from "../models/util/enums/eventRarity";
 import { Event } from "./entities/event";
 import { Stats } from "./stats";
-import { UpgradeController } from "./upgradeController";
+import { UpgradeController } from "./gui-controller/upgradeController";
 import { TimedEvent } from "./entities/timedEvent";
 import { Controller } from "./controller";
 import { Role } from "../models/util/enums/roles";

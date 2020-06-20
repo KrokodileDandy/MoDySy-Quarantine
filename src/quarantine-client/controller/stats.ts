@@ -1,5 +1,5 @@
 import { TimeController } from "./timeController";
-import { UpgradeController } from "./upgradeController";
+import { UpgradeController } from "./gui-controller/upgradeController";
 import { DifficultyLevel} from "../models/util/enums/difficultyLevels";
 import { IncomeStatement } from "./entities/incomeStatement";
 

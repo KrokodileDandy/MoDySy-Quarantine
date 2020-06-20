@@ -1,6 +1,6 @@
 import 'phaser';
 import { GameObjects } from 'phaser';
-import { UpgradeController } from '../../controller/upgradeController';
+import { UpgradeController } from '../../controller/gui-controller/upgradeController';
 import { ButtonContainer } from './button-container';
 
 /**

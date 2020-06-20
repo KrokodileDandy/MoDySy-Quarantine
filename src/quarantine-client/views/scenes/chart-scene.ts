@@ -3,7 +3,7 @@ import "chartjs-plugin-zoom";
 import "hammerjs";
 import { TimeSubscriber } from "../../models/util/timeSubscriber";
 import { TimeController } from "../../controller/timeController";
-import { UpgradeController } from "../../controller/upgradeController";
+import { UpgradeController } from "../../controller/gui-controller/upgradeController";
 import { Stats } from "../../controller/stats";
 
 /**
