@@ -60,6 +60,7 @@ export class Stats {
      *                      depending on the difficulty level. This parameter is OPTIONAL!!!
      */
     public static loadDifficulty(difficultyLevel: DifficultyLevel): void {
+        console.log(difficultyLevel + " was loaded");
         Stats.instance = new Stats(difficultyLevel);
     }
 
