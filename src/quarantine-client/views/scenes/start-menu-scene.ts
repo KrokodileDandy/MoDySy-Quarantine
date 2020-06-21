@@ -157,7 +157,7 @@ export class StartMenuScene extends Phaser.Scene {
             this.buttonClickMusic.play();
 
             //loads the "EASY" game stats @see{res/json/difficulty-levels/easy.json}
-            Stats.getInstance(DifficultyLevel.EASY);
+            Stats.loadDifficulty(DifficultyLevel.EASY);
             this.updateDifficultyAttributes(this.easy);
         });
         // Change the button textures on hover, press, etc.
@@ -173,13 +173,13 @@ export class StartMenuScene extends Phaser.Scene {
         })
         .on('pointerup', () => {
             normalButton.setTexture('NormalA');
-            easyButton.setInteractive().setTexture('Easy');
             normalButton.removeInteractive();
+            easyButton.setInteractive().setTexture('Easy');
             hardButton.setInteractive().setTexture('Hard');
             this.buttonClickMusic.play();
 
             //loads the "NORMAL" game stats @see{res/json/difficulty-levels/normal.json}
-            Stats.getInstance(DifficultyLevel.NORMAL);
+            Stats.loadDifficulty(DifficultyLevel.NORMAL);
             this.updateDifficultyAttributes(this.normal);
         });
         // Change the button textures on hover, press, etc.
@@ -195,13 +195,13 @@ export class StartMenuScene extends Phaser.Scene {
         })
         .on('pointerup', () => {
             hardButton.setTexture('HardA');
+            hardButton.removeInteractive();
             easyButton.setInteractive().setTexture('Easy');
             normalButton.setInteractive().setTexture('Normal');
-            hardButton.removeInteractive();
             this.buttonClickMusic.play();
 
             //loads the "HARD" game stats @see{res/json/difficulty-levels/hard.json}
-            Stats.getInstance(DifficultyLevel.HARD);
+            Stats.loadDifficulty(DifficultyLevel.HARD);
             this.updateDifficultyAttributes(this.hard);
         });
     }
