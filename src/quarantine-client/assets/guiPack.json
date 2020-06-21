@@ -503,6 +503,11 @@
         },
         {
           "type": "image",
+          "key": "police-icon",
+          "url": "assets/sprites/log-book/police.png"
+        },
+        {
+          "type": "image",
           "key": "vaccine",
           "url": "assets/sprites/skill-tree/vaccine.png"
         },

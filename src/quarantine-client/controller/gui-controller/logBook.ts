@@ -136,9 +136,8 @@ export class LogBook {
         imgPhysician.scale = 0.3;
         arr.push(imgPhysician);
 
-        const imgPolice = this.getStatImg('chemistry'); // TODO search sprite?
-        imgPolice.scale = 0.5;
-        imgPolice.visible = false;
+        const imgPolice = this.getStatImg('police-icon'); // TODO search sprite?
+        imgPolice.scale = 0.2;
         arr.push(imgPolice);
 
         const imgChemistry = this.getStatImg('chemistry');
