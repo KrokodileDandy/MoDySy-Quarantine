@@ -87,6 +87,7 @@ export class StartMenuScene extends Phaser.Scene {
             delay:0
         }
         this.mainThemeMusic.play(musicConfig);
+
     }
 
     /**
@@ -137,6 +138,10 @@ export class StartMenuScene extends Phaser.Scene {
         const hardButton = this.add.sprite(innerWidth*0.25, innerHeight*0.8, 'Hard').setScale(0.75);
 
         this.showDifficultyAttributes(this.normal);
+
+        // initially the difficulty NORMAL is selected
+        Stats.loadDifficulty(DifficultyLevel.NORMAL);
+        this.updateDifficultyAttributes(this.normal);
 
         // Change the button textures on hover, press, etc.
         easyButton.setInteractive()
