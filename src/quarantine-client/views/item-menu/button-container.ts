@@ -10,7 +10,7 @@ import { GuiScene } from '../scenes/gui-scene';
  * 
  * @author Shao
  */
-export class ButtonContainer extends Phaser.GameObjects.Container implements TimeSubscriber {
+export class ButtonContainer implements TimeSubscriber {
 
     /** Key to determine which button is used */
     private key: string;
@@ -48,8 +48,14 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
 
     private eventListener: Function;
 
+    private scene: Phaser.Scene;
+    private x: number;
+    private y: number;
+
     public constructor(scene: Phaser.Scene, x: number, y: number, texture: string, price: number, callback: Function) {
-        super(scene, x, y);
+        this.scene = scene;
+        this.x = x;
+        this.y = y;
 
         this.eventListener = callback;
 
@@ -74,7 +80,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
 
         TimeController.getInstance().subscribe(this);
 
-        this.scene.add.existing(this);
+        //this.scene.add.existing(this);
     }
 
     /**

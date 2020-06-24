@@ -152,7 +152,7 @@ export class EventController implements TimeSubscriber {
         this.calcRanTimeSpan(EventRarity.RARE);
         this.calcRanTimeSpan(EventRarity.VERY_RARE);
         this.calcRanTimeSpan(EventRarity.EPIC);
-        this.calcRanTimeSpan(EventRarity.LEGENDARY);
+        
     }
 
     /**

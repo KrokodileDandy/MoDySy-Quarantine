@@ -21,12 +21,13 @@ export class GameSpeedButtons extends GuiElement {
      * * faster speed
      * * the fastest speed
      */
-    public create(): void {
+    public create(): GameSpeedButtons {
         this.addPauseButton();
         this.addSpeedButtonSlow();
         this.addSpeedButtonNormal();
         this.addSpeedButtonQuicker();
         this.addSpeedButtonQuickest();
+        return this;
     }
 
     private addPauseButton(): void {

@@ -10,7 +10,7 @@ import { GuiElement } from "../guiElement";
 export class SoundButtons extends GuiElement {
 
     /** Create and add the sound and music buttons to the GuiScene */
-    public create(): void {
+    public create(): SoundButtons {
         const musicOn = this.scene.add.sprite(this.scene.game.renderer.width - 100, 250, 'music_on').setInteractive();
         const soundOn = this.scene.add.sprite(this.scene.game.renderer.width - 100, 350, 'sound_on').setInteractive();
 
@@ -57,6 +57,8 @@ export class SoundButtons extends GuiElement {
                 this.scene.soundON = true;
             }
         });
+
+        return this;
     }
 
 }

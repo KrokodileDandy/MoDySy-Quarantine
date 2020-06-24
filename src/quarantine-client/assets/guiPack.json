@@ -178,11 +178,6 @@
       },
       {
         "type": "image",
-        "key": "tablet",
-        "url": "assets/sprites/main-scene/tablet.png"
-      },
-      {
-        "type": "image",
         "key": "your_skills",
         "url": "assets/sprites/main-scene/your_skills.png"
       },

@@ -2,6 +2,7 @@ import 'phaser';
 import { GameObjects } from 'phaser';
 import { UpgradeController } from '../../controller/gui-controller/upgradeController';
 import { ButtonContainer } from './button-container';
+import { TutorialComponent } from '../tutorial/tutorialComponent';
 
 /**
  * Extends Phaser.GameObjects.Container and represents the ingame item menu.
@@ -9,17 +10,21 @@ import { ButtonContainer } from './button-container';
  * It contains the single items as well as all relevant layout components like navigation buttons (@see arrow-button) and so on.
  * @author Shao, Marvin Kruber
  */
-export class ItemMenu extends Phaser.GameObjects.Container {
+export class ItemMenu extends Phaser.GameObjects.Container implements TutorialComponent {
 
+    /** Current available budget */
     private budget: number;
+    /** Current income */
     private income: number;
 
-    private currLv: number;
-    private currPrice: number;
-    public researchText: Phaser.GameObjects.Text;
+    /** Instance of upgradeController. Used to buy measures */
     public upgradeContr: UpgradeController;
     
+    /** Data of all measures @see measures.json */
     public measures = require("./../../../../res/json/measures.json");
+
+    /** Counts the number of invocations of activateComponent*/
+    private activationCounter = 0;
 
     /**
      * 
@@ -37,11 +42,6 @@ export class ItemMenu extends Phaser.GameObjects.Container {
         this.scene.add.image(this.x + 350 , this.y + 120, 'notebook').setScale(0.6);  //.setAlpha(0.5); //dont work
         // Add menu bar
         this.add(this.scene.add.image(this.x + 515 , 70, 'note-pink').setScale(0.6));
-        // Add button container
-        new ButtonContainer(this.scene, this.x + 25, 475, 'research', this.measures['research']['prices'][0], this.buildClosure(this.upgradeContr.buyResearchLevel));
-        new ButtonContainer(this.scene, this.x + 25, 575, 'lockdown', this.measures['lockdown']['price'], this.buildClosure(this.upgradeContr.activateLockdown));
-        new ButtonContainer(this.scene, this.x + 25, 675, 'police', this.measures['police']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
-        new ButtonContainer(this.scene, this.x + 25, 775, 'healthworkers', this.measures['healthworkers']['price'], this.buildClosure(this.upgradeContr.buyHealthWorkers));
 
         this.scene.add.existing(this);
 
@@ -68,5 +68,26 @@ export class ItemMenu extends Phaser.GameObjects.Container {
     private buildClosure(myFunction: Function): Function {
         const contr = this.upgradeContr;
         return function(): void {myFunction(contr)};
+    }
+
+    /** Adds lockdown button to the menu */
+    public unlockLockdownBtn(): void {
+        new ButtonContainer(this.scene, this.x + 25, 575, 'lockdown', this.measures['lockdown']['price'], this.buildClosure(this.upgradeContr.activateLockdown));
+    }
+
+    public activateComponent(): void {
+        // Add/unlocks button container
+        console.log("Hier")
+        if( this.activationCounter === 0) {
+            new ButtonContainer(this.scene, this.x + 25, 675, 'police', this.measures['police']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
+            new ButtonContainer(this.scene, this.x + 25, 775, 'healthworkers', this.measures['healthworkers']['price'], this.buildClosure(this.upgradeContr.buyHealthWorkers));
+        } else {
+            new ButtonContainer(this.scene, this.x + 25, 475, 'research', this.measures['research']['prices'][0], this.buildClosure(this.upgradeContr.buyResearchLevel));
+        }
+        this.activationCounter++;
+    }
+
+    public hideComponent(): void {
+        // has to be implemented because of tutorialComponent (-> interface)
     }
 }

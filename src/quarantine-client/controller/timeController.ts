@@ -74,11 +74,20 @@ export class TimeController {
 
     /**
      * Subscribe to the TimeController (Pub/Sub) to get notified about changes in time.
-     * @param subscriber Expects a Phaser.GameObject if this object wants to be notfied about time changes
+     * @param subscriber object which wants to be notfied about time changes
      */
     public subscribe(subscriber: TimeSubscriber): TimeController {
         this.subscribers.push(subscriber);
         return this;
+    }
+
+    /**
+     * Unsubscribe to the TimeController. Especially used in the context of timedEvents{@see timedEvents.ts}.
+     * @param subscriber object which wants to be notfied about time changes
+     */
+    public unsubscibe(subscriber: TimeSubscriber): void {
+        const index = this.subscribers.findIndex(x => x === subscriber);
+        this.subscribers.splice(index, 1);
     }
 
     // ----------------------------------------------------------------- GETTER-METHODS

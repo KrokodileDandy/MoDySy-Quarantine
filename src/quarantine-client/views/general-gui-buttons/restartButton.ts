@@ -14,7 +14,7 @@ import { GuiElement } from "../guiElement";
 export class RestartButton extends GuiElement {
 
     /** Create and add a restart button to the GuiScene */
-    public create(): void {
+    public create(): RestartButton {
         const resetBtn = this.scene.add.image(this.scene.game.renderer.width - 100, 150, 'restart');
         resetBtn.setInteractive();
 
@@ -65,6 +65,8 @@ export class RestartButton extends GuiElement {
             if (this.scene.soundON) this.scene.buttonClickMusic.play();
 
         });
+
+        return this;
     }
 
 }

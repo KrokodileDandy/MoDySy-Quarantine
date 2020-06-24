@@ -105,6 +105,8 @@ export class PopupWindow extends Phaser.GameObjects.Container {
                 map.scene.resume();
             }
         }
+
+        this.destroy();
     }
     
     /**
@@ -138,4 +140,14 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         this.addCloseBtn(this.closeBtnX, this.closeBtnY);
         this.setVisible(true);
     }
+
+    // -------------------------------------------------------------------- GETTER
+
+    /** @returns X coordinate of close button */
+    public getCloseBtnX(): number {return this.closeBtnX;}
+
+    /** @returns Y coordinate of close button */
+    public getCloseBtnY(): number {return this.closeBtnY;}
+
+
 }
