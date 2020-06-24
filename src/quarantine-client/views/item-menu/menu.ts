@@ -8,7 +8,9 @@ import { TutorialComponent } from '../tutorial/tutorialComponent';
  * Extends Phaser.GameObjects.Container and represents the ingame item menu.
  * 
  * It contains the single items as well as all relevant layout components like navigation buttons (@see arrow-button) and so on.
- * @author Shao, Marvin Kruber
+ * ItemMenu is implemented as a singleton
+ * @author Marvin Kruber
+ * @author Shao
  */
 export class ItemMenu extends Phaser.GameObjects.Container implements TutorialComponent {
 
@@ -26,13 +28,16 @@ export class ItemMenu extends Phaser.GameObjects.Container implements TutorialCo
     /** Counts the number of invocations of activateComponent*/
     private activationCounter = 0;
 
+    /** Singleton instance */
+    private static instance: ItemMenu;
+
     /**
      * 
      * @param scene scene to which this GameObject belongs
      * @param x horizontal position of this menu
      * @param y vertical position of this menu
      */
-    public constructor(scene: Phaser.Scene, x: number, y: number) {
+    private constructor(scene: Phaser.Scene, x: number, y: number) {
         super(scene, x, y);
 
         this.upgradeContr = UpgradeController.getInstance();
@@ -77,17 +82,24 @@ export class ItemMenu extends Phaser.GameObjects.Container implements TutorialCo
 
     public activateComponent(): void {
         // Add/unlocks button container
-        console.log("Hier")
-        if( this.activationCounter === 0) {
+        ++this.activationCounter;
+        if( this.activationCounter == 1) {
             new ButtonContainer(this.scene, this.x + 25, 675, 'police', this.measures['police']['price'], this.buildClosure(this.upgradeContr.buyPoliceOfficers));
             new ButtonContainer(this.scene, this.x + 25, 775, 'healthworkers', this.measures['healthworkers']['price'], this.buildClosure(this.upgradeContr.buyHealthWorkers));
         } else {
             new ButtonContainer(this.scene, this.x + 25, 475, 'research', this.measures['research']['prices'][0], this.buildClosure(this.upgradeContr.buyResearchLevel));
         }
-        this.activationCounter++;
     }
 
     public hideComponent(): void {
         // has to be implemented because of tutorialComponent (-> interface)
+    }
+
+    /** Singleton method.
+     * @returns Instance of ItemMenu
+     */
+    public static getInstance(scene = null, x = 0, y = 0): ItemMenu {
+        if(!ItemMenu.instance) ItemMenu.instance = new ItemMenu(scene, x, y);
+        return ItemMenu.instance;
     }
 }

@@ -1,5 +1,6 @@
 import 'phaser';
 import { TimeSubscriber } from '../models/util/timeSubscriber';
+import { TimedEvent } from './entities/timedEvent';
 
 /**
  * Singleton controller which simulates ingame time. It acts as the central 
@@ -88,6 +89,11 @@ export class TimeController {
     public unsubscibe(subscriber: TimeSubscriber): void {
         const index = this.subscribers.findIndex(x => x === subscriber);
         this.subscribers.splice(index, 1);
+    }
+
+    /** Removes all TimedEvents of the tutorial (that means whithin the first 15 days) from subscribers */
+    public removeAllTimedTutorialEvents(): void {
+        if(this.getDaysSinceGameStart() <= 15) this.subscribers.filter(x => x instanceof TimedEvent).forEach(x => this.unsubscibe(x));
     }
 
     // ----------------------------------------------------------------- GETTER-METHODS

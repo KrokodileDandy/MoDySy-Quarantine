@@ -6,7 +6,7 @@ import { TutorialComponent } from "../tutorial/tutorialComponent";
  * Factory which generates the the log book button which opens the
  * log book sub scene.
  * @see GuiScene
- * @see LogBook
+ * @see LogBookController
  * @author Sebastian Führ
  */
 export class LogBookButton extends GuiElement implements TutorialComponent {

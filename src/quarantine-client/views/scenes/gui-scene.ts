@@ -6,10 +6,9 @@ import { RestartButton } from "../general-gui-buttons/restartButton";
 import { SkillTreeButton } from "../skill-tree/skillTreeButton";
 import { LogBookButton } from '../log-book/logBookButton';
 import { SoundButtons } from '../general-gui-buttons/soundButtons';
-import { TimedEvent } from '../../controller/entities/timedEvent';
-import { TutorialComponent } from '../tutorial/tutorialComponent';
 import { MapScene } from './map-scene';
 import { ChartScene } from "./chart-scene";
+import { SkipTutorialButton } from '../tutorial/skipTutorialButton';
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -25,6 +24,7 @@ export class GuiScene extends Phaser.Scene {
     public static instance: GuiScene;
 
     private menu: ItemMenu;
+    private skipTutorialBtn: SkipTutorialButton;
 
     public mainSceneIsPaused = false;
     public gameSpeed = 1;
@@ -55,7 +55,7 @@ export class GuiScene extends Phaser.Scene {
     create(): void {
 
         // Creates Itemmenu and it to this scene
-        this.menu = new ItemMenu(this, 0, 750);
+        this.menu = ItemMenu.getInstance(this, 0, 750);
 
         //** create sound objects */
         this.inGameMusic = this.sound.add("game_theme_music");
@@ -90,12 +90,11 @@ export class GuiScene extends Phaser.Scene {
 
         // -------------------------------------------------------------------- TUTORIAL SET UP
 
-        this.tC.createComponentTutorial((this.scene.get('MapScene') as MapScene), this);
-        this.tC.createComponentTutorial((this.scene.get('ChartScene') as ChartScene), this);
-        this.tC.createComponentTutorial(logBookBtn, this);
-        this.tC.createComponentTutorial(this.menu, this);
-        this.tC.createComponentTutorial(skillTreeBtn, this);
-        this.tC.startTutorial(this); //TODO LOCKDOWN Button COnditional activation
+        const tutComponents = [(this.scene.get('MapScene') as MapScene), (this.scene.get('ChartScene') as ChartScene), logBookBtn, this.menu, skillTreeBtn];
+        // adds skip tutorial button
+        this.skipTutorialBtn = new SkipTutorialButton(this, tutComponents).create();
+        // start tutorial
+        this.tC.startTutorial(this, tutComponents);
     }
 
     // -------------------------------------------------------------------------- GAME MENU
@@ -104,7 +103,9 @@ export class GuiScene extends Phaser.Scene {
         if (!this.mainSceneIsPaused) this.menu.updateItemMenu(); // has to be invoked each tic/ ingame hour TODO
     }
 
-    private tutMethod(tc: TutorialComponent): void {
-        new TimedEvent(0, tc.activateComponent);
+    /** Removes skipTutorialButton from GuiScene (=> used after the tutorial ends) */
+    public removeSkipBtn(): void {
+        this.skipTutorialBtn.removeSkipButton();
+        delete this.skipTutorialBtn;
     }
 }

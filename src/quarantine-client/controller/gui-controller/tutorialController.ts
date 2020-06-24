@@ -7,12 +7,14 @@ import { MapScene } from "../../views/scenes/map-scene";
 import { ChartScene } from "../../views/scenes/chart-scene";
 import { ItemMenu } from "../../views/item-menu/menu";
 import { SkillTreeButton } from "../../views/skill-tree/skillTreeButton";
+import { GuiScene } from "../../views/scenes/gui-scene";
 
 /**
  * The tutorial which shows basic game introductions and
  * allows to be opened inside a popup.
  * This class is implemented as a singleton.
- * @author Sebastian Führ, Marvin Kruber
+ * @author Marvin Kruber
+ * @author Sebastian Führ
  */
 export class TutorialController {
 
@@ -27,6 +29,8 @@ export class TutorialController {
 
     /** Array of all tutorial texts (see /res/json/tutorial-messages.json)*/
     private tutorial = require('../../../../res/json/tutorial-messages.json');
+
+    private lastEventTriggered = false;
 
     private constructor() {
         this.stats = Stats.getInstance();
@@ -124,25 +128,27 @@ export class TutorialController {
     public getNumberOfPages(key: string): number {return this.tutorial[key].length;}
 
     /**
-     * 
-     * @param scene 
+     * Initiates the whole tutorial workflow, i.e. the tutorials for all TutorialComponents as well as some 'plot' messages
+     * @param scene GuiScene
+     * @param tutorialComponents All components (see tutorialComponents.ts), which should be unlocked after a specific time  
      */
-    public startTutorial(scene: Phaser.Scene): void {
+    public startTutorial(scene: GuiScene, tutorialComponents: TutorialComponent[]): void {
         new TimedEvent(3, () => {
             this.open(scene, 'status-bar');
         });
         new TimedEvent(5, () => {
             this.open(scene, 'newspaper');
         });
+        tutorialComponents.forEach(x => this.createComponentTutorial(x, scene)); //create tutorials for each component
         this.open(scene, 'start'); //the start tutorial
     }
 
     /**
-     * 
-     * @param component 
-     * @param scene 
+     * Creates a TimedEvent for the passed TutorialComponent. After a specific time span expired, the component becomes visible and an affiliated tutorial is displayed.
+     * @param component specific TutorialComponent (see tutorialComponents.ts)
+     * @param scene GuiScene
      */
-    public createComponentTutorial(component: TutorialComponent, scene: Phaser.Scene): void {
+    private createComponentTutorial(component: TutorialComponent, scene: GuiScene): void {
         //
         if (component instanceof MapScene){
             new TimedEvent(7, () => { // display map
@@ -167,18 +173,28 @@ export class TutorialController {
                 component.activateComponent();
                 this.open(scene, 'measures');
             });
-
-            new TimedEvent (14, () => { //display research button
+            /*new TimedEvent (14, () => { //display research button
                 component.activateComponent();
-            });
+            });*/
         } else if (component instanceof SkillTreeButton) {
             new TimedEvent (14, () => {
                 component.activateComponent();
+                ItemMenu.getInstance().activateComponent(); //has to be triggered this way
                 this.open(scene, 'researchAndSkills');
+                scene.removeSkipBtn();
             });
         } else {
             console.error("[WARNING] - THE PASSED COMPONENT IS NOT A REQUIRED TUTORIAL COMPONENT")
         }
-        //this.open(scene);
     }
+
+    /**
+     * Activates lockdown button and displays the affiliated tutorial.
+     * Invoked in eventController.ts#notify
+     */
+    public enableLockdown(): void {
+        ItemMenu.getInstance().unlockLockdownBtn();
+        this.open(this.scene, 'lockdown');
+    }
+
 }

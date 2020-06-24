@@ -2,7 +2,9 @@ import { PopupWindow } from "../popupWindow";
 import { TutorialController } from "../../controller/gui-controller/tutorialController";
 
 /**
+ * GUI for tutorials. 
  * @author Sebastian Führ
+ * @author Marvin Kruber
  */
 export class TutorialView extends PopupWindow {
 
