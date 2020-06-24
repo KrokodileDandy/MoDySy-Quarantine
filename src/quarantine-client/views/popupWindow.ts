@@ -2,6 +2,7 @@ import "phaser";
 import { MainScene } from "./scenes/main-scene";
 import { ChartScene } from "./scenes/chart-scene";
 import { MapScene } from "./scenes/map-scene";
+import { GuiScene } from "./scenes/gui-scene";
 
 /**
  * Creates a popup window on creation which holds multiple phaser game objects.
@@ -92,17 +93,18 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         if(!this.isChild){
             const chart = this.scene.scene.get('ChartScene') as ChartScene;
             const map = this.scene.scene.get('MapScene') as MapScene;
+            const gui = this.scene.scene.get('GuiScene') as GuiScene;
+            const main = this.scene.scene.get('MainScene') as MainScene;
 
-            map.scene.wake();
-            chart.scene.wake();
             // resume the game if game was paused.    
-            if(this.pause){
-                const main = this.scene.scene.get('MainScene') as MainScene;
-                const map = this.scene.scene.get('MapScene') as MapScene;
-
+            if(this.pause){      
+                map.scene.wake();
+                chart.scene.wake();
                 main.scene.resume();
                 chart.scene.resume();
                 map.scene.resume();
+                gui.showBtns();
+                gui.mainSceneIsPaused = false;
             }
         }
     }
@@ -120,10 +122,7 @@ export class PopupWindow extends Phaser.GameObjects.Container {
             const main = this.scene.scene.get('MainScene') as MainScene;
             const chart = this.scene.scene.get('ChartScene') as ChartScene;
             const map = this.scene.scene.get('MapScene') as MapScene;
-        
-            //main.scene.sendToBack();
-            //chart.scene.sendToBack();
-            //map.scene.sendToBack();
+            const gui = this.scene.scene.get('GuiScene') as GuiScene;
 
             chart.scene.sleep();
             map.scene.sleep();
@@ -131,6 +130,8 @@ export class PopupWindow extends Phaser.GameObjects.Container {
                 main.scene.pause();
                 chart.scene.pause();
                 map.scene.pause();
+                gui.hideBtns();
+                gui.mainSceneIsPaused = true;
             }
         }
 
