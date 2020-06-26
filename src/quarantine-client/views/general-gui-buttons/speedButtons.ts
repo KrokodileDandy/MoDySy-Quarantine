@@ -1,9 +1,10 @@
 import { MainScene } from "../scenes/main-scene";
-import { ChartScene } from "../scenes/chart-scene";
-import { MapScene } from "../scenes/map-scene";
+import { ChartScene } from "../tablet/chart-scene";
+import { MapScene } from "../tablet/map-scene";
 import { TimeController } from "../../controller/timeController";
 import { GuiElement } from "../guiElement";
 import { PopupWindow } from "../popupWindow";
+import { Tablet } from "../tablet/tablet";
 
 /**
  * Factory which generates the game speed buttons.
@@ -69,13 +70,14 @@ export class GameSpeedButtons extends GuiElement {
                 const chart = this.scene.scene.get('ChartScene') as ChartScene;
                 const map = this.scene.scene.get('MapScene') as MapScene;
                 const main = this.scene.scene.get('MainScene') as MainScene;
-                map.scene.wake();
-                chart.scene.wake();
                 main.scene.resume();
                 chart.scene.resume();
                 map.scene.resume();
                 this.scene.showBtns();
                 this.scene.mainSceneIsPaused = false;
+                /** Only wake up the scenes if they were prviously displayed in the tablet */
+                if (!Tablet.instance.getChartSceneIsSleeping()) chart.scene.wake();
+                if (!Tablet.instance.getMapSceneIsSleeping()) map.scene.wake();
                 if (this.scene.soundON) this.scene.buttonClickMusic.play();
             }
         });

@@ -1,19 +1,25 @@
 import "phaser";
 import { MainScene } from "./scenes/main-scene";
-import { ChartScene } from "./scenes/chart-scene";
-import { MapScene } from "./scenes/map-scene";
 import { GuiScene } from "./scenes/gui-scene";
+import { ChartScene } from "./tablet/chart-scene";
+import { MapScene } from "./tablet/map-scene";
+import { Tablet } from "./tablet/tablet";
+
 
 /**
  * Creates a popup window on creation which holds multiple phaser game objects.
  * @author Vinh Hien Tran
  */
 export class PopupWindow extends Phaser.GameObjects.Container {
-
     private pause: boolean;
     private isChild: boolean;
     private closeBtnX: number;
     private closeBtnY:  number;
+
+    private mainScene = this.scene.scene.get('MainScene') as MainScene;
+    private chartScene = this.scene.scene.get('ChartScene') as ChartScene;
+    private mapScene = this.scene.scene.get('MapScene') as MapScene;
+    
     /**
      * @param scene scene to which this GameObject belongs
      * @param x x-index position of this modal
@@ -96,16 +102,19 @@ export class PopupWindow extends Phaser.GameObjects.Container {
             const gui = this.scene.scene.get('GuiScene') as GuiScene;
             const main = this.scene.scene.get('MainScene') as MainScene;
 
+            /** Only wake up the scenes if they were prviously displayed in the tablet */
+            if (!Tablet.instance.getChartSceneIsSleeping()) this.chartScene.scene.wake();
+            if (!Tablet.instance.getMapSceneIsSleeping()) this.mapScene.scene.wake();
+            
             // resume the game if game was paused.    
-            if(this.pause){      
-                map.scene.wake();
-                chart.scene.wake();
+            if(this.pause){                     
                 main.scene.resume();
                 chart.scene.resume();
                 map.scene.resume();
                 gui.showBtns();
                 gui.mainSceneIsPaused = false;
             }
+            
         }
     }
     
@@ -123,9 +132,9 @@ export class PopupWindow extends Phaser.GameObjects.Container {
             const chart = this.scene.scene.get('ChartScene') as ChartScene;
             const map = this.scene.scene.get('MapScene') as MapScene;
             const gui = this.scene.scene.get('GuiScene') as GuiScene;
+            this.chartScene.scene.sleep();
+            this.mapScene.scene.sleep();
 
-            chart.scene.sleep();
-            map.scene.sleep();
             if(this.pause){
                 main.scene.pause();
                 chart.scene.pause();

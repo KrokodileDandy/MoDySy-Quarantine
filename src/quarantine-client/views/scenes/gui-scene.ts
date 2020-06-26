@@ -7,6 +7,7 @@ import { SkillTreeButton } from "../skill-tree/skillTreeButton";
 import { LogBookButton } from '../log-book/logBookButton';
 import { SoundButtons } from '../general-gui-buttons/soundButtons';
 import { StatusBar } from '../status-bar/statusBar';
+import { Tablet } from '../tablet/tablet';
 
 /** Scene for user interface elements. */
 export class GuiScene extends Phaser.Scene {
@@ -53,7 +54,6 @@ export class GuiScene extends Phaser.Scene {
     }
 
     create(): void {
-        this.poseSprites();
         // Creates Itemmenu and it to this scene
         this.menu = new ItemMenu(this, 0, 750);
 
@@ -92,24 +92,17 @@ export class GuiScene extends Phaser.Scene {
         new SoundButtons(this).create().forEach(b => {
             arr.push(b);
         });
-        this.setButtons(arr);
-        this.addBackground();
-        this.showBtns();
+        // add the tablet
+        arr.push(new Tablet(this).create());
         // add the status bar
         this.statusBar = new StatusBar(this);
         this.statusBar.create();
 
-        console.log(this.buttons.length);
-        Tutorial.getInstance().open(this);
-    }
+        this.setButtons(arr);
+        this.addBackground();
+        this.showBtns();
 
-    // -------------------------------------------------------------------------- GAME MENU
-    poseSprites(): void {
-        /** Position tablet */
-        const tablet = this.add.sprite(35, 20, 'tablet').setInteractive();
-        tablet.setOrigin(0, 0);
-        tablet.scaleX = 0.57;
-        tablet.scaleY = 0.7;
+        Tutorial.getInstance().open(this);
     }
 
     update(): void {

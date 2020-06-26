@@ -1,9 +1,9 @@
 import { MainScene } from "../scenes/main-scene";
-import { ChartScene } from "../scenes/chart-scene";
-import { MapScene } from "../scenes/map-scene";
+import { ChartScene } from "../tablet/chart-scene";
+import { MapScene } from "../tablet/map-scene";
 import { PopupWindow } from "../popupWindow";
 import { GuiElement } from "../guiElement";
-
+import { Tablet } from "../tablet/tablet";
 /**
  * Factory which generates the reset game button which opens a popup and
  * asks the player if he/she really wants to restart the game.

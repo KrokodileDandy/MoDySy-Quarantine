@@ -29,7 +29,7 @@ export class MapScene extends Phaser.Scene {
 
     preload(): void {
         /** Load map */
-        this.load.image('germanyMap', 'assets/sprites/germany-map.png');
+        this.load.image('usaMap', 'assets/sprites/usa-map.png');
     }
 
     init(): void {
@@ -48,8 +48,8 @@ export class MapScene extends Phaser.Scene {
 
     create(): void {
         /** Add the map to the scene */
-        this.map = this.add.sprite(1400, 100, 'germanyMap');
-        this.map.setScale(0.32, 0.32);
+        this.map = this.add.sprite(105, 72, 'usaMap');
+        this.map.setScale(0.35, 0.30);
         this.map.setOrigin(0, 0);
 
         /** Add a white rectangle as background for the map to the scene */
