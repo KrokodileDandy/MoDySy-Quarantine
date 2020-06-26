@@ -139,7 +139,7 @@ export class GuiScene extends Phaser.Scene {
         delete this.skipTutorialBtn;
     }
 
-    /** */
+    /** Adds element to the list of buttons/images which should be hidden by a popup window. */
     public addToVisibleButtons(element: Phaser.GameObjects.Image): void {
         this.buttons.push(element);
     }
