@@ -1,7 +1,7 @@
 import { MainScene } from "./main-scene";
 import { GuiScene } from "./gui-scene";
-import { ChartScene } from "./chart-scene";
-import { MapScene } from "./map-scene";
+import { ChartScene } from "../tablet/chart-scene";
+import { MapScene } from "../tablet/map-scene";
 import { Stats } from "../../controller/stats";
 import { DifficultyLevel } from "../../models/util/enums/difficultyLevels";
 

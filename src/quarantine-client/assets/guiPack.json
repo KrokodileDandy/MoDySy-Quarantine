@@ -760,6 +760,11 @@
         "type": "image",
         "key": "cash",
         "url": "assets/sprites/status-bar/cash.png"
+      },
+      {
+        "type": "image",
+        "key": "home-button",
+        "url": "assets/sprites/main-scene/home-button.png"
       }
     ]
   }
