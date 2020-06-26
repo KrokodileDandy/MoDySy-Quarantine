@@ -21,7 +21,9 @@ export class Stats {
     private constructor(difficulty: DifficultyLevel) {
         let values;
         if(difficulty == DifficultyLevel.EASY) values = require("./../../../res/json//difficulty-levels/easy.json");
-        else if (difficulty == DifficultyLevel.NORMAL) values = require("./../../../res/json//difficulty-levels/normal.json");
+        else if (difficulty == DifficultyLevel.NORMAL) {
+            values = require("./../../../res/json//difficulty-levels/normal.json");
+        }
         else values = require("./../../../res/json/difficulty-levels/hard.json");
         // STATE VARIABLES
         this.population = values["population"]; //83_149_300: german population in september 2019 (wikipedia)
@@ -34,6 +36,7 @@ export class Stats {
         // PROBABILITIES / VIRUS VARIABLES
         this.basicInteractionRate = values["basicInteractionRate"];
         this.maxInteractionVariance = values["maxInteractionVariance"];
+        this.currentInteractionRate = this.basicInteractionRate;
 
         // SALARIES
         this.avgSalaryPO = values["avgSalaryPO"]; // @see #79
@@ -148,14 +151,19 @@ export class Stats {
     /** Compliance of the population between 0 and 100.00 */
     public compliance: number;
 
+    /** Number of immune citizens */
+    public immune = 0;
+
     // --------------------------------------------------- PROBABILITIES / VIRUS VARIABLES
     /** 
      * Basic interaction rate which is used to calculate the number of
      * interactions per tic.
      */
     public basicInteractionRate: number;
-    /** Upper bound of the randomly generated interaction variance. */
+    /** Upper bound of the randomly generated interaction variance */
     public maxInteractionVariance: number;
+    /** Interaction rate which was currently calculated by controller */
+    public currentInteractionRate: number;
     /** The virus name, chosen by the player */
     public virusName = "the virus"
 
@@ -251,6 +259,13 @@ export class Stats {
     /** @returns prices for all bought vaccines of the current week */
     public getWeeklyVaccinesExpense(): number {return this.weeklyVaccines[this.weeklyVaccines.length - 1] * this.currentPriceVaccination;}
 
+    /** @returns R-Value */
+    public getRValue(): number { 
+        // Number of suscetible agents
+        const suscetible = this.population - this.infected - this.nbrHW - this.immune;
+        return this.basicInteractionRate * this.populationFactor * 4 * suscetible/ this.population;
+    }
+
     /**
      * Returns an array of all weekly stats for the given week in the following order:  
      * 1. Infected
@@ -305,6 +320,7 @@ export class Stats {
     /** Decrease infected counter by one and consume one vaccine */
     public cureInfected(): void {
         this.infected--;
+        this.immune++;
         this.vaccineUsed();
     }
 
@@ -316,6 +332,7 @@ export class Stats {
     /** Decrease unknowingly infected counter by one and consume one vaccine */
     public cureUnknowinglyInfected(): void {
         this.unknowinglyInfected--;
+        this.immune++;
         this.vaccineUsed();
     }
 

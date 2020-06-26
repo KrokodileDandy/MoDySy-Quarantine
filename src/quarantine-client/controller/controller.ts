@@ -174,7 +174,9 @@ export class Controller implements TimeSubscriber {
     /** @returns Partially randomized interaction rate. */
     private calculateInteractionRate(): number {
         const sign = (Math.random() > 0.5) ? 1 : -1;
-        return this.stats.basicInteractionRate + sign * this.stats.maxInteractionVariance;
+        const interactionRate = this.stats.basicInteractionRate + sign * this.stats.maxInteractionVariance;
+        this.stats.currentInteractionRate = interactionRate;
+        return interactionRate;
     }
 
     /**
