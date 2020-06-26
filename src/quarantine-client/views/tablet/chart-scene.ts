@@ -57,8 +57,6 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber, Tutorial
     /** Dom element to add the chart to the scene */
     private canvasDomElement: Phaser.GameObjects.DOMElement;
 
-    private tablet: Phaser.GameObjects.Image;
-
     constructor() {
         super({
             key: 'ChartScene',
@@ -98,11 +96,6 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber, Tutorial
         /** Initialize the chart and create the form to customize the chart */
         this.initializeChart();
         this.createForm();
-
-        this.tablet = this.add.sprite(35, 20, 'tablet'); //otherwise this.scene.get('GuiScene').add.sprite(35, 20, 'tablet')
-        this.tablet.setOrigin(0, 0);
-        this.tablet.scaleX = 0.57;
-        this.tablet.scaleY = 0.7;
 
         this.hideComponent();
     }
@@ -370,15 +363,15 @@ export class ChartScene extends Phaser.Scene implements TimeSubscriber, Tutorial
         });
     }
 
+    /** @see TutorialComponent */    
     public hideComponent(): void {
         this.chartContainer.style.visibility = "hidden"; //hide HTML-Elements 
         this.formContainer.style.visibility = "hidden";
-        this.tablet.setVisible(false);
     }
 
+    /** @see TutorialComponent */
     public activateComponent(): void {
         this.chartContainer.style.visibility = "visible"; //make HTML-Elements visible
         this.formContainer.style.visibility = "visible";
-        this.tablet.setVisible(true);
     }
 }

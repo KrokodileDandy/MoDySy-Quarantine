@@ -73,19 +73,19 @@ export class Controller implements TimeSubscriber {
      * the underlying array.
      */
     private initiatePopulation(): void {
-        let remainingPolice = this.stats.nbrPolice;
-        let remainingHW = this.stats.nbrHW;
-        this.agents = new Array(this.stats.population);
+        let remainingPolice = this.stats.getNumberOfPolice();
+        let remainingHW = this.stats.getNumberOfHealthWorkers();
+        this.agents = new Array(this.stats.getNumberOfAgents());
         
-        for (let i = 0; i < this.stats.population; i++) {
+        for (let i = 0; i < this.stats.getNumberOfAgents(); i++) {
             if (remainingPolice > 0
-                && (Math.random() > (this.stats.nbrPolice / this.stats.population) // random generation of agents OR
-                    || remainingPolice === this.stats.population - i)) { // remaining number of agents has to be filled by police officers
+                && (Math.random() > (this.stats.getNumberOfPolice() / this.stats.getNumberOfAgents()) // random generation of agents OR
+                    || remainingPolice === this.stats.getNumberOfAgents() - i)) { // remaining number of agents has to be filled by police officers
                 this.agents[i] = new Police(State.HEALTHY);
                 remainingPolice--;
             } else if (remainingHW > 0
-                && (Math.random() > (this.stats.nbrHW / this.stats.population)
-                || remainingHW === this.stats.population - i)) {
+                && (Math.random() > (this.stats.getNumberOfHealthWorkers() / this.stats.getNumberOfAgents())
+                || remainingHW === this.stats.getNumberOfAgents() - i)) {
                 this.agents[i] = new HealthWorker(State.TEST_KIT);
                 remainingHW--;
             } else {
@@ -136,7 +136,7 @@ export class Controller implements TimeSubscriber {
 
                     if (testKit) this.agents[idx] = new HealthWorker(State.TEST_KIT);
                     else this.agents[idx] = new HealthWorker(State.CURE);
-                    this.stats.nbrHW++;
+                    this.stats.increaseHealthWorkers(1);
                     i++;
                 }
                 break;
@@ -149,7 +149,7 @@ export class Controller implements TimeSubscriber {
 
                     const tmp = this.agents[idx].getHealthState(); // infected agents can become police officers
                     this.agents[idx] = new Police(tmp);
-                    this.stats.nbrPolice++;
+                    this.stats.increasePoliceOfficers(1);
                     i++;
                 }
                 break;
@@ -165,11 +165,11 @@ export class Controller implements TimeSubscriber {
     /** Adds a specific amount of new citizens into the population array */
     public addNewPopulation(amt: number): void {
         for (let i = 0; i < amt; i++) this.agents.splice(this.getRandomIndex(), 0, new Citizen(State.HEALTHY));
-        this.stats.population += amt;
+        this.stats.increasePopulation(amt);
     }
 
     /** Returns a random integer value between 0 and the current population number. */
-    private getRandomIndex(): number {return Math.floor(Math.random() * this.stats.population);}
+    private getRandomIndex(): number {return Math.floor(Math.random() * this.stats.getNumberOfAgents());}
 
     /** @returns Partially randomized interaction rate. */
     private calculateInteractionRate(): number {
@@ -217,7 +217,7 @@ export class Controller implements TimeSubscriber {
                 "Congratulations!",
                 "You eradicated the virus! Your thoroughness really saved this country from disaster."
             );
-        } else if (this.stats.population - this.stats.nbrHW == 0) { // LOOSE
+        } else if (this.stats.getPopulation() - this.stats.getNumberOfHealthWorkers() == 0) { // LOOSE
             this.openWinLossWindow(
                 "Loss!",
                 "As the last survivors fade away, it is time to face it. This is the end."
@@ -271,7 +271,7 @@ export class Controller implements TimeSubscriber {
     /** Implements the game logic. Select random pairs of agents to apply transition rules. */
     public update(): void {
         // number of interactions between agent pairs in the current tic
-        const selections = Math.floor(this.calculateInteractionRate() * this.stats.population);
+        const selections = Math.floor(this.calculateInteractionRate() * this.stats.getNumberOfAgents());
         
         let idxAgent1: number;
         let idxAgent2: number;

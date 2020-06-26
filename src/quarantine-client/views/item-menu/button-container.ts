@@ -3,6 +3,7 @@ import { UpgradeController } from '../../controller/gui-controller/upgradeContro
 import { TimeController } from '../../controller/timeController';
 import { TimeSubscriber } from '../../models/util/timeSubscriber';
 import { GuiScene } from '../scenes/gui-scene';
+import { PopupWindow } from '../popupWindow';
 
 /**
  * Represents a container which inherit all necessary items
@@ -161,7 +162,9 @@ export class ButtonContainer implements TimeSubscriber {
         .on('pointerdown', () => { // decrease scale on click
             image.setScale(0.5);
         })
-        .on('pointerup', () => { // "try to buy this item"
+        .on('pointerup', () => {
+            if(!GuiScene.instance.mainSceneIsPaused){
+            // "try to buy this item"
             image.setScale(0.6);
             //this.eventListener();       // initiate the buy process of reasearch in the upgrade controller
             // Updates the text of research price, since it has different prices for each level
@@ -200,6 +203,13 @@ export class ButtonContainer implements TimeSubscriber {
                     console.error("[WARNING] - Passed key does not exist.");
             }
             if (GuiScene.instance.soundON) GuiScene.instance.itemBoughtSound.play();
+            }else{
+                const popupMss = new PopupWindow(this.scene, 0, 0, '', 1050, 400, false, [], false);
+                const blankNode = this.scene.add.sprite(this.scene.game.renderer.width / 2 + 50, this.scene.game.renderer.height / 2, 'blank-note').setDisplaySize(300, 200);
+                const content = new Phaser.GameObjects.Text(this.scene, this.scene.game.renderer.width / 2 - 50, this.scene.game.renderer.height / 2, 'The game is paused', { color: 'Black', fontSize: '20px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+                popupMss.addGameObjects([blankNode, content]);
+                popupMss.createModal();
+            }
         });
     }
 

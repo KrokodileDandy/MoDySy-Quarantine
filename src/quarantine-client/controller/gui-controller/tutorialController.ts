@@ -3,11 +3,12 @@ import { TutorialView } from "../../views/tutorial/tutorialView";
 import { TutorialComponent } from "../../views/tutorial/tutorialComponent";
 import { TimedEvent } from "../entities/timedEvent";
 import { LogBookButton } from "../../views/log-book/logBookButton";
-import { MapScene } from "../../views/scenes/map-scene";
-import { ChartScene } from "../../views/scenes/chart-scene";
+import { MapScene } from "../../views/tablet/map-scene";
+import { ChartScene } from "../../views/tablet/chart-scene";
 import { ItemMenu } from "../../views/item-menu/menu";
 import { SkillTreeButton } from "../../views/skill-tree/skillTreeButton";
 import { GuiScene } from "../../views/scenes/gui-scene";
+import { Tablet } from "../../views/tablet/tablet";
 
 /**
  * The tutorial which shows basic game introductions and
@@ -150,17 +151,13 @@ export class TutorialController {
      */
     private createComponentTutorial(component: TutorialComponent, scene: GuiScene): void {
         //
-        if (component instanceof MapScene){
+        if (component instanceof Tablet){
             new TimedEvent(7, () => { // display map
                 component.activateComponent();
             });
             new TimedEvent(8, () => { // display chart/map tutorial
                 this.open(scene, 'tablet');
             })
-        } else if (component instanceof ChartScene) {
-            new TimedEvent(7, () => { // display chart
-                component.activateComponent();
-            });
         } else if (component instanceof LogBookButton) {
             new TimedEvent(7, () => { // display logbook 
                 component.activateComponent();

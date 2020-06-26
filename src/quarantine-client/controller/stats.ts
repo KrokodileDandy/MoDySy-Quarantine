@@ -26,9 +26,9 @@ export class Stats {
         }
         else values = require("./../../../res/json/difficulty-levels/hard.json");
         // STATE VARIABLES
-        this.population = values["population"]; //83_149_300: german population in september 2019 (wikipedia)
-        this.nbrPolice = this.population * values["portion_of_police"];
-        this.nbrHW = this.population * values["portion_of_healthworkers"];
+        this.population = values["population"];
+        this.weeklyPolice[0] = this.getNumberOfAgents() * values["portion_of_police"];
+        this.weeklyHW[0] = this.getNumberOfAgents() * values["portion_of_healthworkers"];
         this.happiness = values["happiness"];
         this.happinessRate = values["happinessRate"];
         this.compliance = values["compliance"];
@@ -57,13 +57,18 @@ export class Stats {
         this.lowerBoundBankruptcy = -200_000;
     }
 
-    /** 
+    /**
+     * Loads the stats singleton with a specific difficulty
      * @param difficultyLvl Used to instantiate the stats object with different values 
      *                      depending on the difficulty level. This parameter is OPTIONAL!!!
-     * @returns The singleton instance 
-     */
-    public static getInstance(difficultyLvl: DifficultyLevel = null): Stats {
-        if (!Stats.instance) Stats.instance = new Stats(difficultyLvl)
+     
+    public static loadDifficulty(): void {
+        ;
+    }*/
+
+    /** @returns The singleton instance */
+    public static getInstance(difficultyLevel: DifficultyLevel = null): Stats {
+        if (!Stats.instance) Stats.instance = new Stats(difficultyLevel);
         return Stats.instance;
     }
 
@@ -82,16 +87,17 @@ export class Stats {
     public updateWeek(incomeStatement: IncomeStatement): void {
         const currWeek = TimeController.getInstance().getWeeksSinceGameStart();
         this.weeklyResearch[currWeek] = UpgradeController.getInstance().getCurrentResearchLevel();
-        this.weeklyPolice[currWeek] = this.nbrPolice;
-        this.weeklyHW[currWeek] = this.nbrPolice;
         
         if (TimeController.getInstance().getDaysSinceGameStart() % 7 == 1) { // one week has passed
             this.weeklyDead.push(0);
             this.weeklyInfected.push(0);
             this.weeklyCured.push(0);
             this.weeklyHW.push(0);
+            this.weeklyHW[currWeek + 1] = this.weeklyHW[currWeek];
             this.weeklyPolice.push(0);
+            this.weeklyPolice[currWeek + 1] = this.weeklyPolice[currWeek];
             this.weeklyResearch.push(0);
+            this.weeklyResearch[currWeek + 1] = UpgradeController.getInstance().getCurrentResearchLevel();
             this.weeklyTestKits.push(0);
             this.weeklyVaccines.push(0);
 
@@ -118,14 +124,53 @@ export class Stats {
         this.usedTestKitsThisDay = 0;
     }
 
+    /**
+     * This method formats a large number into a decimal with a text which
+     * represents the number.
+     * @param value to be formatted
+     */
+    public formatLargerNumber(value: number): string {
+        let invert = false;
+        let result = "";
+
+        if (value < 0) {
+            value = value * -1;
+            invert = true;
+        }
+
+        if (value >= 1_000_000_000) { // trillion
+            if (invert) value = value * -1;
+            result = +(value / 1_000_000_000).toFixed(2) + " Trillion";
+        } else if (value >= 1_000_000_000) { // billion
+            if (invert) value = value * -1;
+            result = +(value / 1_000_000_000).toFixed(2) + " Mrd.";
+        } else if (value >= 1_000_000) { // millions
+            if (invert) value = value * -1;
+            result = +(value / 1_000_000).toFixed(2) + " Mio."; // + before paranthesis clips 0 after the decimal
+        } else {
+            result = value.toLocaleString("de-DE");
+        }
+        return result;
+    }
+
+    /**
+     * This method transforms a number into a string which represents this number
+     * as a currency value.
+     * @param value to be formatted
+     * @see #formatLargeNumber
+     */
+    public formatMoneyString(value: number): string {
+        return this.formatLargerNumber(value) + " " + this.currency;
+    }
+
     
     // ------------------------------------------------------------------- STATE VARIABLES
     /** Scale factor to multiply with population numbers to simulate real population numbers */
     private readonly populationFactor = 50;  
     /** Population of the country the player is playing in */
-    public population: number;
+    private population: number;
     /** Number of deceased people since the game started */
-    public deceased = 0;
+    private deceased = 0;
     /** 
      * Number of currently infected people (known cases). 
      * The game starts with 0 agents with the status INFECTED, but
@@ -138,11 +183,6 @@ export class Stats {
     public unknowinglyInfected = 0;
     /** Wether the first infected citizen was detected (with a test kit) or not */
     public firstCaseFound = false;
-
-    /** Number of police officers */
-    public nbrPolice: number;
-    /** Number of health workers */
-    public nbrHW: number;
 
     /** Overall happiness of the population between 0 and 100.00 */
     public happiness: number;
@@ -198,6 +238,8 @@ export class Stats {
     public maxIncome: number;
     /** Current income per tic */
     public income: number;
+    /** The in-game currency */
+    public currency = '€';
 
     // ----------------------------------------------------------------------- WEEKLY LOGS
     /** Number of infected people each week */
@@ -225,7 +267,8 @@ export class Stats {
     // -------------------------------------------------------------------- GETTER-METHODS
     /** @returns Current population number */
     public getPopulation(): number {return this.population * this.populationFactor;}
-
+    /** @returns Actual number of agents inside the agents array */
+    public getNumberOfAgents(): number {return this.population;}
     /** @returns Number of deceased people since game start */
     public getDeceased(): number {return this.deceased * this.populationFactor;}
 
@@ -236,16 +279,16 @@ export class Stats {
     public getInfected(): number {return this.infected * this.populationFactor;}
 
     /** @returns Number of police officers */
-    public getNumberOfPolice(): number {return this.nbrPolice * this.populationFactor;}
+    public getNumberOfPolice(): number {return this.weeklyPolice[TimeController.getInstance().getWeeksSinceGameStart()] * this.populationFactor;}
 
     /** @returns Number of health workers */
-    public getNumberOfHealthWorkers(): number {return this.nbrHW * this.populationFactor;}
+    public getNumberOfHealthWorkers(): number {return this.weeklyHW[TimeController.getInstance().getWeeksSinceGameStart()] * this.populationFactor;}
 
     /** @returns salary for all health workers */
-    public getHWSalary(): number {return this.nbrHW * this.currentSalaryHW;}
+    public getHWSalary(): number {return this.getNumberOfHealthWorkers() * this.currentSalaryHW;}
 
     /** @returns salary for all police officers */
-    public getPOSalary(): number {return this.nbrPolice * this.currentSalaryPO;}
+    public getPOSalary(): number {return this.getNumberOfPolice() * this.currentSalaryPO;}
 
     /** @returns prices for all bought test kits of the current day */
     public getDailyTestKitsExpense(): number {return this.usedTestKitsThisDay * this.currentPriceTestKit;}
@@ -262,7 +305,7 @@ export class Stats {
     /** @returns R-Value */
     public getRValue(): number { 
         // Number of suscetible agents
-        const suscetible = this.population - this.infected - this.nbrHW - this.immune;
+        const suscetible = this.population - this.infected - this.weeklyHW[TimeController.getInstance().getWeeksSinceGameStart()] - this.immune;
         return this.basicInteractionRate * this.populationFactor * 4 * suscetible/ this.population;
     }
 
@@ -298,6 +341,25 @@ export class Stats {
      */
     public getIncomeStatement(week: number): IncomeStatement {
         return this.weeklyIncomeStatements[week];
+    }
+
+    // --------------------- GETTER STRING METHODS -------------------------------- //
+    /** @returns the budget as a formatted string */
+    public getBudgetString(): string {
+        return this.formatMoneyString(this.budget);
+    }
+
+    /** @returns the difference of the income and all epxenses as a formatted string */
+    public getEarningsString(): string {
+        const is = UpgradeController.getInstance().getIncomeStatementToday();
+        return this.formatMoneyString(is.getEarningsTotal());
+    }
+
+    /** @returns the current percentage of infected people, e.g. 45 % */
+    public getInfectedString(): string {
+        if (this.infected * this.populationFactor < 1_000_000) {
+            return this.formatLargerNumber(this.infected * this.populationFactor);
+        } else return ((this.infected / this.population) * this.populationFactor).toFixed(2) + " %";
     }
 
 
@@ -336,20 +398,27 @@ export class Stats {
         this.vaccineUsed();
     }
 
-    /** Increases the Stats variable nbrPolice
+    /** Increases the current number of plice officer agents
      * @param amt Number of new police officers
      */
     public increasePoliceOfficers(amt: number): void {
         this.weeklyPolice[TimeController.getInstance().getWeeksSinceGameStart()] += amt;
-        this.nbrPolice += amt;
     }
 
-    /** Increases the Stats variable nbrHW
+    /**
+     * Increases the variable which represents the number of agents inside the agents array.
+     * This method does not influence the agents array but only the length variable!
+     * @param amt Amount of new agents
+     */
+    public increasePopulation(amt: number): void {
+        this.population += amt;
+    }
+
+    /** Increases the current number of health worker agents
      * @param amt Number of new health workers
      */
     public increaseHealthWorkers(amt: number): void {
         this.weeklyHW[TimeController.getInstance().getWeeksSinceGameStart()] += amt;
-        this.nbrHW += amt;
     }
 
     /** Increse the test kit counter for the current day by one */

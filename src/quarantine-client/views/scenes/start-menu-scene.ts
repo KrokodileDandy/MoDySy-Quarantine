@@ -1,7 +1,7 @@
 import { MainScene } from "./main-scene";
 import { GuiScene } from "./gui-scene";
-import { ChartScene } from "./chart-scene";
-import { MapScene } from "./map-scene";
+import { ChartScene } from "../tablet/chart-scene";
+import { MapScene } from "../tablet/map-scene";
 import { Stats } from "../../controller/stats";
 import { DifficultyLevel } from "../../models/util/enums/difficultyLevels";
 
@@ -89,6 +89,7 @@ export class StartMenuScene extends Phaser.Scene {
             delay:0
         }
         this.mainThemeMusic.play(musicConfig);
+
     }
 
     /**
@@ -140,6 +141,9 @@ export class StartMenuScene extends Phaser.Scene {
 
         this.showDifficultyAttributes(this.normal);
 
+        // initially the difficulty NORMAL is selected
+        this.updateDifficultyAttributes(this.normal);
+
         // Change the button textures on hover, press, etc.
         easyButton.setInteractive()
         .on('pointerover', () => {
@@ -175,8 +179,8 @@ export class StartMenuScene extends Phaser.Scene {
         })
         .on('pointerup', () => {
             normalButton.setTexture('NormalA');
-            easyButton.setInteractive().setTexture('Easy');
             normalButton.removeInteractive();
+            easyButton.setInteractive().setTexture('Easy');
             hardButton.setInteractive().setTexture('Hard');
             this.buttonClickMusic.play();
 
@@ -197,9 +201,9 @@ export class StartMenuScene extends Phaser.Scene {
         })
         .on('pointerup', () => {
             hardButton.setTexture('HardA');
+            hardButton.removeInteractive();
             easyButton.setInteractive().setTexture('Easy');
             normalButton.setInteractive().setTexture('Normal');
-            hardButton.removeInteractive();
             this.buttonClickMusic.play();
 
             //loads the "HARD" game stats @see{res/json/difficulty-levels/hard.json}

@@ -14,6 +14,8 @@ export class LogBookController {
     /** The only existing instance of this singleton */
     private static instance: LogBookController;
 
+    private stats: Stats;
+
     private textStatPosY: number;
     private imgStatPosY: number;
     private textFinanceIncPosY: number;
@@ -22,7 +24,7 @@ export class LogBookController {
     private scene: Phaser.Scene;
 
     private constructor() {
-        //
+        this.stats = Stats.getInstance();
     }
 
     /** 
@@ -45,7 +47,7 @@ export class LogBookController {
             this.scene,
             400, 
             this.textStatPosY, 
-            name + ": " + value, 
+            name + ": " + this.stats.formatLargerNumber(value), 
             { color: 'Black', fontSize: '28px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
         );
         this.textStatPosY += 64;
@@ -66,7 +68,7 @@ export class LogBookController {
             this.scene,
             1070 + offset, 
             posY, 
-            name + ": " + value.toLocaleString("de-DE") + " €", 
+            name + ": " + this.stats.formatMoneyString(value), 
             { color: 'Black', fontSize: '18px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
         );
         if (offset == 0) this.textFinanceIncPosY += 32;
@@ -134,9 +136,8 @@ export class LogBookController {
         imgPhysician.scale = 0.3;
         arr.push(imgPhysician);
 
-        const imgPolice = this.getStatImg('chemistry'); // TODO search sprite?
-        imgPolice.scale = 0.5;
-        imgPolice.visible = false;
+        const imgPolice = this.getStatImg('police-icon'); // TODO search sprite?
+        imgPolice.scale = 0.2;
         arr.push(imgPolice);
 
         const imgChemistry = this.getStatImg('chemistry');
@@ -194,14 +195,14 @@ export class LogBookController {
             this.scene,
             1050, 
             tempY, 
-            incomeStatement.getIncome().toLocaleString("de-DE") + " €", 
+            this.stats.formatMoneyString(incomeStatement.getIncome()), 
             { color: 'Black', fontSize: '22px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
         ));
         arr.push(new Phaser.GameObjects.Text(
             this.scene,
             1300, 
             tempY, 
-            incomeStatement.getExpenses().toLocaleString("de-DE") + " €", 
+            this.stats.formatMoneyString(incomeStatement.getExpenses()), 
             { color: 'Black', fontSize: '22px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
         ));
 
@@ -221,6 +222,14 @@ export class LogBookController {
         this.generateLogBookStats(lbView, info);
         this.generateLogBookStatsImages(lbView);
         this.generateLogBookIncomeStatement(lbView, is);
+
+        lbView.addGameObjects([new Phaser.GameObjects.Text(
+            this.scene,
+            330, 
+            800, 
+            "This log book shows the accumulated values for each week.", 
+            { color: 'Black', fontSize: '22px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }
+        )]);
         
         return lbView;
     }
