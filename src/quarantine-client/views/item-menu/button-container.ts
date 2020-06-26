@@ -1,5 +1,5 @@
 import 'phaser';
-import { UpgradeController } from '../../controller/upgradeController';
+import { UpgradeController } from '../../controller/gui-controller/upgradeController';
 import { TimeController } from '../../controller/timeController';
 import { TimeSubscriber } from '../../models/util/timeSubscriber';
 import { GuiScene } from '../scenes/gui-scene';
@@ -11,7 +11,7 @@ import { PopupWindow } from '../popupWindow';
  * 
  * @author Shao
  */
-export class ButtonContainer extends Phaser.GameObjects.Container implements TimeSubscriber {
+export class ButtonContainer implements TimeSubscriber {
 
     /** Key to determine which button is used */
     private key: string;
@@ -49,8 +49,14 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
 
     private eventListener: Function;
 
+    private scene: Phaser.Scene;
+    private x: number;
+    private y: number;
+
     public constructor(scene: Phaser.Scene, x: number, y: number, texture: string, price: number, callback: Function) {
-        super(scene, x, y);
+        this.scene = scene;
+        this.x = x;
+        this.y = y;
 
         this.eventListener = callback;
 
@@ -75,7 +81,7 @@ export class ButtonContainer extends Phaser.GameObjects.Container implements Tim
 
         TimeController.getInstance().subscribe(this);
 
-        this.scene.add.existing(this);
+        //this.scene.add.existing(this);
     }
 
     /**

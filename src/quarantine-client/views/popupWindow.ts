@@ -92,8 +92,6 @@ export class PopupWindow extends Phaser.GameObjects.Container {
 
     /** this method will close modal, callable by anthoner class and designed for future confirm button */
     public closeModal(): void {
-        //stop this modal scene
-        this.setVisible(false);
 
         //if this popup windows not a child, wake up the chart scene.
         if(!this.isChild){
@@ -116,6 +114,8 @@ export class PopupWindow extends Phaser.GameObjects.Container {
             }
             
         }
+        //this.each(x => x. destroy());
+        this.destroy();
     }
     
     /**
@@ -148,4 +148,14 @@ export class PopupWindow extends Phaser.GameObjects.Container {
         this.addCloseBtn(this.closeBtnX, this.closeBtnY);
         this.setVisible(true);
     }
+
+    // -------------------------------------------------------------------- GETTER
+
+    /** @returns X coordinate of close button */
+    public getCloseBtnX(): number {return this.closeBtnX;}
+
+    /** @returns Y coordinate of close button */
+    public getCloseBtnY(): number {return this.closeBtnY;}
+
+
 }

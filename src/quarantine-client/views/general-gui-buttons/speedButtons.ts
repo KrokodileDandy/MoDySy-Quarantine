@@ -15,6 +15,8 @@ import { Tablet } from "../tablet/tablet";
  */
 export class GameSpeedButtons extends GuiElement {
 
+    private gameSpeedButtons: Phaser.GameObjects.Image[];
+
     /**
      * Creates the following buttons and adds them to the GuiScene:  
      * * pause
@@ -23,12 +25,17 @@ export class GameSpeedButtons extends GuiElement {
      * * faster speed
      * * the fastest speed
      */
-    public create(): Phaser.GameObjects.Sprite[] {
-        return [this.addPauseButton(), this.addButtonResume(), this.addSpeedButtonNormal(), this.addSpeedButtonQuicker(),  this.addSpeedButtonQuickest()] ;
+    public create(): GameSpeedButtons {
+        this.gameSpeedButtons = [this.addPauseButton(), 
+        this.addButtonResume(),
+        this.addSpeedButtonNormal(),
+        this.addSpeedButtonQuicker(),
+        this.addSpeedButtonQuickest()]
+        return this;
     }
 
-    private addPauseButton(): Phaser.GameObjects.Sprite {
-        const pause = this.scene.add.sprite(this.scene.game.renderer.width / 2 + 150, 50, 'pause').setInteractive();
+    private addPauseButton(): Phaser.GameObjects.Image {
+        const pause = this.scene.add.image(this.scene.game.renderer.width / 2 + 150, 50, 'pause').setInteractive();
 
         pause.on('pointerover', () => {
             pause.setScale(0.7);
@@ -54,8 +61,8 @@ export class GameSpeedButtons extends GuiElement {
         return pause;
     }
 
-    private addButtonResume(): Phaser.GameObjects.Sprite {
-        const resume = this.scene.add.sprite(this.scene.game.renderer.width / 2 + 250, 50, 'resume-button').setInteractive();
+    private addButtonResume(): Phaser.GameObjects.Image {
+        const resume = this.scene.add.image(this.scene.game.renderer.width / 2 + 250, 50, 'resume-button').setInteractive();
 
         resume.on('pointerover', () => {
             resume.setScale(0.7);
@@ -84,8 +91,8 @@ export class GameSpeedButtons extends GuiElement {
         return resume;
     }
 
-    private addSpeedButtonNormal(): Phaser.GameObjects.Sprite {
-        const speed1x = this.scene.add.sprite(this.scene.game.renderer.width / 2 + 350, 50, 'speed1x').setInteractive();
+    private addSpeedButtonNormal(): Phaser.GameObjects.Image {
+        const speed1x = this.scene.add.image(this.scene.game.renderer.width / 2 + 350, 50, 'speed1x').setInteractive();
 
         speed1x.on('pointerover', () => {
             speed1x.setScale(0.7);
@@ -102,7 +109,7 @@ export class GameSpeedButtons extends GuiElement {
                 if (this.scene.soundON) this.scene.buttonClickMusic.play();
             }else{
                 const popupMss = new PopupWindow(this.scene, 0, 0, '', 1050, 400, false, [], false);
-                const blankNode = this.scene.add.sprite(this.scene.game.renderer.width / 2 + 50, this.scene.game.renderer.height / 2, 'blank-note').setDisplaySize(300, 200);
+                const blankNode = this.scene.add.image(this.scene.game.renderer.width / 2 + 50, this.scene.game.renderer.height / 2, 'blank-note').setDisplaySize(300, 200);
                 const content = new Phaser.GameObjects.Text(this.scene, this.scene.game.renderer.width / 2 - 50, this.scene.game.renderer.height / 2, 'The game is paused', { color: 'Black', fontSize: '20px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
                 popupMss.addGameObjects([blankNode, content]);
                 popupMss.createModal();
@@ -111,8 +118,8 @@ export class GameSpeedButtons extends GuiElement {
         return speed1x;
     }
 
-    private addSpeedButtonQuicker(): Phaser.GameObjects.Sprite {
-        const speed2x = this.scene.add.sprite(this.scene.game.renderer.width / 2 + 450, 50, 'speed2x').setInteractive();
+    private addSpeedButtonQuicker(): Phaser.GameObjects.Image {
+        const speed2x = this.scene.add.image(this.scene.game.renderer.width / 2 + 450, 50, 'speed2x').setInteractive();
 
         speed2x.on('pointerover', () => {
             speed2x.setScale(0.7);
@@ -129,7 +136,7 @@ export class GameSpeedButtons extends GuiElement {
                 if (this.scene.soundON) this.scene.buttonClickMusic.play();
             }else{
                 const popupMss = new PopupWindow(this.scene, 0, 0, '', 1050, 400, false, [], false);
-                const blankNode = this.scene.add.sprite(this.scene.game.renderer.width / 2 + 50, this.scene.game.renderer.height / 2, 'blank-note').setDisplaySize(300, 200);
+                const blankNode = this.scene.add.image(this.scene.game.renderer.width / 2 + 50, this.scene.game.renderer.height / 2, 'blank-note').setDisplaySize(300, 200);
                 const content = new Phaser.GameObjects.Text(this.scene, this.scene.game.renderer.width / 2 - 50, this.scene.game.renderer.height / 2, 'The game is paused', { color: 'Black', fontSize: '20px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
                 popupMss.addGameObjects([blankNode, content]);
                 popupMss.createModal();
@@ -138,8 +145,8 @@ export class GameSpeedButtons extends GuiElement {
         return speed2x;
     }
 
-    private addSpeedButtonQuickest(): Phaser.GameObjects.Sprite {
-        const speed3x = this.scene.add.sprite(this.scene.game.renderer.width / 2 + 550, 50, 'speed3x').setInteractive();
+    private addSpeedButtonQuickest(): Phaser.GameObjects.Image {
+        const speed3x = this.scene.add.image(this.scene.game.renderer.width / 2 + 550, 50, 'speed3x').setInteractive();
 
         speed3x.on('pointerover', () => {
             speed3x.setScale(0.7);
@@ -156,7 +163,7 @@ export class GameSpeedButtons extends GuiElement {
                 if (this.scene.soundON) this.scene.buttonClickMusic.play();
             }else{
                 const popupMss = new PopupWindow(this.scene, 0, 0, '', 1050, 400, false, [], false);
-                const blankNode = this.scene.add.sprite(this.scene.game.renderer.width / 2 + 50, this.scene.game.renderer.height / 2, 'blank-note').setDisplaySize(300, 200);
+                const blankNode = this.scene.add.image(this.scene.game.renderer.width / 2 + 50, this.scene.game.renderer.height / 2, 'blank-note').setDisplaySize(300, 200);
                 const content = new Phaser.GameObjects.Text(this.scene, this.scene.game.renderer.width / 2 - 50, this.scene.game.renderer.height / 2, 'The game is paused', { color: 'Black', fontSize: '20px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
                 popupMss.addGameObjects([blankNode, content]);
                 popupMss.createModal();
@@ -165,4 +172,6 @@ export class GameSpeedButtons extends GuiElement {
         return speed3x;
     }
 
+    /** @returns Phaser.GameObjects.Image[] of game speed buttons */
+    public getGameSpeedButtons(): Phaser.GameObjects.Image[] {return this.gameSpeedButtons}
 }

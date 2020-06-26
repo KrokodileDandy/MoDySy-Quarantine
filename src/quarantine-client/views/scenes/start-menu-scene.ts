@@ -27,6 +27,8 @@ export class StartMenuScene extends Phaser.Scene {
     public normal = require('../../../../res/json/difficulty-levels/normal.json');
     public hard = require('../../../../res/json/difficulty-levels/hard.json');
 
+    private selectedDifficulty = DifficultyLevel.NORMAL; 
+
     constructor() {
         super({
             key: "StartMenuScene",
@@ -140,7 +142,6 @@ export class StartMenuScene extends Phaser.Scene {
         this.showDifficultyAttributes(this.normal);
 
         // initially the difficulty NORMAL is selected
-        Stats.loadDifficulty(DifficultyLevel.NORMAL);
         this.updateDifficultyAttributes(this.normal);
 
         // Change the button textures on hover, press, etc.
@@ -162,7 +163,7 @@ export class StartMenuScene extends Phaser.Scene {
             this.buttonClickMusic.play();
 
             //loads the "EASY" game stats @see{res/json/difficulty-levels/easy.json}
-            Stats.loadDifficulty(DifficultyLevel.EASY);
+            this.selectedDifficulty = DifficultyLevel.EASY;
             this.updateDifficultyAttributes(this.easy);
         });
         // Change the button textures on hover, press, etc.
@@ -184,7 +185,7 @@ export class StartMenuScene extends Phaser.Scene {
             this.buttonClickMusic.play();
 
             //loads the "NORMAL" game stats @see{res/json/difficulty-levels/normal.json}
-            Stats.loadDifficulty(DifficultyLevel.NORMAL);
+            this.selectedDifficulty = DifficultyLevel.NORMAL;
             this.updateDifficultyAttributes(this.normal);
         });
         // Change the button textures on hover, press, etc.
@@ -206,7 +207,7 @@ export class StartMenuScene extends Phaser.Scene {
             this.buttonClickMusic.play();
 
             //loads the "HARD" game stats @see{res/json/difficulty-levels/hard.json}
-            Stats.loadDifficulty(DifficultyLevel.HARD);
+            this.selectedDifficulty = DifficultyLevel.HARD;
             this.updateDifficultyAttributes(this.hard);
         });
     }
@@ -231,9 +232,11 @@ export class StartMenuScene extends Phaser.Scene {
         })
         .on('pointerup', () => {
             startButton.setTexture('StartH');
+            Stats.getInstance(this.selectedDifficulty);
             this.scene.setVisible(false);
             this.buttonClickMusic.play();
             this.loadScenes();
+            this.scene.remove(this);
         });
     }
 

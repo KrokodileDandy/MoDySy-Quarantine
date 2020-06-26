@@ -3,7 +3,7 @@ import { ChartScene } from "../tablet/chart-scene";
 import { MapScene } from "../tablet/map-scene";
 import { PopupWindow } from "../popupWindow";
 import { GuiElement } from "../guiElement";
-import { Tablet } from "../tablet/tablet";
+
 /**
  * Factory which generates the reset game button which opens a popup and
  * asks the player if he/she really wants to restart the game.
@@ -13,21 +13,26 @@ import { Tablet } from "../tablet/tablet";
  */
 export class RestartButton extends GuiElement {
 
+    private restartBtn: Phaser.GameObjects.Image;
+
     /** Create and add a restart button to the GuiScene */
-    public create(): Phaser.GameObjects.Sprite {
-        const resetBtn = this.scene.add.sprite(this.scene.game.renderer.width - 100, 150, 'restart');
-        resetBtn.setInteractive();
+    public create(): RestartButton {
+        this.restartBtn = this.scene.add.image(this.scene.game.renderer.width - 100, 150, 'restart');
+    /*public create(): Phaser.GameObjects.Sprite {
+        const this.restartBtn = this.scene.add.sprite(this.scene.game.renderer.width - 100, 150, 'restart');*/
+
+        this.restartBtn.setInteractive();
 
         // hover, click event etc.
-        resetBtn.on('pointerover', () => {
-            resetBtn.setScale(0.7);
+        this.restartBtn.on('pointerover', () => {
+            this.restartBtn.setScale(0.7);
         });
 
-        resetBtn.on('pointerout', () => {
-            resetBtn.setScale(1);
+        this.restartBtn.on('pointerout', () => {
+            this.restartBtn.setScale(1);
         });
 
-        resetBtn.on('pointerup', () => {
+        this.restartBtn.on('pointerup', () => {
                 if(!this.scene.mainSceneIsPaused){
                     //creates popup messages
                     const popupMss = new PopupWindow(this.scene, 0, 0, '', 1100, 350, true, [], false);
@@ -76,7 +81,11 @@ export class RestartButton extends GuiElement {
             }
 
         });
-        return resetBtn;
+
+        return this;
     }
+
+    /** @returns Phaser.GameObjects.Image of restart button */
+    public getRestartButton(): Phaser.GameObjects.Image { return this.restartBtn; }
 
 }

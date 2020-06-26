@@ -1,11 +1,12 @@
 import { TimeController } from "../../controller/timeController";
 import { Stats } from "../../controller/stats";
+import { TutorialComponent } from "../tutorial/tutorialComponent";
 
 /**
  * Scene to show the infected people on a map
  * @author Jakob Hartmann
  */
-export class MapScene extends Phaser.Scene {
+export class MapScene extends Phaser.Scene implements TutorialComponent{
     /** Number of infected people */
     private infected: number;
 
@@ -65,6 +66,8 @@ export class MapScene extends Phaser.Scene {
 
         /** Select red color to fill the circles */
         this.graphics.fillStyle(0xFF0000);
+
+        this.hideComponent();
     }
 
     /** @see TimeSubscriber */
@@ -74,21 +77,31 @@ export class MapScene extends Phaser.Scene {
 
     /** Add newly infected to the map */
     updateMap(): void {
-        /** Get current infection numbers */
+        // Get current infection numbers
         const currentlyInfected: number = this.stats.getInfected();
 
-        /** For every thousandth person infected, add a red circle */
-        while (this.infected + 1000 <= currentlyInfected) {
-            /** Place a circle at a random position on the map */
+        // For every thousandth person infected, add a red circle /
+       while (this.infected + 1000 <= currentlyInfected) {
+            // Place a circle at a random position on the map
             const circle = new Phaser.Geom.Circle(
                 Phaser.Math.Between(this.map.getTopLeft().x + 5, this.map.getBottomRight().x - 5), 
                 Phaser.Math.Between(this.map.getTopLeft().y + 5, this.map.getBottomRight().y - 5), 1.5);
 
-            /** Fill the circle with the selected color */
+            // Fill the circle with the selected color
             this.graphics.fillCircleShape(circle);
 
-            /** Update internal infection numbers */
+            // Update internal infection numbers 
             this.infected = this.infected + 1000;
         }
+    }
+
+    /** @see TutorialComponent */
+    public hideComponent(): void {
+        this.scene.sendToBack();
+    }
+
+    /** @see TutorialComponent */
+    public activateComponent(): void {
+        this.scene.bringToTop();
     }
 }

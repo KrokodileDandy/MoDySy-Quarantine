@@ -10,10 +10,12 @@ import { PopupWindow } from "../popupWindow";
  */
 export class SoundButtons extends GuiElement {
 
+    private soundButtons: Phaser.GameObjects.Image[];
+
     /** Create and add the sound and music buttons to the GuiScene */
-    public create(): Phaser.GameObjects.Sprite[] {
-        const musicOn = this.scene.add.sprite(this.scene.game.renderer.width - 100, 250, 'music_on').setInteractive();
-        const soundOn = this.scene.add.sprite(this.scene.game.renderer.width - 100, 350, 'sound_on').setInteractive();
+    public create(): SoundButtons {
+        const musicOn = this.scene.add.image(this.scene.game.renderer.width - 100, 250, 'music_on').setInteractive();
+        const soundOn = this.scene.add.image(this.scene.game.renderer.width - 100, 350, 'sound_on').setInteractive();
 
         musicOn.on('pointerover', () => {
             musicOn.setScale(0.7);
@@ -75,7 +77,11 @@ export class SoundButtons extends GuiElement {
             }
         });
 
-        return [soundOn, musicOn];
+        this.soundButtons = [musicOn, soundOn];
+        return this;
     }
+
+    /** @returns Phaser.GameObjects.Image[] of sound buttons */
+    public getSoundButtons(): Phaser.GameObjects.Image[] { return this.soundButtons; }
 
 }
