@@ -17,7 +17,7 @@ export class Tablet extends GuiElement {
     private chartSceneIsSleeping: boolean;
 
     /** Create the tablet and the home button and manage their logic */
-    public create(): void {
+    public create(): Phaser.GameObjects.Sprite {
         Tablet.instance = this;
 
         /** Reference to the chart scene */
@@ -88,7 +88,7 @@ export class Tablet extends GuiElement {
             showChart.setVisible(false);
             showMap.setVisible(false);
         })
-
+        return homeButton;
     }
 
     /** Getter-function, which allows the pop-up window to determine whether the map scene is sleeping */

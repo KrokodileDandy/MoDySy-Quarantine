@@ -14,8 +14,8 @@ import { GuiElement } from "../guiElement";
 export class RuleButton extends GuiElement {
 
     /** Create and add a rules button to the GuiScene */
-    public create(): void {
-        const rulesBtn = this.scene.add.image(this.scene.game.renderer.width - 100, this.scene.game.renderer.height - 250, 'rules');
+    public create(): Phaser.GameObjects.Sprite {
+        const rulesBtn = this.scene.add.sprite(this.scene.game.renderer.width - 100, this.scene.game.renderer.height - 250, 'rules');
         const popupRules = new PopupWindow(this.scene, 0, 0, '', 1300, 130, true, [], false);
         const title = this.scene.add.text(550, 130, 'The Rules', { color: 'Black', fontSize: '50px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' }).setDepth(1);
         const blankNode = this.scene.add.sprite(this.scene.game.renderer.width / 2 + 50, this.scene.game.renderer.height / 2, 'blank-note').setDisplaySize(1200, 970);
@@ -31,7 +31,7 @@ export class RuleButton extends GuiElement {
         /*---------END: add Rules ---------- */
 
         // popup info as a seconde popup
-        const info = new Phaser.GameObjects.Image(this.scene, 800, 150, 'information').setScale(0.4);
+        const info = new Phaser.GameObjects.Sprite(this.scene, 800, 150, 'information').setScale(0.4);
         info.setInteractive();
 
         info.on('pointerup', () => {
@@ -63,10 +63,20 @@ export class RuleButton extends GuiElement {
             rulesBtn.setScale(1);
         });
         rulesBtn.on('pointerup', () => {
-            rulesBtn.setScale(0.8);
-            popupRules.createModal();
-            if (this.scene.soundON) this.scene.buttonClickMusic.play();
+            if(!this.scene.mainSceneIsPaused){
+                rulesBtn.setScale(0.8);
+                popupRules.createModal();
+                if (this.scene.soundON) this.scene.buttonClickMusic.play();
+            }else{
+                const popupMss = new PopupWindow(this.scene, 0, 0, '', 1050, 400, false, [], false);
+                const blankNode = this.scene.add.sprite(this.scene.game.renderer.width / 2 + 50, this.scene.game.renderer.height / 2, 'blank-note').setDisplaySize(300, 200);
+                const content = new Phaser.GameObjects.Text(this.scene, this.scene.game.renderer.width / 2 - 50, this.scene.game.renderer.height / 2, 'The game is paused', { color: 'Black', fontSize: '20px', fontFamily: 'Georgia, "Goudy Bookletter 1911", Times, serif' });
+                popupMss.addGameObjects([blankNode, content]);
+                popupMss.createModal();
+            }
         });
+
+        return rulesBtn;
     }
 
     private addRuleToContainer(container: Phaser.GameObjects.Container, rule: Rule, ruleIndex: number): void {
