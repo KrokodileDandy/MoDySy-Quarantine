@@ -20,7 +20,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     preload(): void {
-        this.load.image('background', 'assets/sprites/main-scene/background.png');
+      this.load.image('background', 'assets/sprites/main-scene/background.png');
     }
 
     init(): void {

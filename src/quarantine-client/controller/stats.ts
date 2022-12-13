@@ -2,6 +2,7 @@ import { TimeController } from "./timeController";
 import { UpgradeController } from "./gui-controller/upgradeController";
 import { DifficultyLevel} from "../models/util/enums/difficultyLevels";
 import { IncomeStatement } from "./entities/incomeStatement";
+import { ResourceController } from "./resourceController";
 
 /**
  * Singleton controller which contains game variables (e.g. budget, population size)
@@ -92,6 +93,7 @@ export class Stats {
             this.weeklyDead.push(0);
             this.weeklyInfected.push(0);
             this.weeklyCured.push(0);
+            this.weeklyCured[currWeek + 1] = this.immune;
             this.weeklyHW.push(0);
             this.weeklyHW[currWeek + 1] = this.weeklyHW[currWeek];
             this.weeklyPolice.push(0);
@@ -129,7 +131,7 @@ export class Stats {
      * represents the number.
      * @param value to be formatted
      */
-    public formatLargerNumber(value: number): string {
+    public static formatLargerNumber(value: number): string {
         let invert = false;
         let result = "";
 
@@ -138,15 +140,15 @@ export class Stats {
             invert = true;
         }
 
-        if (value >= 1_000_000_000) { // trillion
+        if (value >= 1_000_000_000_000) { // trillion
             if (invert) value = value * -1;
-            result = +(value / 1_000_000_000).toFixed(2) + " Trillion";
+            result = (+(value / 1_000_000_000_000).toFixed(2)).toLocaleString("de-DE") + "  Trillion";
         } else if (value >= 1_000_000_000) { // billion
             if (invert) value = value * -1;
-            result = +(value / 1_000_000_000).toFixed(2) + " Mrd.";
+            result = (+(value / 1_000_000_000).toFixed(2)).toLocaleString("de-DE") + " Billion";
         } else if (value >= 1_000_000) { // millions
             if (invert) value = value * -1;
-            result = +(value / 1_000_000).toFixed(2) + " Mio."; // + before paranthesis clips 0 after the decimal
+            result = (+(value / 1_000_000).toFixed(2)).toLocaleString("de-DE") + " Mio."; // + before paranthesis clips 0 after the decimal
         } else {
             result = value.toLocaleString("de-DE");
         }
@@ -159,14 +161,14 @@ export class Stats {
      * @param value to be formatted
      * @see #formatLargeNumber
      */
-    public formatMoneyString(value: number): string {
-        return this.formatLargerNumber(value) + " " + this.currency;
+    public static formatMoneyString(value: number): string {
+        return this.formatLargerNumber(value) + " " + Stats.currency;
     }
 
     
     // ------------------------------------------------------------------- STATE VARIABLES
     /** Scale factor to multiply with population numbers to simulate real population numbers */
-    private readonly populationFactor = 50;  
+    private readonly populationFactor = 400;  
     /** Population of the country the player is playing in */
     private population: number;
     /** Number of deceased people since the game started */
@@ -239,7 +241,7 @@ export class Stats {
     /** Current income per tic */
     public income: number;
     /** The in-game currency */
-    public currency = '€';
+    public static readonly currency = '€';
 
     // ----------------------------------------------------------------------- WEEKLY LOGS
     /** Number of infected people each week */
@@ -263,7 +265,6 @@ export class Stats {
     /** When this lower bound is reached, the game should be lost */
     public lowerBoundBankruptcy: number;
 
-
     // -------------------------------------------------------------------- GETTER-METHODS
     /** @returns Current population number */
     public getPopulation(): number {return this.population * this.populationFactor;}
@@ -278,14 +279,24 @@ export class Stats {
      */
     public getInfected(): number {return this.infected * this.populationFactor;}
 
+    /** @returns Number of immune people */
+    public getImmune(): number {return this.immune * this.populationFactor;}
+
+    /** @returns Number of healthy people */
+    public getHealthy(): number {return (this.population - this.infected - this.unknowinglyInfected) * this.populationFactor;}
+
     /** @returns Number of police officers */
     public getNumberOfPolice(): number {return this.weeklyPolice[TimeController.getInstance().getWeeksSinceGameStart()] * this.populationFactor;}
 
     /** @returns Number of health workers */
     public getNumberOfHealthWorkers(): number {return this.weeklyHW[TimeController.getInstance().getWeeksSinceGameStart()] * this.populationFactor;}
 
-    /** @returns salary for all health workers */
-    public getHWSalary(): number {return this.getNumberOfHealthWorkers() * this.currentSalaryHW;}
+    /** @returns salary for all health workers (minus hw's which were added through the research upgrade) */
+    public getHWSalary(): number {
+        const uC = UpgradeController.getInstance();
+        if (uC.researchExists()) return (this.getNumberOfHealthWorkers() - uC.measures["research"]["number_of_new_health_workers"]) * this.currentSalaryHW;
+        else return this.getNumberOfHealthWorkers() * this.currentSalaryHW;
+    }
 
     /** @returns salary for all police officers */
     public getPOSalary(): number {return this.getNumberOfPolice() * this.currentSalaryPO;}
@@ -306,8 +317,11 @@ export class Stats {
     public getRValue(): number { 
         // Number of suscetible agents
         const suscetible = this.population - this.infected - this.weeklyHW[TimeController.getInstance().getWeeksSinceGameStart()] - this.immune;
-        return this.basicInteractionRate * this.populationFactor * 4 * suscetible/ this.population;
+        return +(this.basicInteractionRate * this.populationFactor * 4 * suscetible/ this.population).toFixed(2);
     }
+
+    /** @returns scale factor to multiply with population numbers to simulate real population numbers */
+    public getPopulationFactor(): number {return this.populationFactor;}
 
     /**
      * Returns an array of all weekly stats for the given week in the following order:  
@@ -346,20 +360,30 @@ export class Stats {
     // --------------------- GETTER STRING METHODS -------------------------------- //
     /** @returns the budget as a formatted string */
     public getBudgetString(): string {
-        return this.formatMoneyString(this.budget);
+        return Stats.formatMoneyString(this.budget);
     }
 
     /** @returns the difference of the income and all epxenses as a formatted string */
     public getEarningsString(): string {
-        const is = UpgradeController.getInstance().getIncomeStatementToday();
-        return this.formatMoneyString(is.getEarningsTotal());
+        const is = ResourceController.getInstance().getIncomeStatementToday();
+        return Stats.formatMoneyString(is.getEarningsTotal());
     }
 
     /** @returns the current percentage of infected people, e.g. 45 % */
     public getInfectedString(): string {
         if (this.infected * this.populationFactor < 1_000_000) {
-            return this.formatLargerNumber(this.infected * this.populationFactor);
+            return Stats.formatLargerNumber(this.infected * this.populationFactor);
         } else return ((this.infected / this.population) * this.populationFactor).toFixed(2) + " %";
+    }
+
+    /** @returns the current salary for health workers as a formated string */
+    public getHwSalaryString(): string {
+        return Stats.formatMoneyString(this.getHWSalary());
+    }
+
+    /** @returns the current salary for police officers as a formated string */
+    public getPoliceSalaryString(): string {
+        return Stats.formatMoneyString(this.getPOSalary());
     }
 
 
@@ -382,6 +406,12 @@ export class Stats {
     /** Decrease infected counter by one and consume one vaccine */
     public cureInfected(): void {
         this.infected--;
+        this.immune++;
+        this.vaccineUsed();
+    }
+
+    /** Increase infected counter by one and consume one vaccine */
+    public cureHealthy(): void {
         this.immune++;
         this.vaccineUsed();
     }

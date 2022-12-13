@@ -1,5 +1,7 @@
 # Contribution Guide
+
 ## Content
+
 [1. Very condensed](#very-condensed)  
 [1.1 Code Conventions](#code-conventions)  
 [1.2 Naming Conventions](#naming-conventions)  
@@ -16,7 +18,9 @@
 Straight to the [Quick Start Guide](https://git.mtv.tu-berlin.de/modysy-2020sose/quarantine/-/wikis/intern/Quick-Start-Guide) on how to use GitLab.
 
 ## Very condensed
+
 ### Code conventions
+
 * Every method and loop should have a short and descriptive comment
 * Spaces behind list elements and method parameters
   * e.g. `['a', 'b', 'c']`, not `['a','b','c']`
@@ -26,22 +30,27 @@ Straight to the [Quick Start Guide](https://git.mtv.tu-berlin.de/modysy-2020sose
 * No empty lines between the documentation and the first line of the class/method
 
 ### Naming conventions
+
 * Use CamelCase e.g. `MyClass`
 * Enums in Caps-Lock e.g. `INFECTED`
 
 Generally speaking: _Think about the person which will read your code and make your code easy to understend and good looking._
 
 ### Characteristics of a "good" merge request
+
 ... should contain ...
+
 * __Clear and descriptive Title__ to identify the implemented feature
 * __Description of the changes__
   * If the issue you are solving has a good description just link that issue. But if you made changes not remarked in the issue description pleas add them here.
 * __Helpful Documentation__ (see [here](#documentation-isnt-optional))
 
-
 ## Merge Requests
+
 ### Preparation
+
 Before opening a new merge request please check the following:
+
 1. Update your branch to fit the state of `master`
 	1. Commit all your changes: `git commit -m "<commit-message>"`
 	2. Get current version of master: `git pull origin master`
@@ -50,6 +59,7 @@ Before opening a new merge request please check the following:
 4. `npm run test` doesn't throw any errors
 
 ## Contributing changes
+
 ### Version control branching
 
 Based upon <a href="www.contribution-guide.org">www.contribution-guide.org</a>
@@ -67,6 +77,7 @@ Based upon <a href="www.contribution-guide.org">www.contribution-guide.org</a>
 To write great commit messages you have to use a text editor. Type `git config --global core.editor "<editor-name>"` to define one of your choice.
 
 #### The seven rules of a great Git commit message
+
 1. Separate subject from body with a blank line
 2. Limit the subject line to 50 characters
 3. Capitalize the subject line
@@ -105,24 +116,28 @@ Further paragraphs come after blank lines.
 For more information look [here](https://chris.beams.io/posts/git-commit/).
 
 ### Documentation isn't optional
+
 It’s not! Patches without documentation will be returned to sender. Otherwise we'll have a lot of work later on and complicate the development process for each other.  
 Insert your documentation in our [wiki](https://git.mtv.tu-berlin.de/modysy-2020sose/quarantine/-/wikis/Documentations).
 
 
-
 ## Full Example
+
 ### Preparing your project
+
 1. Clone project: `git clone ssh://git@git.mtv.tu-berlin.de:2222/modysy-2020sose/quarantine.git`
 2. Navigate to the project folder
 3. Create a branch: `git branch <branch-name>`
 4. Change to this branch: `git checkout <branch-name>` 
 
 ### Making your changes
+
 1. Stage your changed files for commit: `git add <datei-name>`
 2. Make your commit: `git commit -m "Ausführliche Beschreibung der vorgenommenen Änderungen."`
 3. Upload your commit with all the changes: `git push`
 
 ### Create Merge Request
+
 1. Click 'Create merge request' on GitLab
 2. Chose a descriptive title
 3. In the description field
